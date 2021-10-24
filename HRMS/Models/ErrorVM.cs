@@ -6,7 +6,7 @@ namespace HRMS.Models
     {
         public string Title { get; set; }
 
-        public ErrorStatus ErrorStatus { get; set; }
+        public ErrorStatus Status { get; set; }
 
         public string Description { get; set; }
 

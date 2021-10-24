@@ -1,19 +1,22 @@
 using HRMS.Data;
+using HRMS.Data.Core;
+using HRMS.Repository;
+using HRMS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HRMS
 {
@@ -37,16 +40,23 @@ namespace HRMS
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //services.AddIdentity<ApplicationUser, AppicationRole>(options =>
-            //{
-            //    options.Password.RequireLowercase = bool.Parse(Configuration["SecurityConfig:Password:RequireLowercase"]);
-            //    options.Password.RequireUppercase = bool.Parse(Configuration["SecurityConfig:Password:RequireUppercase"]);
-            //    options.Password.RequireDigit = bool.Parse(Configuration["SecurityConfig:Password:RequireDigit"]);
-            //    options.Password.RequiredLength = int.Parse(Configuration["SecurityConfig:Password:RequiredLength"]);
-            //}).AddRoles<ApplicationRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddErrorDescriber<CustomErrorDescriber>()
-            //    .AddDefaultTokenProviders();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequireLowercase = bool.Parse(Configuration["SecurityConfig:Password:RequireLowercase"]);
+                options.Password.RequireUppercase = bool.Parse(Configuration["SecurityConfig:Password:RequireUppercase"]);
+                options.Password.RequireDigit = bool.Parse(Configuration["SecurityConfig:Password:RequireDigit"]);
+                options.Password.RequiredLength = int.Parse(Configuration["SecurityConfig:Password:RequiredLength"]);
+            }).AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddErrorDescriber<IdentityErrorDescriber>()
+                .AddDefaultTokenProviders();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -54,13 +64,17 @@ namespace HRMS
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
+            services.AddSignalR();
 
             services.Configure<DataProtectionTokenProviderOptions>(o =>
             {
                 o.TokenLifespan = TimeSpan.FromHours(1);
             });
 
-            //services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+            services.AddScoped<IDDLRepo, DDLRepo>();
+            services.AddScoped<IFunctionRepo, FunctionRepo>();
 
             services.ConfigureExternalCookie(options =>
             {
@@ -83,6 +97,32 @@ namespace HRMS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            IList<CultureInfo> supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("sq-AL")
+                {
+                    DateTimeFormat = new DateTimeFormatInfo { DateSeparator="/" },
+                    NumberFormat = new NumberFormatInfo { CurrencyDecimalDigits = 2, CurrencyGroupSeparator =",", CurrencyDecimalSeparator = ".", NumberGroupSeparator = ",", NumberDecimalSeparator = "." }
+                },
+                new CultureInfo("en-GB")
+                {
+                    DateTimeFormat = new DateTimeFormatInfo { DateSeparator="/" },
+                    NumberFormat = new NumberFormatInfo { CurrencyDecimalDigits = 2, CurrencyGroupSeparator =",", CurrencyDecimalSeparator = ".", NumberGroupSeparator = ",", NumberDecimalSeparator = "." }
+                },
+            };
+
+            var culture = new CultureInfo("sq_AL");
+            culture.NumberFormat.NumberDecimalSeparator = ".";
+            culture.NumberFormat.NumberGroupSeparator = ",";
+            culture.DateTimeFormat.DateSeparator = "/";
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(culture),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
             app.UseMigrationsEndPoint();
 
             if (env.IsDevelopment())
@@ -99,7 +139,7 @@ namespace HRMS
             app.UseStatusCodePagesWithRedirects("/Error/{0}");
             app.UseHttpsRedirection();
 
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandler();
 
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -121,6 +161,7 @@ namespace HRMS
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseResponseCaching();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
