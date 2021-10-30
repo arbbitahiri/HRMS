@@ -78,6 +78,7 @@ namespace HRMS.Controllers
             log.HttpMethod = context.HttpContext.Request.Method;
             log.Url = context.HttpContext.Request.GetDisplayUrl();
             log.Error = false;
+            log.InsertedDate = DateTime.Now;
 
             if (context.HttpContext.Request.HasFormContentType)
             {
@@ -156,15 +157,13 @@ namespace HRMS.Controllers
         [Description("Error status message.")]
         public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
 
-        protected LanguageEnum GetLanguage(string culture)
-        {
-            return culture switch
+        protected LanguageEnum GetLanguage(string culture) =>
+            culture switch
             {
-                "sq_AL" => LanguageEnum.Albanian,
+                "sq-AL" => LanguageEnum.Albanian,
                 "en-GB" => LanguageEnum.English,
                 _ => LanguageEnum.Albanian,
             };
-        }
 
         protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, int type = 512)
         {

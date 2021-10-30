@@ -1,10 +1,18 @@
 ﻿@page
 @model LockoutModel
 @{
-    ViewData["Title"] = "Locked out";
+    Layout = "_Layout";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<div class="text-center mb-10">
+    <h3>Account locked</h3>
+
+    <a asp-page-handler="ChangeLang" asp-route-culture="sq-AL">Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-culture="en-GB">English</a>
+</div>
+
+<div class="pb-13 pt-lg-0 pt-5 mt-4">
+    <h5 class="login-box-msg">This account has been locked out, please try again later.</h5>
+    <hr />
+</div>
+
+<div class="mb-0 font-size-h6"><a href="/Identity/Account/Login" class="text-warning"><b>Log in</b></a> As different user</div>

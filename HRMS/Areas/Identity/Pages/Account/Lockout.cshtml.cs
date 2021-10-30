@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HRMS.Data.General;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace HRMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class LockoutModel : PageModel
+    public class LockoutModel : BaseOModel
     {
+        public LockoutModel(HRMSContext db) : base (db)
+        {
+
+        }
+
         public void OnGet()
         {
 

@@ -1,0 +1,92 @@
+﻿@page
+@model HRMS.Areas.Identity.Pages.Account.TimeoutModel
+@{
+    Layout = "_Layout";
+}
+
+<h3 class="auth-title" style="font-size:2rem !important;">HRMS Riinvest</h3>
+
+<div class="text-center mb-10">
+    <h3>Session timed out</h3>
+
+    <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="sq-AL">Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="en-GB">English</a>
+</div>
+
+<form method="post" asp-route-returnUrl="@Model.ReturnUrl" id="frm_Login" class="form-element">
+    @Html.AntiForgeryToken()
+    <div class="text-center content-bottom">
+        <img id="user-profile-img" src="@Url.Content(Model.Image ?? "")" class="rounded-circle b-2 p-10 border-dark" style="max-width:200px" alt="">
+        <h3 id="user-name">@(Model.Name ?? "")</h3>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.TextBoxFor(m => m.Input.Email, new { @class = "form-control d-none" })
+    <div class="form-group has-feedback">
+        <input type="password" asp-for="Input.Password" id="Password" class="form-control" placeholder="Password" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+        <span class="ion ion-locked form-control-feedback"></span>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center pt-2">
+            <button type="submit" data-callback="onSubmitForm" data-action="login" class="btn btn-primary btn-block margin-top-10">Log in</button>
+        </div>
+    </div>
+</form>
+
+<div class="text-center">
+    <p class="mb-5 mt-4">
+        Type password to retrieve session
+    </p>
+    <p class="mt-4"> or </p>
+</div>
+<div class="text-center">
+    <p class="mb-0">or <a asp-page="Login" class="text-warning"><b>Log in</b></a>As different user</p>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function ShowLoading() {
+            $('#loader').modal('show')
+        }
+
+        function HideLoading() {
+            $('#loader').modal('hide')
+        }
+
+        function onSubmitForm(data) {
+            if ($("#frm_Login").valid()) {
+                $("#frm_Login").submit();
+            }
+        }
+
+        $(document).on('submit', 'form:not(.noLoading)', function () {
+            ShowLoading()
+        });
+
+        $(document).on('invalid-form.validate', 'form', function () {
+            HideLoading();
+        });
+    </script>
+
+    @if (Model.Email != null)
+    {
+        <script>
+            var ud = {
+                e: '@Model.Email',
+                n: '@Model.Name',
+                i: '@Model.Image'
+            };
+            window.localStorage.setItem('ud', JSON.stringify(ud))
+            $('#Input_Email').val('@Model.Email')
+            window.location.reload()
+        </script>
+    }
+    else
+    {
+        <script>
+            var ud = JSON.parse(window.localStorage.getItem("ud"));
+            $('#user-profile-img').attr('src', ud.i)
+            $('#user-name').text(ud.n)
+            $('#Input_Email').val(ud.e)
+        </script>
+    }
+}

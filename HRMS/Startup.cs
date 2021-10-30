@@ -1,7 +1,9 @@
 using HRMS.Data;
 using HRMS.Data.Core;
+using HRMS.Data.General;
 using HRMS.Repository;
 using HRMS.Services;
+using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,8 +39,9 @@ namespace HRMS
                     Configuration.GetConnectionString("SqlConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<HRMSContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("SqlConnection")));
 
             services.AddSession(options =>
             {
@@ -49,10 +52,10 @@ namespace HRMS
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
-                options.Password.RequireLowercase = bool.Parse(Configuration["SecurityConfig:Password:RequireLowercase"]);
-                options.Password.RequireUppercase = bool.Parse(Configuration["SecurityConfig:Password:RequireUppercase"]);
-                options.Password.RequireDigit = bool.Parse(Configuration["SecurityConfig:Password:RequireDigit"]);
-                options.Password.RequiredLength = int.Parse(Configuration["SecurityConfig:Password:RequiredLength"]);
+                options.Password.RequireLowercase = bool.Parse(Configuration["SecurityConfiguration:Password:RequiredLowercase"]);
+                options.Password.RequireUppercase = bool.Parse(Configuration["SecurityConfiguration:Password:RequiredUppercase"]);
+                options.Password.RequireDigit = bool.Parse(Configuration["SecurityConfiguration:Password:RequiredDigit"]);
+                options.Password.RequiredLength = int.Parse(Configuration["SecurityConfiguration:Password:RequiredLength"]);
             }).AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddErrorDescriber<IdentityErrorDescriber>()
@@ -139,7 +142,7 @@ namespace HRMS
             app.UseStatusCodePagesWithRedirects("/Error/{0}");
             app.UseHttpsRedirection();
 
-            app.UseExceptionHandler();
+            app.UseExceptionHandlerMiddleware();
 
             app.UseStaticFiles(new StaticFileOptions()
             {

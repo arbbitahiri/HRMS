@@ -1,0 +1,25 @@
+﻿@page
+@model HRMS.Areas.Identity.Pages.Account.StatusModel
+@{
+}
+
+@if (Model != null)
+{
+    if (Model.Status == ErrorStatus.Success)
+    {
+
+    }
+    else if (Model.Status == ErrorStatus.Warning)
+    {
+
+    }
+    else if (Model.Status == ErrorStatus.Info)
+    {
+
+    }
+    else if (Model.Status == ErrorStatus.Error)
+    {
+
+    }
+}
+

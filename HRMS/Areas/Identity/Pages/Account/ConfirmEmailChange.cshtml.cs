@@ -1,30 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HRMS.Data.General;
+using HRMS.Models;
+using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HRMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class ConfirmEmailChangeModel : PageModel
+    public class ConfirmEmailChangeModel : BaseOModel
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, HRMSContext db)
+            : base(db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        [TempData]
-        public string StatusMessage { get; set; }
+        public ErrorVM Error { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
         {
@@ -43,8 +42,8 @@ namespace HRMS.Areas.Identity.Pages.Account
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
-                return Page();
+                Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Error while changing email!" };
+                return RedirectToPage("Login");
             }
 
             // In our UI email and user name are one and the same, so when we update the email
@@ -52,13 +51,15 @@ namespace HRMS.Areas.Identity.Pages.Account
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                StatusMessage = "Error changing user name.";
+                Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Error while changing username!" };
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
-            return Page();
+            Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Thank you for confirming your email." };
+
+            TempData.Set<ErrorVM>("Error", Error);
+            return RedirectToPage("Login");
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿@{
+    ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HRMS Riinvest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="¬/assets1/css/bootstrap.css">
+    <link rel="stylesheet" href="¬/assets1/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="¬/assets1/css/app.css">
+    <link rel="stylesheet" href="¬/assets1/css/pages/auth.css">
+</head>
+<body>
+    <div id="auth">
+        <div class="row h-100">
+            <div class="col-lg-5 col-12">
+                <div id="auth-left">
+                    <div class="auth-logo">
+                        <img src="~/assets1/images/logo/logo.png" alt="Logo">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="_LoadingPartial" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
