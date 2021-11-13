@@ -1,0 +1,39 @@
+﻿@using HRMS.Models.Shared
+@model IEnumerable<MenuVM>
+@{
+    var area = this.ViewContext.RouteData.Values["area"];
+    var controller = this.ViewContext.RouteData.Values["controller"]??"";
+    var action = this.ViewContext.RouteData.Values["action"]??"";
+}
+
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    @foreach (var menu in Model)
+    {
+        <li class="nav-item @(menu.HasSubmenu ? "menu-open" : "")" aria-haspopup="true" @(menu.HasSubmenu ? "data-menu-toggle=click" : "")>
+            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class="nav-link @(menu.Controller == (string)controller && menu.OpenFor.Split(',').Contains((string)action) ? "menu-open" : "")">
+                <i class="nav-icon @menu.Icon mr-2"></i>
+                <p>
+                    @menu.Title
+                    @if (menu.HasSubmenu)
+                    {
+                        <i class="right fas fa-angle-left"></i>
+                    }
+                </p>
+            </a>
+            @if (menu.Submenus.Any(a => a.SubmenuId != null))
+            {
+                <ul class="nav nav-treeview">
+                    @foreach (var submenu in menu.Submenus.Where(a => a.ParentId == null))
+                    {
+                        <li class="nav-item" aria-haspopup="true" @(menu.Submenus.Any(t => t.ParentId == submenu.SubmenuId) ? "data-menu-toggle=hover" : "")>
+                            <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" class="nav-link @(submenu.Controller == (string)controller && submenu.OpenFor.Split(',').Contains((string)action) ? "active" :"")">
+                                <i class="@submenu.Icon nav-icon"></i>
+                                <p>@submenu.Title</p>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>

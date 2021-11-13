@@ -195,7 +195,7 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<Log>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.LogId).HasColumnName("LogID");
 
                 entity.Property(e => e.Action)
                     .IsRequired()
@@ -218,8 +218,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.Ip)
                     .IsRequired()
                     .HasMaxLength(128);
-
-                entity.Property(e => e.LogId).HasColumnName("LogID");
 
                 entity.Property(e => e.Url)
                     .IsRequired()

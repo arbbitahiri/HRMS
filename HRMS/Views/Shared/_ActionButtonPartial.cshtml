@@ -1,0 +1,15 @@
+﻿@using HRMS.Models.Shared
+@model IEnumerable<ActionButton>
+
+<div class="input-group-prepend">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Actions</button>
+    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+        @foreach (var action in Model.Where(a => a.Display))
+        {
+            <button class="dropdown-item" type="button" onclick="@action.OnClick">
+                @Html.Raw(action.Icon)
+                <span class="" style="margin-top: 3px; margin-left: 10px;">@action.Title</span>
+            </button>
+        }
+    </div>
+</div>

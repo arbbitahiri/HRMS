@@ -1,21 +1,76 @@
 ﻿@model ErrorVM
 
+<style>
+    .alert-title {
+        font-size: 14px;
+        display: block
+    }
+
+    .alert-custom {
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%) !important;
+    }
+</style>
+
 @if (Model != null)
 {
     if (Model.Status == ErrorStatus.Success)
     {
-
+        <div class="d-flex bg-light-success rounded border-success border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder">Success!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     else if (Model.Status == ErrorStatus.Warning)
     {
-
+        <div class="d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder">Warning!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     else if (Model.Status == ErrorStatus.Info)
     {
-
+        <div class="d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder">Info!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     else if (Model.Status == ErrorStatus.Error)
     {
-
+        <div class="d-flex bg-light-danger rounded border-danger border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder">Error!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 }

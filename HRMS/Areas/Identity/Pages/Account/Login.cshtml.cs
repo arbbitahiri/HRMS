@@ -1,4 +1,5 @@
-﻿using HRMS.Data.General;
+﻿using HRMS.Data.Core;
+using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Utilities;
 using Microsoft.AspNetCore.Authentication;
@@ -20,12 +21,12 @@ namespace HRMS.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : BaseOModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             HRMSContext db)
             : base(db)
@@ -44,7 +45,6 @@ namespace HRMS.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
             public string Email { get; set; }
 
             [Required]
@@ -66,7 +66,6 @@ namespace HRMS.Areas.Identity.Pages.Account
                 returnUrl = returnUrl
             };
 
-            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -86,8 +85,6 @@ namespace HRMS.Areas.Identity.Pages.Account
             var error = new ErrorVM { Status = ErrorStatus.Success, Description = "" };
             var request = Request.Form;
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
             if (result.Succeeded)
             {

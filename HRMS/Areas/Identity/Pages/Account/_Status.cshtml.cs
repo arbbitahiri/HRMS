@@ -11,13 +11,13 @@ namespace HRMS.Areas.Identity.Pages.Account
 
         }
 
-        public ErrorStatus ErrorNumber { get; set; }
+        public ErrorStatus Status { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
 
         public void OnGet(ErrorVM Error)
         {
-            ErrorNumber = Error.Status;
+            Status = Error.Status;
             Description = Error.Description;
             Title = Error.Title;
         }

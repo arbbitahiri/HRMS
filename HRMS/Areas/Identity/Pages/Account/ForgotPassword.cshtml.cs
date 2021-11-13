@@ -1,4 +1,5 @@
-﻿using HRMS.Data.General;
+﻿using HRMS.Data.Core;
+using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
@@ -19,11 +20,11 @@ namespace HRMS.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ForgotPasswordModel : BaseOModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
 
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender, IConfiguration configuration, HRMSContext db)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration configuration, HRMSContext db)
             : base(db)
         {
             _userManager = userManager;

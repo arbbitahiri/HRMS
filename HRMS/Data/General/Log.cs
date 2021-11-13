@@ -7,7 +7,7 @@ namespace HRMS.Data.General
 {
     public partial class Log
     {
-        public long LogId { get; set; }
+        public int LogId { get; set; }
         public string UserId { get; set; }
         public string Ip { get; set; }
         public string Controller { get; set; }

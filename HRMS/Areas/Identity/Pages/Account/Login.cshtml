@@ -3,126 +3,100 @@
 @using HRMS.Utilities.General
 @model LoginModel
 @{
-	Layout = null;
-	ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
+    ViewData["Title"] = "Forgot your password?";
+    Layout = "_Layout";
+    ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
 }
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - HRMS Riinvest</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="¬/assets1/css/bootstrap.css">
-    <link rel="stylesheet" href="¬/assets1/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="¬/assets1/css/app.css">
-    <link rel="stylesheet" href="¬/assets1/css/pages/auth.css">
-</head>
-<body>
-    <div id="auth">
-        <div class="row h-100">
-            <div class="col-lg-5 col-12">
-                <div id="auth-left">
-                    <div class="auth-logo">
-                        <img src="~/assets1/images/logo/logo.png" alt="Logo">
-                    </div>
+<form method="post" asp-page="Login" asp-route-returnUrl="@Model.ReturnUrl" data-ajax="true" data-ajax-success="onSuccessLogin" id="frm_Login">
+    <div class="card-body">
+        <div id="status"></div>
+        <p class="login-box-msg">Log in to start your session.</p>
 
-                    <div id="status"></div>
-                    <h3 class="auth-title" style="font-size:2rem !important;">Log in.</h3>
-                    <p class="auth-subtitle mb-5" style="font-size:1rem !important;">Log in to start your session.</p>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(a => a.Input.returnUrl)
 
-                    <form method="post" asp-page="Login" asp-route-returnUrl="@Model.ReturnUrl" data-ajax="true" data-ajax-success="onSuccessLogin" id="frm_Login">
-                        @Html.AntiForgeryToken()
-                        @Html.HiddenFor(a => a.Input.returnUrl)
+        <div class="input-group">
+            <input asp-for="Input.Email" type="text" class="form-control" placeholder="Email">
+            <div class="input-group-append"><div clas="input-group-text"><span class="fas fa-envelope"></span></div></div>
+        </div>
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
 
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control" placeholder="Username">
-                            <div class="form-control-icon">
-                                <i class="bi bi-person"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control" placeholder="Password">
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <button type="submit" id="btn_SubmitLogin" data-action="Login" data-callback="onSubmitForm" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
-                                <span class="btn-text">
-                                    Log in
-                                </span>
-                                <span class="btn-spinner d-none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    Please wait..
-                                </span>
-                            </button>
-                        </div>
-                        <div class="text-center mt-5 text-md fs-4" style="font-size:1rem !important;">
-                            <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-7 d-none d-lg-block"><div id="auth-right"></div></div>
+        <div class="input-group mt-3">
+            <input asp-for="Input.Password" type="password" class="form-control form-control" placeholder="Password">
+            <div class="input-group-append"><div clas="input-group-text"><span class="fas fa-lock"></span></div></div>
+        </div>
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="card-footer">
+        <div class="social-auth-links text-center mt-2 mb-3">
+            <button type="submit" id="btn_SubmitLogin" data-action="Login" data-callback="onSubmitForm" class="btn btn-block btn-primary">
+                <span class="btn-text">
+                    Log in
+                </span>
+                <span class="btn-spinner d-none">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Please wait..
+                </span>
+            </button>
+        </div>
+        <div class="text-center mt-1 text-md fs-4" style="font-size:1rem !important;">
+            <p class="m-0"><a class="font-bold" href="/Identity/Account/ForgotPassword">Forgot password?</a></p>
         </div>
     </div>
-    <partial name="_LoadingPartial" />
+</form>
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
-
-    <script>
-        function onSubmitForm() {
-            if ($('#frm_Login').valid()) {
-                $('#frm_Login').submit();
-                setTimeout(function() {
-                    $('#btn_SubmitLogin').attr('disabled', true);
-                }, 150);
-            }
+@section Scripts{
+<script>
+    function onSubmitForm() {
+        if ($('#frm_Login').valid()) {
+            $('#frm_Login').submit();
+            setTimeout(function() {
+                $('#btn_SubmitLogin').attr('disabled', true);
+            }, 150);
         }
+    }
 
-        $('#btn_SubmitLogin').on('click', function() {
-            if ($('#frm_Login').valid()) {
-                $('#btn_SubmitLogin').find('.btn-text').addClass('d-none');
-                $('#btn_SubmitLogin').find('.btn-spinner').removeClass('d-none');
-            }
-        });
-
-        function onSuccessLogin(data) {
-            $('#btn_SubmitLogin').find('.btn-text').removeClass('d-none');
-            $('#btn_SubmitLogin').find('.btn-spinner').addClass('d-none');
-            if (data.Status == 1) {
-                window.location.href = '@Url.Action("Index", "Home")';
-            } else if (data.Status == 2) {
-                $.post('/Identity/Account/Message?handler=Filter',
-                {
-                    Title: data.Title,
-                    Status: data.Status,
-                    Description: data.Description,
-                    '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
-                },
-                function (data) {
-                    $('#status').html(data);
-                })
-                $('#btn_SubmitLogin').removeAttr('disabled');
-            } else if (data.Status == 3) {
-                $.post('/Identity/Account/Message?handler=Filter',
-                {
-                    Title: data.Title,
-                    Status: data.Status,
-                    Description: data.Description,
-                    '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
-                },
-                function (data) {
-                    $('#status').html(data);
-                })
-                $('#btn_SubmitLogin').removeAttr('disabled');
-            }
+    $('#btn_SubmitLogin').on('click', function() {
+        if ($('#frm_Login').valid()) {
+            $('#btn_SubmitLogin').attr('disabled');
+            $('#btn_SubmitLogin').find('.btn-text').addClass('d-none');
+            $('#btn_SubmitLogin').find('.btn-spinner').removeClass('d-none');
         }
-    </script>
-</body>
-</html>
+    });
+
+    function onSuccessLogin(data) {
+        $('#btn_SubmitLogin').find('.btn-text').removeClass('d-none');
+        $('#btn_SubmitLogin').find('.btn-spinner').addClass('d-none');
+        if (data.status == 1) {
+            window.location.href = '/Home/Index';
+        } else if (data.status == 2) {
+            $.post('/Identity/Account/Message?handler=Filter',
+            {
+                Title: data.title,
+                Status: data.status,
+                Description: data.description,
+                '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            function (data) {
+                $('#status').html(data);
+            });
+            $('#btn_SubmitLogin').removeAttr('disabled');
+        } else if (data.status == 3) {
+            $.post('/Identity/Account/Message?handler=Filter',
+            {
+                Title: data.title,
+                Status: data.status,
+                Description: data.description,
+                '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            function (data) {
+                console.log(data);
+                $('#status').html(data);
+            });
+            $('#btn_SubmitLogin').removeAttr('disabled');
+        }
+    }
+</script>
+}

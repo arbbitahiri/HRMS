@@ -1,0 +1,29 @@
+﻿@model LanguageEnum
+@{
+    var returnUrl = Context.Request.Path + Context.Request.QueryString.Value;
+}
+
+<li class="nav-item dropdown">
+    <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+        @if (Model == LanguageEnum.Albanian)
+        {
+            <i class="flag-icon flag-icon-al"></i>
+        }
+        else if (Model == LanguageEnum.English)
+        {
+            <i class="flag-icon flag-icon-gb"></i>
+        }
+        else
+        {
+            <i class="flag-icon flag-icon-al"></i>
+        }
+    </a>
+    <div class="dropdown-menu dropdown-menu-right p-0" style="left: inherit; right: 0px;">
+        <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="dropdown-item active">
+            <i class="flag-icon flag-icon-al mr-2"></i> Albanian
+        </a>
+        <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="dropdown-item">
+            <i class="flag-icon flag-icon-ua mr-2"></i> English
+        </a>
+    </div>
+</li>
