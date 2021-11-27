@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-HRMS-5746F201-6C76-4855-A3A7-74007DBF1334</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,8 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Data\General\" />
-    <Folder Include="Data\SqlFunctions\" />
-    <Folder Include="Utilities\Security\" />
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 

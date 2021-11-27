@@ -15,7 +15,10 @@ namespace HRMS.Data.General
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string NameSq { get; set; }
+        public string NameEn { get; set; }
+        public string DescriptionSq { get; set; }
+        public string DescriptionEn { get; set; }
         public string NormalizedName { get; set; }
         public string ConcurrencyStamp { get; set; }
 

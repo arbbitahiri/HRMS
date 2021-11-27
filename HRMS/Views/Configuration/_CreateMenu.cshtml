@@ -1,0 +1,102 @@
+﻿@using HRMS.Models.Menu
+@model CreateMenu
+
+<div class="modal-header">
+    <h5 class="modal-title">Create menu</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<form asp-action="CreateMenu" asp-controller="Configuration" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <div class="row form group">
+            <div class="col-md-4">
+                <label asp-for="NameSq" class="required"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameEn" class="required"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Controller" class="required"></label>
+                <input asp-for="Controller" class="form-control" />
+                <span asp-validation-for="Controller" class="text-danger" />
+            </div>
+        </div>
+        <div class="row form group">
+            <div class="col-md-4">
+                <label asp-for="Action" class="required"></label>
+                <input asp-for="Action" class="form-control" />
+                <span asp-validation-for="Action" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="OrdinalNumber" class="required"></label>
+                <input asp-for="OrdinalNumber" type="number" class="form-control" />
+                <span asp-validation-for="OrdinalNumber" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="ClaimPolicy" class="required"></label>
+                <input asp-for="ClaimPolicy" class="form-control" />
+                <span asp-validation-for="ClaimPolicy" class="text-danger" />
+            </div>
+        </div>
+        <div class="row form group">
+            <div class="col-md-4">
+                <label asp-for="Icon" class="required"></label>
+                <input asp-for="Icon" class="form-control" />
+                <span asp-validation-for="Icon" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="OpenFor" class="required"></label>
+                <input asp-for="OpenFor" class="form-control" />
+                <span asp-validation-for="OpenFor" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="HasSubMenu" class="custom-control custom-checkbox">
+                    <input asp-for="HasSubMenu" class="custom-control-input" style="cursor: pointer;" type="checkbox" id="ch_hasAccess" onchange="change_access()">
+                    <span class="custom-control-label" asp-for="HasSubMenu"></span>
+                </label>
+                <span asp-validation-for="HasSubMenu" class="text-danger" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">Create</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_CreateMenu');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+
+    function on_success(data) {
+        if (data.status == 1) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.description,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(t => {
+                window.location.reload()
+            });
+        } else if (data.status == 3) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.description,
+                confirmButtonText: 'Okay'
+            });
+        }
+    }
+</script>

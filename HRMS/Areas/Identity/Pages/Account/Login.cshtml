@@ -53,14 +53,14 @@
         if ($('#frm_Login').valid()) {
             $('#frm_Login').submit();
             setTimeout(function() {
-                $('#btn_SubmitLogin').attr('disabled', true);
-            }, 150);
+                $('#btn_SubmitLogin').attr('readonly', true);
+            }, 100);
         }
     }
 
     $('#btn_SubmitLogin').on('click', function() {
         if ($('#frm_Login').valid()) {
-            $('#btn_SubmitLogin').attr('disabled');
+            $('#btn_SubmitLogin').prop('readonly', true);
             $('#btn_SubmitLogin').find('.btn-text').addClass('d-none');
             $('#btn_SubmitLogin').find('.btn-spinner').removeClass('d-none');
         }

@@ -26,7 +26,9 @@ namespace HRMS.Data.General
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<StatusType> StatusType { get; set; }
+        public virtual DbSet<SubMenu> SubMenu { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,11 +60,25 @@ namespace HRMS.Data.General
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.Property(e => e.Description).HasMaxLength(1024);
+                entity.Property(e => e.DescriptionEn)
+                    .HasMaxLength(1024)
+                    .HasColumnName("DescriptionEN");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.DescriptionSq)
+                    .HasMaxLength(1024)
+                    .HasColumnName("DescriptionSQ");
+
+                entity.Property(e => e.Name).HasMaxLength(256);
+
+                entity.Property(e => e.NameEn)
                     .IsRequired()
-                    .HasMaxLength(256);
+                    .HasMaxLength(256)
+                    .HasColumnName("NameEN");
+
+                entity.Property(e => e.NameSq)
+                    .IsRequired()
+                    .HasMaxLength(256)
+                    .HasColumnName("NameSQ");
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
             });
@@ -221,16 +237,66 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.Url)
                     .IsRequired()
-                    .HasMaxLength(256);
+                    .HasMaxLength(1024);
 
                 entity.Property(e => e.UserId)
                     .HasMaxLength(450)
                     .HasColumnName("UserID");
             });
 
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.Property(e => e.MenuId).HasColumnName("MenuID");
+
+                entity.Property(e => e.Action).HasMaxLength(128);
+
+                entity.Property(e => e.Claim).HasMaxLength(128);
+
+                entity.Property(e => e.ClaimType).HasMaxLength(128);
+
+                entity.Property(e => e.Controller).HasMaxLength(128);
+
+                entity.Property(e => e.Icon).HasMaxLength(128);
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.NameEn)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameEN");
+
+                entity.Property(e => e.NameSq)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameSQ");
+
+                entity.Property(e => e.Roles).HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.MenuInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Menu_AspNetUsers_Insert");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.MenuUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_Menu_AspNetUsers_Update");
+            });
+
             modelBuilder.Entity<StatusType>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.StatusTypeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -248,11 +314,78 @@ namespace HRMS.Data.General
                     .HasMaxLength(256)
                     .HasColumnName("NameSQ");
 
-                entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.StatusTypeInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StatusType_AspNetUsers_Insert");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.StatusTypeUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_StatusType_AspNetUsers_Update");
+            });
+
+            modelBuilder.Entity<SubMenu>(entity =>
+            {
+                entity.Property(e => e.SubMenuId).HasColumnName("SubMenuID");
+
+                entity.Property(e => e.Action).HasMaxLength(128);
+
+                entity.Property(e => e.Claim).HasMaxLength(128);
+
+                entity.Property(e => e.ClaimType).HasMaxLength(128);
+
+                entity.Property(e => e.Controller).HasMaxLength(128);
+
+                entity.Property(e => e.Icon)
+                    .IsRequired()
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.MenuId).HasColumnName("MenuID");
+
+                entity.Property(e => e.NameEn)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameEN");
+
+                entity.Property(e => e.NameSq)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameSQ");
+
+                entity.Property(e => e.Roles).HasMaxLength(1024);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.SubMenuInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubMenu_AspNetUsers_Insert");
+
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.SubMenu)
+                    .HasForeignKey(d => d.MenuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubMenu_Menu");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.SubMenuUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_SubMenu_AspNetUsers_Update");
             });
 
             OnModelCreatingPartial(modelBuilder);

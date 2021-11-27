@@ -1,0 +1,170 @@
+﻿@using HRMS.Models.Authorization
+@model Search
+@inject IDDLRepo repo
+@{
+    ViewData["Title"] = "Authorizations";
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<style>
+    .w-20 {
+        width: 20%;
+    }
+</style>
+
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">Authorizations</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="Configuration" method="post" id="frm_SearchRole" data-ajax="true" data-ajax-method="post" data-ajax-success="kt_search">
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Role" class="required">Role</label><br />
+                    <select asp-for="Role" asp-items="await repo.Roles(user.Language)" class="form-control select2">
+                        <option value="">Choose</option>
+                    </select><br />
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Role" class="required" style="visibility: hidden;">Role</label><br />
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card card-default d-none" id="dv_ListAuth">
+    <div class="card-header">
+        <h3 class="card-title">Authorizations for menus</h3>
+    </div>
+    <div class="card-body">
+        <table id="tbl_Menu" class="table table-striped table-bordered w-full table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Policy</th>
+                    <th style="width: 20% !important;">Has access</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2({ width: "100%" });
+
+            var form = $('.form');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+        });
+
+        function kt_search(data) {
+            $('#mdl_load').css("display", "block");
+            $("#dv_ListAuth").removeClass("d-none");
+            render_Tbl(data);
+        }
+
+        var rowNo = 1;
+        function render_Tbl(data) {
+            $('#mdl_load').css("display", "none");
+            $("#tbl_Menu").DataTable({
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                data: data,
+                columnDefs: [
+                    {
+                        targets: 3,
+                        className: "w-20"
+                    }
+                ],
+                order: [[0, "asc"]],
+                columns:[
+                    {
+                        data: function (row, type, set) {
+                            return rowNo++;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var toReturn = row.menuTitle;
+                            if (row.subMenuTitle != "") {
+                                toReturn += ` => (${row.subMenuTitle})`;
+                            }
+                            return toReturn;
+                        }
+                    },
+                    { data: "claimPolicy" },
+                    {
+                        data: function (row, type, set) {
+                            var hasAccess = row.hasAccess ? "checked" : "";
+                            return '<label class="custom-control custom-switch">' +
+                                   '<input class="custom-control-input customSwitch" style="cursor: pointer;" type="checkbox" id="ch_hasAccess"' +
+                                   'onchange="change_access(this, \'' + row.menuIde + '\',\'' + row.subMenuIde + '\')" ' + hasAccess + '>' +
+                                   '<span class="custom-control-label" for="ch_hasAccess"></span></label>';
+                        }
+                    }
+                ]
+            });
+        }
+
+        $('#ch_hasAccess').on('change', function() {
+            console.log('u change: ' + $(this))
+        });
+
+        function change_access(e, mIde, sIde) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeAccess", "Configuration")',
+                data: {
+                    Role: $("#Role").val(),
+                    MenuIde: mIde,
+                    SubMenuIde: sIde,
+                    Access: $(e).is(":checked"),
+                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: data.title,
+                            text: data.description,
+                            timer: 2000,
+                            showConfirmButton: false
+                        })
+                    } else if (data.status == 3) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: data.title,
+                            text: data.description,
+                            confirmButtonText: 'Okay'
+                        })
+                    } else if (data.status == 2) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.title,
+                            text: data.description,
+                            confirmButtonText: 'Okay'
+                        })
+                    }
+                },
+                error: function (msg) {
+                    console.log("Error " + msg);
+                }
+            });
+        }
+    </script>
+}

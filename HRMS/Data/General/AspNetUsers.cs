@@ -13,6 +13,12 @@ namespace HRMS.Data.General
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            MenuInsertedFromNavigation = new HashSet<Menu>();
+            MenuUpdatedFromNavigation = new HashSet<Menu>();
+            StatusTypeInsertedFromNavigation = new HashSet<StatusType>();
+            StatusTypeUpdatedFromNavigation = new HashSet<StatusType>();
+            SubMenuInsertedFromNavigation = new HashSet<SubMenu>();
+            SubMenuUpdatedFromNavigation = new HashSet<SubMenu>();
         }
 
         public string Id { get; set; }
@@ -26,6 +32,7 @@ namespace HRMS.Data.General
         public string NormalizedUserName { get; set; }
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool? PhoneNumberConfirmed { get; set; }
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }
@@ -44,5 +51,11 @@ namespace HRMS.Data.General
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<Menu> MenuInsertedFromNavigation { get; set; }
+        public virtual ICollection<Menu> MenuUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StatusType> StatusTypeInsertedFromNavigation { get; set; }
+        public virtual ICollection<StatusType> StatusTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<SubMenu> SubMenuInsertedFromNavigation { get; set; }
+        public virtual ICollection<SubMenu> SubMenuUpdatedFromNavigation { get; set; }
     }
 }

@@ -1,0 +1,125 @@
+﻿@using HRMS.Models.Menu
+@model IEnumerable<MenuDetails>
+@{
+    Layout = null;
+}
+
+<div class="d-flex justify-content-between">
+    <div class="title">
+        <h3 class="card-title">List of menus</h3>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="button" onclick="create_menu()">Create menu</button>
+    </div>
+</div>
+<br />
+<table id="tbl_Menu" class="table table-striped table-bordered w-100 table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Menu title</th>
+            <th>Icon</th>
+            <th>Controller</th>
+            <th>Action</th>
+            <th style="width: 10% !important;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    function create_menu(){
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateMenu", "Configuration")', function () {
+            $('#modal-lg').modal('toggle');
+        });
+    }
+
+    render_MenuTbl(@Json.Serialize(Model));
+
+    var rowNoM = 1;
+    function render_MenuTbl(data) {
+        $('#tbl_Menu').DataTable({
+            language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+            keys: true,
+            responsive: true,
+            data: data,
+            order: [[0, "asc"]],
+            columns:[
+                { data: null },
+                { data: "title" },
+                {
+                    data: function (row, type, set) {
+                        return `<i class="${row.icon}"></i> (${row.icon})`;
+                    }
+                },
+                { data: "controller" },
+                { data: "action" },
+                {
+                    data: function (row, type, set) {
+                        return '<div class="input-group-prepend">' +
+                               '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Actions</button>' +
+                               '<div class="dropdown-menu" role="menu">' +
+                               '<button type="button" class="dropdown-item" onclick="add_submenu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">Add submenu</span></button>' +
+                               '<button type="button" class="dropdown-item" onclick="edit(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">Edit</span></button>' +
+                               '<button type="button" class="dropdown-item" onclick="delete_menu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">Delete</span></button>' +
+                               '</div></div>';
+                    }
+                }
+            ]
+        });
+    }
+
+    $('#tbl_Menu tbody tr').each(function (idx) {
+        $(this).children("td:eq(0)").html(idx + 1);
+    });
+
+    function add_submenu(ide) {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Configuration")', function () {
+            $('#modal-lg').modal('toggle');
+        });
+    }
+
+    function edit(ide) {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditMenu", "Configuration")', function () {
+            $('#modal-lg').modal('toggle');
+        });
+    }
+
+    function delete_menu(ide) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure you want to delete this menu?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: "Yes",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.value) {
+                $.post('@Url.Action("DeleteMenu", "Configuration")', { ide: ide }, function (data) {
+                    if (data.status == 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: data.title,
+                            text: data.description,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else if (data.status == 2) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.title,
+                            text: data.description,
+                            confirmButtonText: 'Okay'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+</script>

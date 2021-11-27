@@ -1,0 +1,23 @@
+{
+  "sEmptyTable": "Nuk ka asnj\u00EB t\u00EB dh\u00EBn\u00EB n\u00EB tabel\u00EB.",
+  "sInfo": "Duke treguar _START_ deri _END_ prej _TOTAL_ rreshtave.",
+  "sInfoEmpty": "Duke treguar 0 deri 0 prej 0 rreshtave.",
+  "sInfoFiltered": "(t\u00EB filtruara nga gjith\u00EBsej _MAX_ rreshtave.)",
+  "sInfoPostFix": "",
+  "sInfoThousands": ",",
+  "sLengthMenu": "Shiko _MENU_ rreshta.",
+  "sLoadingRecords": "Duke u ngarkuar...",
+  "sProcessing": "Duke u procesuar...",
+  "sSearch": "K\u00EBrkoni:",
+  "sZeroRecords": "Nuk u gjet asnj\u00EB e dh\u00EBn\u00EB.",
+  "oPaginate": {
+    "sFirst": "E para",
+    "sLast": "E fundit",
+    "sNext": "Para",
+    "sPrevious": "Prapa"
+  },
+  "oAria": {
+    "sSortAscending": ": aktivizoni p\u00EBr t\u00EB renditur kolon\u00EBn n\u00EB rritje.",
+    "sSortDescending": ": aktivizoni p\u00EBr t\u00EB renditur kolon\u00EBn n\u00EB zbritje."
+  }
+}

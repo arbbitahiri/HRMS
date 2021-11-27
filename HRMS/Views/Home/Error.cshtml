@@ -1,0 +1,52 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "System error!";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System error - HRMS Riinvest</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/assets/assets2/bootstrap.css">
+    <link rel="stylesheet" href="~/assets/assets2/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/assets/assets2/app.css">
+    <link rel="stylesheet" href="~/assets/assets2/error.css">
+
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60% !important;
+            height: 60% !important;
+        }
+
+        .img {
+            width: 60%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error p-0">
+        <div class="error-page container">
+            <div class="col-md-8 col-12 offset-md-2">
+                <div class="d-flex justify-content-center mb-5">
+                    <img class="img-error img" src="~/images/error/error-500.png" asp-append-version="true" alt="Not Found" class="center">
+                </div>
+                <div class="text-center">
+                    <h1 class="error-title">System Error</h1>
+                    <p class="fs-5 text-gray-600">There has been an error in system.<br />Please try again later!</p>
+                    <a href="/Home/Index" class="btn btn-lg btn-outline-primary mt-3">Go Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

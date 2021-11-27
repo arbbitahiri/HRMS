@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Menu and submenu";
+}
+
+<div class="card card-primary card-outline card-outline-tabs">
+    <div class="card-header p-0 border-bottom-0">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" id="kt_menu">
+                <a class="nav-link" id="tab_Menu" data-toggle="tab" href="#">
+                    <span class="nav-icon mr-1"><i class="fas fa-bars"></i></span>
+                    <span class="nav-text font-size-h6">Menu</span>
+                </a>
+            </li>
+            <li class="nav-item" id="kt_submenu">
+                <a class="nav-link" id="tab_SubMenu" data-toggle="tab" href="#">
+                    <span class="nav-icon mr-1"><i class="fab fa-mendeley"></i></span>
+                    <span class="nav-text font-size-h6">Submenu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane" id="tab_forMenu">
+
+            </div>
+            <div class="tab-pane" id="tab_forSubMenu">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tab_Menu').click();
+        });
+
+        $('#tab_Menu').click(function () {
+            $(this).addClass('active');
+            $('#tab_SubMenu').removeClass('active');
+            $('#tab_forMenu').addClass('active');
+            $('#tab_forSubMenu').removeClass('active');
+            window.location.hash = "menu";
+
+            $("#tab_forMenu").html('');
+            $("#tab_forMenu").load('@Url.Action("Menu", "Configuration")');
+        });
+
+        $('#tab_SubMenu').click(function () {
+            $(this).addClass('active');
+            $('#tab_Menu').removeClass('active');
+            $('#tab_forSubMenu').addClass('active');
+            $('#tab_forMenu').removeClass('active');
+            window.location.hash = "submenu";
+
+            $("#tab_forSubMenu").html('');
+            $("#tab_forSubMenu").load('@Url.Action("SubMenu", "Configuration")');
+        });
+
+        if (window.location.hash == "#submenu") {
+            $('#kt_submenu').find('a').addClass('active');
+            $('#tab_Menu').removeClass('active');
+            $('#tab_forSubMenu').addClass('active');
+            $('#tab_forMenu').removeClass('active');
+            $('.fade-in').hide().fadeIn(2000);
+        } else {
+            $('#kt_menu').find('a').addClass('active');
+            $('#tab_SubMenu').removeClass('active');
+            $('#tab_forMenu').addClass('active');
+            $('#tab_forSubMenu').removeClass('active');
+        }
+    </script>
+}

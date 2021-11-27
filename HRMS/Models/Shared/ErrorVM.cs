@@ -1,19 +1,17 @@
 using HRMS.Utilities;
 
-namespace HRMS.Models
+namespace HRMS.Models;
+public class ErrorVM
 {
-    public class ErrorVM
-    {
-        public string Title { get; set; }
+    public string Title { get; set; }
 
-        public ErrorStatus Status { get; set; }
+    public ErrorStatus Status { get; set; }
 
-        public string Description { get; set; }
+    public string Description { get; set; }
 
-        public string Icon { get; set; }
+    public string Icon { get; set; }
 
-        public string RequestId { get; set; }
+    public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-    }
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }
