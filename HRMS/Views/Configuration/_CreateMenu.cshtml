@@ -2,13 +2,13 @@
 @model CreateMenu
 
 <div class="modal-header">
-    <h5 class="modal-title">Create menu</h5>
+    <h5 class="modal-title">@Resource.AddMenu</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <i aria-hidden="true" class="ki ki-close"></i>
+        <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
 </div>
 
-<form asp-action="CreateMenu" asp-controller="Configuration" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success" role="form">
+<form asp-action="CreateMenu" asp-controller="Configuration" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <div class="row form group">
@@ -57,6 +57,7 @@
                 <span asp-validation-for="OpenFor" class="text-danger" />
             </div>
             <div class="col-md-4">
+                <label asp-for="HasSubMenu" class="required"></label> <br />
                 <label asp-for="HasSubMenu" class="custom-control custom-checkbox">
                     <input asp-for="HasSubMenu" class="custom-control-input" style="cursor: pointer;" type="checkbox" id="ch_hasAccess" onchange="change_access()">
                     <span class="custom-control-label" asp-for="HasSubMenu"></span>
@@ -66,8 +67,8 @@
         </div>
     </div>
     <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">Create</button>
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
 
@@ -79,8 +80,8 @@
         $.validator.unobtrusive.parse(form);
     });
 
-    function on_success(data) {
-        if (data.status == 1) {
+    function on_success_menu(data) {
+        if (data.status == ErrorStatus.SUCCESS) {
             Swal.fire({
                 icon: 'success',
                 title: data.title,
@@ -90,7 +91,7 @@
             }).then(t => {
                 window.location.reload()
             });
-        } else if (data.status == 3) {
+        } else if (data.status == ErrorStatus.WARNING) {
             Swal.fire({
                 icon: 'warning',
                 title: data.title,

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Authorization;
@@ -38,20 +39,22 @@ namespace HRMS.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Display(Name = "Email", ResourceType = typeof(Resource))]
+            [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
             [EmailAddress]
             [StringLength(32, MinimumLength = 2)]
             public string Email { get; set; }
 
-            [Required]
+            [Display(Name = "Password", ResourceType = typeof(Resource))]
+            [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
             [StringLength(32, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
             [DataType(DataType.Password)]
             [RegularExpression(@"((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+?><{}]).{8,32})")]
             public string Password { get; set; }
 
-            [Required]
+            [Display(Name = "ConfirmPassword", ResourceType = typeof(Resource))]
+            [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 

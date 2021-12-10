@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using HRMS.Areas.Identity.Pages.Account.Manage;
+using HRMS.Data.Core;
+using HRMS.Data.General;
+using Microsoft.AspNetCore.Identity;
 
-namespace HRMS.Areas.Identity.Pages.Account
+namespace HRMS.Areas.Identity.Pages.Account;
+public class AccessDeniedModel : BaseIModel
 {
-    public class AccessDeniedModel : PageModel
+    public AccessDeniedModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
+        : base(signInManager, userManager, db)
     {
-        public void OnGet()
-        {
+    }
 
-        }
+    public void OnGet()
+    {
+
     }
 }
+
 

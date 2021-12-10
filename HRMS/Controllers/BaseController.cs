@@ -2,6 +2,7 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.Shared;
+using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
 using ImageMagick;
@@ -33,9 +34,8 @@ public class BaseController : Controller
 {
     protected readonly SignInManager<ApplicationUser> signInManager;
     protected readonly UserManager<ApplicationUser> userManager;
-    protected readonly HRMSContext db;
+    protected HRMSContext db;
     protected ApplicationUser user;
-    protected UserModel userModel;
 
     public BaseController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
     {
@@ -47,6 +47,11 @@ public class BaseController : Controller
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         user = await userManager.GetUserAsync(context.HttpContext.User);
+        // if (context.HttpContext.Request.RouteValues["action"].ToString() != "_SideProfile")
+        // {
+        //     TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Info, Description = "You must change the password!" });
+        //     context.HttpContext.Response.Redirect("/Identity/Account/Manage/ChangePassword?c=true");
+        // }
         await signInManager.RefreshSignInAsync(user);
 
         ViewData["InternalUser"] = user;
@@ -65,19 +70,21 @@ public class BaseController : Controller
             PersonalNumber = user.PersonalNumber
         };
 
-        var log = new Log();
         var con = context.ActionDescriptor as ControllerActionDescriptor;
         DescriptionAttribute description = ((DescriptionAttribute[])con.MethodInfo.GetCustomAttributes(typeof(DescriptionAttribute), true)).FirstOrDefault();
 
-        log.UserId = (User.Identity.IsAuthenticated ? user.Id : null);
-        log.Ip = context.HttpContext.Connection.RemoteIpAddress.ToString();
-        log.Controller = context.HttpContext.Request.RouteValues["controller"].ToString();
-        log.Action = context.HttpContext.Request.RouteValues["action"].ToString();
-        log.Description = description.Description;
-        log.HttpMethod = context.HttpContext.Request.Method;
-        log.Url = context.HttpContext.Request.GetDisplayUrl();
-        log.Error = false;
-        log.InsertedDate = DateTime.Now;
+        var log = new Log
+        {
+            UserId = (User.Identity.IsAuthenticated ? user.Id : null),
+            Ip = context.HttpContext.Connection.RemoteIpAddress.ToString(),
+            Controller = context.HttpContext.Request.RouteValues["controller"].ToString(),
+            Action = context.HttpContext.Request.RouteValues["action"].ToString(),
+            Description = description.Description,
+            HttpMethod = context.HttpContext.Request.Method,
+            Url = context.HttpContext.Request.GetDisplayUrl(),
+            Error = false,
+            InsertedDate = DateTime.Now
+        };
 
         if (context.HttpContext.Request.HasFormContentType)
         {
@@ -153,6 +160,7 @@ public class BaseController : Controller
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = "Notification mode changed successfully!" });
     }
 
+    [AllowAnonymous]
     [Description("Error status message.")]
     public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
 

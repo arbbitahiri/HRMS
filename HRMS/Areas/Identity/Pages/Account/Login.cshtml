@@ -1,9 +1,8 @@
 ﻿@page
 @using HRMS.Models
-@using HRMS.Utilities.General
 @model LoginModel
 @{
-    ViewData["Title"] = "Forgot your password?";
+    ViewData["Title"] = Resource.Login;
     Layout = "_Layout";
     ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
 }
@@ -11,19 +10,19 @@
 <form method="post" asp-page="Login" asp-route-returnUrl="@Model.ReturnUrl" data-ajax="true" data-ajax-success="onSuccessLogin" id="frm_Login">
     <div class="card-body">
         <div id="status"></div>
-        <p class="login-box-msg">Log in to start your session.</p>
+        <p class="login-box-msg">@Resource.LoginToStart</p>
 
         @Html.AntiForgeryToken()
         @Html.HiddenFor(a => a.Input.returnUrl)
 
         <div class="input-group">
-            <input asp-for="Input.Email" type="text" class="form-control" placeholder="Email">
+            <input asp-for="Input.Email" type="text" class="form-control" placeholder="@Resource.Email">
             <div class="input-group-append"><div clas="input-group-text"><span class="fas fa-envelope"></span></div></div>
         </div>
         <span asp-validation-for="Input.Email" class="text-danger"></span>
 
         <div class="input-group mt-3">
-            <input asp-for="Input.Password" type="password" class="form-control form-control" placeholder="Password">
+            <input asp-for="Input.Password" type="password" class="form-control form-control" placeholder="@Resource.Password">
             <div class="input-group-append"><div clas="input-group-text"><span class="fas fa-lock"></span></div></div>
         </div>
         <span asp-validation-for="Input.Password" class="text-danger"></span>
@@ -33,16 +32,16 @@
         <div class="social-auth-links text-center mt-2 mb-3">
             <button type="submit" id="btn_SubmitLogin" data-action="Login" data-callback="onSubmitForm" class="btn btn-block btn-primary">
                 <span class="btn-text">
-                    Log in
+                    @Resource.Login
                 </span>
                 <span class="btn-spinner d-none">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Please wait..
+                    @Resource.PleaseWait
                 </span>
             </button>
         </div>
         <div class="text-center mt-1 text-md fs-4" style="font-size:1rem !important;">
-            <p class="m-0"><a class="font-bold" href="/Identity/Account/ForgotPassword">Forgot password?</a></p>
+            <p class="m-0"><a class="font-bold" href="/Identity/Account/ForgotPassword">@Resource.ForgotPassword</a></p>
         </div>
     </div>
 </form>
@@ -53,14 +52,13 @@
         if ($('#frm_Login').valid()) {
             $('#frm_Login').submit();
             setTimeout(function() {
-                $('#btn_SubmitLogin').attr('readonly', true);
+                $('#btn_SubmitLogin').prop('disabled', true);
             }, 100);
         }
     }
 
     $('#btn_SubmitLogin').on('click', function() {
         if ($('#frm_Login').valid()) {
-            $('#btn_SubmitLogin').prop('readonly', true);
             $('#btn_SubmitLogin').find('.btn-text').addClass('d-none');
             $('#btn_SubmitLogin').find('.btn-spinner').removeClass('d-none');
         }

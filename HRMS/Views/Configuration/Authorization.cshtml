@@ -2,7 +2,7 @@
 @model Search
 @inject IDDLRepo repo
 @{
-    ViewData["Title"] = "Authorizations";
+    ViewData["Title"] = Resource.Authorization;
     UserModel user = (UserModel)ViewData["User"];
 }
 
@@ -14,21 +14,21 @@
 
 <div class="card card-default">
     <div class="card-header">
-        <h3 class="card-title">Authorizations</h3>
+        <h3 class="card-title">@Resource.Authorizations</h3>
     </div>
     <div class="card-body">
         <form asp-action="Search" asp-controller="Configuration" method="post" id="frm_SearchRole" data-ajax="true" data-ajax-method="post" data-ajax-success="kt_search">
             <div class="row">
                 <div class="col-md-4">
-                    <label asp-for="Role" class="required">Role</label><br />
+                    <label asp-for="Role" class="required">@Resource.Role</label><br />
                     <select asp-for="Role" asp-items="await repo.Roles(user.Language)" class="form-control select2">
-                        <option value="">Choose</option>
+                        <option value="">@Resource.Choose</option>
                     </select><br />
                     <span asp-validation-for="Role" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                     <label asp-for="Role" class="required" style="visibility: hidden;">Role</label><br />
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Search</button>
                 </div>
             </div>
         </form>
@@ -37,16 +37,16 @@
 
 <div class="card card-default d-none" id="dv_ListAuth">
     <div class="card-header">
-        <h3 class="card-title">Authorizations for menus</h3>
+        <h3 class="card-title">@Resource.AuthorizationsForMenus</h3>
     </div>
     <div class="card-body">
         <table id="tbl_Menu" class="table table-striped table-bordered w-full table-hover">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Policy</th>
-                    <th style="width: 20% !important;">Has access</th>
+                    <th>@Resource.Name</th>
+                    <th>@Resource.Policy</th>
+                    <th style="width: 20% !important;">@Resource.HasAccess</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +74,6 @@
             render_Tbl(data);
         }
 
-        var rowNo = 1;
         function render_Tbl(data) {
             $('#mdl_load').css("display", "none");
             $("#tbl_Menu").DataTable({
@@ -91,10 +90,13 @@
                     }
                 ],
                 order: [[0, "asc"]],
+                drawCallback: function () {
+                    $("input[data-bootstrap-switch]").bootstrapSwitch();
+                },
                 columns:[
                     {
-                        data: function (row, type, set) {
-                            return rowNo++;
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     {
@@ -110,19 +112,14 @@
                     {
                         data: function (row, type, set) {
                             var hasAccess = row.hasAccess ? "checked" : "";
-                            return '<label class="custom-control custom-switch">' +
-                                   '<input class="custom-control-input customSwitch" style="cursor: pointer;" type="checkbox" id="ch_hasAccess"' +
-                                   'onchange="change_access(this, \'' + row.menuIde + '\',\'' + row.subMenuIde + '\')" ' + hasAccess + '>' +
-                                   '<span class="custom-control-label" for="ch_hasAccess"></span></label>';
+                            return '<input data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
+                                   'onchange="change_access(this, \'' + row.menuIde + '\',\'' + row.subMenuIde + '\')" ' + hasAccess + ' ' +
+                                   'data-bootstrap-switch data-off-color="warning" data-on-color="success">';
                         }
                     }
                 ]
             });
         }
-
-        $('#ch_hasAccess').on('change', function() {
-            console.log('u change: ' + $(this))
-        });
 
         function change_access(e, mIde, sIde) {
             $.ajax({
@@ -137,28 +134,28 @@
                 },
                 success: function (data) {
                     console.log(data)
-                    if (data.status == 1) {
+                    if (data.status == ErrorStatus.SUCCESS) {
                         Swal.fire({
                             icon: 'success',
                             title: data.title,
                             text: data.description,
                             timer: 2000,
                             showConfirmButton: false
-                        })
-                    } else if (data.status == 3) {
+                        });
+                    } else if (data.status == ErrorStatus.WARNING) {
                         Swal.fire({
                             icon: 'warning',
                             title: data.title,
                             text: data.description,
                             confirmButtonText: 'Okay'
-                        })
-                    } else if (data.status == 2) {
+                        });
+                    } else if (data.status == ErrorStatus.ERROR) {
                         Swal.fire({
                             icon: 'error',
                             title: data.title,
                             text: data.description,
                             confirmButtonText: 'Okay'
-                        })
+                        });
                     }
                 },
                 error: function (msg) {

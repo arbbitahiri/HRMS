@@ -1,18 +1,23 @@
 ﻿using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Models.AppSettings;
 using HRMS.Models.Authorization;
 using HRMS.Models.Menu;
 using HRMS.Models.SubMenu;
 using HRMS.Repository;
+using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -68,7 +73,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = "Warning", Description = "Invalid data!" });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         Menu menu = null; SubMenu subMenu = null;
@@ -114,7 +119,7 @@ public class ConfigurationController : BaseController
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Access changed successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
     }
 
     #endregion
@@ -151,7 +156,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = "Warning", Description = "Invalid data!" });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.Menu.Add(new Menu
@@ -171,7 +176,7 @@ public class ConfigurationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data registered successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -206,7 +211,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = "Warning", Description = "Invalid data!" });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt(edit.MenuIde));
@@ -226,21 +231,21 @@ public class ConfigurationController : BaseController
         menu.UpdatedNo++;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data updated successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
 
     #region => Delete
 
-    [HttpGet, Authorize(Policy = "11m:r")]
+    [HttpPost, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new menu.")]
     public async Task<IActionResult> DeleteMenu(string ide)
     {
         db.Menu.Remove(await db.Menu.FindAsync(CryptoSecurity.Decrypt(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data deleted successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -286,7 +291,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = "Warning", Description = "Invalid data!" });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.SubMenu.Add(new SubMenu
@@ -306,7 +311,7 @@ public class ConfigurationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data registered successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -339,7 +344,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = "Warning", Description = "Invalid data!" });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(edit.SubMenuIde));
@@ -358,7 +363,7 @@ public class ConfigurationController : BaseController
         submenu.UpdatedNo++;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data updated successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -372,10 +377,78 @@ public class ConfigurationController : BaseController
         db.SubMenu.Remove(await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = "Success", Description = "Data deleted successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
+
+    #endregion
+
+    #region Application settings 11as:r
+
+    [HttpGet, Authorize(Policy = "11as:r")]
+    [Description("Form to display list of application settings.")]
+    public IActionResult AppSettings()
+    {
+        ViewData["Title"] = "Parametrat e aplikacionit";
+
+        var appSettings = new List<AppSettings>();
+
+        string json = string.Empty;
+        using (var streamReader = new StreamReader("appsettings.json"))
+        {
+            json = streamReader.ReadToEnd();
+        }
+
+        dynamic data = JsonConvert.DeserializeObject(json);
+
+        foreach (var item in data.ConnectionStrings)
+        {
+            appSettings.Add(new AppSettings { Key = item.Name, Region = "ConnectionString", Value = item.Value });
+        }
+
+        foreach (var item in data.AppSettings)
+        {
+            appSettings.Add(new AppSettings { Key = item.Name, Region = "AppSettings", Value = item.Value });
+        }
+
+        //foreach (var item in data.SecurityConfiguration)
+        //{
+        //    appSettings.Add(new AppSettings { Key = item.Name, Region = "SecurityConfiguration", Value = item.Value });
+        //}
+
+        foreach (var item in data.EmailConfiguration)
+        {
+            appSettings.Add(new AppSettings { Key = item.Name, Region = "EmailConfiguration", Value = item.Value });
+        }
+
+        return View(appSettings);
+    }
+
+    [HttpPost, Authorize(Policy = "11as:r")]
+    [Description("Form to edit application settings.")]
+    public async Task<IActionResult> _EditAppSetings(AppSettings edit)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        string json = string.Empty;
+        using (var streamReader = new StreamReader("appsettings.json"))
+        {
+            json = streamReader.ReadToEnd();
+        }
+        dynamic data = JsonConvert.DeserializeObject(json);
+        data[edit.Region][edit.Key] = edit.Value;
+
+        using (var streamWriter = new StreamWriter("appsettings.json", false))
+        {
+            await streamWriter.WriteAsync(JsonConvert.SerializeObject(data));
+        }
+
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+    }
 
     #endregion
 }

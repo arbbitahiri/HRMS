@@ -1,4 +1,65 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ErrorVM
+
+@if (Model != null)
+{
+    if (Model.Status == ErrorStatus.Success)
+    {
+        <div class="d-flex bg-light-success rounded border-success border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder"><i class="icon fas fa-check"></i> @Model.Title!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Warning)
+    {
+        <div class="d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder"><i class="icon fas fa-exclamation-triangle"></i> @Model.Title!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Info)
+    {
+        <div class="d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder"><i class="icon fas fa-info"></i> @Model.Title!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Error)
+    {
+        <div class="d-flex bg-light-danger rounded border-danger border border-dashed mb-9 p-6">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold p-2">
+                    <h4 class="text-gray-800 fw-bolder"><i class="icon fas fa-ban"></i> @Model.Title!</h4>
+                    <div class="fs-6 text-gray-600">
+                        <div class="d-flex flex-column">
+                            <div class="alert-text font-size-h6">@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

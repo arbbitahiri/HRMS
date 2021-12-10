@@ -6,10 +6,10 @@
 
 <div class="d-flex justify-content-between">
     <div class="title">
-        <h3 class="card-title">List of menus</h3>
+        <h3 class="card-title">@Resource.ListMenus</h3>
     </div>
     <div>
-        <button class="btn btn-primary" type="button" onclick="create_menu()">Create menu</button>
+        <button class="btn btn-primary" type="button" onclick="create_menu()">@Resource.AddMenu</button>
     </div>
 </div>
 <br />
@@ -17,11 +17,11 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Menu title</th>
-            <th>Icon</th>
-            <th>Controller</th>
-            <th>Action</th>
-            <th style="width: 10% !important;">Actions</th>
+            <th>@Resource.MenuName</th>
+            <th>@Resource.Icon</th>
+            <th>@Resource.Controller</th>
+            <th>@Resource.Action</th>
+            <th style="width: 10% !important;">@Resource.Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -47,8 +47,12 @@
             responsive: true,
             data: data,
             order: [[0, "asc"]],
-            columns:[
-                { data: null },
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
                 { data: "title" },
                 {
                     data: function (row, type, set) {
@@ -59,12 +63,13 @@
                 { data: "action" },
                 {
                     data: function (row, type, set) {
+                        var dnone = row.hasSubMenu ? "" : "d-none";
                         return '<div class="input-group-prepend">' +
-                               '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Actions</button>' +
+                               '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                '<div class="dropdown-menu" role="menu">' +
-                               '<button type="button" class="dropdown-item" onclick="add_submenu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">Add submenu</span></button>' +
-                               '<button type="button" class="dropdown-item" onclick="edit(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">Edit</span></button>' +
-                               '<button type="button" class="dropdown-item" onclick="delete_menu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">Delete</span></button>' +
+                               '<button type="button" class="dropdown-item ' + dnone + '" onclick="add_submenu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Html.Raw(Resource.AddSubMenu)</span></button>' +
+                               '<button type="button" class="dropdown-item" onclick="edit(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                               '<button type="button" class="dropdown-item" onclick="delete_menu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
                                '</div></div>';
                     }
                 }
@@ -73,48 +78,51 @@
     }
 
     $('#tbl_Menu tbody tr').each(function (idx) {
+        debugger
         $(this).children("td:eq(0)").html(idx + 1);
     });
 
     function add_submenu(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Configuration")', function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Configuration")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }
 
     function edit(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditMenu", "Configuration")', function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditMenu", "Configuration")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }
 
     function delete_menu(ide) {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure you want to delete this menu?",
+            title: "@Html.Raw(Resource.AreYouSure)",
+            text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            confirmButtonText: "Yes",
-            cancelButtonText: "No"
+            confirmButtonText: "@Resource.Yes",
+            cancelButtonText: "@Resource.No"
         }).then((result) => {
             if (result.value) {
                 $.post('@Url.Action("DeleteMenu", "Configuration")', { ide: ide }, function (data) {
-                    if (data.status == 1) {
+                    if (data.status == ErrorStatus.SUCCESS) {
                         Swal.fire({
                             icon: 'success',
                             title: data.title,
                             text: data.description,
                             timer: 2000,
                             showConfirmButton: false
+                        }).then(t => {
+                            window.location.reload()
                         });
-                    } else if (data.status == 2) {
+                    } else if (data.status == ErrorStatus.WARNING) {
                         Swal.fire({
                             icon: 'error',
                             title: data.title,
                             text: data.description,
-                            confirmButtonText: 'Okay'
+                            confirmButtonText: '@Html.Raw(Resource.Okay)'
                         });
                     }
                 });

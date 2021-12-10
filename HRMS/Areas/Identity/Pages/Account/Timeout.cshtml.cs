@@ -1,6 +1,7 @@
 using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Identity;
@@ -31,11 +32,13 @@ namespace HRMS.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Display(Name = "Email", ResourceType = typeof(Resource))]
+            [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
             public string Email { get; set; }
 
             [DataType(DataType.Password)]
-            [Required]
+            [Display(Name = "Password", ResourceType = typeof(Resource))]
+            [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
             public string Password { get; set; }
         }
 

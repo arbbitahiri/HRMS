@@ -7,9 +7,9 @@
 <h3 class="auth-title" style="font-size:2rem !important;">HRMS Riinvest</h3>
 
 <div class="text-center mb-10">
-    <h3>Session timed out</h3>
+    <h3>@Resource.SessionTimedOut</h3>
 
-    <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="sq-AL">Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="en-GB">English</a>
+    <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="sq-AL">@Resource.Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="en-GB">@Resource.English</a>
 </div>
 
 <form method="post" asp-route-returnUrl="@Model.ReturnUrl" id="frm_Login" class="form-element">
@@ -21,25 +21,25 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.TextBoxFor(m => m.Input.Email, new { @class = "form-control d-none" })
     <div class="form-group has-feedback">
-        <input type="password" asp-for="Input.Password" id="Password" class="form-control" placeholder="Password" />
+        <input type="password" asp-for="Input.Password" id="Password" class="form-control" placeholder="@Resource.Password" />
         <span asp-validation-for="Input.Password" class="text-danger"></span>
         <span class="ion ion-locked form-control-feedback"></span>
     </div>
     <div class="row">
         <div class="col-12 text-center pt-2">
-            <button type="submit" data-callback="onSubmitForm" data-action="login" class="btn btn-primary btn-block margin-top-10">Log in</button>
+            <button type="submit" data-callback="onSubmitForm" data-action="login" class="btn btn-primary btn-block margin-top-10">@Resource.Login</button>
         </div>
     </div>
 </form>
 
 <div class="text-center">
     <p class="mb-5 mt-4">
-        Type password to retrieve session
+        @Resource.TypePasswordToSession
     </p>
     <p class="mt-4"> or </p>
 </div>
 <div class="text-center">
-    <p class="mb-0">or <a asp-page="Login" class="text-warning"><b>Log in</b></a>As different user</p>
+    <p class="mb-0">or <a asp-page="Login" class="text-warning"><b>@Resource.Login</b></a> @Resource.AsDiffUser</p>
 </div>
 
 @section scripts{

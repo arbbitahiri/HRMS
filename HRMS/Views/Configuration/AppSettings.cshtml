@@ -1,0 +1,139 @@
+﻿@using HRMS.Models.AppSettings
+@model IEnumerable<AppSettings>
+
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">Lista e parametrave te aplikacionit</h3>
+    </div>
+    <div class="card-body">
+        <table id="tbl_appsettings" class="table table-striped table-bordered w-100 table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fusha</th>
+                    <th>Çelësi</th>
+                    <th>Vlera</th>
+                    <th>@Resource.Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="modal modal-right fade" id="mdl_edit" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Resource.Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="far fa-times-circle"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="_EditAppSettings" asp-controller="Configuration" id="frm_EditAppSettings" class="noLoading" method="post" data-ajax="true" data-ajax-method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label class="required">Fusha</label>
+                            <input name="Region" id="Region" disabled="disabled" class="form-control" />
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="required">Çelësi</label>
+                            <input name="Key" id="Key" disabled="disabled" class="form-control" />
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="required">Vlera</label>
+                            <input name="Value" id="Value" required class="form-control" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+                <button type="button" onclick="save_changes()" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            render_Tbl(@Json.Serialize(Model));
+        });
+console.log(culture)
+        function render_Tbl(data) {
+            $('#tbl_appsettings').DataTable({
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                data: data,
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { data: "region" },
+                    { data: "key" },
+                    {
+                        data: function (row, type, set) {
+                            if (row.value != '') {
+                                return row.value;
+                            } else {
+                                return "///";
+                            }
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit(\'' + row.region + '\', \'' + row.key + '\', \'' + row.value + '\')">' +
+                                '<span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Html.Raw(Resource.Edit)</span></button>' +
+                                '</div></div>';
+                        }
+                    }
+                ]
+            });
+        }
+
+        function edit(reg, key, val) {
+            $('#Region').val(reg);
+            $('#Key').val(key);
+            $('#Value').val(val);
+            $('#mdl_edit').modal('toggle');
+        }
+
+        function save_changes() {
+            $.post('@Url.Action("_EditAppSetings", "Configuration")', {
+                Region: $('#Region').val(),
+                Key: $('#Key').val(),
+                Value: $('#Value').val()
+            }, function (data) {
+                if (data.status == ErrorStatus.SUCCESS) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: data.title,
+                        text: data.description,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(t => {
+                        window.location.reload();
+                    });
+                } else if (data.status == ErrorNumber.WARNING) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: data.title,
+                        text: data.description,
+                        confirmButtonText: '@Html.Raw(Resource.Okay)'
+                    });
+                }
+            })
+        }
+    </script>
+}

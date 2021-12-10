@@ -19,11 +19,11 @@
         }
     </a>
     <div class="dropdown-menu dropdown-menu-right p-0" style="left: inherit; right: 0px;">
-        <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="dropdown-item active">
-            <i class="flag-icon flag-icon-al mr-2"></i> Albanian
+        <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.Albanian ? "active" : "")">
+            <i class="flag-icon flag-icon-al mr-2"></i> @Resource.Albanian
         </a>
-        <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="dropdown-item">
-            <i class="flag-icon flag-icon-gb mr-2"></i> English
+        <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.English ? "active" : "")">
+            <i class="flag-icon flag-icon-gb mr-2"></i> @Resource.English
         </a>
     </div>
 </li>

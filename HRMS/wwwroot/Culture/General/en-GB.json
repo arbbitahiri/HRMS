@@ -1,0 +1,7 @@
+{
+    "Error" : "Error",
+    "ErrorProcessingData" : "An error occurred while processing the data. Please try again later!",
+    "Okay": "Okay",
+    "AccessDenied" : "Access is denied!",
+    "AccessDeniedLong" : "You are not authorized to access this page!"
+}

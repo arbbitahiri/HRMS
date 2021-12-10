@@ -1,16 +1,5 @@
 ﻿@model ErrorVM
 
-<style>
-    .alert-title {
-        font-size: 14px;
-        display: block
-    }
-
-    .alert-custom {
-        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%) !important;
-    }
-</style>
-
 @if (Model != null)
 {
     if (Model.Status == ErrorStatus.Success)

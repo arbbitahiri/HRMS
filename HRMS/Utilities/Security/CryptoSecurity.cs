@@ -12,6 +12,8 @@ public static class CryptoSecurity
     public static string Encrypt(int obj)
     {
         using Aes aes = Aes.Create();
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
         aes.Key = Convert.FromBase64String(Key);
         aes.IV = Convert.FromBase64String(IV);
 
@@ -25,7 +27,7 @@ public static class CryptoSecurity
             {
                 swEncrypt.Write(obj);
             }
-            return Convert.ToBase64String(msEncrypt.ToArray()); //.Replace("+", "(").Replace("/", ")");
+            return Convert.ToBase64String(msEncrypt.ToArray()).Replace("+", "(").Replace("/", ")");
         }
         catch
         {
@@ -35,14 +37,16 @@ public static class CryptoSecurity
 
     public static int Decrypt(string obj)
     {
+        obj = obj.Replace("(", "+").Replace(")", "/").Replace(" ", "+").Replace("%2F", "/");
+
         using Aes aes = Aes.Create();
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
         aes.Key = Convert.FromBase64String(Key);
         aes.IV = Convert.FromBase64String(IV);
 
         try
         {
-            //obj = obj.Replace("(", "+").Replace(")", "/");
-
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
             using var msDecrypt = new MemoryStream(Convert.FromBase64String(obj));

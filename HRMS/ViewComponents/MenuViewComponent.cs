@@ -1,71 +1,80 @@
-﻿using HRMS.Data.Core;
+﻿using HRMS.Data;
+using HRMS.Data.Core;
 using HRMS.Data.SqlFunctions;
 using HRMS.Models.Shared;
 using HRMS.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HRMS.ViewComponents
+namespace HRMS.ViewComponents;
+public class MenuViewComponent : ViewComponent
 {
-    public class MenuViewComponent : ViewComponent
+    private readonly ApplicationDbContext db;
+    private readonly UserManager<ApplicationUser> userManager;
+    private readonly IFunctionRepo repo;
+    private IMemoryCache cache;
+    private MemoryCacheEntryOptions cacheOptions;
+
+    public MenuViewComponent(IMemoryCache cache, IFunctionRepo repo,
+        UserManager<ApplicationUser> userManager,
+        ApplicationDbContext db)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IFunctionRepo _repo;
+        this.db = db;
+        this.repo = repo;
+        this.userManager = userManager;
+        this.cache = cache;
+        cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(relative: TimeSpan.FromHours(2));
+    }
 
-        public MenuViewComponent(UserManager<ApplicationUser> userManager, IFunctionRepo repo)
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var menusTemp = new List<MenuList>();
+        var user = (ApplicationUser)ViewData["InternalUser"];
+
+        var roles = await userManager.GetRolesAsync(user);
+        foreach (var role in roles)
         {
-            _repo = repo;
-            _userManager = userManager;
+            var getMenu = (await repo.MenuList(role, user.Language)).Where(a => !menusTemp.Any(n => n.SubMenuController == a.SubMenuController)).ToList();
+
+            menusTemp.AddRange(getMenu);
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var menusTemp = new List<MenuList>();
-            var user = (ApplicationUser)ViewData["InternalUser"];
-
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
+        var menus = menusTemp.OrderBy(a => a.MenuOrdinalNumber)
+            .Select(a => new
             {
-                var getMenu = (await _repo.MenuList(role, user.Language)).Where(a => !menusTemp.Any(n => n.SubMenuController == a.SubMenuController)).ToList();
+                a.MenuId,
+                a.MenuTitle,
+                a.HasSubMenu,
+                a.MenuIcon,
+                a.MenuController,
+                a.MenuAction,
+                a.MenuOpenFor
+            }).Distinct().ToList()
+            .Select(a => new MenuVM
+            {
+                Title = a.MenuTitle,
+                HasSubmenu = a.HasSubMenu,
+                Icon = a.MenuIcon,
+                Controller = a.MenuController,
+                Action = a.MenuAction,
+                OpenFor = a.MenuOpenFor ?? "",
+                Submenus = menusTemp.Where(b => b.MenuId == a.MenuId).OrderBy(a => a.SubMenuOrdinalNumber)
+                    .Select(b => new SubmenuVM
+                    {
+                        SubmenuId = b.SubMenuId,
+                        Title = b.SubMenuTitle,
+                        Icon = b.SubMenuIcon,
+                        Controller = b.SubMenuController,
+                        Action = b.SubMenuAction,
+                        OpenFor = b.SubMenuOpenFor
+                    }).Distinct().ToList()
+            }).ToList();
 
-                menusTemp.AddRange(getMenu);
-            }
-
-            var menus = menusTemp.OrderBy(a => a.MenuOrdinalNumber)
-                .Select(a => new
-                {
-                    a.MenuId,
-                    a.MenuTitle,
-                    a.HasSubMenu,
-                    a.MenuIcon,
-                    a.MenuController,
-                    a.MenuAction,
-                    a.MenuOpenFor
-                }).Distinct().ToList()
-                .Select(a => new MenuVM
-                {
-                    Title = a.MenuTitle,
-                    HasSubmenu = a.HasSubMenu,
-                    Icon = a.MenuIcon,
-                    Controller = a.MenuController,
-                    Action = a.MenuAction,
-                    OpenFor = a.MenuOpenFor == null ? "" : a.MenuOpenFor,
-                    Submenus = menusTemp.Where(b => b.MenuId == a.MenuId).OrderBy(a => a.SubMenuOrdinalNumber)
-                        .Select(b => new SubmenuVM
-                        {
-                            SubmenuId = b.SubMenuId,
-                            Title = b.SubMenuTitle,
-                            Icon = b.SubMenuIcon,
-                            Controller = b.SubMenuController,
-                            Action = b.SubMenuAction,
-                            OpenFor = b.SubMenuOpenFor
-                        }).Distinct().ToList()
-                }).ToList();
-
-            return View(menus);
-        }
+        return View(menus);
     }
 }
