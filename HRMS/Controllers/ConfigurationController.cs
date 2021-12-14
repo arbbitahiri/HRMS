@@ -392,7 +392,7 @@ public class ConfigurationController : BaseController
     {
         ViewData["Title"] = "Parametrat e aplikacionit";
 
-        var appSettings = new List<AppSettings>();
+        var appSettings = new List<ApplicationSettings>();
 
         string json = string.Empty;
         using (var streamReader = new StreamReader("appsettings.json"))
@@ -404,22 +404,18 @@ public class ConfigurationController : BaseController
 
         foreach (var item in data.ConnectionStrings)
         {
-            appSettings.Add(new AppSettings { Key = item.Name, Region = "ConnectionString", Value = item.Value });
+            appSettings.Add(new ApplicationSettings { Key = item.Name, Region = "ConnectionString", Value = item.Value });
         }
 
         foreach (var item in data.AppSettings)
         {
-            appSettings.Add(new AppSettings { Key = item.Name, Region = "AppSettings", Value = item.Value });
+            appSettings.Add(new ApplicationSettings { Key = item.Name, Region = "AppSettings", Value = item.Value });
         }
 
-        //foreach (var item in data.SecurityConfiguration)
-        //{
-        //    appSettings.Add(new AppSettings { Key = item.Name, Region = "SecurityConfiguration", Value = item.Value });
-        //}
 
         foreach (var item in data.EmailConfiguration)
         {
-            appSettings.Add(new AppSettings { Key = item.Name, Region = "EmailConfiguration", Value = item.Value });
+            appSettings.Add(new ApplicationSettings { Key = item.Name, Region = "EmailConfiguration", Value = item.Value });
         }
 
         return View(appSettings);
@@ -427,7 +423,7 @@ public class ConfigurationController : BaseController
 
     [HttpPost, Authorize(Policy = "11as:r")]
     [Description("Form to edit application settings.")]
-    public async Task<IActionResult> _EditAppSetings(AppSettings edit)
+    public async Task<IActionResult> _EditAppSetings(ApplicationSettings edit)
     {
         if (!ModelState.IsValid)
         {

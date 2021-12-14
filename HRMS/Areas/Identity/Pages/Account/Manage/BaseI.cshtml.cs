@@ -4,36 +4,41 @@ using HRMS.Models;
 using HRMS.Models.Shared;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
+using ImageMagick;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
 public class BaseIModel : PageModel
 {
-    protected readonly SignInManager<ApplicationUser> _signInManager;
-    protected readonly UserManager<ApplicationUser> _userManager;
+    protected readonly SignInManager<ApplicationUser> signInManager;
+    protected readonly UserManager<ApplicationUser> userManager;
     protected HRMSContext db;
     protected ApplicationUser user;
 
     public BaseIModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
+        this.signInManager = signInManager;
+        this.userManager = userManager;
         this.db = db;
     }
 
     public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
     {
-        user = await _userManager.GetUserAsync(context.HttpContext.User);
-        await _signInManager.RefreshSignInAsync(user);
+        user = await userManager.GetUserAsync(context.HttpContext.User);
+        await signInManager.RefreshSignInAsync(user);
 
         if (context.HttpContext.Request.RouteValues["page"].ToString() != "/Account/Manage/ChangePassword")
         {
@@ -95,5 +100,65 @@ public class BaseIModel : PageModel
         db.Log.Add(log);
         await db.SaveChangesAsync();
         ViewData["Error"] = TempData.Get<ErrorVM>("ErrorI");
+    }
+
+    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, ImageSizeType type = ImageSizeType.ProfilePhoto)
+    {
+        int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
+        string[] imageFormats = configuration["AppSettings:ImagesFormat"].Split(",");
+
+        if (file != null && file.Length > 0 && maxKB * 1024 >= file.Length)
+        {
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
+            if (!Directory.Exists(uploads))
+            {
+                Directory.CreateDirectory(uploads);
+            }
+
+            var filePath = Path.Combine(uploads, fileName);
+            if (imageFormats.Contains(Path.GetExtension(file.FileName).ToUpper()))
+            {
+                await ResizeImage(file, filePath, (int)type);
+            }
+            else
+            {
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(fileStream);
+            }
+            return $"/Uploads/{folder}/{fileName}";
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    protected async Task ResizeImage(IFormFile file, string filePath, int size)
+    {
+        var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Position = 0;
+
+        int width, height;
+        var img = Image.FromStream(stream);
+        if (img.Width > img.Height)
+        {
+            width = size;
+            height = Convert.ToInt32(img.Height * size / (double)img.Width);
+        }
+        else
+        {
+            width = Convert.ToInt32(img.Width * size / (double)img.Height);
+            height = size;
+        }
+
+        stream.Position = 0;
+        var resizer = new MagickImage(stream);
+
+        resizer.Resize(width, height);
+        resizer.Orientation = OrientationType.TopLeft;
+
+        resizer.Write(filePath);
     }
 }

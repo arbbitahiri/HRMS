@@ -32,20 +32,6 @@ public class HomeController : BaseController
         return View();
     }
 
-    [HttpGet, Description("Side profile, profile controls.")]
-    public async Task<IActionResult> _SideProfile()
-    {
-        var sideProfile = await db.AspNetUsers.Where(a => a.Id == user.Id)
-            .Select(a => new SideProfile
-            {
-                Name = $"{a.FirstName} {a.LastName}",
-                ProfileImage = a.ProfileImage ?? null,
-                Username = a.UserName
-            }).FirstOrDefaultAsync();
-
-        return PartialView(sideProfile);
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [Description("Error view")]
     public IActionResult Error()

@@ -339,4 +339,109 @@
   <data name="AccessDeniedLong" xml:space="preserve">
     <value>You are not authorized to access this page!</value>
   </data>
+  <data name="AccountData" xml:space="preserve">
+    <value>Account data</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="AllowedFormatImage" xml:space="preserve">
+    <value>Allowed formats for image</value>
+  </data>
+  <data name="AllowNotification" xml:space="preserve">
+    <value>Allow notification</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Ngarko</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ChangeRole" xml:space="preserve">
+    <value>Ndrysho grupin</value>
+  </data>
+  <data name="CharacterLength" xml:space="preserve">
+    <value>You must have at least {2} and maximum {1} characters.</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="Firstname" xml:space="preserve">
+    <value>Firstname</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Lastname" xml:space="preserve">
+    <value>Lastname</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Shkyçu</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="MaxImageSize" xml:space="preserve">
+    <value>Maximum allowed size for image</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="PasswordNotMatch" xml:space="preserve">
+    <value>Passwords do not match!</value>
+  </data>
+  <data name="PersonalData" xml:space="preserve">
+    <value>Personal data</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="TemplateMode" xml:space="preserve">
+    <value>Application mode</value>
+  </data>
+  <data name="UnableToLoadUser" xml:space="preserve">
+    <value>Unable to load user</value>
+  </data>
+  <data name="UpdateAccountData" xml:space="preserve">
+    <value>Update account data</value>
+  </data>
+  <data name="UpdatedPassword" xml:space="preserve">
+    <value>Fjalëkalimi juaj u ndryshua me sukses!</value>
+  </data>
+  <data name="UpdatedProfile" xml:space="preserve">
+    <value>Your profile has been successfully updated!</value>
+  </data>
+  <data name="UpdateImage" xml:space="preserve">
+    <value>Change photo</value>
+  </data>
+  <data name="UpdatePassword" xml:space="preserve">
+    <value>Update password</value>
+  </data>
+  <data name="UpdatePersonalData" xml:space="preserve">
+    <value>Update personal data</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>

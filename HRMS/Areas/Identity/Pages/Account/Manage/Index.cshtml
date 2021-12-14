@@ -1,26 +1,84 @@
 ﻿@page
 @model IndexModel
+@using HRMS.Data.Core
 @{
-    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+    ViewData["Title"] = Resource.Profile;
     ViewData["ActivePage"] = ManageNavPages.Index;
+    ApplicationUser user = (ApplicationUser)ViewData["InternalUser"];
 }
 
-<h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
+<div class="card">
+    <div class="card-header p-2">
+        <div class="card-title align-items-start flex-column ml-2">
+            <h3 class="card-label font-weight-bolder">@Resource.PersonalData</h3>
+            <small class="text-muted font-weight-bolder mt-1">@Resource.UpdatePersonalData</small>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary mr-2" onclick="$('#frm_personal_info').trigger('submit')">@Resource.Save</button>
+            <button type="button" class="btn btn-secondary" onclick="$('#frm_personal_info').trigger('reset')">@Resource.Cancel</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal">
+            <div class="row form-group">
+                <label asp-for="Input.ProfileImage" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="text-center">
+                        <img src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")' class="profile-user-img img-fluid img-circle" alt="User profile picture">
+                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="@Resource.UpdateImage">
+                            <i class="fa fa-pen icon-sm text-muted"></i>
+                            <input type="file" asp-for="Input.ProfileImage" />
+                            <input type="hidden" name="profile_avatar_remove" />
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            <div class="row form-group">
+                <label asp-for="Input.FirstName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.FirstName" type="text" class="form-control" placeholder="@Resource.Firstname">
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
             </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+            <div class="row form-group">
+                <label asp-for="Input.LastName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.LastName" type="text" class="form-control" placeholder="@Resource.Lastname">
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.Address" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.Address" type="text" class="form-control" placeholder="@Resource.Address">
+                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.PhoneNumber" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        </div>
+                        <input asp-for="Input.PhoneNumber" type="text" class="form-control" data-inputmask="'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']" data-mask="" inputmode="text">
+                    </div>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-2 col-form-label">@Resource.Email</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-at"></i></span>
+                        </div>
+                        <input type="text" class="form-control" value="@user.Email" placeholder="@Resource.Email" disabled>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

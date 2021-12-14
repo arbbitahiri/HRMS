@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace HRMS.Data.General
 {
     public partial class AspNetRoles
@@ -10,7 +8,7 @@ namespace HRMS.Data.General
         public AspNetRoles()
         {
             AspNetRoleClaims = new HashSet<AspNetRoleClaims>();
-            AspNetUserRoles = new HashSet<AspNetUserRoles>();
+            User = new HashSet<AspNetUsers>();
         }
 
         public string Id { get; set; }
@@ -23,6 +21,7 @@ namespace HRMS.Data.General
         public string ConcurrencyStamp { get; set; }
 
         public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+
+        public virtual ICollection<AspNetUsers> User { get; set; }
     }
 }

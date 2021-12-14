@@ -1,4 +1,5 @@
 ﻿using HRMS.Data.General;
+using HRMS.Resources;
 using HRMS.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,19 @@ public class DDLRepo : IDDLRepo
     {
         this.db = db;
     }
+
+    public List<SelectListItem> Languages() =>
+        new List<SelectListItem>
+        {
+            new SelectListItem { Text = Resource.Albanian, Value = LanguageEnum.Albanian.ToString() },
+            new SelectListItem { Text = Resource.English, Value = LanguageEnum.English.ToString() }
+        };
+
+    public List<SelectListItem> Genders() =>
+        new List<SelectListItem> {
+            new SelectListItem { Value = ((int)GenderEnum.Male).ToString(), Text = Resource.Male },
+            new SelectListItem { Value = ((int)GenderEnum.Female).ToString(), Text = Resource.Female },
+        };
 
     public async Task<List<SelectListItem>> Roles(LanguageEnum lang) =>
         await db.AspNetRoles.Select(a => new SelectListItem

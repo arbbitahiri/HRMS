@@ -1,0 +1,31 @@
+﻿@using HRMS.Models.Home.SideProfile
+@model SideProfile
+@{
+}
+
+<ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" role="menu" id="quick_profile">
+    <li class="user-header bg-primary">
+        <img src='@Url.Content(Model.ProfileImage ?? "~/images/user-default.png")' class="img-circle elevation-2" alt="User image">
+
+        <p>
+            @Model.Name
+            <small>@Model.Username</small>
+        </p>
+    </li>
+
+    <li class="user-body">
+        <div class="row">
+            <div class="col-12 text-center">
+                @Resource.ChangeRole
+            </div>
+        </div>
+    </li>
+
+    <li class="user-footer">
+        <a href="/Identity/Account/Manage" class="btn btn-default btn-flat">@Resource.Profile</a>
+        <form method="post" action="/Identity/Account/Logout" id="frm_logout" class="float-right">
+            @Html.AntiForgeryToken()
+            <a href="#" onclick="$('#frm_logout').trigger('submit')" class="btn btn-default btn-flat">@Resource.LogOut</a>
+        </form>
+    </li>
+</ul>

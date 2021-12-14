@@ -1,47 +1,24 @@
 ﻿@using HRMS.Models.Home.SideProfile
 @model SideProfile
 
-<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-    <h5 class="float-left">
-        Profile
-    </h5>
-    <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary float-right" onclick="$('#aside_profile').css('display', 'none');">
-        <i aria-hidden="true" class="far fa-times-circle"></i>
-    </a>
-</div>
-<div class="offcanvas-content pr-5 mr-n5">
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
-        <div class="image">
-            <img src="@Url.Content(Model.ProfileImage ?? "~/images/user-default.png")" class="img-circle" alt="User Image" asp-append-version="true">
-        </div>
-        <div class="info">
-            <a href="/Identity/Account/Manage" class="d-block">@Model.Name</a>
-            <span style="font-size: 12px;">@Model.Username</span>
-            <form method="post" action="/Identity/Account/Logout" id="frm_Logout">
-                @Html.AntiForgeryToken()
-                <button onclick="log_out()" class="btn btn-primary" style="width: 100%; cursor: pointer;">Shkyçu</button>
-            </form>
+<li class="user-header bg-primary">
+    <img src='@Url.Content(Model.ProfileImage ?? "~/images/user-default.png")' class="img-circle elevation-2" alt="User image">
+
+    <p>
+        @Model.Name
+        <small>@Model.Username</small>
+    </p>
+</li>
+
+<li class="user-body">
+    <div class="row">
+        <div class="col-12 text-center">
+            Change role
         </div>
     </div>
-</div>
+</li>
 
-@*@if (Model.Roles.Count > 1)
-{
-    <button onclick="roles_side()" class="btn btn-primary">Ndrysho grupin</button>
-    <div class="d-none border-bottom" id="roles_side">
-        @foreach (var role in Model.Roles)
-        {
-
-        }
-    </div>
-}*@
-
-<script>
-    function roles_side() {
-        $('#roles_side').toggleClass('d-none');
-    }
-
-    function log_out() {
-        $('#frm_Logout').trigger('submit');
-    }
-</script>
+<li class="user-footer">
+    <a href="/Identity/Account/Manage" class="btn btn-default btn-flat">Profili</a>
+    <a href="/Identity/Account/Logout" class="btn btn-default btn-flat float-right">Shkyqu</a>
+</li>

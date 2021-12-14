@@ -88,6 +88,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Të dhënat e llogarisë.
+        /// </summary>
+        public static string AccountData {
+            get {
+                return ResourceManager.GetString("AccountData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Llogaria është bllokuar.
         /// </summary>
         public static string AccountLocked {
@@ -142,6 +151,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adresa.
+        /// </summary>
+        public static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto nënmeny.
         /// </summary>
         public static string AddSubMenu {
@@ -165,6 +183,24 @@ namespace HRMS.Resources {
         public static string Albanian {
             get {
                 return ResourceManager.GetString("Albanian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatet e lejuara për foto.
+        /// </summary>
+        public static string AllowedFormatImage {
+            get {
+                return ResourceManager.GetString("AllowedFormatImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lejo njoftimet.
+        /// </summary>
+        public static string AllowNotification {
+            get {
+                return ResourceManager.GetString("AllowNotification", resourceCulture);
             }
         }
         
@@ -214,6 +250,42 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngarko.
+        /// </summary>
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anulo.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndrysho grupin.
+        /// </summary>
+        public static string ChangeRole {
+            get {
+                return ResourceManager.GetString("ChangeRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duhet të ketë të paktën {2} dhe maksimumi {1} karaktere..
+        /// </summary>
+        public static string CharacterLength {
+            get {
+                return ResourceManager.GetString("CharacterLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zgjedh.
         /// </summary>
         public static string Choose {
@@ -241,6 +313,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Konfirmo fjalëkalimin e ri!.
+        /// </summary>
+        public static string ConfirmNewPassword {
+            get {
+                return ResourceManager.GetString("ConfirmNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Konfirmo fjalëkalimin.
         /// </summary>
         public static string ConfirmPassword {
@@ -255,6 +336,24 @@ namespace HRMS.Resources {
         public static string Controller {
             get {
                 return ResourceManager.GetString("Controller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fjalëkalimi aktual.
+        /// </summary>
+        public static string CurrentPassword {
+            get {
+                return ResourceManager.GetString("CurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E errët.
+        /// </summary>
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
             }
         }
         
@@ -349,11 +448,38 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Femër.
+        /// </summary>
+        public static string Female {
+            get {
+                return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri.
+        /// </summary>
+        public static string Firstname {
+            get {
+                return ResourceManager.GetString("Firstname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keni harruar fjalëkalimin?.
         /// </summary>
         public static string ForgotPassword {
             get {
                 return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjinia.
+        /// </summary>
+        public static string Gender {
+            get {
+                return ResourceManager.GetString("Gender", resourceCulture);
             }
         }
         
@@ -412,6 +538,33 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjuha.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mbiemri.
+        /// </summary>
+        public static string Lastname {
+            get {
+                return ResourceManager.GetString("Lastname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E ndriçuar.
+        /// </summary>
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e menyve.
         /// </summary>
         public static string ListMenus {
@@ -462,6 +615,33 @@ namespace HRMS.Resources {
         public static string LoginToStart {
             get {
                 return ResourceManager.GetString("LoginToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shkyçu.
+        /// </summary>
+        public static string LogOut {
+            get {
+                return ResourceManager.GetString("LogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mashkull.
+        /// </summary>
+        public static string Male {
+            get {
+                return ResourceManager.GetString("Male", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Madhësia maksimale e lejuar për foto.
+        /// </summary>
+        public static string MaxImageSize {
+            get {
+                return ResourceManager.GetString("MaxImageSize", resourceCulture);
             }
         }
         
@@ -520,6 +700,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjalëkalimi i ri.
+        /// </summary>
+        public static string NewPassword {
+            get {
+                return ResourceManager.GetString("NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jo.
         /// </summary>
         public static string No {
@@ -565,6 +754,33 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjalëkalimet nuk përputhen!.
+        /// </summary>
+        public static string PasswordNotMatch {
+            get {
+                return ResourceManager.GetString("PasswordNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Të dhënat personale.
+        /// </summary>
+        public static string PersonalData {
+            get {
+                return ResourceManager.GetString("PersonalData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri telefonit.
+        /// </summary>
+        public static string PhoneNumber {
+            get {
+                return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ju lutem prisni....
         /// </summary>
         public static string PleaseWait {
@@ -579,6 +795,15 @@ namespace HRMS.Resources {
         public static string Policy {
             get {
                 return ResourceManager.GetString("Policy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profili.
+        /// </summary>
+        public static string Profile {
+            get {
+                return ResourceManager.GetString("Profile", resourceCulture);
             }
         }
         
@@ -615,6 +840,15 @@ namespace HRMS.Resources {
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ruaj.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
@@ -691,6 +925,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modaliteti aplikacionit.
+        /// </summary>
+        public static string TemplateMode {
+            get {
+                return ResourceManager.GetString("TemplateMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kjo llogari është bllokuar, ju lutem provoni përsëri më vonë..
         /// </summary>
         public static string ThisAccountLocked {
@@ -705,6 +948,78 @@ namespace HRMS.Resources {
         public static string TypePasswordToSession {
             get {
                 return ResourceManager.GetString("TypePasswordToSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E pamundur të ngarkohet përdoruesi..
+        /// </summary>
+        public static string UnableToLoadUser {
+            get {
+                return ResourceManager.GetString("UnableToLoadUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndryshoni të dhënat e llogarisë.
+        /// </summary>
+        public static string UpdateAccountData {
+            get {
+                return ResourceManager.GetString("UpdateAccountData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fjalëkalimi juaj u ndryshua me sukses!.
+        /// </summary>
+        public static string UpdatedPassword {
+            get {
+                return ResourceManager.GetString("UpdatedPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profili juaj u ndryshua me sukses!.
+        /// </summary>
+        public static string UpdatedProfile {
+            get {
+                return ResourceManager.GetString("UpdatedProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndrysho foton.
+        /// </summary>
+        public static string UpdateImage {
+            get {
+                return ResourceManager.GetString("UpdateImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndryshoni fjalëkalimin.
+        /// </summary>
+        public static string UpdatePassword {
+            get {
+                return ResourceManager.GetString("UpdatePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndryshoni të dhënat personale.
+        /// </summary>
+        public static string UpdatePersonalData {
+            get {
+                return ResourceManager.GetString("UpdatePersonalData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri përdoruesit.
+        /// </summary>
+        public static string Username {
+            get {
+                return ResourceManager.GetString("Username", resourceCulture);
             }
         }
         

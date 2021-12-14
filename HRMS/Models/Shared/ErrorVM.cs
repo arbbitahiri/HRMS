@@ -9,6 +9,8 @@ public class ErrorVM
 
     public string Description { get; set; }
 
+    public bool RawContent { get; set; }
+
     public string Icon { get; set; }
 
     public string RequestId { get; set; }

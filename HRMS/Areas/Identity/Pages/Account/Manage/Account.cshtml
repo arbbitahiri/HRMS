@@ -1,4 +1,85 @@
 ﻿@page
 @model HRMS.Areas.Identity.Pages.Account.Manage.AccountModel
+@inject IDDLRepo repo
+@using HRMS.Data.Core
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = Resource.Profile;
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    ApplicationUser user = (ApplicationUser)ViewData["InternalUser"];
+    //@(Model.Input.TemplateMode ? "" : "checked")
 }
+
+<div class="card">
+    <div class="card-header p-2">
+        <div class="card-title align-items-start flex-column ml-2">
+            <h3 class="card-label font-weight-bolder">@Resource.AccountData</h3>
+            <small class="text-muted font-weight-bolder mt-1">@Resource.UpdateAccountData</small>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary mr-2" onclick="$('#frm_account_info').trigger('submit')">@Resource.Save</button>
+            <button type="button" class="btn btn-secondary" onclick="$('#frm_account_info').trigger('reset')">@Resource.Cancel</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="frm_account_info" method="post" class="form-horizontal">
+            <div class="row form-group">
+                <label asp-for="Input.Username" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.Username" type="text" class="form-control" placeholder="@Resource.Username">
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.Email" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-at"></i></span>
+                        </div>
+                        <input asp-for="Input.Email" type="text" class="form-control" value="@user.Email" placeholder="@Resource.Email">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.Language" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="Input.Language" asp-items="repo.Languages()" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                    <span asp-validation-for="Input.Language" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.TemplateMode" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.TemplateMode" data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_templateMode" data-bootstrap-switch data-off-color="default" data-on-color="secondary" data-off-text="@Resource.Light" data-on-text="@Resource.Dark">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.AllowNotification" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.AllowNotification" data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_allowNotification" data-bootstrap-switch data-off-color="danger" data-on-color="primary" data-off-text="@Resource.Yes" data-on-text="@Resource.No">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        console.log(cultureShort);
+
+        $(".select2").select2({
+            width: "100%",
+            language: cultureShort
+        });
+        $("input[data-bootstrap-switch]").bootstrapSwitch();
+
+        var form = $('.form');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+</script>

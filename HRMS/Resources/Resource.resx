@@ -339,4 +339,109 @@
   <data name="AccessDeniedLong" xml:space="preserve">
     <value>Ju nuk jeni të autorizuar të qaseni në këtë faqe!</value>
   </data>
+  <data name="AccountData" xml:space="preserve">
+    <value>Të dhënat e llogarisë</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="AllowedFormatImage" xml:space="preserve">
+    <value>Formatet e lejuara për foto</value>
+  </data>
+  <data name="AllowNotification" xml:space="preserve">
+    <value>Lejo njoftimet</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Ngarko</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="ChangeRole" xml:space="preserve">
+    <value>Ndrysho grupin</value>
+  </data>
+  <data name="CharacterLength" xml:space="preserve">
+    <value>Duhet të ketë të paktën {2} dhe maksimumi {1} karaktere.</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Konfirmo fjalëkalimin e ri!</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Fjalëkalimi aktual</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>E errët</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Femër</value>
+  </data>
+  <data name="Firstname" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gjinia</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Gjuha</value>
+  </data>
+  <data name="Lastname" xml:space="preserve">
+    <value>Mbiemri</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>E ndriçuar</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Shkyçu</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Mashkull</value>
+  </data>
+  <data name="MaxImageSize" xml:space="preserve">
+    <value>Madhësia maksimale e lejuar për foto</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Fjalëkalimi i ri</value>
+  </data>
+  <data name="PasswordNotMatch" xml:space="preserve">
+    <value>Fjalëkalimet nuk përputhen!</value>
+  </data>
+  <data name="PersonalData" xml:space="preserve">
+    <value>Të dhënat personale</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numri telefonit</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profili</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="TemplateMode" xml:space="preserve">
+    <value>Modaliteti aplikacionit</value>
+  </data>
+  <data name="UnableToLoadUser" xml:space="preserve">
+    <value>E pamundur të ngarkohet përdoruesi.</value>
+  </data>
+  <data name="UpdateAccountData" xml:space="preserve">
+    <value>Ndryshoni të dhënat e llogarisë</value>
+  </data>
+  <data name="UpdatedPassword" xml:space="preserve">
+    <value>Fjalëkalimi juaj u ndryshua me sukses!</value>
+  </data>
+  <data name="UpdatedProfile" xml:space="preserve">
+    <value>Profili juaj u ndryshua me sukses!</value>
+  </data>
+  <data name="UpdateImage" xml:space="preserve">
+    <value>Ndrysho foton</value>
+  </data>
+  <data name="UpdatePassword" xml:space="preserve">
+    <value>Ndryshoni fjalëkalimin</value>
+  </data>
+  <data name="UpdatePersonalData" xml:space="preserve">
+    <value>Ndryshoni të dhënat personale</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Emri përdoruesit</value>
+  </data>
 </root>

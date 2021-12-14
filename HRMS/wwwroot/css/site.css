@@ -1,71 +1,100 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+.text-muted {
+  color: #b5b5c3 !important
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+.text-dark-75 {
+  color: #3f4254 !important
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.font-size-sm {
+  font-size: .925rem
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.font-size-xs {
+  font-size: .8rem
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
+.font-size-lg {
+  font-size: 1.08rem
 }
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
+
+.font-size-h1 {
+  font-size: 2rem !important
+}
+
+.font-size-h2 {
+  font-size: 1.75rem !important
+}
+
+.font-size-h3 {
+  font-size: 1.5rem !important
+}
+
+.font-size-h4 {
+  font-size: 1.35rem !important
+}
+
+.font-size-h5 {
+  font-size: 1.25rem !important
+}
+
+.font-size-h6 {
+  font-size: 1.175rem !important
+}
+
+.text-hover-primary, a.text-hover-primary {
+  -webkit-transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease,-webkit-box-shadow .15s ease
+}
+
+  .text-hover-primary:hover, a.text-hover-primary:hover {
+      -webkit-transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+      transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+      transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+      transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease,-webkit-box-shadow .15s ease;
+      color: #009ef7 !important
   }
+
+      .text-hover-primary:hover i, a.text-hover-primary:hover i {
+          color: #009ef7 !important
+      }
+
+      .text-hover-primary:hover .svg-icon svg g [fill], a.text-hover-primary:hover .svg-icon svg g [fill] {
+          -webkit-transition: fill .3s ease;
+          transition: fill .3s ease;
+          fill: #009ef7
+      }
+
+      .text-hover-primary:hover .svg-icon svg:hover g [fill], a.text-hover-primary:hover .svg-icon svg:hover g [fill] {
+          -webkit-transition: fill .3s ease;
+          transition: fill .3s ease
+      }
+
+.hoverable:hover .text-hover-primary, .hoverable:hover a.text-hover-primary {
+  -webkit-transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+  transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease,-webkit-box-shadow .15s ease;
+  color: #009ef7 !important
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
+  .hoverable:hover .text-hover-primary i, .hoverable:hover a.text-hover-primary i {
+      color: #009ef7 !important
+  }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
+  .hoverable:hover .text-hover-primary .svg-icon svg g [fill], .hoverable:hover a.text-hover-primary .svg-icon svg g [fill] {
+      -webkit-transition: fill .3s ease;
+      transition: fill .3s ease;
+      fill: #009ef7 !important
+  }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
+  .hoverable:hover .text-hover-primary .svg-icon svg:hover g [fill], .hoverable:hover a.text-hover-primary .svg-icon svg:hover g [fill] {
+      -webkit-transition: fill .3s ease;
+      transition: fill .3s ease
+  }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
-}

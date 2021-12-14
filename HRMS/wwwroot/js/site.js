@@ -66,10 +66,3 @@ $(document).on('invalid-form.validate', 'form', function () {
 $(document).ajaxStart(function () {
     Pace.restart();
 });
-
-$('#profile_side').on("click", function () {
-    $(this).ControlSidebar('toggle');
-    $('#quick_profile').load('/Home/_SideProfile', function () {
-        // $('#aside_profile').addClass('offcanvas-on');
-    });
-});
