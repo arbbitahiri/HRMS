@@ -444,4 +444,76 @@
   <data name="Username" xml:space="preserve">
     <value>Emri përdoruesit</value>
   </data>
+  <data name="AccountCreatedSuccessfully" xml:space="preserve">
+    <value>Llogari është krijuar me sukses!</value>
+  </data>
+  <data name="AccountLockedSuccess" xml:space="preserve">
+    <value>Llogari u bllokua me sukses!</value>
+  </data>
+  <data name="AccountUnlockedSuccess" xml:space="preserve">
+    <value>Llogari u zhbllokua me sukses!</value>
+  </data>
+  <data name="Birthdate" xml:space="preserve">
+    <value>Ditëlindja</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Kriju përdoruesin</value>
+  </data>
+  <data name="EmailExists" xml:space="preserve">
+    <value>E-maili ekziston!</value>
+  </data>
+  <data name="EmailNotValid" xml:space="preserve">
+    <value>E-maili nuk është valid!</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Fjalëkalim i pasaktë</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Mbyllur</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nuk u gjet asnjë rezultat</value>
+  </data>
+  <data name="OnlyNumbers" xml:space="preserve">
+    <value>Vetëm numra</value>
+  </data>
+  <data name="PasswordNotAdded" xml:space="preserve">
+    <value>Fjalëkalimi nuk mund të vendoset:</value>
+  </data>
+  <data name="PasswordUpdatedSuccess" xml:space="preserve">
+    <value>Fjalëkalimi u ndryshua me sukses!</value>
+  </data>
+  <data name="PersonalNumber" xml:space="preserve">
+    <value>Numri personal</value>
+  </data>
+  <data name="ProfileImage" xml:space="preserve">
+    <value>Foto e profilit</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Regjistro</value>
+  </data>
+  <data name="RoleAddedSuccess" xml:space="preserve">
+    <value>Grupi u shtua me sukses!</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Grupet</value>
+  </data>
+  <data name="RolesAddThroughList" xml:space="preserve">
+    <value>Grupet mund t'i shtoni edhe nga lista e përdoruesve!</value>
+  </data>
+  <data name="SearchParameters" xml:space="preserve">
+    <value>Parametrat e kërkimit</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>Rezultati i kërkimit</value>
+  </data>
+  <data name="UserHasAccount" xml:space="preserve">
+    <value>Ky përdorues ka llogari!</value>
+  </data>
+  <data name="UsernameExists" xml:space="preserve">
+    <value>Emri përdoruesit ekziston!</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Përdoruesit</value>
+  </data>
 </root>

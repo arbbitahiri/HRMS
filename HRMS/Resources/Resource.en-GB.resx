@@ -444,4 +444,76 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="AccountCreatedSuccessfully" xml:space="preserve">
+    <value>Account created successfully!</value>
+  </data>
+  <data name="AccountLockedSuccess" xml:space="preserve">
+    <value>Account locked successfully!</value>
+  </data>
+  <data name="AccountUnlockedSuccess" xml:space="preserve">
+    <value>Account unlocked successfully!</value>
+  </data>
+  <data name="Birthdate" xml:space="preserve">
+    <value>Birthdate</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Create user</value>
+  </data>
+  <data name="EmailExists" xml:space="preserve">
+    <value>Email exists!</value>
+  </data>
+  <data name="EmailNotValid" xml:space="preserve">
+    <value>Email is not valid!</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Incorrect password!</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="OnlyNumbers" xml:space="preserve">
+    <value>Only numbers</value>
+  </data>
+  <data name="PasswordNotAdded" xml:space="preserve">
+    <value>Password could not be added:</value>
+  </data>
+  <data name="PasswordUpdatedSuccess" xml:space="preserve">
+    <value>Password updated successfully!</value>
+  </data>
+  <data name="PersonalNumber" xml:space="preserve">
+    <value>Personal number</value>
+  </data>
+  <data name="ProfileImage" xml:space="preserve">
+    <value>Profile image</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RoleAddedSuccess" xml:space="preserve">
+    <value>Role added successfully!</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="RolesAddThroughList" xml:space="preserve">
+    <value>Roles can also be added through the list of users!</value>
+  </data>
+  <data name="SearchParameters" xml:space="preserve">
+    <value>Search parameters</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>Search result</value>
+  </data>
+  <data name="UserHasAccount" xml:space="preserve">
+    <value>This user has an account!</value>
+  </data>
+  <data name="UsernameExists" xml:space="preserve">
+    <value>Username exists!</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
 </root>

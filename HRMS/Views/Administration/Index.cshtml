@@ -1,0 +1,352 @@
+﻿@using HRMS.Models.Administration
+@model Search
+@inject IDDLRepo repo
+@{
+    ViewData["Title"] = Resource.Users;
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchParameters</h3>
+        <div class="card-tools">
+            <a asp-action="Create" class="btn btn-primary float-right">@Resource.CreateUser</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="Administration" class="noLoading" method="post" data-ajax="true" data-ajax-begin="begin_user" data-ajax-success="success_user" data-ajax-method="POST" id="frm_search_user">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-3 form-group">
+                    <label asp-for="Roles"></label>
+                    <select asp-for="Roles" asp-items="await repo.Roles(user.Language)" multiple class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-3 form-group">
+                    <label asp-for="PersonalNumber"></label>
+                    <input asp-for="PersonalNumber" type="text" class="form-control"/>
+                </div>
+                <div class="col-3 form-group">
+                    <label asp-for="Firstname"></label>
+                    <input asp-for="Firstname" type="text" class="form-control"/>
+                </div>
+                <div class="col-3 form-group">
+                    <label asp-for="Lastname"></label>
+                    <input asp-for="Lastname" type="text" class="form-control"/>
+                </div>
+                <div class="col-3 form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" type="text" class="form-control"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-3">
+                    <label asp-for="Firstname" style="visibility:hidden"></label><br />
+                    <button type="submit" class="btn btn-primary">@Resource.Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card" id="search_result">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchResult</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered table-hover w-100" id="tbl_Users">
+            <thead>
+                <th>#</th>
+                <th>@Resource.Name</th>
+                <th>@Resource.PhoneNumber</th>
+                <th>@Resource.Email</th>
+                <th>@Resource.Role</th>
+                <th>@Resource.Locked</th>
+                <th data-orderable="false">@Resource.Actions</th>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            var form = $('#frm_search_user');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            $('#frm_search_user').submit();
+        });
+
+        function begin_user(data) {
+            $('#tbl_Users').DataTable().clear().draw();
+        }
+
+        function success_user(data) {
+            render_table(data);
+        }
+
+        function render_table(data) {
+            $('#tbl_Users').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { width: 10, targets: [0, 5, 6] },
+                    { width: 20, targets: [2, 3, 4] },
+                    { width: 30, targets: [1] },
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var name = '<div class="d-flex align-items-center">' +
+                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                            if (row.profileImage == null) {
+                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                            } else {
+                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                            }
+                            name += '</div><div class="ml-4">' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.name + '</div>' +
+                                '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                                '</div></div>';
+                            return name;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            if (row.phoneNumber == null) {
+                                return "///";
+                            } else {
+                                return row.phoneNumber;
+                            }
+                        }
+                    },
+                    { data: "email" },
+                    { data: "roles" },
+                    {
+                        data: function (row, type, set) {
+                            let dateTimeNow = new Date();
+                            var lockoutDate = new Date(row.lockoutEnd);
+                            return lockoutDate >= dateTimeNow ? "@Html.Raw(Resource.No)" : "@Html.Raw(Resource.Yes)";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            let dateTimeNow = new Date();
+                            var lockoutDate = new Date(row.lockoutEnd);
+
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="setPassword(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-key"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                            if (lockoutDate <= dateTimeNow) {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="lock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                            } else {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="unlock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-unlock"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                            }
+                            dropdown += '<button type="button" class="dropdown-item" onclick="addRole(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-user-tag"></i></span><span class="p-1">@Resource.Role</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function edit_user(uId) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_Edit", "Administration")?uId=' + uId, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function setPassword(uId) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_SetPassword", "Administration")?uId=' + uId, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function addRole(uId) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddRole", "Administration")?uId=' + uId, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function delete_user(uId) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        method: "post",
+                        url: '@Url.Action("Delete", "Administration")',
+                        data: {
+                            uId: uId,
+                            "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
+                        },
+                        success: function (data) {
+                            if (data.status == ErrorStatus.SUCCESS) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: data.title,
+                                    text: data.description,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(t => {
+                                    window.location.reload()
+                                });
+                            } else if (data.status == ErrorStatus.WARNING) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            } else if (data.status == ErrorStatus.ERROR) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function lock_user(uId) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        method: "post",
+                        url: '@Url.Action("Lock", "Administration")',
+                        data: {
+                            uId: uId,
+                            "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
+                        },
+                        success: function (data) {
+                            if (data.status == ErrorStatus.SUCCESS) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: data.title,
+                                    text: data.description,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(t => {
+                                    window.location.reload()
+                                });
+                            } else if (data.status == ErrorStatus.WARNING) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            } else if (data.status == ErrorStatus.ERROR) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function unlock_user(uId) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        method: "post",
+                        url: '@Url.Action("Unlock", "Administration")',
+                        data: {
+                            uId: uId,
+                            "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
+                        },
+                        success: function (data) {
+                            if (data.status == ErrorStatus.SUCCESS) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: data.title,
+                                    text: data.description,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(t => {
+                                    window.location.reload()
+                                });
+                            } else if (data.status == ErrorStatus.WARNING) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            } else if (data.status == ErrorStatus.ERROR) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

@@ -40,12 +40,6 @@ public class BaseIModel : PageModel
         user = await userManager.GetUserAsync(context.HttpContext.User);
         await signInManager.RefreshSignInAsync(user);
 
-        if (context.HttpContext.Request.RouteValues["page"].ToString() != "/Account/Manage/ChangePassword")
-        {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Info, Description = "You must change your password." });
-            context.HttpContext.Response.Redirect("/Identity/Account/Manage/ChangePassword?c=true");
-        }
-
         ViewData["Title"] = "Manage your account.";
         ViewData["InternalUser"] = user;
         ViewData["User"] = new UserModel
