@@ -439,6 +439,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Departamenti.
+        /// </summary>
+        public static string Department {
+            get {
+                return ResourceManager.GetString("Department", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dokumentet.
+        /// </summary>
+        public static string Documents {
+            get {
+                return ResourceManager.GetString("Documents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ndrysho.
         /// </summary>
         public static string Edit {
@@ -939,6 +957,15 @@ namespace HRMS.Resources {
         public static string ProfileImage {
             get {
                 return ResourceManager.GetString("ProfileImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kualifikimet.
+        /// </summary>
+        public static string Qualifications {
+            get {
+                return ResourceManager.GetString("Qualifications", resourceCulture);
             }
         }
         

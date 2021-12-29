@@ -516,4 +516,13 @@
   <data name="Users" xml:space="preserve">
     <value>Përdoruesit</value>
   </data>
+  <data name="Department" xml:space="preserve">
+    <value>Departamenti</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Dokumentet</value>
+  </data>
+  <data name="Qualifications" xml:space="preserve">
+    <value>Kualifikimet</value>
+  </data>
 </root>

@@ -30,3 +30,10 @@ public enum ImageSizeType
     ProfilePhoto = 512,
     News = 1280
 }
+
+public enum MethodType
+{
+    GET = 1,
+    POST = 2,
+    PUT = 3
+}

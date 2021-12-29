@@ -11,6 +11,12 @@ const ErrorStatus = {
     INFO: 4
 }
 
+const MethodType = {
+    GET = 1,
+    POST = 2,
+    PUT = 3
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 

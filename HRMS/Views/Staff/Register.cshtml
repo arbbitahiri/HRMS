@@ -1,0 +1,109 @@
+﻿@using HRMS.Models.Staff
+@model StaffPost
+@inject IDDLRepo repo
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Staff/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<form asp-action='@(Model.MethodType == MethodType.POST ? "Register" : "Edit")' asp-controller="Staff" id="frm_staff_registration" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="StaffIde" type="hidden"/>
+
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="PersonalNumber"></label>
+            <input asp-for="PersonalNumber" type="text" class="form-control"/>
+            <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Firstname"></label>
+            <input asp-for="Firstname" type="text" class="form-control"/>
+            <span asp-validation-for="Firstname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Lastname"></label>
+            <input asp-for="Lastname" type="text" class="form-control"/>
+            <span asp-validation-for="Lastname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" type="text" class="form-control"/>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="BirthDate"></label>
+            <input asp-for="BirthDate" type="date" class="form-control"/>
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Gender"></label>
+            <select asp-for="Gender" asp-items='repo.Genders()' class="form-control select2"></select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="City"></label>
+            <input asp-for="City" type="text" class="form-control"/>
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Country"></label>
+            <input asp-for="Country" type="text" class="form-control"/>
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" type="text" class="form-control"/>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" type="text" class="form-control"/>
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        if (@Model.MethodType == MethodType.POST) {
+            $('#tab1').attr({ href: '', style: '' });
+            $('#tab2').attr({ href: '', style: '' });
+            $('#tab3').attr({ href: '', style: '' });
+            $('#tab4').attr({ href: '', style: '' });
+        } else {
+            $('#tab1').attr({ href: '@Url.Action("Register", "Staff")', style: "cursor:pointer" });
+            $('#tab2').attr({ href: '@Url.Action("Register", "Staff")', style: "cursor:pointer" });
+            $('#tab3').attr({ href: '@Url.Action("Register", "Staff")', style: "cursor:pointer" });
+            $('#tab4').attr({ href: '@Url.Action("Register", "Staff")', style: "cursor:pointer" });
+        }
+
+        $.validator.setDefaults({ ignore: '' });
+        var form = $('#frm_staff_registration');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $('#PhoneNumber').inputmask("mask", {
+            "mask": "+(999) 99 999-999",
+            removeMaskOnSubmit: true,
+            autoUnmask: true
+        });
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+    });
+</script>

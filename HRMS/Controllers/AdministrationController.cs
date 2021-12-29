@@ -35,7 +35,7 @@ public class AdministrationController : BaseController
         this.appDb = appDb;
     }
 
-    #region Users => CRUD
+    #region Users |> CRUD
 
     #region |> List
 
@@ -72,7 +72,7 @@ public class AdministrationController : BaseController
 
     #endregion
 
-    #region |=> Create
+    #region |> Create
 
     [HttpGet, Description("Form to create a user.")]
     public IActionResult Create() => View();
@@ -93,7 +93,7 @@ public class AdministrationController : BaseController
 
         string filePath = create.ProfileImage != null ? await SaveImage(environment, create.ProfileImage, "Users") : null;
 
-        var newUser = new ApplicationUser
+        var firstUser = new ApplicationUser
         {
             PersonalNumber = create.PersonalNumber,
             FirstName = create.Firstname,
@@ -114,7 +114,7 @@ public class AdministrationController : BaseController
         var error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountCreatedSuccessfully };
 
         string password = FirstTimePassword(configuration, create.Firstname, create.Lastname);
-        var result = await userManager.CreateAsync(newUser, password);
+        var result = await userManager.CreateAsync(firstUser, password);
         if (!result.Succeeded)
         {
             foreach (var identityError in result.Errors)
@@ -126,7 +126,7 @@ public class AdministrationController : BaseController
 
         if (create.Roles.Any())
         {
-            result = await userManager.AddToRolesAsync(newUser, db.AspNetRoles.Where(a => create.Roles.Contains(a.Id)).Select(a => a.Name).ToList());
+            result = await userManager.AddToRolesAsync(firstUser, db.AspNetRoles.Where(a => create.Roles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
             {
                 TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
@@ -140,7 +140,7 @@ public class AdministrationController : BaseController
 
     #endregion
 
-    #region |=> Edit
+    #region |> Edit
 
     [HttpGet, Description("Form to edit a user.")]
     public async Task<IActionResult> _Edit(string uId)
@@ -214,7 +214,7 @@ public class AdministrationController : BaseController
 
     #endregion
 
-    #region |=> Delete
+    #region |> Delete
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Action to delete a user.")]

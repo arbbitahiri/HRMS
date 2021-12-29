@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="bs-stepper">
+            <div class="bs-stepper-header" role="tablist">
+                <partial name="_Navigation" />
+            </div>
+            <div class="bs-stepper-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+    </script>
+    @RenderSection("Scripts", required: false)
+}

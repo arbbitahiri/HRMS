@@ -9,7 +9,7 @@ public static class CryptoSecurity
     private readonly static string IV = "ZCPpTydDDxl+alvCal+2xw==";
     private readonly static string Key = "evnuHp0Fn3WvnQ91SssExYX7F7hGCFyWz/5yW0TW0ag=";
 
-    public static string Encrypt(int obj)
+    public static string Encrypt<T>(T obj)
     {
         using Aes aes = Aes.Create();
         aes.Mode = CipherMode.CBC;
@@ -35,7 +35,7 @@ public static class CryptoSecurity
         }
     }
 
-    public static int Decrypt(string obj)
+    public static T Decrypt<T>(string obj)
     {
         obj = obj.Replace("(", "+").Replace(")", "/").Replace(" ", "+").Replace("%2F", "/");
 
@@ -52,11 +52,18 @@ public static class CryptoSecurity
             using var msDecrypt = new MemoryStream(Convert.FromBase64String(obj));
             using var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
             using var srDecrypt = new StreamReader(csDecrypt);
-            return Convert.ToInt32(srDecrypt.ReadToEnd());
+            if (typeof(T) == typeof(int))
+            {
+                return (T)Convert.ChangeType(Convert.ToInt32(srDecrypt.ReadToEnd()), typeof(T));
+            }
+            else
+            {
+                return (T)Convert.ChangeType(srDecrypt.ReadToEnd(), typeof(T));
+            }
         }
         catch
         {
-            return 0;
+            return (T)Convert.ChangeType(0, typeof(T));
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿@{
+    string action = (string)this.ViewContext.RouteData.Values["action"];
+}
+
+<div class="step" data-target="#register_form">
+    <a id="tab1">
+        <button type="button" class="step-trigger" role="tab" aria-controls="register_form" id="trigger_register_form">
+            <span class="bs-stepper-circle"><span class="fas fa-id-card-alt" aria-hidden="true"></span></span>
+            <span class="bs-stepper-label">1. @Resource.PersonalData</span>
+        </button>
+    </a>
+</div>
+<div class="step" data-target="#qualification_form">
+    <a id="tab2">
+        <button type="button" class="step-trigger" role="tab" aria-controls="qualification_form" id="trigger_qualification_form">
+            <span class="bs-stepper-circle"><span class="fab fa-windows" aria-hidden="true"></span></span>
+            <span class="bs-stepper-label">2. @Resource.Qualifications</span>
+        </button>
+    </a>
+</div>
+<div class="step" data-target="#document_form">
+    <a id="tab3">
+        <button type="button" class="step-trigger" role="tab" aria-controls="document_form" id="trigger_document_form">
+            <span class="bs-stepper-circle"><span class="fas fa-file-alt" aria-hidden="true"></span></span>
+            <span class="bs-stepper-label">3. @Resource.Documents</span>
+        </button>
+    </a>
+</div>
+<div class="step" data-target="#staff_college">
+    <a id="tab4">
+        <button type="button" class="step-trigger" role="tab" aria-controls="staff_college" id="trigger_staff_college">
+            <span class="bs-stepper-circle"><span class="fas fa-bookmark" aria-hidden="true"></span></span>
+            <span class="bs-stepper-label">4. @Resource.Department</span>
+        </button>
+    </a>
+</div>
+
