@@ -10,6 +10,7 @@ namespace HRMS.Data.General
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            AspNetUserRoles = new HashSet<AspNetUserRoles>();
             DepartmentInsertedFromNavigation = new HashSet<Department>();
             DepartmentUpdatedFromNavigation = new HashSet<Department>();
             DocumentInsertedFromNavigation = new HashSet<Document>();
@@ -86,6 +87,7 @@ namespace HRMS.Data.General
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<Department> DepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<Department> DepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<Document> DocumentInsertedFromNavigation { get; set; }

@@ -172,21 +172,21 @@ public class BaseController : Controller
             _ => LanguageEnum.Albanian,
         };
 
-    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, int type = 512)
+    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
         string[] imageFormats = configuration["AppSettings:ImagesFormat"].Split(",");
 
         if (file != null && file.Length > 0 && maxKB * 1024 >= file.Length)
         {
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
+            string fileName = string.IsNullOrEmpty(fileTitle) ? (Guid.NewGuid().ToString() + Path.GetExtension(file.FileName)) : fileTitle;
+            string uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
             if (!Directory.Exists(uploads))
             {
                 Directory.CreateDirectory(uploads);
             }
 
-            var filePath = Path.Combine(uploads, fileName);
+            string filePath = Path.Combine(uploads, fileName);
             if (imageFormats.Contains(Path.GetExtension(file.FileName).ToUpper()))
             {
                 await ResizeImage(file, filePath, type);
@@ -226,6 +226,27 @@ public class BaseController : Controller
         resizer.Write(filePath);
     }
 
+    protected async Task<string> SaveImage(IWebHostEnvironment environment, IFormFile file, string folder)
+    {
+        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+        string extension = Path.GetExtension(file.FileName);
+
+        string uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
+        if (!Directory.Exists(uploads))
+        {
+            Directory.CreateDirectory(uploads);
+        }
+
+        fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+        string filePath = Path.Combine(uploads, fileName);
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+        return fileName;
+    }
+
     protected void SendEmailAsync(IConfiguration configuration, string email, string subject, string htmlMessage, string name, bool addHeader = true)
     {
         var smtpClient = new SmtpClient();
@@ -263,18 +284,18 @@ public class BaseController : Controller
         return email;
     }
 
-    protected string GeneratePassword(IConfiguration configuration, string firstName, string lastName)
+    protected string FirstTimePassword(IConfiguration configuration, string firstName, string lastName)
     {
-        string password = "@";
+        string password = "@1234";
         if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredUppercase"]))
         {
             password += firstName[..1].ToUpper();
         }
         if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredLowercase"]))
         {
-            password += lastName[..1].ToUpper();
+            password += lastName[..1].ToLower();
         }
-        password += ".#";
+        password += "#";
         return password;
     }
 }

@@ -22,13 +22,12 @@
     <div class="card-body">
         <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal">
             <div class="row form-group">
-                <label asp-for="Input.ProfileImage" class="col-sm-2 col-form-label"></label>
+                <label class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <div class="text-center">
-                        <img src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")' class="profile-user-img img-fluid img-circle" alt="User profile picture">
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="@Resource.UpdateImage">
-                            <i class="fa fa-pen icon-sm text-muted"></i>
-                            <input type="file" asp-for="Input.ProfileImage" />
+                            <img src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")' class="img-circle" alt="User profile picture">
+                            <input type="file" asp-for="Input.ProfileImage" class="d-none" />
                             <input type="hidden" name="profile_avatar_remove" />
                         </label>
                     </div>
@@ -84,5 +83,7 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $('[data-mask]').inputmask();
+    </script>
 }

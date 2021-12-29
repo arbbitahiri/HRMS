@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
-
 public class AccountModel : BaseIModel
 {
     public AccountModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)

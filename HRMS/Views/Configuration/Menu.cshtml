@@ -1,7 +1,7 @@
 ﻿@using HRMS.Models.Menu
 @model IEnumerable<MenuDetails>
 @{
-    Layout = null;
+    //Layout = null;
 }
 
 <div class="d-flex justify-content-between">
@@ -29,15 +29,16 @@
 </table>
 
 <script>
-    function create_menu(){
+    $(document).ready(function() {
+        render_MenuTbl(@Json.Serialize(Model));
+    });
+
+    function create_menu() {
         $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateMenu", "Configuration")', function () {
             $('#modal-lg').modal('toggle');
         });
     }
 
-    render_MenuTbl(@Json.Serialize(Model));
-
-    var rowNoM = 1;
     function render_MenuTbl(data) {
         $('#tbl_Menu').DataTable({
             language: {
@@ -77,11 +78,6 @@
         });
     }
 
-    $('#tbl_Menu tbody tr').each(function (idx) {
-        debugger
-        $(this).children("td:eq(0)").html(idx + 1);
-    });
-
     function add_submenu(ide) {
         $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Configuration")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
@@ -119,7 +115,7 @@
                         });
                     } else if (data.status == ErrorStatus.WARNING) {
                         Swal.fire({
-                            icon: 'error',
+                            icon: 'warning',
                             title: data.title,
                             text: data.description,
                             confirmButtonText: '@Html.Raw(Resource.Okay)'
@@ -129,5 +125,4 @@
             }
         });
     }
-
 </script>

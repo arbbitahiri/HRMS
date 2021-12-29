@@ -21,6 +21,7 @@ namespace HRMS.Data.General
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUsers1> AspNetUsers1 { get; set; }
@@ -147,6 +148,20 @@ namespace HRMS.Data.General
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<AspNetUserRoles>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId })
+                    .HasName("PK_AspNetUserRoles");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.RoleId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.UserId);
+            });
+
             modelBuilder.Entity<AspNetUserTokens>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
@@ -210,20 +225,20 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(256);
 
-                entity.HasMany(d => d.Role)
-                    .WithMany(p => p.User)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "AspNetUserRoles",
-                        l => l.HasOne<AspNetRoles>().WithMany().HasForeignKey("RoleId"),
-                        r => r.HasOne<AspNetUsers>().WithMany().HasForeignKey("UserId"),
-                        j =>
-                        {
-                            j.HasKey("UserId", "RoleId");
+                //entity.HasMany(d => d.Role)
+                //    .WithMany(p => p.User)
+                //    .UsingEntity<Dictionary<string, object>>(
+                //        "AspNetUserRoles",
+                //        l => l.HasOne<AspNetRoles>().WithMany().HasForeignKey("RoleId"),
+                //        r => r.HasOne<AspNetUsers>().WithMany().HasForeignKey("UserId"),
+                //        j =>
+                //        {
+                //            j.HasKey("UserId", "RoleId");
 
-                            j.ToTable("AspNetUserRoles");
+                //            j.ToTable("AspNetUserRoles");
 
-                            j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
-                        });
+                //            j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                //        });
             });
 
             modelBuilder.Entity<AspNetUsers1>(entity =>

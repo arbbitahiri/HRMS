@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public AspNetRoles()
         {
             AspNetRoleClaims = new HashSet<AspNetRoleClaims>();
+            AspNetUserRoles = new HashSet<AspNetUserRoles>();
             User = new HashSet<AspNetUsers>();
         }
 
@@ -21,6 +22,8 @@ namespace HRMS.Data.General
         public string ConcurrencyStamp { get; set; }
 
         public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+
+        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
 
         public virtual ICollection<AspNetUsers> User { get; set; }
     }

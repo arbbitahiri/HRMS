@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="~/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/plugins/sweetalert2/sweetalert2.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
 
     <style>
         .custom-file-input:lang(en) ~ .custom-file-label::after {
@@ -90,7 +91,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h5 class="m-0">@ViewData["Title"]</h5>
+                            <h6 class="m-0">@ViewData["Title"]</h6>
                         </div>
                     </div>
                 </div>
@@ -138,9 +139,9 @@
     <script src="~/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/select2/js/select2.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/select2/i18n/sq.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/select2/i18n/en.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/inputmask/inputmask.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/inputmask/inputmask.min.js" asp-append-version="true"></script>
     <script src="~/assets/dist/js/adminlte.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
@@ -149,10 +150,11 @@
     <script>
         var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';
         var cultureShort = '@System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2)';
+
         //$(document).idleTimer(@conf["AppSettings:Timeout"]);
-        $(document).on("idle.idleTimer", function (event, elem, obj) {
-            window.location.href = '/Identity/Account/Timeout?returnUrl=' + window.location.pathname;
-        });
+        //$(document).on("idle.idleTimer", function (event, elem, obj) {
+        //    window.location.href = '/Identity/Account/Timeout?returnUrl=' + window.location.pathname;
+        //});
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

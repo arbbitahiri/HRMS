@@ -1,5 +1,5 @@
 ﻿@page
-@model HRMS.Areas.Identity.Pages.Account.Manage.AccountModel
+@model AccountModel
 @inject IDDLRepo repo
 @using HRMS.Data.Core
 @{
@@ -67,19 +67,25 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        console.log(cultureShort);
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            console.log(cultureShort);
 
-        $(".select2").select2({
-            width: "100%",
-            language: cultureShort
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+            $("input[data-bootstrap-switch]").bootstrapSwitch();
+
+            var form = $('.form');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
         });
-        $("input[data-bootstrap-switch]").bootstrapSwitch();
-
-        var form = $('.form');
-        form.removeData('validator');
-        form.removeData('unobtrusiveValidation');
-        $.validator.unobtrusive.parse(form);
-    });
-</script>
+    </script>
+}
