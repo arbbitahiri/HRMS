@@ -6,7 +6,7 @@
     var role = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
 
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Lista e stafit";
+    ViewData["Title"] = Resource.StaffList;
 }
 
 <div class="card">
@@ -65,8 +65,8 @@
                 <tr>
                     <th>#</th>
                     <th>@Resource.Name</th>
-                    <th>Staff type</th>
-                    <th>Department</th>
+                    <th>@Resource.StaffType</th>
+                    <th>@Resource.Department</th>
                     <th>@Resource.Gender</th>
                     <th>@Resource.Email</th>
                     <th>@Resource.PhoneNumber</th>

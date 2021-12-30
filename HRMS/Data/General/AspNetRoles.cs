@@ -22,7 +22,6 @@ namespace HRMS.Data.General
         public string ConcurrencyStamp { get; set; }
 
         public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
 
         public virtual ICollection<AspNetUsers> User { get; set; }

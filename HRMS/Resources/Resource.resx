@@ -525,4 +525,34 @@
   <data name="Qualifications" xml:space="preserve">
     <value>Kualifikimet</value>
   </data>
+  <data name="ExistsStaffRole" xml:space="preserve">
+    <value>{0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Qyteti</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Shteti</value>
+  </data>
+  <data name="MaxChar10" xml:space="preserve">
+    <value>Gjatësia maksimale e shkronjave është 10.</value>
+  </data>
+  <data name="MinChar10" xml:space="preserve">
+    <value>Gjatësia minimale e shkronjave është 10.</value>
+  </data>
+  <data name="MustBe18YearsOld" xml:space="preserve">
+    <value>Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër.</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nacionaliteti</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Kodi postal</value>
+  </data>
+  <data name="StaffList" xml:space="preserve">
+    <value>Lista e stafit</value>
+  </data>
+  <data name="StaffType" xml:space="preserve">
+    <value>Lloji stafit</value>
+  </data>
 </root>

@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public DocumentType()
         {
             Document = new HashSet<Document>();
+            StaffDocument = new HashSet<StaffDocument>();
         }
 
         public int DocumentTypeId { get; set; }
@@ -23,5 +24,6 @@ namespace HRMS.Data.General
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual ICollection<Document> Document { get; set; }
+        public virtual ICollection<StaffDocument> StaffDocument { get; set; }
     }
 }

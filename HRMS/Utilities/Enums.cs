@@ -37,3 +37,9 @@ public enum MethodType
     POST = 2,
     PUT = 3
 }
+
+public enum StaffTypeEnum
+{
+    Administrator = 1,
+    Professor = 2
+}

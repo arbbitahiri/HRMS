@@ -331,6 +331,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Qyteti.
+        /// </summary>
+        public static string City {
+            get {
+                return ResourceManager.GetString("City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Claim policy.
         /// </summary>
         public static string ClaimPolicy {
@@ -372,6 +381,15 @@ namespace HRMS.Resources {
         public static string Controller {
             get {
                 return ResourceManager.GetString("Controller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shteti.
+        /// </summary>
+        public static string Country {
+            get {
+                return ResourceManager.GetString("Country", resourceCulture);
             }
         }
         
@@ -525,6 +543,15 @@ namespace HRMS.Resources {
         public static string ErrorProcessingData {
             get {
                 return ResourceManager.GetString("ErrorProcessingData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!.
+        /// </summary>
+        public static string ExistsStaffRole {
+            get {
+                return ResourceManager.GetString("ExistsStaffRole", resourceCulture);
             }
         }
         
@@ -736,6 +763,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjatësia maksimale e shkronjave është 10..
+        /// </summary>
+        public static string MaxChar10 {
+            get {
+                return ResourceManager.GetString("MaxChar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Madhësia maksimale e lejuar për foto.
         /// </summary>
         public static string MaxImageSize {
@@ -772,6 +808,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjatësia minimale e shkronjave është 10..
+        /// </summary>
+        public static string MinChar10 {
+            get {
+                return ResourceManager.GetString("MinChar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër..
+        /// </summary>
+        public static string MustBe18YearsOld {
+            get {
+                return ResourceManager.GetString("MustBe18YearsOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emri.
         /// </summary>
         public static string Name {
@@ -795,6 +849,15 @@ namespace HRMS.Resources {
         public static string NameSq {
             get {
                 return ResourceManager.GetString("NameSq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nacionaliteti.
+        /// </summary>
+        public static string Nationality {
+            get {
+                return ResourceManager.GetString("Nationality", resourceCulture);
             }
         }
         
@@ -939,6 +1002,15 @@ namespace HRMS.Resources {
         public static string Policy {
             get {
                 return ResourceManager.GetString("Policy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kodi postal.
+        /// </summary>
+        public static string PostalCode {
+            get {
+                return ResourceManager.GetString("PostalCode", resourceCulture);
             }
         }
         
@@ -1092,6 +1164,24 @@ namespace HRMS.Resources {
         public static string SessionTimedOut {
             get {
                 return ResourceManager.GetString("SessionTimedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e stafit.
+        /// </summary>
+        public static string StaffList {
+            get {
+                return ResourceManager.GetString("StaffList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lloji stafit.
+        /// </summary>
+        public static string StaffType {
+            get {
+                return ResourceManager.GetString("StaffType", resourceCulture);
             }
         }
         

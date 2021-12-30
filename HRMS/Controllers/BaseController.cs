@@ -172,6 +172,13 @@ public class BaseController : Controller
             _ => LanguageEnum.Albanian,
         };
 
+    protected string GetRoleFromStaffType(int staffType) =>
+        staffType switch
+        {
+            1 => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            _ => ""
+        };
+
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);

@@ -525,4 +525,28 @@
   <data name="Qualifications" xml:space="preserve">
     <value>Qualifications</value>
   </data>
+  <data name="ExistsStaffRole" xml:space="preserve">
+    <value>{0} {1} exists as {2}. You need to make this passive, to register then!</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="MaxChar10" xml:space="preserve">
+    <value>The maximum character length is 10.</value>
+  </data>
+  <data name="MinChar10" xml:space="preserve">
+    <value>The minimum character length is 10.</value>
+  </data>
+  <data name="MustBe18YearsOld" xml:space="preserve">
+    <value>Staff employee must be 18 years or older.</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal code</value>
+  </data>
 </root>
