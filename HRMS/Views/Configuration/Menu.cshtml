@@ -1,7 +1,8 @@
 ﻿@using HRMS.Models.Menu
 @model IEnumerable<MenuDetails>
 @{
-    //Layout = null;
+    Layout = "~/Shared/_Layout.cshtml";
+
 }
 
 <div class="d-flex justify-content-between">
@@ -21,7 +22,7 @@
             <th>@Resource.Icon</th>
             <th>@Resource.Controller</th>
             <th>@Resource.Action</th>
-            <th style="width: 10% !important;">@Resource.Actions</th>
+            <th style="width: 10% !important;" data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
     <tbody>

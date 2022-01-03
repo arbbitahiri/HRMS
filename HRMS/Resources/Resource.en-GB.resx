@@ -516,4 +516,49 @@
   <data name="Users" xml:space="preserve">
     <value>Users</value>
   </data>
+  <data name="DocumentType" xml:space="preserve">
+    <value>Document type</value>
+  </data>
+  <data name="EducationLevelType" xml:space="preserve">
+    <value>Education level type</value>
+  </data>
+  <data name="EvaluationType" xml:space="preserve">
+    <value>Evaluation type</value>
+  </data>
+  <data name="HolidayType" xml:space="preserve">
+    <value>Holiday type</value>
+  </data>
+  <data name="ProfessionType" xml:space="preserve">
+    <value>Profession type</value>
+  </data>
+  <data name="RateType" xml:space="preserve">
+    <value>Rate type</value>
+  </data>
+  <data name="StaffType" xml:space="preserve">
+    <value>Staff type</value>
+  </data>
+  <data name="StatusType" xml:space="preserve">
+    <value>Status type</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="HelpingTables" xml:space="preserve">
+    <value>Helping tables</value>
+  </data>
+  <data name="Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="RateNumber" xml:space="preserve">
+    <value>Rate number</value>
+  </data>
+  <data name="Tables" xml:space="preserve">
+    <value>Tables</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
 </root>

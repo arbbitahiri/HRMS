@@ -34,15 +34,15 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <label class="required">Fusha</label>
+                            <label class="required">@Resource.Field</label>
                             <input name="Region" id="Region" disabled="disabled" class="form-control" />
                         </div>
                         <div class="col-md-12 form-group">
-                            <label class="required">Çelësi</label>
+                            <label class="required">@Resource.Key</label>
                             <input name="Key" id="Key" disabled="disabled" class="form-control" />
                         </div>
                         <div class="col-md-12 form-group">
-                            <label class="required">Vlera</label>
+                            <label class="required">@Resource.Value</label>
                             <input name="Value" id="Value" required class="form-control" />
                         </div>
                     </div>
@@ -61,7 +61,7 @@
         $(document).ready(function() {
             render_Tbl(@Json.Serialize(Model));
         });
-console.log(culture)
+
         function render_Tbl(data) {
             $('#tbl_appsettings').DataTable({
                 language: {

@@ -1,0 +1,75 @@
+﻿@using HRMS.Models.Tables
+@model CreateData
+@{
+    var bonusField = Model.Table == LookUpTable.ProfessionType || Model.Table == LookUpTable.RateType;
+    var col = bonusField ? "col-md-4" : "col-md-6";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Add - @Model.Title</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="Edit" asp-controller="Tables" id="frm_Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
+    <div class="card-body">
+        <input asp-for="Ide" type="hidden"/>
+        <input asp-for="Title" type="hidden"/>
+
+        <div class="row">
+            @if (bonusField)
+            {
+                <div class="@col form-group">
+                    <label asp-for="OtherData" class="required">@(Model.Table == LookUpTable.ProfessionType ? Resource.Code : Resource.RateNumber)</label>
+                    <input asp-for="OtherData" class="form-control" />
+                    <span asp-validation-for="OtherData" class="text-danger"></span>
+                </div>
+            }
+            <div class="@col form-group">
+                <label asp-for="NameSQ" class="required">@Resource.NameSq</label>
+                <input asp-for="NameSQ" class="form-control" />
+                <span asp-validation-for="NameSQ" class="text-danger"></span>
+            </div>
+            <div class="@col form-group">
+                <label asp-for="NameEN" class="required">@Resource.NameEn</label>
+                <input asp-for="NameEN" class="form-control" />
+                <span asp-validation-for="NameEN" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_Create');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+
+    function success_create(data) {
+        if (data.status == ErrorStatus.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.description,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(t => {
+                window.location.reload()
+            });
+        } else if (data.status == ErrorStatus.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.description,
+                confirmButtonText: 'Okay'
+            });
+        }
+    }
+</script>

@@ -1,0 +1,26 @@
+﻿@using HRMS.Models.Tables
+@model IEnumerable<TableName>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            @Resource.Tables
+        </h3>
+    </div>
+    <div class="card-body">
+        <ul class="nav nav-pills flex-column" role="tablist">
+            @foreach (var table in Model)
+            {
+                <li class="nav-item" id="@table.Table">
+                    <a onclick="load_table('@table.Table', '@table.Title')" class="nav-link" style="cursor: pointer;">
+                        @table.Title
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+
+</script>

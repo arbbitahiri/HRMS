@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = Resource.HelpingTables;
+}
+
+<div class="row">
+    <div id="kt_table_names" class="col-xl-3 col-lg-3 col-md-4 col-sm-12"></div>
+    <div id="kt_table_data" class="col-xl-9 col-lg-9 col-md-8 col-sm-12"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#kt_table_names').load('@Url.Action("_LookUpTables", "Tables")');
+
+            if (sessionStorage.getItem("tbl_enum") == null) {
+                $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
+                    table: @LookUpTable.DocumentType,
+                    title: @Resource.DocumentType
+                });
+            } else {
+                $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
+                    table: sessionStorage.getItem("tbl_enum")
+                });
+
+                $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
+            }
+        });
+    </script>
+}
