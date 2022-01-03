@@ -7,7 +7,7 @@ namespace HRMS.Data.General
     {
         public int StaffQualificationId { get; set; }
         public int StaffId { get; set; }
-        public int ProffessionTypeId { get; set; }
+        public int ProfessionTypeId { get; set; }
         public int EducationLevelTypeId { get; set; }
         public bool Training { get; set; }
         public string Title { get; set; }
@@ -32,7 +32,7 @@ namespace HRMS.Data.General
 
         public virtual EducationLevelType EducationLevelType { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
-        public virtual ProfessionType ProffessionType { get; set; }
+        public virtual ProfessionType ProfessionType { get; set; }
         public virtual Staff Staff { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }

@@ -82,13 +82,13 @@ public class ConfigurationController : BaseController
 
         if (!string.IsNullOrEmpty(change.SubMenuIde))
         {
-            subMenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(change.SubMenuIde));
+            subMenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(change.SubMenuIde));
             claimType = subMenu.Claim.Split(":")[0];
             claimValue = subMenu.Claim.Split(":")[1];
         }
         else
         {
-            menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt(change.MenuIde));
+            menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(change.MenuIde));
             claimType = menu.Claim.Split(":")[0];
             claimValue = menu.Claim.Split(":")[1];
         }
@@ -144,7 +144,7 @@ public class ConfigurationController : BaseController
         return PartialView(menus);
     }
 
-    #region => Create
+    #region |> Create
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to create a new menu.")]
@@ -181,13 +181,13 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region => Edit
+    #region |> Edit
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new menu.")]
     public async Task<IActionResult> _EditMenu(string ide)
     {
-        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt(ide));
+        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
         var edit = new EditMenu
         {
             MenuIde = ide,
@@ -214,7 +214,7 @@ public class ConfigurationController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
-        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt(edit.MenuIde));
+        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(edit.MenuIde));
         menu.NameSq = edit.NameSq;
         menu.NameEn = edit.NameEn;
         menu.HasSubMenu = edit.HasSubMenu;
@@ -236,13 +236,13 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region => Delete
+    #region |> Delete
 
     [HttpPost, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new menu.")]
     public async Task<IActionResult> DeleteMenu(string ide)
     {
-        db.Menu.Remove(await db.Menu.FindAsync(CryptoSecurity.Decrypt(ide)));
+        db.Menu.Remove(await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
@@ -270,13 +270,13 @@ public class ConfigurationController : BaseController
         return PartialView(menus);
     }
 
-    #region => Create
+    #region |> Create
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to create a new submenu.")]
     public async Task<IActionResult> _CreateSubMenu(string ide)
     {
-        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt(ide));
+        var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
         var create = new CreateSubMenu
         {
             MenuIde = ide,
@@ -296,7 +296,7 @@ public class ConfigurationController : BaseController
 
         db.SubMenu.Add(new SubMenu
         {
-            MenuId = CryptoSecurity.Decrypt(create.MenuIde),
+            MenuId = CryptoSecurity.Decrypt<int>(create.MenuIde),
             NameSq = create.NameSq,
             NameEn = create.NameEn,
             Active = true,
@@ -316,13 +316,13 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region => Edit
+    #region |> Edit
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new submenu.")]
     public async Task<IActionResult> _EditSubMenu(string ide)
     {
-        var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(ide));
+        var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
         var edit = new EditSubMenu
         {
             NameSq = submenu.NameSq,
@@ -347,7 +347,7 @@ public class ConfigurationController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
-        var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(edit.SubMenuIde));
+        var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(edit.SubMenuIde));
         submenu.NameSq = edit.NameSq;
         submenu.NameEn = edit.NameEn;
         submenu.Active = edit.Active;
@@ -368,13 +368,13 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region => Delete
+    #region |> Delete
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new submenu.")]
     public async Task<IActionResult> DeleteSubMenu(string ide)
     {
-        db.SubMenu.Remove(await db.SubMenu.FindAsync(CryptoSecurity.Decrypt(ide)));
+        db.SubMenu.Remove(await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });

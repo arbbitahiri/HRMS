@@ -1,0 +1,169 @@
+﻿@using HRMS.Models.Staff
+@model Search
+@inject IDDLRepo repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+    var role = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resource.StaffList;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchParameters</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="Staff" method="post" id="frm_search_staff" data-ajax="true" data-ajax-method="post" data-ajax-success="search_success">
+            @Html.AntiForgeryToken()
+            <div class="row form-group">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label asp-for="Department"></label>
+                    <select asp-for="Department">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label asp-for="StaffType"></label>
+                    <select asp-for="StaffType">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label asp-for="PersonalNumber"></label>
+                    <input asp-for="PersonalNumber" type="text" class="form-control"/>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label asp-for="Firstname"></label>
+                    <input asp-for="Firstname" type="text" class="form-control"/>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label asp-for="Lastname"></label>
+                    <input asp-for="Lastname" type="text" class="form-control"/>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" value="@Resource.Search"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchResult</h3>
+    </div>
+    <div class="card-body">
+        <table id="tbl_staff" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Resource.Name</th>
+                    <th>@Resource.StaffType</th>
+                    <th>@Resource.Department</th>
+                    <th>@Resource.Gender</th>
+                    <th>@Resource.Email</th>
+                    <th>@Resource.PhoneNumber</th>
+                    <th data-orderable="false">@Resource.Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $.validator.setDefaults({ ingore: '' });
+            var form = $('.form');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+        });
+
+        function search_success(data) {
+            $("#tbl_staff").DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 20,
+                data: data,
+                columnDefs: [
+                    { width: 10, targets: [0, 2, 6] },
+                ],
+                order: [[ 0, 'asc' ]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var name = '<div class="d-flex align-items-center">' +
+                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                            if (row.profileImage == null) {
+                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                            } else {
+                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                            }
+                            name += '</div><div class="ml-4">' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.firstname + '</div>' +
+                                '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                                '</div></div>';
+                            return name;
+                        }
+                    },
+                    { data: "department" },
+                    { data: "staffType" },
+                    { data: "gender" },
+                    { data: "email" },
+                    { data: "phoneNumber" },
+                    {
+                        data: function (row, type, set) {
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="add_document(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-file-upload"></i></span><span class="p-1">Ngarko dokumente</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="staff_profile(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    },
+                ]
+            })
+        }
+
+        function add_document(ide) {
+            window.location.href = '@Url.Action("AddDocument", "Staff")?ide=' + ide;
+        }
+
+        function staff_profile(ide) {
+            window.location.href = '@Url.Action("Profile", "Staff")?ide=' + ide;
+        }
+
+        function edit_staff(ide) {
+            window.location.href = '@Url.Action("Register", "Staff")?ide=' + ide;
+        }
+
+    </script>
+}

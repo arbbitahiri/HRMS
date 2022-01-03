@@ -31,6 +31,19 @@ public enum ImageSizeType
     News = 1280
 }
 
+public enum MethodType
+{
+    GET = 1,
+    POST = 2,
+    PUT = 3
+}
+
+public enum StaffTypeEnum
+{
+    Administrator = 1,
+    Professor = 2
+}
+
 public enum LookUpTable
 {
     DocumentType = 1,

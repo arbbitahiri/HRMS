@@ -55,7 +55,8 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI\\SQLEXPRESS;Database=HRMS;Trusted_Connection=True;");
             }
         }
 
@@ -151,7 +152,7 @@ namespace HRMS.Data.General
             modelBuilder.Entity<AspNetUserRoles>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_AspNetUserRoles");
+                    .HasName("PK__AspNetUserRoles");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUserRoles)
@@ -1080,7 +1081,11 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.StaffDocumentId).HasColumnName("StaffDocumentID");
 
-                entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
+                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
+
+                entity.Property(e => e.FileName)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -1088,15 +1093,21 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(450);
 
+                entity.Property(e => e.Path).IsRequired();
+
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
-                entity.HasOne(d => d.Document)
+                entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.StaffDocument)
-                    .HasForeignKey(d => d.DocumentId)
+                    .HasForeignKey(d => d.DocumentTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffDocument_Document");
 
@@ -1150,7 +1161,7 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(450);
 
-                entity.Property(e => e.ProffessionTypeId).HasColumnName("ProffessionTypeID");
+                entity.Property(e => e.ProfessionTypeId).HasColumnName("ProfessionTypeID");
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
@@ -1180,9 +1191,9 @@ namespace HRMS.Data.General
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffQualification_AspNetUsers_Insert");
 
-                entity.HasOne(d => d.ProffessionType)
+                entity.HasOne(d => d.ProfessionType)
                     .WithMany(p => p.StaffQualification)
-                    .HasForeignKey(d => d.ProffessionTypeId)
+                    .HasForeignKey(d => d.ProfessionTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffQualification_ProfessionType");
 
