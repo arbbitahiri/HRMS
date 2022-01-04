@@ -16,7 +16,7 @@
             <th>@Resource.Icon</th>
             <th>@Resource.Controller</th>
             <th>@Resource.Action</th>
-            <th style="width: 10% !important;">@Resource.Actions</th>
+            <th style="width: 10% !important;" data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -55,8 +55,8 @@
                         return '<div class="dropdown cursor-pointer">' +
                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions</button>' +
                                '<div class="dropdown-menu dropdown-grid" role="menu">' +
-                               '<button class="dropdown-item cursor-pointer" type="button" onclick="edit(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span class="p-1"><span>@Resource.Edit</span></button>' +
-                               '<button class="dropdown-item cursor-pointer" type="button" onclick="delete_submenu(\'' + row.menuIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                               '<button class="dropdown-item cursor-pointer" type="button" onclick="edit(\'' + row.subMenuIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span class="p-1"><span>@Resource.Edit</span></button>' +
+                               '<button class="dropdown-item cursor-pointer" type="button" onclick="delete_submenu(\'' + row.subMenuIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
                                '</div></div>';
                     }
                 }
@@ -82,25 +82,28 @@
             cancelButtonText: "@Resource.No"
         }).then((result) => {
             if (result.value) {
-                $.post('@Url.Action("DeleteSubMenu", "Configuration")', { ide: ide }, function (data) {
-                    if (data.status == ErrorStatus.SUCCESS) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.description,
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(t => {
-                            window.location.reload()
-                        });
-                    } else if (data.status == ErrorStatus.WARNING) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.description,
-                            confirmButtonText: '@Html.Raw(Resource.Okay)'
-                        });
-                    }
+                $.post('@Url.Action("DeleteSubMenu", "Configuration")', {
+                    ide: ide,
+                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    }, function (data) {
+                        if (data.status == ErrorStatus.SUCCESS) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.description,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(t => {
+                                window.location.reload()
+                            });
+                        } else if (data.status == ErrorStatus.WARNING) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.title,
+                                text: data.description,
+                                confirmButtonText: '@Html.Raw(Resource.Okay)'
+                            });
+                        }
                 });
             }
         });

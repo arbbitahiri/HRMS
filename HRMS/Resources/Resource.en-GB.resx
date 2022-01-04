@@ -328,7 +328,7 @@
     <value>Are you sure you want to delete menu?</value>
   </data>
   <data name="AddMenu" xml:space="preserve">
-    <value>AddMenu</value>
+    <value>Add menu</value>
   </data>
   <data name="Active" xml:space="preserve">
     <value>Active</value>

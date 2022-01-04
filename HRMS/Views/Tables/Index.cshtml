@@ -14,8 +14,8 @@
 
             if (sessionStorage.getItem("tbl_enum") == null) {
                 $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
-                    table: @LookUpTable.DocumentType,
-                    title: @Resource.DocumentType
+                    table: TableType.DOCUMENT,
+                    title: '@Resource.DocumentType'
                 });
             } else {
                 $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {

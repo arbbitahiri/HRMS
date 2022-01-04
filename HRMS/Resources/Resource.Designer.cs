@@ -574,20 +574,20 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!.
-        /// </summary>
-        public static string ExistsStaffRole {
-            get {
-                return ResourceManager.GetString("ExistsStaffRole", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Lloji vlerësimit.
         /// </summary>
         public static string EvaluationType {
             get {
                 return ResourceManager.GetString("EvaluationType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!.
+        /// </summary>
+        public static string ExistsStaffRole {
+            get {
+                return ResourceManager.GetString("ExistsStaffRole", resourceCulture);
             }
         }
         
@@ -1272,15 +1272,6 @@ namespace HRMS.Resources {
         public static string StaffList {
             get {
                 return ResourceManager.GetString("StaffList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lloji stafit.
-        /// </summary>
-        public static string StaffType {
-            get {
-                return ResourceManager.GetString("StaffType", resourceCulture);
             }
         }
         

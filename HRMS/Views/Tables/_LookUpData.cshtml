@@ -5,7 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">@Model.Title</h3>
         <div class="card-tools">
-            <a onclick="create('@Model.Table', '@Model.Title')" class="btn btn-primary">@Resource.Add</a>
+            <a onclick="create('@((int)Model.Table)', '@Model.Title')" class="btn btn-primary">@Resource.Add</a>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>@(Model.Table == LookUpTable.ProfessionType ? "Kodi" : "Numri vlerësimit")</th>
+                    <th>@(Model.Table == LookUpTable.ProfessionType ? Resource.Code : Resource.RateNumber)</th>
                     <th>@Resource.NameSq</th>
                     <th>@Resource.NameEn</th>
                     <th>@Resource.Active</th>
@@ -59,9 +59,8 @@
                     data: function(row, type, set) {
                         var isActive = row.active ? "checked" : "";
                         return '<label class="icheck-success d-inline">' +
-                                '<input style="cursor: pointer;" type="checkbox" id="ch_isActive" ' +
-                                'onchange="change_active(this, \'' + row.ide + '\',\'' + @Model.Table + '\')"' + isActive + '>' +
-                                '<label for="ch_isActive"></label>'
+                                '<input style="cursor: pointer;" type="checkbox" id="ch_isActive" ' + isActive + '>' +
+                                '<label for="ch_isActive" onclick="change_active(\'' + row.ide + '\',\'' + @((int)Model.Table) + '\')"></label>'
                                 '</label>';
                     }
                 },
@@ -70,7 +69,7 @@
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit(\'' + row.ide + '\',\'' + @Model.Table + '\',\'' + @Model.Title + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="edit(\'' + row.ide + '\',\'' + @((int)Model.Table) + '\',\'' + @Model.Title + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                             '</div></div>';
                         return dropdown;
                     }
@@ -79,17 +78,17 @@
         });
     }
 
-    function change_active(e, ide, tbl) {
-        if($(e).is(":checked")) {
-            $(e).removeAttr('checked');
+    function change_active(ide, tbl) {
+        if($('#ch_isActive').is(":checked")) {
+            $('#ch_isActive').removeAttr('checked');
         } else {
-            $(e).attr('checked');
+            $('#ch_isActive').attr('checked', true);
         }
 
         $.post('@Url.Action("Delete", "Tables")', {
             table: tbl,
             ide: ide,
-            show: $(e).is(":checked"),
+            show: $('#ch_isActive').is(":checked"),
             "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
         }, function(data) {
             if (data.status == ErrorStatus.SUCCESS) {
