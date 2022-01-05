@@ -45,6 +45,43 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size: 1.175rem !important
 }
 
+.flex-root {
+    -webkit-box-flex: 1;
+    flex: 1;
+    -ms-flex: 1 0 0px
+}
+
+.flex-column-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none
+}
+
+.flex-column-fluid {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto
+}
+
+.flex-row-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto
+}
+
+.flex-row-fluid {
+    -webkit-box-flex: 1;
+    flex: 1 auto;
+    -ms-flex: 1 0 0px;
+    min-width: 0
+}
+
+@media screen and (-ms-high-contrast:active),(-ms-high-contrast:none) {
+    .flex-row-fluid {
+        min-width: none
+    }
+}
+
 .text-hover-primary, a.text-hover-primary {
   -webkit-transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;
   transition: color .15s ease,background-color .15s ease,border-color .15s ease,-webkit-box-shadow .15s ease;

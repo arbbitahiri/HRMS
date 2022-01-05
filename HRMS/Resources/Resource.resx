@@ -555,4 +555,10 @@
   <data name="StaffType" xml:space="preserve">
     <value>Lloji stafit</value>
   </data>
+  <data name="LookLess" xml:space="preserve">
+    <value>Shiko më pak</value>
+  </data>
+  <data name="LookMore" xml:space="preserve">
+    <value>Shiko më shumë</value>
+  </data>
 </root>

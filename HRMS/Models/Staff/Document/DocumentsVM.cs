@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HRMS.Utilities;
+using System.Collections.Generic;
 
 namespace HRMS.Models.Staff.Document;
 
@@ -8,4 +9,5 @@ public class DocumentsVM
     public List<Documents> Documents { get; set; }
 
     public int DocumentCount { get; set; }
+    public MethodType MethodType { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HRMS.Utilities;
+using System.Collections.Generic;
 
 namespace HRMS.Models.Staff.Department;
 
@@ -10,4 +11,5 @@ public class DepartmentVM
 
     public int DepartmentCount { get; set; }
     public int SubjectCount { get; set; }
+    public MethodType MethodType { get; set; }
 }

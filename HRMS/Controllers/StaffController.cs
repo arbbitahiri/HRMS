@@ -216,7 +216,7 @@ public class StaffController : BaseController
             }
         }
 
-        return RedirectToAction(nameof(Qualification), new { ide = staffIde });
+        return RedirectToAction(nameof(Qualification), new { ide = staffIde, mt = staff.MethodType });
     }
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -247,7 +247,7 @@ public class StaffController : BaseController
         staff.UpdatedNo++;
 
         await db.SaveChangesAsync();
-        return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde });
+        return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
         //return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
@@ -258,7 +258,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Description("Entry form for qualification. Second step of registration/edition of staff.")]
-    public async Task<IActionResult> Qualification(string ide)
+    public async Task<IActionResult> Qualification(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new StaffDetails
@@ -276,14 +276,15 @@ public class StaffController : BaseController
                 EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
-                City = a.City,
+                CreditNumber = a.CreditNumber,
             }).ToListAsync();
 
         var qualificationVM = new QualificationVM
         {
             StaffDetails = staff,
             Qualifications = qualifications,
-            QualificationCount = qualifications.Count
+            QualificationCount = qualifications.Count,
+            MethodType = method
         };
         return View(qualifications);
     }
@@ -423,7 +424,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Description("Entry form for documents. Third step of registration/editation of staff.")]
-    public async Task<IActionResult> Documents(string ide)
+    public async Task<IActionResult> Documents(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new StaffDetails
@@ -450,7 +451,8 @@ public class StaffController : BaseController
         {
             StaffDetails = staff,
             Documents = documents,
-            DocumentCount = documents.Count
+            DocumentCount = documents.Count,
+            MethodType = method
         };
         return View(documentVM);
     }
@@ -563,7 +565,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Description("Entry form for department. Fourth step of registration/editation of staff.")]
-    public async Task<IActionResult> Departments(string ide)
+    public async Task<IActionResult> Departments(string ide, MethodType method)
     {
         var staff = await db.Staff
             .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -605,7 +607,8 @@ public class StaffController : BaseController
             Departments = departments,
             Subjects = subjects,
             DepartmentCount = departments.Count,
-            SubjectCount = subjects.Count
+            SubjectCount = subjects.Count,
+            MethodType = method
         };
         return View(departmentVM);
     }
@@ -883,7 +886,7 @@ public class StaffController : BaseController
                 EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
-                City = a.City
+                CreditNumber = a.CreditNumber
             }).ToListAsync();
 
         var documents = await db.StaffDocument

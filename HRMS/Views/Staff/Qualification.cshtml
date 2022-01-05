@@ -1,0 +1,166 @@
+﻿@using HRMS.Models.Staff
+@model QualificationVM
+@inject IDDLRepo repo
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Staff/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="flex-row-fluid">
+    <div class="card" style="box-shadow: none !important;">
+        <div class="card-header border-0">
+            <h1 class="align-items-start flex-column">
+                <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span>
+                <span class="text-muted mt-1 font-weight-bold font-size-sm">Ka <b class="text-primary">@Model.QualificationCount</b> kualifikime</span>
+            </h1>
+            <div class="card-tools">
+                <a onclick="add_qualification('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">Shto kualifikimin</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tbl_qualifications" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Lloji profesionit</th>
+                        <th>Niveli edukimit</th>
+                        <th>Titulli</th>
+                        <th>Fusha e studimit</th>
+                        <th>Numri kredive</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between border-top">
+        <input type="button" onclick="go_back_register('@Model.StaffDetails.Ide')" class="btn btn-light-primary font-weight-bolder text-uppercase"/>
+        <input type="button" onclick="continue_to_documents('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase"/>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@Model.MethodType == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: '' });
+                $('#tab3').attr({ href: '', style: '' });
+                $('#tab4').attr({ href: '', style: '' });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
+            }
+
+            render_tbl(@Html.Raw(Model.Qualifications));
+        });
+
+        function go_back_register(ide) {
+            window.location.href = '@Url.Action("Register", "Staff")?ide=' + ide + '&method=@Model.MethodType';
+        }
+
+        function continue_to_documents(ide) {
+            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide + '&method=@Model.MethodType';
+        }
+
+        function render_tbl(data) {
+            $('#tbl_qualifications').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { width: 10, targets: [0, 5, 6] },
+                    { width: 20, targets: [1, 2, 4] },
+                    { width: 30, targets: [3] },
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { data: "professionType" },
+                    { data: "educationLevel" },
+                    { data: "title" },
+                    { data: "fieldOfStudy" },
+                    {
+                        data: function (row, type, set) {
+                            return row.creditNumber != null ? row.creditNumber : "///";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function add_qualification(ide) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddQualification", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
+            });
+        }
+
+        function edit_qualification(ide) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQualification", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
+            });
+        }
+
+        function delete_qualification(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("DeleteQualification", "Staff")', { ide: ide }, function (data) {
+                        if (data.status == ErrorStatus.SUCCESS) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.description,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(t => {
+                                window.location.reload()
+                            });
+                        } else if (data.status == ErrorStatus.WARNING) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: data.title,
+                                text: data.description,
+                                confirmButtonText: '@Html.Raw(Resource.Okay)'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

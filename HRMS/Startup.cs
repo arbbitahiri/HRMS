@@ -48,7 +48,7 @@ public class Startup
 
         services.AddDbContext<HRMSContext>(options =>
             options.UseSqlServer(
-                Configuration["ConnectionStrings:SqlConnection"]));
+                Configuration["WorkConnectionStrings:SqlConnection"]));
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
@@ -186,7 +186,7 @@ public class Startup
         {
             endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{ide?}");
             endpoints.MapRazorPages();
         });
     }

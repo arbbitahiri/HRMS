@@ -754,6 +754,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shiko më pak.
+        /// </summary>
+        public static string LookLess {
+            get {
+                return ResourceManager.GetString("LookLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shiko më shumë.
+        /// </summary>
+        public static string LookMore {
+            get {
+                return ResourceManager.GetString("LookMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mashkull.
         /// </summary>
         public static string Male {
