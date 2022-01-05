@@ -25,7 +25,6 @@ public class CreateMenu
     [Display(Name = "ClaimPolicy", ResourceType = typeof(Resource))]
     public string ClaimPolicy { get; set; }
 
-    [Display(Name = "HasSubMenu", ResourceType = typeof(Resource))]
     public bool HasSubMenu { get; set; }
 
     [Display(Name = "Icon", ResourceType = typeof(Resource))]

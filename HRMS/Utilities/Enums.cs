@@ -43,3 +43,15 @@ public enum StaffTypeEnum
     Administrator = 1,
     Professor = 2
 }
+
+public enum LookUpTable
+{
+    DocumentType = 1,
+    EducationLevelType = 2,
+    EvaluationType = 3,
+    HolidayType = 4,
+    ProfessionType = 5,
+    RateType = 6,
+    StaffType = 7,
+    StatusType = 8
+}

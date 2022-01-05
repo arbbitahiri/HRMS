@@ -12,9 +12,20 @@ const ErrorStatus = {
 }
 
 const MethodType = {
-    GET = 1,
-    POST = 2,
-    PUT = 3
+    GET: 1,
+    POST: 2,
+    PUT: 3
+}
+
+const TableType = {
+    DOCUMENT: 1,
+    EDUCATIONLEVEL: 2,
+    EVALUATION: 3,
+    HOLIDAY: 4,
+    PROFESSION: 5,
+    RATE: 6,
+    STAFF: 7,
+    STATUS: 8
 }
 
 $(document).ready(function () {

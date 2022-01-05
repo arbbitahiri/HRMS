@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = Resource.MenuSubmenu;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card card-primary card-outline card-outline-tabs">
@@ -39,7 +40,7 @@
             $('#tab_Menu').click();
         });
 
-        $('#tab_Menu').click(function () {
+        $('#tab_Menu').on("click", function () {
             $(this).addClass('active');
             $('#tab_SubMenu').removeClass('active');
             $('#tab_forMenu').addClass('active');
@@ -50,7 +51,7 @@
             $("#tab_forMenu").load('@Url.Action("Menu", "Configuration")');
         });
 
-        $('#tab_SubMenu').click(function () {
+        $('#tab_SubMenu').on("click", function () {
             $(this).addClass('active');
             $('#tab_Menu').removeClass('active');
             $('#tab_forSubMenu').addClass('active');

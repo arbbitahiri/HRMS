@@ -1,0 +1,35 @@
+﻿@using HRMS.Models.Tables
+@model IEnumerable<TableName>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            @Resource.Tables
+        </h3>
+    </div>
+    <div class="card-body p-0">
+        <ul class="nav nav-pills flex-column" role="tablist">
+            @foreach (var table in Model)
+            {
+                <li class="nav-item" id="@((int)table.Table)">
+                    <a onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer;">
+                        @table.Title
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+    function load_table(tbl, title) {
+        $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
+            table: tbl,
+            title: '@Resource.DocumentType'
+        });
+
+        $('#' + sessionStorage.getItem('tbl_enum')).removeClass('active');
+        sessionStorage.setItem('tbl_enum', tbl);
+        $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
+    }
+</script>

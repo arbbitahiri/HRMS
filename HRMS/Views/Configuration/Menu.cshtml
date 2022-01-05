@@ -1,7 +1,7 @@
 ﻿@using HRMS.Models.Menu
 @model IEnumerable<MenuDetails>
 @{
-    //Layout = null;
+    Layout = null;
 }
 
 <div class="d-flex justify-content-between">
@@ -21,7 +21,7 @@
             <th>@Resource.Icon</th>
             <th>@Resource.Controller</th>
             <th>@Resource.Action</th>
-            <th style="width: 10% !important;">@Resource.Actions</th>
+            <th style="width: 10% !important;" data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -102,25 +102,28 @@
             cancelButtonText: "@Resource.No"
         }).then((result) => {
             if (result.value) {
-                $.post('@Url.Action("DeleteMenu", "Configuration")', { ide: ide }, function (data) {
-                    if (data.status == ErrorStatus.SUCCESS) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.description,
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(t => {
-                            window.location.reload()
-                        });
-                    } else if (data.status == ErrorStatus.WARNING) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: data.title,
-                            text: data.description,
-                            confirmButtonText: '@Html.Raw(Resource.Okay)'
-                        });
-                    }
+                $.post('@Url.Action("DeleteMenu", "Configuration")', {
+                    ide: ide,
+                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    }, function (data) {
+                        if (data.status == ErrorStatus.SUCCESS) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.title,
+                                text: data.description,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(t => {
+                                window.location.reload()
+                            });
+                        } else if (data.status == ErrorStatus.WARNING) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: data.title,
+                                text: data.description,
+                                confirmButtonText: '@Html.Raw(Resource.Okay)'
+                            });
+                        }
                 });
             }
         });

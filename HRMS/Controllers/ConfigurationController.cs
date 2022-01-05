@@ -238,7 +238,7 @@ public class ConfigurationController : BaseController
 
     #region |> Delete
 
-    [HttpPost, Authorize(Policy = "11m:r")]
+    [HttpPost, Authorize(Policy = "11m:r"), ValidateAntiForgeryToken]
     [Description("Form to edit a new menu.")]
     public async Task<IActionResult> DeleteMenu(string ide)
     {
@@ -260,7 +260,7 @@ public class ConfigurationController : BaseController
         var menus = await db.SubMenu.Include(a => a.Menu)
             .Select(a => new SubMenuDetails
             {
-                SubMenuIde = CryptoSecurity.Encrypt(a.MenuId),
+                SubMenuIde = CryptoSecurity.Encrypt(a.SubMenuId),
                 Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
                 MenuTitle = user.Language == LanguageEnum.Albanian ? a.Menu.NameSq : a.Menu.NameEn,
                 Controller = a.Controller,
@@ -370,7 +370,7 @@ public class ConfigurationController : BaseController
 
     #region |> Delete
 
-    [HttpGet, Authorize(Policy = "11m:r")]
+    [HttpPost, Authorize(Policy = "11m:r"), ValidateAntiForgeryToken]
     [Description("Form to edit a new submenu.")]
     public async Task<IActionResult> DeleteSubMenu(string ide)
     {
