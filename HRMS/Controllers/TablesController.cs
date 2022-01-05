@@ -47,8 +47,7 @@ public class TablesController : BaseController
 
     #region List
 
-    [HttpGet, Authorize(Policy = "11t:r")]
-    [Description("List of data of look up tables")]
+    [Authorize(Policy = "11t:r"), Description("List of data of look up tables")]
     public async Task<IActionResult> _LookUpData(LookUpTable table, string title)
     {
         switch (table)
@@ -143,8 +142,7 @@ public class TablesController : BaseController
 
     #region Create
 
-    [HttpGet, Authorize(Policy = "11t:r")]
-    [Description("Form to create data for a look up table.")]
+    [Authorize(Policy = "11t:r"), Description("Form to create data for a look up table.")]
     public IActionResult _Create(LookUpTable table, string title) => PartialView(new CreateData { Table = table, Title = title });
 
     [HttpPost, Authorize(Policy = "11t:r"), ValidateAntiForgeryToken]
@@ -156,7 +154,7 @@ public class TablesController : BaseController
             return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var error = new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData };
+        var error = new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.DataRegisteredSuccessfully };
 
         switch (create.Table)
         {
@@ -261,8 +259,7 @@ public class TablesController : BaseController
 
     #region Edit
 
-    [HttpGet, Authorize(Policy = "11t:r")]
-    [Description("Form to edit data from look up tables.")]
+    [Authorize(Policy = "11t:r"), Description("Form to edit data from look up tables.")]
     public async Task<IActionResult> _Edit(LookUpTable table, string title, string ide)
     {
         var id = CryptoSecurity.Decrypt<int>(ide);
@@ -476,10 +473,9 @@ public class TablesController : BaseController
     [Description("Action to delete data from a lookup table.")]
     public async Task<IActionResult> Delete(LookUpTable table, string ide, bool active)
     {
-        var error = new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.DataDeletedSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully };
 
         var id = CryptoSecurity.Decrypt<int>(ide);
-        //var active = show ? true : false;
 
         switch (table)
         {

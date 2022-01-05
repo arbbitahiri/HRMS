@@ -600,4 +600,106 @@
   <data name="LookMore" xml:space="preserve">
     <value>Look more</value>
   </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Add role</value>
+  </data>
+  <data name="LockAccount" xml:space="preserve">
+    <value>Lock account</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+  <data name="SureYouWantToDeleteUser" xml:space="preserve">
+    <value>Are you sure you want to delete menu?</value>
+  </data>
+  <data name="UnlockAccount" xml:space="preserve">
+    <value>Unlock account</value>
+  </data>
+  <data name="UploadDocument" xml:space="preserve">
+    <value>Upload document</value>
+  </data>
+  <data name="AddDepartment" xml:space="preserve">
+    <value>Add department</value>
+  </data>
+  <data name="AddDocument" xml:space="preserve">
+    <value>Add document</value>
+  </data>
+  <data name="AddQualification" xml:space="preserve">
+    <value>Add qualification</value>
+  </data>
+  <data name="AddSubject" xml:space="preserve">
+    <value>Add subject</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="CreditsNumber" xml:space="preserve">
+    <value>Credits number</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DocumentsLower" xml:space="preserve">
+    <value>documents</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="EducationLevel" xml:space="preserve">
+    <value>Education level</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="FieldOfStudy" xml:space="preserve">
+    <value>Field of study</value>
+  </data>
+  <data name="FirstStepStaffRegistration" xml:space="preserve">
+    <value>1. Personal data</value>
+  </data>
+  <data name="FourthStepStaffRegistration" xml:space="preserve">
+    <value>4. Departments &amp; Subjects</value>
+  </data>
+  <data name="Has" xml:space="preserve">
+    <value>Has</value>
+  </data>
+  <data name="InsertDate" xml:space="preserve">
+    <value>Insert date</value>
+  </data>
+  <data name="QualificationsLower" xml:space="preserve">
+    <value>qualifications</value>
+  </data>
+  <data name="SecondStepStaffRegistration" xml:space="preserve">
+    <value>2. Qualifications</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="SubjectsLower" xml:space="preserve">
+    <value>subjects</value>
+  </data>
+  <data name="SureYouWantToDeleteDepartmentForStaff" xml:space="preserve">
+    <value>Are you sure you want to delete department for staff?</value>
+  </data>
+  <data name="SureYouWantToDeleteDocument" xml:space="preserve">
+    <value>Are you sure you want to delete document?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubjectForStaff" xml:space="preserve">
+    <value>Are you sure you want to delete subject for staff?</value>
+  </data>
+  <data name="ThirdStepStaffRegistration" xml:space="preserve">
+    <value>3. Documents</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
 </root>

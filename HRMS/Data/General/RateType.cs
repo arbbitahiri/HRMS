@@ -7,8 +7,8 @@ namespace HRMS.Data.General
     {
         public RateType()
         {
-            StaffCollegeEvaluationQuestionnaire = new HashSet<StaffCollegeEvaluationQuestionnaire>();
-            StaffCollegeEvaluationQuestionnaireRate = new HashSet<StaffCollegeEvaluationQuestionnaireRate>();
+            StaffDepartmentEvaluationQuestionnaire = new HashSet<StaffDepartmentEvaluationQuestionnaire>();
+            StaffDepartmentEvaluationQuestionnaireRate = new HashSet<StaffDepartmentEvaluationQuestionnaireRate>();
         }
 
         public int RateTypeId { get; set; }
@@ -24,7 +24,7 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluationQuestionnaire> StaffCollegeEvaluationQuestionnaire { get; set; }
-        public virtual ICollection<StaffCollegeEvaluationQuestionnaireRate> StaffCollegeEvaluationQuestionnaireRate { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluationQuestionnaire> StaffDepartmentEvaluationQuestionnaire { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluationQuestionnaireRate> StaffDepartmentEvaluationQuestionnaireRate { get; set; }
     }
 }

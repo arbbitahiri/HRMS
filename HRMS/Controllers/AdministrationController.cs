@@ -47,8 +47,7 @@ public class AdministrationController : BaseController
     public async Task<IActionResult> Search(Search search)
     {
         var users = await db.AspNetUsers
-            .Include(a => a.AspNetUserRoles).ThenInclude(a => a.Role)
-            .Where(a => ((search.Roles ?? new List<string>()).Any() ? search.Roles.Contains(a.AspNetUserRoles.Select(a => a.RoleId).FirstOrDefault()) : true)
+            .Where(a => ((search.Roles ?? new List<string>()).Any() ? search.Roles.Contains(a.Role.Select(a => a.Id).FirstOrDefault()) : true)
                 && (string.IsNullOrEmpty(search.PersonalNumber) || search.PersonalNumber.Contains(a.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || search.Firstname.Contains(a.FirstName))
                 && (string.IsNullOrEmpty(search.Lastname) || search.Lastname.Contains(a.LastName))
@@ -64,7 +63,7 @@ public class AdministrationController : BaseController
                 Name = $"{a.FirstName} {a.LastName}",
                 Email = a.Email,
                 PhoneNumber = a.PhoneNumber,
-                Roles = string.Join(", ", a.AspNetUserRoles.Select(a => user.Language == LanguageEnum.Albanian ? a.Role.NameSq : a.Role.NameEn).ToArray()),
+                Roles = string.Join(", ", a.Role.Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).ToArray()),
                 LockoutEnd = a.LockoutEnd
             }).ToListAsync();
         return Json(users);
@@ -331,11 +330,11 @@ public class AdministrationController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.IncorrectPassword });
         }
 
-        var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == addRole.UserId);
+        var userToAdd = await userManager.FindByIdAsync(addRole.UserId);
 
-        if (!await db.AspNetUserRoles.AnyAsync(a => a.UserId == user.Id))
+        if (!await db.AspNetRoles.AnyAsync(a => a.User.Any(a => a.Id == addRole.UserId)))
         {
-            await userManager.AddToRoleAsync(user, addRole.Role);
+            await userManager.AddToRoleAsync(userToAdd, addRole.Role);
         }
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.RoleAddedSuccess });
     }

@@ -325,6 +325,7 @@ public class ConfigurationController : BaseController
         var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
         var edit = new EditSubMenu
         {
+            SubMenuIde = ide,
             NameSq = submenu.NameSq,
             NameEn = submenu.NameEn,
             Active = submenu.Active,
@@ -436,6 +437,13 @@ public class ConfigurationController : BaseController
             json = streamReader.ReadToEnd();
         }
         dynamic data = JsonConvert.DeserializeObject(json);
+
+        db.AppSettings.Add(new AppSettings
+        {
+            OldVersion = data[edit.Region][edit.Key],
+            UpdatedVersion = edit.Value
+        });
+        await db.SaveChangesAsync();
         data[edit.Region][edit.Key] = edit.Value;
 
         using (var streamWriter = new StreamWriter("appsettings.json", false))

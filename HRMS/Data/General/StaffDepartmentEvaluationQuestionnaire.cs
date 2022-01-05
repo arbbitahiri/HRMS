@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class StaffCollegeEvaluationQuestionnaire
+    public partial class StaffDepartmentEvaluationQuestionnaire
     {
-        public StaffCollegeEvaluationQuestionnaire()
+        public StaffDepartmentEvaluationQuestionnaire()
         {
-            StaffCollegeEvaluationQuestionnaireRate = new HashSet<StaffCollegeEvaluationQuestionnaireRate>();
+            StaffDepartmentEvaluationQuestionnaireRate = new HashSet<StaffDepartmentEvaluationQuestionnaireRate>();
         }
 
-        public int StaffCollegeEvaluationQuestionnaireId { get; set; }
-        public int StaffCollegeEvaluationId { get; set; }
+        public int StaffDepartmentEvaluationQuestionnaireId { get; set; }
+        public int StaffDepartmentEvaluationId { get; set; }
         public string Title { get; set; }
         public int? RateTypeId { get; set; }
         public string Description { get; set; }
@@ -24,8 +24,8 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual RateType RateType { get; set; }
-        public virtual StaffCollegeEvaluation StaffCollegeEvaluation { get; set; }
+        public virtual StaffDepartmentEvaluation StaffDepartmentEvaluation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluationQuestionnaireRate> StaffCollegeEvaluationQuestionnaireRate { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluationQuestionnaireRate> StaffDepartmentEvaluationQuestionnaireRate { get; set; }
     }
 }

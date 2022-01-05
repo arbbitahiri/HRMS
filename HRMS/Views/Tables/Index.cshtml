@@ -14,15 +14,18 @@
 
             if (sessionStorage.getItem("tbl_enum") == null) {
                 $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
-                    table: TableType.DOCUMENT,
+                    table: LookUpTable.DOCUMENT,
                     title: '@Resource.DocumentType'
+                }, function() {
+                    $('#' + LookUpTable.DOCUMENT).addClass('active');
                 });
             } else {
                 $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
-                    table: sessionStorage.getItem("tbl_enum")
+                    table: sessionStorage.getItem("tbl_enum"),
+                    title: sessionStorage.getItem("tbl_title")
+                }, function() {
+                    $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
                 });
-
-                $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
             }
         });
     </script>

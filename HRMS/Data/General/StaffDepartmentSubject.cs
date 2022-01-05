@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class StaffCollegeSubject
+    public partial class StaffDepartmentSubject
     {
-        public int StaffCollegeSubjectId { get; set; }
-        public int StaffCollegeId { get; set; }
+        public int StaffDepartmentSubjectId { get; set; }
+        public int StaffDepartmentId { get; set; }
         public int SubjectId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -18,7 +18,7 @@ namespace HRMS.Data.General
         public int? UpdatedNo { get; set; }
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
-        public virtual StaffCollege StaffCollege { get; set; }
+        public virtual StaffDepartment StaffDepartment { get; set; }
         public virtual Subject Subject { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }

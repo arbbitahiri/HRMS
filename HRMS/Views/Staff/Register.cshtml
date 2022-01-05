@@ -2,7 +2,7 @@
 @model StaffPost
 @inject IDDLRepo repo
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = Resource.FirstStepStaffRegistration;
     Layout = "~/Views/Staff/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
@@ -72,23 +72,23 @@
     </div>
 
     <div class="d-flex justify-content-end border-top mt-5">
-        <input type="button" class="btn btn-primary font-weight-bolder text-uppercase" onclick="continue_form()" value="Vazhdo"/>
+        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase"/>
     </div>
 </form>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            if (@Model.MethodType == MethodType.POST) {
+            if (@((int)Model.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: '' });
                 $('#tab2').attr({ href: '', style: '' });
                 $('#tab3').attr({ href: '', style: '' });
                 $('#tab4').attr({ href: '', style: '' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor:pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });

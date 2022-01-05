@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class StaffCollege
+    public partial class StaffDepartment
     {
-        public StaffCollege()
+        public StaffDepartment()
         {
             HolidayRequest = new HashSet<HolidayRequest>();
-            StaffCollegeEvaluation = new HashSet<StaffCollegeEvaluation>();
-            StaffCollegeSubject = new HashSet<StaffCollegeSubject>();
+            StaffDepartmentEvaluation = new HashSet<StaffDepartmentEvaluation>();
+            StaffDepartmentSubject = new HashSet<StaffDepartmentSubject>();
         }
 
-        public int StaffCollegeId { get; set; }
+        public int StaffDepartmentId { get; set; }
         public int DepartmentId { get; set; }
         public int StaffId { get; set; }
         public int StaffTypeId { get; set; }
@@ -31,7 +31,7 @@ namespace HRMS.Data.General
         public virtual StaffType StaffType { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual ICollection<HolidayRequest> HolidayRequest { get; set; }
-        public virtual ICollection<StaffCollegeEvaluation> StaffCollegeEvaluation { get; set; }
-        public virtual ICollection<StaffCollegeSubject> StaffCollegeSubject { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluation { get; set; }
+        public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubject { get; set; }
     }
 }

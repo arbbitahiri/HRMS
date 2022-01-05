@@ -10,7 +10,6 @@ namespace HRMS.Data.General
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
-            AspNetUserRoles = new HashSet<AspNetUserRoles>();
             DepartmentInsertedFromNavigation = new HashSet<Department>();
             DepartmentUpdatedFromNavigation = new HashSet<Department>();
             DocumentInsertedFromNavigation = new HashSet<Document>();
@@ -33,14 +32,14 @@ namespace HRMS.Data.General
             ProfessionTypeUpdatedFromNavigation = new HashSet<ProfessionType>();
             RateTypeInsertedFromNavigation = new HashSet<RateType>();
             RateTypeUpdatedFromNavigation = new HashSet<RateType>();
-            StaffCollegeEvaluationInsertedFromNavigation = new HashSet<StaffCollegeEvaluation>();
-            StaffCollegeEvaluationQuestionnaireInsertedFromNavigation = new HashSet<StaffCollegeEvaluationQuestionnaire>();
-            StaffCollegeEvaluationQuestionnaireUpdatedFromNavigation = new HashSet<StaffCollegeEvaluationQuestionnaire>();
-            StaffCollegeEvaluationUpdatedFromNavigation = new HashSet<StaffCollegeEvaluation>();
-            StaffCollegeInsertedFromNavigation = new HashSet<StaffCollege>();
-            StaffCollegeSubjectInsertedFromNavigation = new HashSet<StaffCollegeSubject>();
-            StaffCollegeSubjectUpdatedFromNavigation = new HashSet<StaffCollegeSubject>();
-            StaffCollegeUpdatedFromNavigation = new HashSet<StaffCollege>();
+            StaffDepartmentEvaluationInsertedFromNavigation = new HashSet<StaffDepartmentEvaluation>();
+            StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation = new HashSet<StaffDepartmentEvaluationQuestionnaire>();
+            StaffDepartmentEvaluationQuestionnaireUpdatedFromNavigation = new HashSet<StaffDepartmentEvaluationQuestionnaire>();
+            StaffDepartmentEvaluationUpdatedFromNavigation = new HashSet<StaffDepartmentEvaluation>();
+            StaffDepartmentInsertedFromNavigation = new HashSet<StaffDepartment>();
+            StaffDepartmentSubjectInsertedFromNavigation = new HashSet<StaffDepartmentSubject>();
+            StaffDepartmentSubjectUpdatedFromNavigation = new HashSet<StaffDepartmentSubject>();
+            StaffDepartmentUpdatedFromNavigation = new HashSet<StaffDepartment>();
             StaffDocumentInsertedFromNavigation = new HashSet<StaffDocument>();
             StaffDocumentUpdatedFromNavigation = new HashSet<StaffDocument>();
             StaffQualificationInsertedFromNavigation = new HashSet<StaffQualification>();
@@ -87,7 +86,6 @@ namespace HRMS.Data.General
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<Department> DepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<Department> DepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<Document> DocumentInsertedFromNavigation { get; set; }
@@ -110,14 +108,14 @@ namespace HRMS.Data.General
         public virtual ICollection<ProfessionType> ProfessionTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<RateType> RateTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<RateType> RateTypeUpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluation> StaffCollegeEvaluationInsertedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluationQuestionnaire> StaffCollegeEvaluationQuestionnaireInsertedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluationQuestionnaire> StaffCollegeEvaluationQuestionnaireUpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeEvaluation> StaffCollegeEvaluationUpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollege> StaffCollegeInsertedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeSubject> StaffCollegeSubjectInsertedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeSubject> StaffCollegeSubjectUpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollege> StaffCollegeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluationInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluationQuestionnaire> StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluationQuestionnaire> StaffDepartmentEvaluationQuestionnaireUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluationUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartment> StaffDepartmentInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubjectInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubjectUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StaffDepartment> StaffDepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffDocument> StaffDocumentInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDocument> StaffDocumentUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffQualification> StaffQualificationInsertedFromNavigation { get; set; }

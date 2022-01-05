@@ -4,7 +4,7 @@ namespace HRMS.Models.Staff.Department;
 
 public class Departments
 {
-    public string StaffCollegeIde { get; set; }
+    public string StaffDepartmentIde { get; set; }
 
     public string Department { get; set; }
     public string StaffType { get; set; }

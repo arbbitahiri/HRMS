@@ -11,8 +11,8 @@
         <ul class="nav nav-pills flex-column" role="tablist">
             @foreach (var table in Model)
             {
-                <li class="nav-item" id="@((int)table.Table)">
-                    <a onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer;">
+                <li class="nav-item">
+                    <a id="@((int)table.Table)" onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer;">
                         @table.Title
                     </a>
                 </li>
@@ -25,11 +25,18 @@
     function load_table(tbl, title) {
         $('#kt_table_data').load('@Url.Action("_LookUpData", "Tables")', {
             table: tbl,
-            title: '@Resource.DocumentType'
+            title: title
+        }, function() {
+            if (sessionStorage.getItem('tbl_enum') != null) {
+                $('#' + sessionStorage.getItem('tbl_enum')).removeClass('active');
+            } else {
+                $('#' + LookUpTable.DOCUMENT).removeClass('active');
+            }
+
+            sessionStorage.setItem('tbl_enum', tbl);
+            sessionStorage.setItem("tbl_title", title);
+            $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
         });
 
-        $('#' + sessionStorage.getItem('tbl_enum')).removeClass('active');
-        sessionStorage.setItem('tbl_enum', tbl);
-        $('#' + sessionStorage.getItem('tbl_enum')).addClass('active');
     }
 </script>

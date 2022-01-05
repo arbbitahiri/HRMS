@@ -42,13 +42,11 @@ public class Startup
         });
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(
-                Configuration.GetConnectionString("SqlConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddDbContext<HRMSContext>(options =>
-            options.UseSqlServer(
-                Configuration["WorkConnectionStrings:SqlConnection"]));
+            options.UseSqlServer(Configuration["ConnectionStrings:SqlConnection"]));
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {

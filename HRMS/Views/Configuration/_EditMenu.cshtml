@@ -13,68 +13,67 @@
         @Html.AntiForgeryToken()
         <input asp-for="MenuIde" type="hidden"/>
 
-        <div class="row form group">
+        <div class="row form-group">
             <div class="col-md-4">
                 <label asp-for="NameSq" class="required"></label>
                 <input asp-for="NameSq" class="form-control" />
-                <span asp-validation-for="NameSq" class="text-danger" />
+                <span asp-validation-for="NameSq" class="text-danger"></span>
             </div>
             <div class="col-md-4">
                 <label asp-for="NameEn" class="required"></label>
                 <input asp-for="NameEn" class="form-control" />
-                <span asp-validation-for="NameEn" class="text-danger" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
             </div>
             <div class="col-md-4">
                 <label asp-for="Controller" class="required"></label>
                 <input asp-for="Controller" class="form-control" />
-                <span asp-validation-for="Controller" class="text-danger" />
+                <span asp-validation-for="Controller" class="text-danger"></span>
             </div>
         </div>
-        <div class="row form group">
+        <div class="row form-group">
             <div class="col-md-4">
                 <label asp-for="Action" class="required"></label>
                 <input asp-for="Action" class="form-control" />
-                <span asp-validation-for="Action" class="text-danger" />
+                <span asp-validation-for="Action" class="text-danger"></span>
             </div>
             <div class="col-md-4">
                 <label asp-for="OrdinalNumber" class="required"></label>
                 <input asp-for="OrdinalNumber" type="number" class="form-control" />
-                <span asp-validation-for="OrdinalNumber" class="text-danger" />
+                <span asp-validation-for="OrdinalNumber" class="text-danger"></span>
             </div>
             <div class="col-md-4">
                 <label asp-for="ClaimPolicy" class="required"></label>
                 <input asp-for="ClaimPolicy" class="form-control" />
-                <span asp-validation-for="ClaimPolicy" class="text-danger" />
+                <span asp-validation-for="ClaimPolicy" class="text-danger"></span>
             </div>
         </div>
-        <div class="row form group">
+        <div class="row form-group">
             <div class="col-md-4">
                 <label asp-for="Icon" class="required"></label>
                 <input asp-for="Icon" class="form-control" />
-                <span asp-validation-for="Icon" class="text-danger" />
+                <span asp-validation-for="Icon" class="text-danger"></span>
             </div>
             <div class="col-md-4">
                 <label asp-for="OpenFor" class="required"></label>
                 <input asp-for="OpenFor" class="form-control" />
-                <span asp-validation-for="OpenFor" class="text-danger" />
+                <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
             <div class="col-md-4">
-                <label asp-for="HasSubMenu" class="required"></label> <br />
-                <label asp-for="HasSubMenu" class="custom-control custom-checkbox">
-                    <input asp-for="HasSubMenu" class="custom-control-input" style="cursor: pointer;" type="checkbox" id="ch_hasAccess" onchange="change_access()">
-                    <span class="custom-control-label" asp-for="HasSubMenu"></span>
-                </label>
-                <span asp-validation-for="HasSubMenu" class="text-danger" />
+                <label asp-for="HasSubMenu" class="required">@Resource.HasSubMenu</label>
+                <div class="icheck-primary d-inline">
+                    <input asp-for="HasSubMenu" id="has_submenu" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="HasSubMenu" id="lbl_submenu" onclick="change_submenu(this)"></label>
+                </div>
             </div>
         </div>
-        <div class="row form group">
-            <div class="col-md-4">
-                <label asp-for="Active" class="required"></label> <br />
-                <label asp-for="Active" class="custom-control custom-checkbox">
-                    <input asp-for="Active" class="custom-control-input" style="cursor: pointer;" type="checkbox" id="ch_hasAccess" onchange="change_access()">
-                    <span class="custom-control-label" asp-for="HasSubMenu"></span>
-                </label>
-                <span asp-validation-for="Active" class="text-danger" />
+        <div class="row form-group">
+            <div class="col-md-4 d-flex flex-column pl-2">
+                <label asp-for="Active" class="required">@Resource.Active</label>
+                <div class="icheck-primary d-inline">
+                    <input asp-for="Active" id="inp_active" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="Active" id="lbl_active" onclick="change_active(this)"></label>
+                </div>
+                <span asp-validation-for="Active" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -90,7 +89,26 @@
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
+
+        $('#lbl_submenu').text('');
+        $('#lbl_active').text('');
     });
+
+    function change_submenu(e) {
+        if($('#has_submenu').is(":checked")) {
+            $('#has_submenu').removeAttr('checked');
+        } else {
+            $('#has_submenu').attr('checked', true);
+        }
+    }
+
+    function change_active(e) {
+        if($('#inp_active').is(":checked")) {
+            $('#inp_active').removeAttr('checked');
+        } else {
+            $('#inp_active').attr('checked', true);
+        }
+    }
 
     function on_success_menu(data) {
         if (data.status == ErrorStatus.SUCCESS) {

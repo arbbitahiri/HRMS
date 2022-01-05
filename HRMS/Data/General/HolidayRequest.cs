@@ -12,7 +12,7 @@ namespace HRMS.Data.General
 
         public int HolidayRequestId { get; set; }
         public int HolidayTypeId { get; set; }
-        public int StaffCollegeId { get; set; }
+        public int StaffDepartmentId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
@@ -25,7 +25,7 @@ namespace HRMS.Data.General
 
         public virtual HolidayType HolidayType { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
-        public virtual StaffCollege StaffCollege { get; set; }
+        public virtual StaffDepartment StaffDepartment { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual ICollection<HolidayRequestStatus> HolidayRequestStatus { get; set; }
     }

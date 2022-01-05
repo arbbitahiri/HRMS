@@ -65,7 +65,7 @@
     }
 
     function edit(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubMenu", "Configuration")', function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubMenu", "Configuration")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }

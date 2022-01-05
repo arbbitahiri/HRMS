@@ -35,43 +35,6 @@ public class StaffController : BaseController
         this.configuration = configuration;
     }
 
-    #region List
-
-    [HttpGet, Description("Entry home. Search for staff.")]
-    public IActionResult Index() => View();
-
-    [HttpPost, ValidateAntiForgeryToken]
-    [Description("Form to view searched list of staff.")]
-    public async Task<IActionResult> Search(Search search)
-    {
-        var list = await db.Staff
-            .Include(a => a.StaffCollege).ThenInclude(a => a.Department)
-            .Include(a => a.User)
-            .Where(a => a.StaffCollege.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                && a.StaffCollege.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
-                && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
-                && a.StaffCollege.Any(a => a.EndDate >= DateTime.Now))
-            .AsSplitQuery()
-            .Select(a => new StaffDetails
-            {
-                Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
-                Firstname = a.FirstName,
-                Lastname = a.LastName,
-                PersonalNumber = a.PersonalNumber,
-                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
-                Department = user.Language == LanguageEnum.Albanian ? a.StaffCollege.Select(a => a.Department.NameSq).FirstOrDefault() : a.StaffCollege.Select(a => a.Department.NameEn).FirstOrDefault(),
-                ProfileImage = a.User.ProfileImage,
-                Email = a.User.Email,
-                PhoneNumber = a.User.PhoneNumber,
-                StaffType = string.Join(", ", a.StaffCollege.Select(a => a.StaffType).FirstOrDefault())
-            }).ToListAsync();
-        return Json(list);
-    }
-
-    #endregion
-
     #region 1. Register and edit
 
     [HttpGet, Description("Form to register or update staff. First step of registration/edition of staff.")]
@@ -577,24 +540,24 @@ public class StaffController : BaseController
                 //IsProfessor = a.StaffCollege.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Professor)
             }).FirstOrDefaultAsync();
 
-        var departments = await db.StaffCollege
+        var departments = await db.StaffDepartment
             .Include(a => a.Department).Include(a => a.StaffType)
             .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Departments
             {
-                StaffCollegeIde = CryptoSecurity.Encrypt(a.StaffCollegeId),
+                StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
                 StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate
             }).ToListAsync();
 
-        var subjects = await db.StaffCollegeSubject
+        var subjects = await db.StaffDepartmentSubject
             .Include(a => a.Subject)
-            .Where(a => a.StaffCollege.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            .Where(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Subjects
             {
-                StaffCollegeSubjectIde = CryptoSecurity.Encrypt(a.StaffCollegeSubjectId),
+                StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
                 Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
@@ -632,11 +595,11 @@ public class StaffController : BaseController
         }
 
         var getRole = GetRoleFromStaffType(add.StaffTypeId);
-        var staffCollege = await db.StaffCollege.Include(a => a.Staff).Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).ToListAsync();
+        var staffCollege = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).ToListAsync();
 
         foreach (var item in staffCollege)
         {
-            if (await db.StaffCollege.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
+            if (await db.StaffDepartment.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
             {
                 var role = GetRoleFromStaffType(item.StaffTypeId);
                 var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
@@ -644,7 +607,7 @@ public class StaffController : BaseController
             }
         }
 
-        var newStaffCollege = new StaffCollege
+        var newStaffDepartment = new StaffDepartment
         {
             StaffId = CryptoSecurity.Decrypt<int>(add.StaffIde),
             StaffTypeId = add.StaffTypeId,
@@ -656,19 +619,18 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         };
 
-        var newUserId = await db.Staff.Where(a => a.StaffId == newStaffCollege.StaffId).Select(a => a.UserId).FirstOrDefaultAsync();
-        if (!await db.AspNetUserRoles.AnyAsync(a => a.UserId == newUserId))
+        var newUser = await userManager.FindByIdAsync(newStaffDepartment.Staff.UserId);
+        var getRoles = await userManager.GetRolesAsync(newUser);
+
+        if (!(await userManager.GetRolesAsync(newUser)).Any())
         {
-            db.AspNetUserRoles.Add(new AspNetUserRoles
-            {
-                UserId = newUserId,
-                RoleId = getRole
-            });
+            await userManager.AddToRoleAsync(newUser, getRole);
+            //db.AspNetUserRoles.Add(new AspNetUserRoles { UserId = newUserId, RoleId = getRole });
         }
 
         // TODO: RealRoles
 
-        db.StaffCollege.Add(newStaffCollege);
+        db.StaffDepartment.Add(newStaffDepartment);
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
@@ -680,11 +642,11 @@ public class StaffController : BaseController
     [HttpGet, Description("Form to edit department.")]
     public async Task<IActionResult> _EditDepartment(string ide)
     {
-        var department = await db.StaffCollege
-            .Where(a => a.StaffCollegeId == CryptoSecurity.Decrypt<int>(ide))
+        var department = await db.StaffDepartment
+            .Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new AddDepartment
             {
-                StaffCollegeIde = ide,
+                StaffDepartmentIde = ide,
                 DepartmentId = a.DepartmentId,
                 StaffTypeId = a.StaffTypeId,
                 StartDate = a.StartDate,
@@ -704,7 +666,7 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var department = await db.StaffCollege.Where(a => a.StaffCollegeId == CryptoSecurity.Decrypt<int>(edit.StaffCollegeIde)).FirstOrDefaultAsync();
+        var department = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentIde)).FirstOrDefaultAsync();
         department.DepartmentId = edit.DepartmentId;
         department.StaffTypeId = edit.StaffTypeId;
         department.StartDate = edit.StartDate;
@@ -726,13 +688,13 @@ public class StaffController : BaseController
     [Description("Action to delete a department.")]
     public async Task<IActionResult> DeleteDepartment(string ide)
     {
-        var department = await db.StaffCollege.Where(a => a.StaffCollegeId == CryptoSecurity.Decrypt<int>(ide)).FirstOrDefaultAsync();
+        var department = await db.StaffDepartment.FirstOrDefaultAsync(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide));
         department.EndDate = DateTime.Now.AddDays(-1);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
         department.UpdatedNo++;
 
-        var subjects = await db.StaffCollegeSubject.Where(a => a.StaffCollegeId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now).ToListAsync();
+        var subjects = await db.StaffDepartmentSubject.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now).ToListAsync();
         foreach (var subject in subjects)
         {
             subject.EndDate = DateTime.Now.AddDays(-1);
@@ -742,9 +704,13 @@ public class StaffController : BaseController
             subject.UpdatedNo++;
         }
 
+        var userToRemove = await userManager.FindByIdAsync(department.Staff.UserId);
+        var rolesToRemove = await userManager.GetRolesAsync(userToRemove);
+
         // TODO: check in RealRoles
 
-        db.AspNetUserRoles.Remove(await db.AspNetUserRoles.Where(a => a.UserId == department.Staff.UserId).FirstOrDefaultAsync());
+        //db.AspNetUserRoles.Remove(await db.AspNetUserRoles.Where(a => a.UserId == department.Staff.UserId).FirstOrDefaultAsync());
+        var result = await userManager.RemoveFromRolesAsync(userToRemove, rolesToRemove);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -759,7 +725,7 @@ public class StaffController : BaseController
     #region => Create
 
     [HttpGet, Description("Form to add subject.")]
-    public IActionResult _AddSubject(string ide) => PartialView(new AddSubject { StaffCollegeIde = ide });
+    public IActionResult _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide });
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Action to add subject.")]
@@ -770,9 +736,9 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        db.StaffCollegeSubject.Add(new StaffCollegeSubject
+        db.StaffDepartmentSubject.Add(new StaffDepartmentSubject
         {
-            StaffCollegeId = CryptoSecurity.Decrypt<int>(add.StaffCollegeIde),
+            StaffDepartmentId = CryptoSecurity.Decrypt<int>(add.StaffDepartmentIde),
             SubjectId = add.SubjectId,
             StartDate = add.StartDate,
             EndDate = add.EndDate,
@@ -792,11 +758,11 @@ public class StaffController : BaseController
     [HttpGet, Description("Form to edit subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
-        var subject = await db.StaffCollegeSubject
-            .Where(a => a.StaffCollegeSubjectId == CryptoSecurity.Decrypt<int>(ide))
+        var subject = await db.StaffDepartmentSubject
+            .Where(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new AddSubject
             {
-                StaffCollegeSubjectIde = ide,
+                StaffDepartmentSubjectIde = ide,
                 SubjectId = a.SubjectId,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
@@ -815,7 +781,7 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var subject = await db.StaffCollegeSubject.Where(a => a.StaffCollegeSubjectId == CryptoSecurity.Decrypt<int>(edit.StaffCollegeSubjectIde)).FirstOrDefaultAsync();
+        var subject = await db.StaffDepartmentSubject.FirstOrDefaultAsync(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentSubjectIde));
         subject.SubjectId = edit.SubjectId;
         subject.StartDate = edit.StartDate;
         subject.EndDate = edit.EndDate;
@@ -836,7 +802,7 @@ public class StaffController : BaseController
     [Description("Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
-        var subject = await db.StaffCollegeSubject.Where(a => a.StaffCollegeSubjectId == CryptoSecurity.Decrypt<int>(ide)).FirstOrDefaultAsync();
+        var subject = await db.StaffDepartmentSubject.FirstOrDefaultAsync(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(ide));
         subject.EndDate = DateTime.Now.AddDays(-1);
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
@@ -852,6 +818,43 @@ public class StaffController : BaseController
 
     #endregion
 
+    #region List
+
+    [HttpGet, Description("Entry home. Search for staff.")]
+    public IActionResult Index() => View();
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Form to view searched list of staff.")]
+    public async Task<IActionResult> Search(Search search)
+    {
+        var list = await db.Staff
+            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
+            .Include(a => a.User)
+            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
+                && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
+                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+            .AsSplitQuery()
+            .Select(a => new StaffDetails
+            {
+                Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
+                Firstname = a.FirstName,
+                Lastname = a.LastName,
+                PersonalNumber = a.PersonalNumber,
+                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
+                ProfileImage = a.User.ProfileImage,
+                Email = a.User.Email,
+                PhoneNumber = a.User.PhoneNumber,
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => a.StaffType).FirstOrDefault())
+            }).ToListAsync();
+        return Json(list);
+    }
+
+    #endregion
+
     #region Profile
 
     [HttpGet, Description("Form to view the profile of staff.")]
@@ -864,7 +867,7 @@ public class StaffController : BaseController
 
         var staffDetails = await db.Staff
             .Include(a => a.User)
-            .Include(a => a.StaffCollege).ThenInclude(a => a.Department)
+            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new StaffDetails
             {
@@ -873,7 +876,7 @@ public class StaffController : BaseController
                 Lastname = a.LastName,
                 PhoneNumber = a.User.PhoneNumber,
                 Email = a.User.Email,
-                Department = string.Join(", ", a.StaffCollege.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault())
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault())
             }).FirstOrDefaultAsync();
 
         var qualifications = await db.StaffQualification
@@ -902,15 +905,15 @@ public class StaffController : BaseController
                 Description = a.Description
             }).ToListAsync();
 
-        var subjects = await db.StaffCollegeSubject
+        var subjects = await db.StaffDepartmentSubject
             .Include(a => a.Subject)
-            .Include(a => a.StaffCollege).ThenInclude(a => a.Department)
-            .Where(a => a.StaffCollege.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
+            .Where(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Subjects
             {
-                StaffCollegeSubjectIde = CryptoSecurity.Encrypt(a.StaffCollegeSubjectId),
+                StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
                 Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
-                Department = user.Language == LanguageEnum.Albanian ? a.StaffCollege.Department.NameSq : a.StaffCollege.Department.NameEn,
+                Department = user.Language == LanguageEnum.Albanian ? a.StaffDepartment.Department.NameSq : a.StaffDepartment.Department.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 InsertDate = a.InsertedDate

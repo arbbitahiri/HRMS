@@ -4,7 +4,7 @@ namespace HRMS.Models.Staff;
 
 public class Subjects
 {
-    public string StaffCollegeSubjectIde { get; set; }
+    public string StaffDepartmentSubjectIde { get; set; }
     public string Subject { get; set; }
     public string Department { get; set; }
     public DateTime StartDate { get; set; }

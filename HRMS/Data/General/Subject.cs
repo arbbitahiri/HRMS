@@ -7,7 +7,7 @@ namespace HRMS.Data.General
     {
         public Subject()
         {
-            StaffCollegeSubject = new HashSet<StaffCollegeSubject>();
+            StaffDepartmentSubject = new HashSet<StaffDepartmentSubject>();
         }
 
         public int SubjectId { get; set; }
@@ -23,6 +23,6 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollegeSubject> StaffCollegeSubject { get; set; }
+        public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubject { get; set; }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class StaffCollegeEvaluationQuestionnaireRate
+    public partial class StaffDepartmentEvaluationQuestionnaireRate
     {
-        public int StaffCollegeEvaluationQuestionnaireRateId { get; set; }
-        public int StaffCollegeEvaluationQuestionnaireId { get; set; }
+        public int StaffDepartmentEvaluationQuestionnaireRateId { get; set; }
+        public int StaffDepartmentEvaluationQuestionnaireId { get; set; }
         public int RateTypeId { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
@@ -16,6 +16,6 @@ namespace HRMS.Data.General
         public int? UpdatedNo { get; set; }
 
         public virtual RateType RateType { get; set; }
-        public virtual StaffCollegeEvaluationQuestionnaire StaffCollegeEvaluationQuestionnaire { get; set; }
+        public virtual StaffDepartmentEvaluationQuestionnaire StaffDepartmentEvaluationQuestionnaire { get; set; }
     }
 }

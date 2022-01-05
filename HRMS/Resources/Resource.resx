@@ -313,10 +313,10 @@
     <value>Sukses</value>
   </data>
   <data name="SureYouWantToDeleteMenu" xml:space="preserve">
-    <value>A jeni të sigurt për fshirjen e kësaj menyje?</value>
+    <value>A jeni të sigurt për fshirjen e menysë?</value>
   </data>
   <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
-    <value>A jeni të sigurt për fshirjen e kësaj nënmenyje?</value>
+    <value>A jeni të sigurt për fshirjen e nënmenysë?</value>
   </data>
   <data name="ThisAccountLocked" xml:space="preserve">
     <value>Kjo llogari është bllokuar, ju lutem provoni përsëri më vonë.</value>
@@ -573,9 +573,6 @@
   <data name="RateType" xml:space="preserve">
     <value>Tipi vlerësimit</value>
   </data>
-  <data name="StaffType" xml:space="preserve">
-    <value>Lloji stafit</value>
-  </data>
   <data name="StatusType" xml:space="preserve">
     <value>Lloji statusit</value>
   </data>
@@ -605,5 +602,107 @@
   </data>
   <data name="LookMore" xml:space="preserve">
     <value>Shiko më shumë</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Shto grupin</value>
+  </data>
+  <data name="LockAccount" xml:space="preserve">
+    <value>Blloko llogarinë</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Vendos fjalëkalimin</value>
+  </data>
+  <data name="SureYouWantToDeleteUser" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e përdoruesit?</value>
+  </data>
+  <data name="UnlockAccount" xml:space="preserve">
+    <value>Zhblloko llogarinë</value>
+  </data>
+  <data name="UploadDocument" xml:space="preserve">
+    <value>Ngarko dokumente</value>
+  </data>
+  <data name="AddDepartment" xml:space="preserve">
+    <value>Shto department</value>
+  </data>
+  <data name="AddDocument" xml:space="preserve">
+    <value>Shto dokument</value>
+  </data>
+  <data name="AddQualification" xml:space="preserve">
+    <value>Shto kualifikim</value>
+  </data>
+  <data name="AddSubject" xml:space="preserve">
+    <value>Shto lëndë</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Prapa</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Vazhdo</value>
+  </data>
+  <data name="CreditsNumber" xml:space="preserve">
+    <value>Numri kredive</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Përshkrimi</value>
+  </data>
+  <data name="DocumentsLower" xml:space="preserve">
+    <value>dokumente</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Shkarko</value>
+  </data>
+  <data name="EducationLevel" xml:space="preserve">
+    <value>Niveli edukimit</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>Përfundo</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Data mbarimit</value>
+  </data>
+  <data name="FieldOfStudy" xml:space="preserve">
+    <value>Fusha studimit</value>
+  </data>
+  <data name="FirstStepStaffRegistration" xml:space="preserve">
+    <value>1. Të dhënat personale</value>
+  </data>
+  <data name="FourthStepStaffRegistration" xml:space="preserve">
+    <value>4. Departmenti &amp; Lëndët</value>
+  </data>
+  <data name="Has" xml:space="preserve">
+    <value>Ka</value>
+  </data>
+  <data name="InsertDate" xml:space="preserve">
+    <value>Data insertimit</value>
+  </data>
+  <data name="QualificationsLower" xml:space="preserve">
+    <value>kualifikime</value>
+  </data>
+  <data name="SecondStepStaffRegistration" xml:space="preserve">
+    <value>2. Kualifikimet</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Data fillimit</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Lënda</value>
+  </data>
+  <data name="SubjectsLower" xml:space="preserve">
+    <value>lëndë</value>
+  </data>
+  <data name="SureYouWantToDeleteDepartmentForStaff" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e departmentit për stafin?</value>
+  </data>
+  <data name="SureYouWantToDeleteDocument" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e dokumentit?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubjectForStaff" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e lëndën për stafin?</value>
+  </data>
+  <data name="ThirdStepStaffRegistration" xml:space="preserve">
+    <value>3. Dokumentet</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titulli</value>
   </data>
 </root>

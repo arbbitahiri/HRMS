@@ -2,7 +2,7 @@
 @model DepartmentVM
 @inject IDDLRepo repo
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = Resource.FourthStepStaffRegistration;
     Layout = "~/Views/Staff/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
@@ -15,7 +15,7 @@
                 <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span>
             </h1>
             <div class="card-tools">
-                <a onclick="add_department('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">Shto departmentin</a>
+                <a onclick="add_department('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
             </div>
         </div>
         <div class="card-body">
@@ -23,10 +23,10 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Departmenti</th>
-                        <th>Lloji stafit</th>
-                        <th>Data e fillimit</th>
-                        <th>Data e mbarimit</th>
+                        <th>@Resource.Department</th>
+                        <th>@Resource.StaffType</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -38,10 +38,10 @@
         <div class="card-header border-0">
             <h1 class="align-items-start flex-column">
                 <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span>
-                <span class="text-muted mt-1 font-weight-bold font-size-sm">Ka <b class="text-primary">@Model.SubjectCount</b> lëndë</span>
+                <span class="text-muted mt-1 font-weight-bold font-size-sm">@Resource.Has <b class="text-primary">@Model.SubjectCount</b> @Resource.SubjectsLower</span>
             </h1>
             <div class="card-tools">
-                <a onclick="add_subject('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">Shto dokument</a>
+                <a onclick="add_subject('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddSubject</a>
             </div>
         </div>
         <div class="card-body">
@@ -49,10 +49,10 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Lënda</th>
-                        <th>Data e fillimit</th>
-                        <th>Data e mbarimit</th>
-                        <th>Data e insertimit</th>
+                        <th>@Resource.Subject</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
+                        <th>@Resource.InsertDate</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -61,24 +61,24 @@
     </div>
 
     <div class="d-flex justify-content-between border-top">
-        <input type="button" onclick="go_back_qualification('@Model.StaffDetails.Ide')" class="btn btn-light-primary font-weight-bolder text-uppercase"/>
-        <input type="button" onclick="continue_to_department('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase"/>
+        <input type="button" value="@Resource.Back" onclick="go_back_documents('@Model.StaffDetails.Ide')" class="btn btn-light-primary font-weight-bolder text-uppercase"/>
+        <input type="button" value="@Resource.End" onclick="submit_form('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase"/>
     </div>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            if (@Model.MethodType == MethodType.POST) {
+            if (@((int)Model.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: '' });
                 $('#tab2').attr({ href: '', style: '' });
                 $('#tab3').attr({ href: '', style: '' });
                 $('#tab4').attr({ href: '', style: '' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@Model.MethodType', style: "cursor:pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
             }
 
             render_tbl_departments(@Html.Raw(Model.Departments));
@@ -86,7 +86,7 @@
         });
 
         function go_back_documents(ide) {
-            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide + '&method=@Model.MethodType';
+            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
         }
 
         function submit_form(ide) {
@@ -135,8 +135,8 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffCollegeIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffCollegeIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
+                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
                                 '</div></div>';
                             return dropdown;
                         }
@@ -192,8 +192,8 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffCollegeSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffCollegeSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
+                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
                                 '</div></div>';
                             return dropdown;
                         }
@@ -229,7 +229,7 @@
         function delete_department(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
-                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteDepartmentForStaff)",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -265,7 +265,7 @@
         function delete_subject(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
-                text: "@Html.Raw(Resource.SureYouWantToDeleteMenu)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteSubjectForStaff)",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: '#d33',

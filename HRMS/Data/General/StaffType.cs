@@ -7,7 +7,7 @@ namespace HRMS.Data.General
     {
         public StaffType()
         {
-            StaffCollege = new HashSet<StaffCollege>();
+            StaffDepartment = new HashSet<StaffDepartment>();
         }
 
         public int StaffTypeId { get; set; }
@@ -21,6 +21,6 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffCollege> StaffCollege { get; set; }
+        public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
     }
 }
