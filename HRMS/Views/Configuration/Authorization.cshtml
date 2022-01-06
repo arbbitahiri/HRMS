@@ -97,10 +97,8 @@
                 responsive: true,
                 data: data,
                 columnDefs: [
-                    {
-                        targets: 3,
-                        className: "w-20"
-                    }
+                    { targets: 3, className: "w-20" },
+                    { className: "vertikal", targets: "_all" }
                 ],
                 order: [[0, "asc"]],
                 drawCallback: function () {

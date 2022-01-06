@@ -56,7 +56,7 @@ public class ConfigurationController : BaseController
             .Select(a => new RoleDetails
             {
                 MenuIde = CryptoSecurity.Encrypt(a.MenuId),
-                SubMenuIde = CryptoSecurity.Encrypt(a.SubMenuId),
+                SubMenuIde = a.SubMenuId != 0 ? CryptoSecurity.Encrypt(a.SubMenuId) : string.Empty,
                 MenuTitle = a.Menu,
                 SubMenuTitle = a.SubMenu,
                 Icon = a.Icon,
@@ -127,7 +127,7 @@ public class ConfigurationController : BaseController
     [Authorize(Policy = "11m:r"), Description("Form to display tabs for Menu and Submenu.")]
     public IActionResult MenuIndex() => View();
 
-    #region Menu - 11m:r
+    #region Menu
 
     [Authorize(Policy = "11m:r"), Description("Menu configuration.")]
     public async Task<IActionResult> Menu()
@@ -144,7 +144,7 @@ public class ConfigurationController : BaseController
         return PartialView(menus);
     }
 
-    #region |> Create
+    #region => Create
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to create a new menu.")]
@@ -181,7 +181,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region |> Edit
+    #region => Edit
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new menu.")]
@@ -236,7 +236,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region |> Delete
+    #region => Delete
 
     [HttpPost, Authorize(Policy = "11m:r"), ValidateAntiForgeryToken]
     [Description("Form to edit a new menu.")]
@@ -252,7 +252,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region SubMenu - 11m:r
+    #region SubMenu
 
     [Authorize(Policy = "11m:r"), Description("SubMenu configuration.")]
     public async Task<IActionResult> SubMenu()
@@ -270,7 +270,7 @@ public class ConfigurationController : BaseController
         return PartialView(menus);
     }
 
-    #region |> Create
+    #region => Create
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to create a new submenu.")]
@@ -316,7 +316,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region |> Edit
+    #region => Edit
 
     [HttpGet, Authorize(Policy = "11m:r")]
     [Description("Form to edit a new submenu.")]
@@ -369,7 +369,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region |> Delete
+    #region => Delete
 
     [HttpPost, Authorize(Policy = "11m:r"), ValidateAntiForgeryToken]
     [Description("Form to edit a new submenu.")]
@@ -385,7 +385,7 @@ public class ConfigurationController : BaseController
 
     #endregion
 
-    #region Application settings 11as:r
+    #region Application settings
 
     [HttpGet, Authorize(Policy = "11as:r")]
     [Description("Form to display list of application settings.")]

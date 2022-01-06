@@ -83,6 +83,7 @@
                     { width: 10, targets: [0, 5, 6] },
                     { width: 20, targets: [1, 2, 4] },
                     { width: 30, targets: [3] },
+                    { className: "vertikal", targets: "_all" }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -103,8 +104,7 @@
                         data: function(row, type, set) {
                             var desc = '///';
                             if (row.description.length > 80) {
-                                var descSub = row.description.substring(0, 79);
-                                desc = row.description + '<span class="load-more" onclick="LoadMore(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.Remark.substring(79) + '<span class="d-none load-less-snd" onclick="LoadLess(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                desc = row.description + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(79) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
                             } else {
                                 desc = row.description;
                             }
@@ -126,13 +126,13 @@
             });
         }
 
-        function LoadMore(e) {
+        function load_more(e) {
             $(e).parent().find('.load-less-fst').removeClass('d-none');
             $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
             $(e).addClass('d-none');
         }
 
-        function LoadLess(e) {
+        function load_less(e) {
             $(e).addClass('d-none');
             $(e).parent().addClass('d-none');
             $(e).parent().parent().find('.load-more').removeClass('d-none');

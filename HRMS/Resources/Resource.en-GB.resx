@@ -151,7 +151,7 @@
     <value>AL</value>
   </data>
   <data name="AddSubMenu" xml:space="preserve">
-    <value>Add submenu</value>
+    <value>Add submenu - {0}</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
@@ -456,8 +456,8 @@
   <data name="Birthdate" xml:space="preserve">
     <value>Birthdate</value>
   </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>Create user</value>
+  <data name="AddUser" xml:space="preserve">
+    <value>Add user</value>
   </data>
   <data name="EmailExists" xml:space="preserve">
     <value>Email exists!</value>
@@ -701,5 +701,29 @@
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="DescriptionEN" xml:space="preserve">
+    <value>Description english</value>
+  </data>
+  <data name="DescriptionSQ" xml:space="preserve">
+    <value>Description albanian</value>
+  </data>
+  <data name="NormalizedName" xml:space="preserve">
+    <value>Normalized name</value>
+  </data>
+  <data name="RoleExists" xml:space="preserve">
+    <value>Role exists with that name!</value>
+  </data>
+  <data name="SureYouWantToDeleteRole" xml:space="preserve">
+    <value>Are you sure you want to delete role?</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="SureYouWantToLockUser" xml:space="preserve">
+    <value>Are you sure you want to lock user?</value>
+  </data>
+  <data name="SureYouWantToUnlockUser" xml:space="preserve">
+    <value>Are you sure you want to unlock user?</value>
   </data>
 </root>

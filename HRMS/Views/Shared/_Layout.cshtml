@@ -99,6 +99,13 @@
             </div>
 
             <section class="content mt-2">
+                @if (error.Status != 0)
+                {
+                    <div style="margin: 7px;">
+                        <partial name="_AlertMessage" model="error" />
+                    </div>
+                }
+
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
@@ -141,7 +148,6 @@
     <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/select2/js/select2.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/inputmask/inputmask.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/inputmask/jquery.inputmask.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/bs-stepper/js/bs-stepper.min.js" asp-append-version="true"></script>
     <script src="~/assets/dist/js/adminlte.js" asp-append-version="true"></script>

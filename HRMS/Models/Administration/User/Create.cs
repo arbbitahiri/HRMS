@@ -17,15 +17,20 @@ public class Create
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     [RegularExpression(pattern: @"^\d+$", ErrorMessageResourceName = "OnlyNumbers", ErrorMessageResourceType = typeof(Resource))]
     public string PersonalNumber { get; set; }
+
     public string Username { get; set; }
 
     [Display(Name = "Firstname", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Firstname { get; set; }
 
     [Display(Name = "Lastname", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Lastname { get; set; }
 
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Display(Name = "Birthdate", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public DateTime Birthdate { get; set; }
 
     [Display(Name = "PhoneNumber", ResourceType = typeof(Resource))]

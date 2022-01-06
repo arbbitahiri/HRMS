@@ -35,6 +35,9 @@
             responsive: true,
             data: data,
             order: [[0, "asc"]],
+            columnDefs: [
+                { className: "vertikal", targets: "_all" }
+            ],
             columns:[
                 {
                     data: function (data, type, row, meta) {

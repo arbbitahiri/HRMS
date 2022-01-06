@@ -2,7 +2,7 @@
 @model CreateSubMenu
 
 <div class="modal-header">
-    <h5 class="modal-title">@Resource.AddSubMenu</h5>
+    <h5 class="modal-title">@string.Format(Resource.AddSubMenu, Model.MenuTitle)</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
@@ -65,6 +65,10 @@
         <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
+
+<div>
+
+</div>
 
 <script>
     $(document).ready(function () {

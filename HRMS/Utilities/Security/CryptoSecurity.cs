@@ -9,7 +9,7 @@ public static class CryptoSecurity
     private readonly static string IV = "ZCPpTydDDxl+alvCal+2xw==";
     private readonly static string Key = "evnuHp0Fn3WvnQ91SssExYX7F7hGCFyWz/5yW0TW0ag=";
 
-    public static string Encrypt<T>(T obj)
+    public static string Encrypt(object obj)
     {
         using Aes aes = Aes.Create();
         aes.Mode = CipherMode.CBC;

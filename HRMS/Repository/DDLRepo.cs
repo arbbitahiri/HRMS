@@ -17,15 +17,14 @@ public class DDLRepo : IDDLRepo
         this.db = db;
     }
 
-    public List<SelectListItem> Languages() =>
-        new List<SelectListItem>
+    public List<SelectListItem> Languages() => new()
         {
             new SelectListItem { Text = Resource.Albanian, Value = LanguageEnum.Albanian.ToString() },
             new SelectListItem { Text = Resource.English, Value = LanguageEnum.English.ToString() }
         };
 
-    public List<SelectListItem> Genders() =>
-        new List<SelectListItem> {
+    public List<SelectListItem> Genders() => new()
+        {
             new SelectListItem { Value = ((int)GenderEnum.Male).ToString(), Text = Resource.Male },
             new SelectListItem { Value = ((int)GenderEnum.Female).ToString(), Text = Resource.Female },
         };
@@ -35,5 +34,5 @@ public class DDLRepo : IDDLRepo
         {
             Value = a.Id,
             Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).ToListAsync();
+        }).OrderBy(a => a.Text).ToListAsync();
 }

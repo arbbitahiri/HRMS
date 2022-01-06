@@ -1,0 +1,49 @@
+@model ErrorVM
+
+@if (Model != null)
+{
+    if (Model.Status == ErrorStatus.Success)
+    {
+        <div class='callout callout-success'>
+            <h5>
+                @Model.Title!
+            </h5>
+            <p>
+                @Html.Raw(Model.Description)
+            </p>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Warning)
+    {
+        <div class='callout callout-warning'>
+            <h5>
+                @Model.Title!
+            </h5>
+            <p>
+                @Html.Raw(Model.Description)
+            </p>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Info)
+    {
+        <div class='callout callout-info'>
+            <h5>
+                @Model.Title!
+            </h5>
+            <p>
+                @Html.Raw(Model.Description)
+            </p>
+        </div>
+    }
+    else if (Model.Status == ErrorStatus.Error)
+    {
+        <div class='callout callout-danger'>
+            <h5>
+                @Model.Title!
+            </h5>
+            <p>
+                @Html.Raw(Model.Description)
+            </p>
+        </div>
+    }
+}

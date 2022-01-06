@@ -1,41 +1,40 @@
-﻿@using HRMS.Models.Tables
-@model CreateData
-@{
-    var bonusField = Model.Table == LookUpTable.ProfessionType || Model.Table == LookUpTable.RateType;
-    var col = bonusField ? "col-md-4" : "col-md-6";
-}
+﻿@using HRMS.Models.Administration.Role
+@model CreateRole
 
 <div class="modal-header">
-    <h5 class="modal-title">@Resource.Add - @Model.Title</h5>
+    <h5 class="modal-title">@Resource.AddRole</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
 </div>
 
-<form asp-action="Create" asp-controller="Tables" id="frm_Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
+<form asp-action="CreateRole" asp-controller="Administration" id="frm_Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
     <div class="card-body">
         @Html.AntiForgeryToken()
-        <input asp-for="Table" type="hidden"/>
-        <input asp-for="Title" type="hidden"/>
 
         <div class="row">
-            @if (bonusField)
-            {
-                <div class="@col form-group">
-                    <label asp-for="OtherData" class="required">@(Model.Table == LookUpTable.ProfessionType ? Resource.Code : Resource.RateNumber)</label>
-                    <input asp-for="OtherData" class="form-control" />
-                    <span asp-validation-for="OtherData" class="text-danger"></span>
-                </div>
-            }
-            <div class="@col form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="NameSQ" class="required">@Resource.NameSq</label>
                 <input asp-for="NameSQ" class="form-control" />
                 <span asp-validation-for="NameSQ" class="text-danger"></span>
             </div>
-            <div class="@col form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="NameEN" class="required">@Resource.NameEn</label>
                 <input asp-for="NameEN" class="form-control" />
                 <span asp-validation-for="NameEN" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="DescriptionSQ" class="required">@Resource.NameSq</label>
+                <textarea asp-for="DescriptionSQ" spellcheck="false" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="DescriptionSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="DescriptionEN" class="required">@Resource.NameEn</label>
+                <textarea asp-for="DescriptionEN" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="DescriptionEN" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -46,7 +45,7 @@
 </form>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var form = $('#frm_Create');
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');

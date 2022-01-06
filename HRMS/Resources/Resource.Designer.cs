@@ -232,11 +232,20 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shto nënmeny.
+        ///   Looks up a localized string similar to Shto nënmeny - {0}.
         /// </summary>
         public static string AddSubMenu {
             get {
                 return ResourceManager.GetString("AddSubMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shto përdoruesin.
+        /// </summary>
+        public static string AddUser {
+            get {
+                return ResourceManager.GetString("AddUser", resourceCulture);
             }
         }
         
@@ -466,15 +475,6 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kriju përdoruesin.
-        /// </summary>
-        public static string CreateUser {
-            get {
-                return ResourceManager.GetString("CreateUser", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Numri kredive.
         /// </summary>
         public static string CreditsNumber {
@@ -552,6 +552,24 @@ namespace HRMS.Resources {
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përshkrimi anglisht.
+        /// </summary>
+        public static string DescriptionEN {
+            get {
+                return ResourceManager.GetString("DescriptionEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përshkrimi shqip.
+        /// </summary>
+        public static string DescriptionSQ {
+            get {
+                return ResourceManager.GetString("DescriptionSQ", resourceCulture);
             }
         }
         
@@ -1159,6 +1177,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Emri normalizuar.
+        /// </summary>
+        public static string NormalizedName {
+            get {
+                return ResourceManager.GetString("NormalizedName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Në rregull.
         /// </summary>
         public static string Okay {
@@ -1402,6 +1429,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grupi ekziston me këtë emër!.
+        /// </summary>
+        public static string RoleExists {
+            get {
+                return ResourceManager.GetString("RoleExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grupet.
         /// </summary>
         public static string Roles {
@@ -1600,6 +1636,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e grupit?.
+        /// </summary>
+        public static string SureYouWantToDeleteRole {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e lëndën për stafin?.
         /// </summary>
         public static string SureYouWantToDeleteSubjectForStaff {
@@ -1623,6 +1668,24 @@ namespace HRMS.Resources {
         public static string SureYouWantToDeleteUser {
             get {
                 return ResourceManager.GetString("SureYouWantToDeleteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni të sigurt për bllokimin e përdoruesit?.
+        /// </summary>
+        public static string SureYouWantToLockUser {
+            get {
+                return ResourceManager.GetString("SureYouWantToLockUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni të sigurt për zhbllokimin e përdoruesit?.
+        /// </summary>
+        public static string SureYouWantToUnlockUser {
+            get {
+                return ResourceManager.GetString("SureYouWantToUnlockUser", resourceCulture);
             }
         }
         
@@ -1758,6 +1821,15 @@ namespace HRMS.Resources {
         public static string UploadDocument {
             get {
                 return ResourceManager.GetString("UploadDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përdoruesi.
+        /// </summary>
+        public static string User {
+            get {
+                return ResourceManager.GetString("User", resourceCulture);
             }
         }
         

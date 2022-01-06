@@ -145,7 +145,7 @@
     <value>Shto menynë</value>
   </data>
   <data name="AddSubMenu" xml:space="preserve">
-    <value>Shto nënmeny</value>
+    <value>Shto nënmeny - {0}</value>
   </data>
   <data name="AL" xml:space="preserve">
     <value>SQ</value>
@@ -456,8 +456,8 @@
   <data name="Birthdate" xml:space="preserve">
     <value>Ditëlindja</value>
   </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>Kriju përdoruesin</value>
+  <data name="AddUser" xml:space="preserve">
+    <value>Shto përdoruesin</value>
   </data>
   <data name="EmailExists" xml:space="preserve">
     <value>E-maili ekziston!</value>
@@ -704,5 +704,29 @@
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titulli</value>
+  </data>
+  <data name="DescriptionEN" xml:space="preserve">
+    <value>Përshkrimi anglisht</value>
+  </data>
+  <data name="DescriptionSQ" xml:space="preserve">
+    <value>Përshkrimi shqip</value>
+  </data>
+  <data name="NormalizedName" xml:space="preserve">
+    <value>Emri normalizuar</value>
+  </data>
+  <data name="RoleExists" xml:space="preserve">
+    <value>Grupi ekziston me këtë emër!</value>
+  </data>
+  <data name="SureYouWantToDeleteRole" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e grupit?</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Përdoruesi</value>
+  </data>
+  <data name="SureYouWantToLockUser" xml:space="preserve">
+    <value>A jeni të sigurt për bllokimin e përdoruesit?</value>
+  </data>
+  <data name="SureYouWantToUnlockUser" xml:space="preserve">
+    <value>A jeni të sigurt për zhbllokimin e përdoruesit?</value>
   </data>
 </root>

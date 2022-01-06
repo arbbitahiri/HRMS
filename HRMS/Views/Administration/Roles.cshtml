@@ -1,0 +1,172 @@
+﻿@using HRMS.Models.Administration
+@model IEnumerable<Roles>
+@{
+    ViewData["Title"] = Resource.Roles;
+}
+
+<div class="card">
+    <div class="card-header align-items-center">
+        <h3 class="card-title"></h3>
+        <div class="card-tools">
+            <a onclick="add_role()" class="btn btn-primary" style="cursor: pointer;">@Resource.AddRole</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tbl_roles" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Resource.NormalizedName</th>
+                    <th>@Resource.NameSq</th>
+                    <th>@Resource.NameEn</th>
+                    <th>@Resource.DescriptionSQ</th>
+                    <th>@Resource.DescriptionEN</th>
+                    <th data-orderable="false">@Resource.Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            render_tbl(@Json.Serialize(Model));
+        });
+
+        function add_role() {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateRole", "Administration")', function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function render_tbl(data) {
+            var rowCount = 1;
+            $('#tbl_roles').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { width: 10, targets: [0, 6] },
+                    { width: 20, targets: [1, 2, 3] },
+                    { width: 30, targets: [4, 5] },
+                    { className: "vertikal", targets: "_all" }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { data: "normalizedName" },
+                    { data: "nameSQ" },
+                    { data: "nameEN" },
+                    {
+                        data: function (row, type, set) {
+                            if (row.descriptionSQ.length > 80) {
+                                return row.descriptionSQ + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.descriptionSQ.substring(79) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else if (row.descriptionSQ.length > 0) {
+                                return row.descriptionSQ;
+                            } else {
+                                return "///";
+                            }
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            if (row.descriptionEN.length > 80) {
+                                return row.descriptionEN + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.descriptionEN.substring(79) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else if (row.descriptionEN.length > 0) {
+                                return row.descriptionEN;
+                            } else {
+                                return "///";
+                            }
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_role(\'' + row.roleIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_role(\'' + row.roleIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function edit_role(ide) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditRole", "Administration")', { rIde: ide }, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function delete_role(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteRole)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("DeleteRole", "Administration")', {
+                        rIde: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            if (data.status == ErrorStatus.SUCCESS) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: data.title,
+                                    text: data.description,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(t => {
+                                    window.location.reload();
+                                });
+                            } else if (data.status == ErrorStatus.WARNING) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            }else if (data.status == ErrorStatus.ERROR) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.title,
+                                    text: data.description,
+                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                                });
+                            }
+                    });
+                }
+            });
+        }
+    </script>
+}
