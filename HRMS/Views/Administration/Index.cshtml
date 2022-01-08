@@ -155,7 +155,7 @@
                         data: function (row, type, set) {
                             let dateTimeNow = new Date();
                             var lockoutDate = new Date(row.lockoutEnd);
-                            return lockoutDate >= dateTimeNow ? "@Html.Raw(Resource.No)" : "@Html.Raw(Resource.Yes)";
+                            return lockoutDate >= dateTimeNow ? '<small class="badge badge-success">@Html.Raw(Resource.No)</small>' : '<small class="badge badge-danger">@Html.Raw(Resource.Yes)</small>';
                         }
                     },
                     {
@@ -183,25 +183,23 @@
             });
         }
 
-        function edit_user(uId) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_Edit", "Administration")?uId=' + uId, function () {
+        function edit_user(ide) {
+            window.location.href = '@Url.Action("_Edit", "Administration")?uIde=' + ide;
+        }
+
+        function setPassword(ide) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_SetPassword", "Administration")?uIde=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
-        function setPassword(uId) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_SetPassword", "Administration")?uId=' + uId, function () {
+        function addRole(ide) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddRole", "Administration")?uIde=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
-        function addRole(uId) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddRole", "Administration")?uId=' + uId, function () {
-                $('#modal-lg').modal('toggle');
-            });
-        }
-
-        function delete_user(uId) {
+        function delete_user(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
                 text: "@Html.Raw(Resource.SureYouWantToDeleteUser)",
@@ -217,42 +215,18 @@
                         method: "post",
                         url: '@Url.Action("Delete", "Administration")',
                         data: {
-                            uId: uId,
+                            uIde: ide,
                             "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
                         },
                         success: function (data) {
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data.title,
-                                    text: data.description,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                }).then(t => {
-                                    window.location.reload()
-                                });
-                            } else if (data.status == ErrorStatus.WARNING) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            } else if (data.status == ErrorStatus.ERROR) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                         }
                     });
                 }
             });
         }
 
-        function lock_user(uId) {
+        function lock_user(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
                 text: "@Html.Raw(Resource.SureYouWantToLockUser)",
@@ -268,42 +242,18 @@
                         method: "post",
                         url: '@Url.Action("Lock", "Administration")',
                         data: {
-                            uId: uId,
+                            uIde: ide,
                             "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
                         },
                         success: function (data) {
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data.title,
-                                    text: data.description,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                }).then(t => {
-                                    window.location.reload()
-                                });
-                            } else if (data.status == ErrorStatus.WARNING) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            } else if (data.status == ErrorStatus.ERROR) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                         }
                     });
                 }
             });
         }
 
-        function unlock_user(uId) {
+        function unlock_user(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
                 text: "@Html.Raw(Resource.SureYouWantToUnlockUser)",
@@ -319,35 +269,11 @@
                         method: "post",
                         url: '@Url.Action("Unlock", "Administration")',
                         data: {
-                            uId: uId,
+                            uIde: ide,
                             "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val(),
                         },
                         success: function (data) {
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data.title,
-                                    text: data.description,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                }).then(t => {
-                                    window.location.reload()
-                                });
-                            } else if (data.status == ErrorStatus.WARNING) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            } else if (data.status == ErrorStatus.ERROR) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                         }
                     });
                 }

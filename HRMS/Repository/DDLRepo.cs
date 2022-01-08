@@ -35,4 +35,18 @@ public class DDLRepo : IDDLRepo
             Value = a.Id,
             Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
         }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> Departments(LanguageEnum lang) =>
+        await db.Department.Select(a => new SelectListItem
+        {
+            Value = a.DepartmentId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> StaffTypes(LanguageEnum lang) =>
+        await db.StaffType.Select(a => new SelectListItem
+        {
+            Value = a.StaffTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
 }

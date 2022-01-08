@@ -24,7 +24,8 @@ public class StaffPost
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Lastname { get; set; }
 
-    [Display(Name = "BirthDate", ResourceType = typeof(Resource))]
+    [Display(Name = "Birthdate", ResourceType = typeof(Resource))]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Remote("CheckBirthdate", "Staff", ErrorMessageResourceName = "MustBe18YearsOld", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public DateTime BirthDate { get; set; }

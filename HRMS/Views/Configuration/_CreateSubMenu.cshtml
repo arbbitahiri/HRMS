@@ -2,7 +2,7 @@
 @model CreateSubMenu
 
 <div class="modal-header">
-    <h5 class="modal-title">@string.Format(Resource.AddSubMenu, Model.MenuTitle)</h5>
+    <h5 class="modal-title">@string.Format(Resource.AddSubMenuFor, Model.MenuTitle)</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
@@ -79,23 +79,6 @@
     });
 
     function on_success_submenu(data) {
-        if (data.status == ErrorStatus.SUCCESS) {
-            Swal.fire({
-                icon: 'success',
-                title: data.title,
-                text: data.description,
-                timer: 2000,
-                showConfirmButton: false
-            }).then(t => {
-                window.location.reload();
-            });
-        } else if (data.status == ErrorStatus.WARNING) {
-            Swal.fire({
-                icon: 'warning',
-                title: data.title,
-                text: data.description,
-                confirmButtonText: 'Okay'
-            });
-        }
+        handle_success(data, SubmitPathType.RELOAD, "");
     }
 </script>

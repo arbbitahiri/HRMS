@@ -144,29 +144,7 @@
                     "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                 },
                 success: function (data) {
-                    if (data.status == ErrorStatus.SUCCESS) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: data.title,
-                            text: data.description,
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    } else if (data.status == ErrorStatus.WARNING) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: data.title,
-                            text: data.description,
-                            confirmButtonText: 'Okay'
-                        });
-                    } else if (data.status == ErrorStatus.ERROR) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: data.title,
-                            text: data.description,
-                            confirmButtonText: 'Okay'
-                        });
-                    }
+                    handle_success(data, SubmitPathType.NORELOAD, "");
                 },
                 error: function (msg) {
                     console.log("Error " + msg);

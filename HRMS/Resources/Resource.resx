@@ -144,7 +144,7 @@
   <data name="AddMenu" xml:space="preserve">
     <value>Shto menynë</value>
   </data>
-  <data name="AddSubMenu" xml:space="preserve">
+  <data name="AddSubMenuFor" xml:space="preserve">
     <value>Shto nënmeny - {0}</value>
   </data>
   <data name="AL" xml:space="preserve">
@@ -728,5 +728,23 @@
   </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>A jeni të sigurt për zhbllokimin e përdoruesit?</value>
+  </data>
+  <data name="AddRoleFor" xml:space="preserve">
+    <value>Shto grupin - {0}</value>
+  </data>
+  <data name="AddSubMenu" xml:space="preserve">
+    <value>Shto nënmeny</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>Lista roleve</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Vendos</value>
+  </data>
+  <data name="SetPasswordFor" xml:space="preserve">
+    <value>Vendos fjalëkalimin - {0}</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>

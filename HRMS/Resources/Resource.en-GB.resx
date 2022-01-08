@@ -151,7 +151,7 @@
     <value>AL</value>
   </data>
   <data name="AddSubMenu" xml:space="preserve">
-    <value>Add submenu - {0}</value>
+    <value>Add submenu</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
@@ -725,5 +725,20 @@
   </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>Are you sure you want to unlock user?</value>
+  </data>
+  <data name="AddRoleFor" xml:space="preserve">
+    <value>Add role - {0}</value>
+  </data>
+  <data name="AddSubMenuFor" xml:space="preserve">
+    <value>Add submenu - {0}</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>List of roles</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="SetPasswordFor" xml:space="preserve">
+    <value>Set password - {0}</value>
   </data>
 </root>

@@ -21,30 +21,76 @@ const LookUpTable = {
     DOCUMENT: 1
 }
 
+const SubmitPathType = {
+    RELOAD: 1,
+    NORELOAD: 2,
+    PATH: 3
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
     resources = $.getJSON(`/Culture/General/${culture}.json`);
 });
 
-function ShowLoading() {
-    $('#mdl_load').modal('show')
+function show_loading() {
+    $('#mdl_load').modal('show');
 }
 
-function HideLoading(timeout = 0) {
+function hide_loading(timeout = 0) {
     setTimeout(function () {
-         $('#mdl_load').modal('hide')
+        $('#mdl_load').modal('hide');
     }, timeout);
 }
 
+function handle_success(data, path_type, path) {
+    console.log(path);
+    if (data.status == ErrorStatus.SUCCESS) {
+        Swal.fire({
+            icon: 'success',
+            title: data.title,
+            text: data.description,
+            timer: 2000,
+            showConfirmButton: false
+        }).then((result) => {
+            if (path_type == SubmitPathType.RELOAD) {
+                window.location.reload();
+            } else if (path_type == SubmitPathType.PATH) {
+                window.location.href = path;
+            } else { }
+        });
+    } else if (data.status == ErrorStatus.WARNING) {
+        Swal.fire({
+            icon: 'warning',
+            title: data.title,
+            text: data.description,
+            confirmButtonText: 'Okay'
+        });
+    } else if (data.status == ErrorStatus.ERROR) {
+        Swal.fire({
+            icon: 'error',
+            title: data.title,
+            text: data.description,
+            confirmButtonText: 'Okay'
+        });
+    } else if (data.status == ErrorStatus.INFO) {
+        Swal.fire({
+            icon: 'info',
+            title: data.title,
+            text: data.description,
+            confirmButtonText: 'Okay'
+        });
+    }
+}
+
 $(document).on('submit', 'form:not(.noLoading)', function () {
-    ShowLoading();
+    show_loading();
     $(this).find('button[type="submit"]').attr('disabled', 'disabled');
 });
 
 $(document).ajaxComplete(function () {
-    HideLoading(500);
-    $(this).find('button[type="submit"]').removeAttr('disabled', 'disabled')
+    hide_loading(500);
+    $(this).find('button[type="submit"]').removeAttr('disabled', 'disabled');
 });
 
 $(document).ajaxError(function (error) {
@@ -70,7 +116,7 @@ $(document).ajaxError(function (error) {
 });
 
 $(document).on('invalid-form.validate', 'form', function () {
-    HideLoading();
+    hide_loading();
 });
 
 $(document).ajaxStart(function () {

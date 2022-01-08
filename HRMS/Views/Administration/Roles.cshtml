@@ -6,8 +6,8 @@
 
 <div class="card">
     <div class="card-header align-items-center">
-        <h3 class="card-title"></h3>
-        <div class="card-tools">
+        <h3 class="card-title pt-2">@Resource.ListOfRoles</h3>
+        <div class="card-tools pl-3">
             <a onclick="add_role()" class="btn btn-primary" style="cursor: pointer;">@Resource.AddRole</a>
         </div>
     </div>
@@ -139,31 +139,7 @@
                         rIde: ide,
                         "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                         }, function (data) {
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data.title,
-                                    text: data.description,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                }).then(t => {
-                                    window.location.reload();
-                                });
-                            } else if (data.status == ErrorStatus.WARNING) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            }else if (data.status == ErrorStatus.ERROR) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: data.title,
-                                    text: data.description,
-                                    confirmButtonText: '@Html.Raw(Resource.Okay)'
-                                });
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });

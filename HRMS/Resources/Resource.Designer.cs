@@ -223,6 +223,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shto grupin - {0}.
+        /// </summary>
+        public static string AddRoleFor {
+            get {
+                return ResourceManager.GetString("AddRoleFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto lëndë.
         /// </summary>
         public static string AddSubject {
@@ -232,11 +241,20 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shto nënmeny - {0}.
+        ///   Looks up a localized string similar to Shto nënmeny.
         /// </summary>
         public static string AddSubMenu {
             get {
                 return ResourceManager.GetString("AddSubMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shto nënmeny - {0}.
+        /// </summary>
+        public static string AddSubMenuFor {
+            get {
+                return ResourceManager.GetString("AddSubMenuFor", resourceCulture);
             }
         }
         
@@ -952,6 +970,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista roleve.
+        /// </summary>
+        public static string ListOfRoles {
+            get {
+                return ResourceManager.GetString("ListOfRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e nënmenyve.
         /// </summary>
         public static string ListSubMenus {
@@ -1519,11 +1546,29 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vendos.
+        /// </summary>
+        public static string Set {
+            get {
+                return ResourceManager.GetString("Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vendos fjalëkalimin.
         /// </summary>
         public static string SetPassword {
             get {
                 return ResourceManager.GetString("SetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendos fjalëkalimin - {0}.
+        /// </summary>
+        public static string SetPasswordFor {
+            get {
+                return ResourceManager.GetString("SetPasswordFor", resourceCulture);
             }
         }
         
@@ -1560,6 +1605,15 @@ namespace HRMS.Resources {
         public static string StatusType {
             get {
                 return ResourceManager.GetString("StatusType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

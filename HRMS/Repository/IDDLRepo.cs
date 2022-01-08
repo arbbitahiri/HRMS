@@ -11,4 +11,8 @@ public interface IDDLRepo
     List<SelectListItem> Genders();
 
     Task<List<SelectListItem>> Roles(LanguageEnum lang);
+
+    Task<List<SelectListItem>> Departments(LanguageEnum lang);
+
+    Task<List<SelectListItem>> StaffTypes(LanguageEnum lang);
 }
