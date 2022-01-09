@@ -16,34 +16,34 @@
     <div class="row form-group">
         <div class="col-md-4">
             <label asp-for="PersonalNumber"></label>
-            <input asp-for="PersonalNumber" type="text" class="form-control"/>
+            <input asp-for="PersonalNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PersonalNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Firstname"></label>
-            <input asp-for="Firstname" type="text" class="form-control"/>
+            <input asp-for="Firstname" type="text" autocapitalize="on" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Firstname" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Lastname"></label>
-            <input asp-for="Lastname" type="text" class="form-control"/>
+            <input asp-for="Lastname" type="text" autocapitalize="true" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Lastname" class="text-danger"></span>
         </div>
     </div>
     <div class="row form-group">
         <div class="col-md-4">
             <label asp-for="Email"></label>
-            <input asp-for="Email" type="email" class="form-control"/>
+            <input asp-for="Email" type="email" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="PhoneNumber"></label>
-            <input asp-for="PhoneNumber" type="text" class="form-control"/>
+            <input asp-for="PhoneNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="BirthDate"></label>
-            <input asp-for="BirthDate" type="text" class="form-control" value='@(Model.BirthDate.ToString("dd/MM/yyyy") == "01/01/0001" ? "dd/MM/yyyy" : Model.BirthDate.ToString("dd/MM/yyyy"))' readonly="true" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
+            <input asp-for="BirthDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
     </div>
@@ -55,24 +55,29 @@
         </div>
         <div class="col-md-4">
             <label asp-for="City"></label>
-            <input asp-for="City" type="text" class="form-control"/>
+            <input asp-for="City" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Country"></label>
-            <input asp-for="Country" type="text" class="form-control"/>
+            <input asp-for="Country" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Country" class="text-danger"></span>
         </div>
     </div>
     <div class="row form-group">
         <div class="col-md-4">
+            <label asp-for="Nationality"></label>
+            <input asp-for="Nationality" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Nationality" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
             <label asp-for="Address"></label>
-            <input asp-for="Address" type="text" class="form-control"/>
+            <input asp-for="Address" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="PostalCode"></label>
-            <input asp-for="PostalCode" type="text" class="form-control"/>
+            <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PostalCode" class="text-danger"></span>
         </div>
     </div>

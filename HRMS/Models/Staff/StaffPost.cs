@@ -1,7 +1,6 @@
 ﻿using HRMS.Resources;
 using HRMS.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace HRMS.Models.Staff;
@@ -28,7 +27,7 @@ public class StaffPost
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Remote("CheckBirthdate", "Staff", ErrorMessageResourceName = "MustBe18YearsOld", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public DateTime BirthDate { get; set; }
+    public string BirthDate { get; set; }
 
     [Display(Name = "Gender", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

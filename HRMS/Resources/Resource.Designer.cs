@@ -880,7 +880,7 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fjalëkalim i pasaktë.
+        ///   Looks up a localized string similar to Fjalëkalim i pasaktë!.
         /// </summary>
         public static string IncorrectPassword {
             get {
@@ -970,11 +970,47 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista e departamenteve.
+        /// </summary>
+        public static string ListOfDepartments {
+            get {
+                return ResourceManager.GetString("ListOfDepartments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e dokumenteve.
+        /// </summary>
+        public static string ListOfDocuments {
+            get {
+                return ResourceManager.GetString("ListOfDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e kualifikimeve.
+        /// </summary>
+        public static string ListOfQualifications {
+            get {
+                return ResourceManager.GetString("ListOfQualifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista roleve.
         /// </summary>
         public static string ListOfRoles {
             get {
                 return ResourceManager.GetString("ListOfRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e lëndëve.
+        /// </summary>
+        public static string ListOfSubjects {
+            get {
+                return ResourceManager.GetString("ListOfSubjects", resourceCulture);
             }
         }
         
@@ -1209,6 +1245,15 @@ namespace HRMS.Resources {
         public static string NormalizedName {
             get {
                 return ResourceManager.GetString("NormalizedName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk lejohet data më e madhe se sot!.
+        /// </summary>
+        public static string NotAllowedGreaterDate {
+            get {
+                return ResourceManager.GetString("NotAllowedGreaterDate", resourceCulture);
             }
         }
         
@@ -1605,15 +1650,6 @@ namespace HRMS.Resources {
         public static string StatusType {
             get {
                 return ResourceManager.GetString("StatusType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

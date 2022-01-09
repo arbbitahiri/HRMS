@@ -47,7 +47,8 @@
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 form-group ml-4 text-right">
+                    <label class="invisible"></label><br />
                     <input type="submit" class="btn btn-primary" value="@Resource.Search" />
                 </div>
             </div>
@@ -90,10 +91,12 @@
             });
 
             $.validator.setDefaults({ ingore: '' });
-            var form = $('.form');
+            var form = $('#frm_search_staff');
             form.removeData('validator');
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
+
+            $('#frm_search_staff').submit();
         });
 
         function search_success(data) {

@@ -59,7 +59,7 @@ public class StaffController : BaseController
                     PersonalNumber = CryptoSecurity.Decrypt<string>(ide),
                     Firstname = a.FirstName,
                     Lastname = a.LastName,
-                    BirthDate = a.Birthdate,
+                    BirthDate = a.Birthdate.ToString("dd/MM/yyyy"),
                     Gender = a.Gender,
                     Email = a.User.Email,
                     PhoneNumber = a.User.PhoneNumber,
@@ -98,7 +98,7 @@ public class StaffController : BaseController
                     PersonalNumber = staff.PersonalNumber,
                     FirstName = staff.Firstname,
                     LastName = staff.Lastname,
-                    Birthdate = staff.BirthDate,
+                    Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
                     Country = staff.Country,
@@ -126,7 +126,7 @@ public class StaffController : BaseController
                 PersonalNumber = staff.PersonalNumber,
                 FirstName = staff.Firstname,
                 LastName = staff.Lastname,
-                Birthdate = staff.BirthDate,
+                Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                 Email = staff.Email,
                 EmailConfirmed = true,
                 PhoneNumber = staff.PhoneNumber,
@@ -159,7 +159,7 @@ public class StaffController : BaseController
                     PersonalNumber = staff.PersonalNumber,
                     FirstName = staff.Firstname,
                     LastName = staff.Lastname,
-                    Birthdate = staff.BirthDate,
+                    Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
                     Country = staff.Country,
@@ -200,7 +200,7 @@ public class StaffController : BaseController
         staff.PersonalNumber = edit.PersonalNumber;
         staff.FirstName = edit.Firstname;
         staff.LastName = edit.Lastname;
-        staff.Birthdate = edit.BirthDate;
+        staff.Birthdate = DateTime.ParseExact(edit.BirthDate, "dd/MM/yyyy", null);
         staff.City = edit.City;
         staff.Country = edit.Country;
         staff.Address = edit.Address;
@@ -252,7 +252,7 @@ public class StaffController : BaseController
             QualificationCount = qualifications.Count,
             MethodType = method
         };
-        return View(qualifications);
+        return View(qualificationVM);
     }
 
     #endregion
@@ -853,12 +853,12 @@ public class StaffController : BaseController
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
+            .Where(a => //a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                //&& a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                 (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
-                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
+                //&& a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -961,14 +961,16 @@ public class StaffController : BaseController
     #region Remote
 
     [Description("Method to check birthday.")]
-    public IActionResult CheckBirthdate(DateTime BirthDate)
+    public IActionResult CheckBirthdate(string BirthDate)
     {
-        if (BirthDate >= DateTime.Now)
+        var birthdate = DateTime.ParseExact(BirthDate, "dd/MM/yyyy", null);
+
+        if (birthdate >= DateTime.Now)
         {
-            return Json("Nuk lejohet data me e madhe se sot!");
+            return Json(Resource.NotAllowedGreaterDate);
         }
 
-        if (BirthDate <= DateTime.Now.AddYears(-18))
+        if (birthdate <= DateTime.Now.AddYears(-18))
         {
             return Json(true);
         }
