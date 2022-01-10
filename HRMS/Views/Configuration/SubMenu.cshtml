@@ -89,24 +89,7 @@
                     ide: ide,
                     "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                     }, function (data) {
-                        if (data.status == ErrorStatus.SUCCESS) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: data.title,
-                                text: data.description,
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(t => {
-                                window.location.reload()
-                            });
-                        } else if (data.status == ErrorStatus.WARNING) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: data.title,
-                                text: data.description,
-                                confirmButtonText: '@Html.Raw(Resource.Okay)'
-                            });
-                        }
+                        handle_success(data, SubmitPathType.RELOAD, "");
                 });
             }
         });

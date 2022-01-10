@@ -13,7 +13,7 @@
         <p class="login-box-msg">@Resource.LoginToStart</p>
 
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(a => a.Input.returnUrl)
+        <input asp-for="Input.returnUrl" type="hidden" />
 
         <div class="input-group">
             <input asp-for="Input.Email" type="text" class="form-control" placeholder="@Resource.Email">
@@ -52,7 +52,7 @@
         if ($('#frm_Login').valid()) {
             $('#frm_Login').submit();
             setTimeout(function() {
-                $('#btn_SubmitLogin').attr('disabled', true);
+                $('#btn_SubmitLogin').attr({ disabled: true });
             }, 100);
         }
     }
@@ -67,30 +67,15 @@
     function onSuccessLogin(data) {
         $('#btn_SubmitLogin').find('.btn-text').removeClass('d-none');
         $('#btn_SubmitLogin').find('.btn-spinner').addClass('d-none');
-        if (data.status == 1) {
+        if (data.status == ErrorStatus.SUCCESS) {
             window.location.href = '/Home/Index';
-        } else if (data.status == 2) {
-            $.post('/Identity/Account/Message?handler=Filter',
-            {
+        } else {
+            $.post('/Identity/Account/Message?handler=Filter', {
                 Title: data.title,
                 Status: data.status,
                 Description: data.description,
                 '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            function (data) {
-                $('#status').html(data);
-            });
-            $('#btn_SubmitLogin').removeAttr('disabled');
-        } else if (data.status == 3) {
-            $.post('/Identity/Account/Message?handler=Filter',
-            {
-                Title: data.title,
-                Status: data.status,
-                Description: data.description,
-                '__RequestVerificationToken': $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            function (data) {
-                console.log(data);
+            }, function (data) {
                 $('#status').html(data);
             });
             $('#btn_SubmitLogin').removeAttr('disabled');

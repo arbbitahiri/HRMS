@@ -37,6 +37,7 @@ namespace HRMS.Data.General
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<ProfessionType> ProfessionType { get; set; }
         public virtual DbSet<RateType> RateType { get; set; }
+        public virtual DbSet<RealRole> RealRole { get; set; }
         public virtual DbSet<Staff> Staff { get; set; }
         public virtual DbSet<StaffDepartment> StaffDepartment { get; set; }
         public virtual DbSet<StaffDepartmentEvaluation> StaffDepartmentEvaluation { get; set; }
@@ -54,7 +55,8 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=ARBTAHIRI\\SQLEXPRESS;Database=HRMS;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -533,7 +535,7 @@ namespace HRMS.Data.General
                     .WithMany(p => p.HolidayRequest)
                     .HasForeignKey(d => d.StaffDepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayRequest_StaffCollege");
+                    .HasConstraintName("FK_HolidayRequest_StaffDepartment");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.HolidayRequestUpdatedFromNavigation)
@@ -780,6 +782,56 @@ namespace HRMS.Data.General
                     .HasConstraintName("FK_RateType_AspNetUsers_Update");
             });
 
+            modelBuilder.Entity<RealRole>(entity =>
+            {
+                entity.ToTable("RealRole", "Core");
+
+                entity.Property(e => e.RealRoleId).HasColumnName("RealRoleID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.RoleId)
+                    .IsRequired()
+                    .HasMaxLength(450)
+                    .HasColumnName("RoleID");
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(450)
+                    .HasColumnName("UserID");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.RealRoleInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RealRole_AspNetUsers_Insert");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.RealRole)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RealRole_AspNetRoles");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.RealRoleUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_RealRole_AspNetUsers_Update");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.RealRoleUser)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RealRole_AspNetUsers");
+            });
+
             modelBuilder.Entity<Staff>(entity =>
             {
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
@@ -869,30 +921,30 @@ namespace HRMS.Data.General
                     .WithMany(p => p.StaffDepartment)
                     .HasForeignKey(d => d.DepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollege_Department");
+                    .HasConstraintName("FK_StaffDepartment_Department");
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffDepartmentInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollege_AspNetUsers_Insert");
+                    .HasConstraintName("FK_StaffDepartment_AspNetUsers_Insert");
 
                 entity.HasOne(d => d.Staff)
                     .WithMany(p => p.StaffDepartment)
                     .HasForeignKey(d => d.StaffId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollege_Staff");
+                    .HasConstraintName("FK_StaffDepartment_Staff");
 
                 entity.HasOne(d => d.StaffType)
                     .WithMany(p => p.StaffDepartment)
                     .HasForeignKey(d => d.StaffTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollege_StaffType");
+                    .HasConstraintName("FK_StaffDepartment_StaffType");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.StaffDepartmentUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_StaffCollege_AspNetUsers_Update");
+                    .HasConstraintName("FK_StaffDepartment_AspNetUsers_Update");
             });
 
             modelBuilder.Entity<StaffDepartmentEvaluation>(entity =>
@@ -921,24 +973,24 @@ namespace HRMS.Data.General
                     .WithMany(p => p.StaffDepartmentEvaluation)
                     .HasForeignKey(d => d.EvaluationTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluation_EvaluationType");
+                    .HasConstraintName("FK_StaffDepartmentEvaluation_EvaluationType");
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffDepartmentEvaluationInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluation_AspNetUsers_Insert");
+                    .HasConstraintName("FK_StaffDepartmentEvaluation_AspNetUsers_Insert");
 
                 entity.HasOne(d => d.StaffDepartment)
                     .WithMany(p => p.StaffDepartmentEvaluation)
                     .HasForeignKey(d => d.StaffDepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluation_StaffCollege");
+                    .HasConstraintName("FK_StaffDepartmentEvaluation_StaffCollege");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.StaffDepartmentEvaluationUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_StaffCollegeEvaluation_AspNetUsers_Update");
+                    .HasConstraintName("FK_StaffDepartmentEvaluation_AspNetUsers_Update");
             });
 
             modelBuilder.Entity<StaffDepartmentEvaluationQuestionnaire>(entity =>
@@ -966,24 +1018,22 @@ namespace HRMS.Data.General
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaire_AspNetUsers_InsertedFrom");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.RateType)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaire)
                     .HasForeignKey(d => d.RateTypeId)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaire_RateType");
+                    .HasConstraintName("FK_StaffDepartmentEvaluationQuestionnaire_RateType");
 
                 entity.HasOne(d => d.StaffDepartmentEvaluation)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaire)
                     .HasForeignKey(d => d.StaffDepartmentEvaluationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaire_StaffCollegeEvaluation");
+                    .HasConstraintName("FK_StaffDepartmentEvaluationQuestionnaire_StaffDepartmentEvaluation");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaireUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaire_AspNetUsers_UpdatedFrom");
+                    .HasForeignKey(d => d.UpdatedFrom);
             });
 
             modelBuilder.Entity<StaffDepartmentEvaluationQuestionnaireRate>(entity =>
@@ -1008,13 +1058,13 @@ namespace HRMS.Data.General
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaireRate)
                     .HasForeignKey(d => d.RateTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaireRate_RateType");
+                    .HasConstraintName("FK_StaffDepartmentEvaluationQuestionnaireRate_RateType");
 
                 entity.HasOne(d => d.StaffDepartmentEvaluationQuestionnaire)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaireRate)
                     .HasForeignKey(d => d.StaffDepartmentEvaluationQuestionnaireId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeEvaluationQuestionnaireRate_StaffCollegeEvaluationQuestionnaire");
+                    .HasConstraintName("FK_StaffDepartmentEvaluationQuestionnaireRate_StaffDepartmentEvaluationQuestionnaire");
             });
 
             modelBuilder.Entity<StaffDepartmentSubject>(entity =>
@@ -1043,24 +1093,24 @@ namespace HRMS.Data.General
                     .WithMany(p => p.StaffDepartmentSubjectInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeSubject_AspNetUsers_Insert");
+                    .HasConstraintName("FK_StaffDepartmentSubject_AspNetUsers_Insert");
 
                 entity.HasOne(d => d.StaffDepartment)
                     .WithMany(p => p.StaffDepartmentSubject)
                     .HasForeignKey(d => d.StaffDepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeSubject_StaffCollege");
+                    .HasConstraintName("FK_StaffDepartmentSubject_StaffDepartment");
 
                 entity.HasOne(d => d.Subject)
                     .WithMany(p => p.StaffDepartmentSubject)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StaffCollegeSubject_Subject");
+                    .HasConstraintName("FK_StaffDepartmentSubject_Subject");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.StaffDepartmentSubjectUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_StaffCollegeSubject_AspNetUsers_Update");
+                    .HasConstraintName("FK_StaffDepartmentSubject_AspNetUsers_Update");
             });
 
             modelBuilder.Entity<StaffDocument>(entity =>
@@ -1069,23 +1119,19 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
 
-                entity.Property(e => e.FileName)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom)
                     .IsRequired()
                     .HasMaxLength(450);
 
-                entity.Property(e => e.Path).IsRequired();
+                entity.Property(e => e.Path).HasMaxLength(2048);
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(450);
+                    .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 

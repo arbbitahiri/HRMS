@@ -32,6 +32,9 @@ namespace HRMS.Data.General
             ProfessionTypeUpdatedFromNavigation = new HashSet<ProfessionType>();
             RateTypeInsertedFromNavigation = new HashSet<RateType>();
             RateTypeUpdatedFromNavigation = new HashSet<RateType>();
+            RealRoleInsertedFromNavigation = new HashSet<RealRole>();
+            RealRoleUpdatedFromNavigation = new HashSet<RealRole>();
+            RealRoleUser = new HashSet<RealRole>();
             StaffDepartmentEvaluationInsertedFromNavigation = new HashSet<StaffDepartmentEvaluation>();
             StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation = new HashSet<StaffDepartmentEvaluationQuestionnaire>();
             StaffDepartmentEvaluationQuestionnaireUpdatedFromNavigation = new HashSet<StaffDepartmentEvaluationQuestionnaire>();
@@ -108,6 +111,9 @@ namespace HRMS.Data.General
         public virtual ICollection<ProfessionType> ProfessionTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<RateType> RateTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<RateType> RateTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<RealRole> RealRoleInsertedFromNavigation { get; set; }
+        public virtual ICollection<RealRole> RealRoleUpdatedFromNavigation { get; set; }
+        public virtual ICollection<RealRole> RealRoleUser { get; set; }
         public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluationInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartmentEvaluationQuestionnaire> StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartmentEvaluationQuestionnaire> StaffDepartmentEvaluationQuestionnaireUpdatedFromNavigation { get; set; }

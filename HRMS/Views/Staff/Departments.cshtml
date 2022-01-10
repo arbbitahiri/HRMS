@@ -6,13 +6,14 @@
     Layout = "~/Views/Staff/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
+    var subjects = Model.SubjectCount == 1 ? Resource.SubjectsLower.Substring(0, Resource.SubjectsLower.Length - 1) : (Model.SubjectCount == 0 ? "Nuk ka lëndë" : Resource.SubjectsLower);
 }
 
 <div class="flex-row-fluid">
     <div class="card" style="box-shadow: none !important;">
         <div class="card-header border-0">
-            <h1 class="align-items-start flex-column">
-                <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span>
+            <h1 class="card-title align-items-start flex-column">
+                <span class="text-dark text-lg">@Resource.ListOfDepartments</span>
             </h1>
             <div class="card-tools">
                 <a onclick="add_department('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
@@ -36,9 +37,15 @@
     <hr />
     <div class="card" style="box-shadow: none !important;">
         <div class="card-header border-0">
-            <h1 class="align-items-start flex-column">
-                <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span>
-                <span class="text-muted mt-1 font-weight-bold font-size-sm">@Resource.Has <b class="text-primary">@Model.SubjectCount</b> @Resource.SubjectsLower</span>
+            <h1 class="card-title align-items-start flex-column">
+                <span class="text-dark text-lg">@Resource.ListOfSubjects</span><br />
+                <span class="text-muted mt-1 font-weight-bold font-size-sm">
+                    @if (Model.SubjectCount >= 1)
+                    {
+                        @Resource.Has <b class="text-primary">@Model.SubjectCount </b>
+                    }
+                    @subjects
+                </span>
             </h1>
             <div class="card-tools">
                 <a onclick="add_subject('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddSubject</a>
@@ -60,9 +67,9 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between border-top">
-        <input type="button" value="@Resource.Back" onclick="go_back_documents('@Model.StaffDetails.Ide')" class="btn btn-light-primary font-weight-bolder text-uppercase"/>
-        <input type="button" value="@Resource.End" onclick="submit_form('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase"/>
+    <div class="d-flex justify-content-between border-top mt-5">
+        <input type="button" value="@Resource.Back" onclick="go_back_documents('@Model.StaffDetails.Ide')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.End" onclick="submit_form('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
     </div>
 </div>
 
@@ -70,19 +77,29 @@
     <script>
         $(document).ready(function() {
             if (@((int)Model.MethodType) == MethodType.POST) {
-                $('#tab1').attr({ href: '', style: '' });
-                $('#tab2').attr({ href: '', style: '' });
-                $('#tab3').attr({ href: '', style: '' });
+                $('#tab1').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab2').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab3').attr({ href: '', style: 'cursor: pointer' });
                 $('#tab4').attr({ href: '', style: '' });
+
+                $('#trigger_staff_department').attr({ disabled: true });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
+                $('#icon_document').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
+                $('#icon_document').attr({ style: 'background-color: #43b25d' });
             }
 
-            render_tbl_departments(@Html.Raw(Model.Departments));
-            render_tbl_subjects(@Html.Raw(Model.Subjects));
+            render_tbl_departments(@Json.Serialize(Model.Departments));
+            render_tbl_subjects(@Json.Serialize(Model.Subjects));
         });
 
         function go_back_documents(ide) {
@@ -146,7 +163,7 @@
             });
         }
 
-        function render_tbl_departments(data) {
+        function render_tbl_subjects(data) {
             $('#tbl_subjects').DataTable({
                 destroy: true,
                 language: {
@@ -241,24 +258,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.post('@Url.Action("DeleteDepartment", "Staff")', { ide: ide }, function (data) {
-                        if (data.status == ErrorStatus.SUCCESS) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: data.title,
-                                text: data.description,
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(t => {
-                                window.location.reload()
-                            });
-                        } else if (data.status == ErrorStatus.WARNING) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: data.title,
-                                text: data.description,
-                                confirmButtonText: '@Html.Raw(Resource.Okay)'
-                            });
-                        }
+                        handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });
@@ -277,24 +277,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.post('@Url.Action("DeleteSubject", "Staff")', { ide: ide }, function (data) {
-                        if (data.status == ErrorStatus.SUCCESS) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: data.title,
-                                text: data.description,
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(t => {
-                                window.location.reload()
-                            });
-                        } else if (data.status == ErrorStatus.WARNING) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: data.title,
-                                text: data.description,
-                                confirmButtonText: '@Html.Raw(Resource.Okay)'
-                            });
-                        }
+                        handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });

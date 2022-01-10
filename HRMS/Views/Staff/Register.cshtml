@@ -16,34 +16,38 @@
     <div class="row form-group">
         <div class="col-md-4">
             <label asp-for="PersonalNumber"></label>
-            <input asp-for="PersonalNumber" type="text" class="form-control"/>
+            <input asp-for="PersonalNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PersonalNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Firstname"></label>
-            <input asp-for="Firstname" type="text" class="form-control"/>
+            <input asp-for="Firstname" type="text" autocapitalize="on" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Firstname" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Lastname"></label>
-            <input asp-for="Lastname" type="text" class="form-control"/>
+            <input asp-for="Lastname" type="text" autocapitalize="true" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Lastname" class="text-danger"></span>
         </div>
+    </div>
+    <div class="row form-group">
         <div class="col-md-4">
             <label asp-for="Email"></label>
-            <input asp-for="Email" type="email" class="form-control"/>
+            <input asp-for="Email" type="email" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="PhoneNumber"></label>
-            <input asp-for="PhoneNumber" type="text" class="form-control"/>
+            <input asp-for="PhoneNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="BirthDate"></label>
-            <input asp-for="BirthDate" type="date" class="form-control"/>
+            <input asp-for="BirthDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
+    </div>
+    <div class="row form-group">
         <div class="col-md-4">
             <label asp-for="Gender"></label>
             <select asp-for="Gender" asp-items='repo.Genders()' class="form-control select2"></select>
@@ -51,28 +55,35 @@
         </div>
         <div class="col-md-4">
             <label asp-for="City"></label>
-            <input asp-for="City" type="text" class="form-control"/>
+            <input asp-for="City" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Country"></label>
-            <input asp-for="Country" type="text" class="form-control"/>
+            <input asp-for="Country" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="Nationality"></label>
+            <input asp-for="Nationality" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Nationality" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="Address"></label>
-            <input asp-for="Address" type="text" class="form-control"/>
+            <input asp-for="Address" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="col-md-4">
             <label asp-for="PostalCode"></label>
-            <input asp-for="PostalCode" type="text" class="form-control"/>
+            <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PostalCode" class="text-danger"></span>
         </div>
     </div>
 
     <div class="d-flex justify-content-end border-top mt-5">
-        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase"/>
+        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
     </div>
 </form>
 
@@ -81,14 +92,18 @@
         $(document).ready(function () {
             if (@((int)Model.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: '' });
-                $('#tab2').attr({ href: '', style: '' });
-                $('#tab3').attr({ href: '', style: '' });
-                $('#tab4').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: 'cursor: default' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+                $('#tab4').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_qualification_form').attr({ disabled: true });
+                $('#trigger_document_form').attr({ disabled: true });
+                $('#trigger_staff_department').attr({ disabled: true });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor:pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });
@@ -110,6 +125,10 @@
                         return '@Html.Raw(Resource.NoResultsFound)';
                     },
                 }
+            });
+
+            $("#BirthDate").datetimepicker({
+                format: 'DD/MM/YYYY'
             });
         });
 

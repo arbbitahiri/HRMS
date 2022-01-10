@@ -151,7 +151,7 @@
     <value>AL</value>
   </data>
   <data name="AddSubMenu" xml:space="preserve">
-    <value>Add submenu - {0}</value>
+    <value>Add submenu</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
@@ -364,7 +364,7 @@
     <value>You must have at least {2} and maximum {1} characters.</value>
   </data>
   <data name="ConfirmNewPassword" xml:space="preserve">
-    <value>Confirm new password</value>
+    <value>Confirm new password!</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>Current password</value>
@@ -421,7 +421,7 @@
     <value>Application mode</value>
   </data>
   <data name="UnableToLoadUser" xml:space="preserve">
-    <value>Unable to load user</value>
+    <value>Unable to load user.</value>
   </data>
   <data name="UpdateAccountData" xml:space="preserve">
     <value>Update account data</value>
@@ -725,5 +725,38 @@
   </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>Are you sure you want to unlock user?</value>
+  </data>
+  <data name="AddRoleFor" xml:space="preserve">
+    <value>Add role - {0}</value>
+  </data>
+  <data name="AddSubMenuFor" xml:space="preserve">
+    <value>Add submenu - {0}</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>List of roles</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="SetPasswordFor" xml:space="preserve">
+    <value>Set password - {0}</value>
+  </data>
+  <data name="NotAllowedGreaterDate" xml:space="preserve">
+    <value>Date greater than today is not allowed!</value>
+  </data>
+  <data name="StaffList" xml:space="preserve">
+    <value>Staff list</value>
+  </data>
+  <data name="ListOfDepartments" xml:space="preserve">
+    <value>List of departments</value>
+  </data>
+  <data name="ListOfDocuments" xml:space="preserve">
+    <value>List of documents</value>
+  </data>
+  <data name="ListOfQualifications" xml:space="preserve">
+    <value>List of qualifications</value>
+  </data>
+  <data name="ListOfSubjects" xml:space="preserve">
+    <value>List of subjects</value>
   </data>
 </root>

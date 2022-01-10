@@ -144,7 +144,7 @@
   <data name="AddMenu" xml:space="preserve">
     <value>Shto menynë</value>
   </data>
-  <data name="AddSubMenu" xml:space="preserve">
+  <data name="AddSubMenuFor" xml:space="preserve">
     <value>Shto nënmeny - {0}</value>
   </data>
   <data name="AL" xml:space="preserve">
@@ -466,7 +466,7 @@
     <value>E-maili nuk është valid!</value>
   </data>
   <data name="IncorrectPassword" xml:space="preserve">
-    <value>Fjalëkalim i pasaktë</value>
+    <value>Fjalëkalim i pasaktë!</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>Mbyllur</value>
@@ -728,5 +728,35 @@
   </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>A jeni të sigurt për zhbllokimin e përdoruesit?</value>
+  </data>
+  <data name="AddRoleFor" xml:space="preserve">
+    <value>Shto grupin - {0}</value>
+  </data>
+  <data name="AddSubMenu" xml:space="preserve">
+    <value>Shto nënmeny</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>Lista roleve</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Vendos</value>
+  </data>
+  <data name="SetPasswordFor" xml:space="preserve">
+    <value>Vendos fjalëkalimin - {0}</value>
+  </data>
+  <data name="NotAllowedGreaterDate" xml:space="preserve">
+    <value>Nuk lejohet data më e madhe se sot!</value>
+  </data>
+  <data name="ListOfDepartments" xml:space="preserve">
+    <value>Lista e departamenteve</value>
+  </data>
+  <data name="ListOfDocuments" xml:space="preserve">
+    <value>Lista e dokumenteve</value>
+  </data>
+  <data name="ListOfQualifications" xml:space="preserve">
+    <value>Lista e kualifikimeve</value>
+  </data>
+  <data name="ListOfSubjects" xml:space="preserve">
+    <value>Lista e lëndëve</value>
   </data>
 </root>

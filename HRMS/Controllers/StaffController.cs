@@ -7,6 +7,7 @@ using HRMS.Models.Staff.Document;
 using HRMS.Models.Staff.Qualification;
 using HRMS.Resources;
 using HRMS.Utilities;
+using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -26,18 +27,21 @@ public class StaffController : BaseController
 {
     private readonly IWebHostEnvironment environment;
     private readonly IConfiguration configuration;
+    private readonly RoleManager<ApplicationRole> roleManager;
 
-    public StaffController(IWebHostEnvironment environment, IConfiguration configuration,
+    public StaffController(IWebHostEnvironment environment, IConfiguration configuration, RoleManager<ApplicationRole> roleManager,
         HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.environment = environment;
         this.configuration = configuration;
+        this.roleManager = roleManager;
     }
 
     #region 1. Register and edit
 
-    [HttpGet, Description("Form to register or update staff. First step of registration/edition of staff.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to register or update staff. First step of registration/edition of staff.")]
     public async Task<IActionResult> Register(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -55,7 +59,7 @@ public class StaffController : BaseController
                     PersonalNumber = CryptoSecurity.Decrypt<string>(ide),
                     Firstname = a.FirstName,
                     Lastname = a.LastName,
-                    BirthDate = a.Birthdate,
+                    BirthDate = a.Birthdate.ToString("dd/MM/yyyy"),
                     Gender = a.Gender,
                     Email = a.User.Email,
                     PhoneNumber = a.User.PhoneNumber,
@@ -69,13 +73,13 @@ public class StaffController : BaseController
         }
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to register staff.")]
     public async Task<IActionResult> Register(StaffPost staff)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         string staffIde = string.Empty;
@@ -83,7 +87,7 @@ public class StaffController : BaseController
         {
             if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
             {
-                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = "Stafi me kete numer personal ekziston!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = "Stafi me kete numer personal ekziston!" });
             }
 
             try
@@ -94,7 +98,7 @@ public class StaffController : BaseController
                     PersonalNumber = staff.PersonalNumber,
                     FirstName = staff.Firstname,
                     LastName = staff.Lastname,
-                    Birthdate = staff.BirthDate,
+                    Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
                     Country = staff.Country,
@@ -112,7 +116,7 @@ public class StaffController : BaseController
             catch (Exception ex)
             {
                 await LogError(ex);
-                return Json(new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
             }
         }
         else
@@ -122,7 +126,7 @@ public class StaffController : BaseController
                 PersonalNumber = staff.PersonalNumber,
                 FirstName = staff.Firstname,
                 LastName = staff.Lastname,
-                Birthdate = staff.BirthDate,
+                Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                 Email = staff.Email,
                 EmailConfirmed = true,
                 PhoneNumber = staff.PhoneNumber,
@@ -155,7 +159,7 @@ public class StaffController : BaseController
                     PersonalNumber = staff.PersonalNumber,
                     FirstName = staff.Firstname,
                     LastName = staff.Lastname,
-                    Birthdate = staff.BirthDate,
+                    Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
                     Country = staff.Country,
@@ -169,20 +173,19 @@ public class StaffController : BaseController
                 staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
                 db.Staff.Add(newStaff);
                 await db.SaveChangesAsync();
-                // TODO: Send email to confirm email, if needed
             }
             catch (Exception ex)
             {
                 await userManager.DeleteAsync(firstUser);
                 await LogError(ex);
-                return Json(new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
             }
         }
 
         return RedirectToAction(nameof(Qualification), new { ide = staffIde, mt = staff.MethodType });
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to edit staff data.")]
     public async Task<IActionResult> Edit(StaffPost edit)
     {
@@ -197,7 +200,7 @@ public class StaffController : BaseController
         staff.PersonalNumber = edit.PersonalNumber;
         staff.FirstName = edit.Firstname;
         staff.LastName = edit.Lastname;
-        staff.Birthdate = edit.BirthDate;
+        staff.Birthdate = DateTime.ParseExact(edit.BirthDate, "dd/MM/yyyy", null);
         staff.City = edit.City;
         staff.Country = edit.Country;
         staff.Address = edit.Address;
@@ -211,7 +214,6 @@ public class StaffController : BaseController
 
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
-        //return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -220,7 +222,8 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Description("Entry form for qualification. Second step of registration/edition of staff.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Entry form for qualification. Second step of registration/edition of staff.")]
     public async Task<IActionResult> Qualification(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -249,17 +252,18 @@ public class StaffController : BaseController
             QualificationCount = qualifications.Count,
             MethodType = method
         };
-        return View(qualifications);
+        return View(qualificationVM);
     }
 
     #endregion
 
     #region => Create
 
-    [HttpGet, Description("Form to add new qualification.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to add new qualification.")]
     public IActionResult _AddQualification(string ide) => PartialView(new AddQualification { StaffIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to add qualification.")]
     public async Task<IActionResult> AddQualification(AddQualification add)
     {
@@ -299,7 +303,8 @@ public class StaffController : BaseController
 
     #region => Edit
 
-    [HttpGet, Description("Form to edit staff data.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to edit staff data.")]
     public async Task<IActionResult> _EditQualification(string ide)
     {
         var qualification = await db.StaffQualification
@@ -329,7 +334,7 @@ public class StaffController : BaseController
         return PartialView(qualification);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to edit a qualification.")]
     public async Task<IActionResult> EditQualification(AddQualification edit)
     {
@@ -368,7 +373,7 @@ public class StaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to delete a qualification.")]
     public async Task<IActionResult> DeleteQualification(string ide)
     {
@@ -386,7 +391,8 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Description("Entry form for documents. Third step of registration/editation of staff.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Entry form for documents. Third step of registration/editation of staff.")]
     public async Task<IActionResult> Documents(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -424,10 +430,11 @@ public class StaffController : BaseController
 
     #region => Create
 
-    [HttpGet, Description("Form to add documents.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to add documents.")]
     public IActionResult _AddDocuments(string ide) => PartialView(new AddDocument { StaffIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to add documents.")]
     public async Task<IActionResult> AddDocuments(AddDocument add)
     {
@@ -445,7 +452,6 @@ public class StaffController : BaseController
                 StaffId = CryptoSecurity.Decrypt<int>(add.StaffIde),
                 DocumentTypeId = add.DocumentTypeId,
                 Title = add.Title,
-                FileName = file.FileName,
                 Path = path,
                 Description = add.Description,
                 Active = true,
@@ -462,7 +468,8 @@ public class StaffController : BaseController
 
     #region => Edit
 
-    [HttpGet, Description("Form to edit a document.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to edit a document.")]
     public async Task<IActionResult> _EditDocument(string ide)
     {
         var document = await db.StaffDocument
@@ -479,7 +486,7 @@ public class StaffController : BaseController
         return View(document);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to edit a document.")]
     public async Task<IActionResult> EditDocument(AddDocument edit)
     {
@@ -505,7 +512,7 @@ public class StaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to delete a document.")]
     public async Task<IActionResult> DeleteDocument(string ide)
     {
@@ -527,7 +534,8 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Description("Entry form for department. Fourth step of registration/editation of staff.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Entry form for department. Fourth step of registration/editation of staff.")]
     public async Task<IActionResult> Departments(string ide, MethodType method)
     {
         var staff = await db.Staff
@@ -537,7 +545,7 @@ public class StaffController : BaseController
                 Ide = ide,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                //IsProfessor = a.StaffCollege.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Professor)
+                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Professor)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
@@ -578,14 +586,15 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region Department
+    #region => Department
 
-    #region => Create
+    #region ==> Create
 
-    [HttpGet, Description("Form to add department.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to add department.")]
     public IActionResult _AddDepartment(string ide) => PartialView(new AddDepartment { StaffIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to add new department.")]
     public async Task<IActionResult> AddDepartment(AddDepartment add)
     {
@@ -607,6 +616,8 @@ public class StaffController : BaseController
             }
         }
 
+        var userId = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).Select(a => a.UserId).FirstOrDefaultAsync();
+
         var newStaffDepartment = new StaffDepartment
         {
             StaffId = CryptoSecurity.Decrypt<int>(add.StaffIde),
@@ -619,16 +630,24 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         };
 
-        var newUser = await userManager.FindByIdAsync(newStaffDepartment.Staff.UserId);
+        var newUser = await userManager.FindByIdAsync(userId);
         var getRoles = await userManager.GetRolesAsync(newUser);
 
-        if (!(await userManager.GetRolesAsync(newUser)).Any())
+        if (!getRoles.Any())
         {
             await userManager.AddToRoleAsync(newUser, getRole);
-            //db.AspNetUserRoles.Add(new AspNetUserRoles { UserId = newUserId, RoleId = getRole });
         }
 
-        // TODO: RealRoles
+        if (!getRoles.Any(a => a == getRole))
+        {
+            db.RealRole.Add(new RealRole
+            {
+                UserId = userId,
+                RoleId = getRole,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
 
         db.StaffDepartment.Add(newStaffDepartment);
         await db.SaveChangesAsync();
@@ -637,9 +656,10 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Edit
+    #region ==> Edit
 
-    [HttpGet, Description("Form to edit department.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to edit department.")]
     public async Task<IActionResult> _EditDepartment(string ide)
     {
         var department = await db.StaffDepartment
@@ -657,7 +677,7 @@ public class StaffController : BaseController
         return PartialView(department);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to edit department.")]
     public async Task<IActionResult> EditDepartment(AddDepartment edit)
     {
@@ -682,9 +702,9 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Delete
+    #region ==> Delete
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to delete a department.")]
     public async Task<IActionResult> DeleteDepartment(string ide)
     {
@@ -720,14 +740,15 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region Subject
+    #region => Subject
 
-    #region => Create
+    #region ==> Create
 
-    [HttpGet, Description("Form to add subject.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to add subject.")]
     public IActionResult _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to add subject.")]
     public async Task<IActionResult> AddSubject(AddSubject add)
     {
@@ -753,9 +774,10 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Edit
+    #region ==> Edit
 
-    [HttpGet, Description("Form to edit subject.")]
+    [HttpGet, Authorize(Policy = "21s:c")]
+    [Description("Form to edit subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
         var subject = await db.StaffDepartmentSubject
@@ -772,7 +794,7 @@ public class StaffController : BaseController
         return PartialView(subject);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to edit subject.")]
     public async Task<IActionResult> EditSubject(AddSubject edit)
     {
@@ -796,9 +818,9 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Delete
+    #region ==> Delete
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
@@ -820,22 +842,23 @@ public class StaffController : BaseController
 
     #region List
 
-    [HttpGet, Description("Entry home. Search for staff.")]
+    [HttpGet, Authorize(Policy = "21s:r")]
+    [Description("Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
     [Description("Form to view searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
+            .Where(a => //a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                //&& a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                 (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
-                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
+                //&& a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -857,7 +880,8 @@ public class StaffController : BaseController
 
     #region Profile
 
-    [HttpGet, Description("Form to view the profile of staff.")]
+    [HttpGet, Authorize(Policy = "21s:r")]
+    [Description("Form to view the profile of staff.")]
     public async Task<IActionResult> Profile(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -937,14 +961,16 @@ public class StaffController : BaseController
     #region Remote
 
     [Description("Method to check birthday.")]
-    public IActionResult CheckBirthdate(DateTime BirthDate)
+    public IActionResult CheckBirthdate(string BirthDate)
     {
-        if (BirthDate >= DateTime.Now)
+        var birthdate = DateTime.ParseExact(BirthDate, "dd/MM/yyyy", null);
+
+        if (birthdate >= DateTime.Now)
         {
-            return Json("Nuk lejohet data me e madhe se sot!");
+            return Json(Resource.NotAllowedGreaterDate);
         }
 
-        if (BirthDate <= DateTime.Now.AddYears(-18))
+        if (birthdate <= DateTime.Now.AddYears(-18))
         {
             return Json(true);
         }

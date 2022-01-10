@@ -72,7 +72,7 @@ public class LoginModel : BaseOModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        ViewData["Title"] = "Login";
+        ViewData["Title"] = Resource.Login;
         Language = Thread.CurrentThread.CurrentCulture.Name;
         if (!ModelState.IsValid)
         {
@@ -91,15 +91,15 @@ public class LoginModel : BaseOModel
         }
         if (result.RequiresTwoFactor)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = "You must confirm account!", Title = "Info", Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = "You must confirm account!", Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         if (result.IsLockedOut)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = "Account is locked!", Title = "Info", Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = Resource.AccountLocked, Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         else
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Warning, Description = "Invalid login attempt", Title = "Warning" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Warning, Description = "Invalid login attempt", Title = Resource.Warning });
         }
     }
 }

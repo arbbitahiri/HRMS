@@ -1,4 +1,122 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HRMS.Models.Administration
+@model Edit
+@inject IDDLRepo repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+    ViewData["Title"] = Resource.User;
+
+    var srcPath = string.IsNullOrEmpty(Model.ImagePath) ? "~/images/user-default.png" : Model.ImagePath;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.AddUser</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" asp-controller="Administration" id="frm_create_user" enctype="multipart/form-data" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                    <div class="text-center symbol flex-shrink-0">
+                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow">
+                            <img src="@srcPath" id="img_upload" style="border-radius: 100%;" width="150" alt="User profile picture">
+                            <input asp-for="ProfileImage" type="file" class="d-none" />
+                        </label>
+                    </div>
+                    <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="PersonalNumber" class="required"></label>
+                    <input asp-for="PersonalNumber" class="form-control"/>
+                    <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Firstname" class="required"></label>
+                    <input asp-for="Firstname" class="form-control"/>
+                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Lastname" class="required"></label>
+                    <input asp-for="Lastname" class="form-control"/>
+                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Username" class="required"></label>
+                    <input asp-for="Username" class="form-control"/>
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label asp-for="Birthdate" class="required"></label>
+                    <input asp-for="Birthdate" type="text" readonly="true" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
+                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="PhoneNumber" class="required"></label>
+                    <input asp-for="PhoneNumber" class="form-control" data-mask="" inputmode="text"/>
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Email" class="required"></label>
+                    <input asp-for="Email" class="form-control"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <input type="submit" class="btn btn-primary" value="@Resource.Register" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_create_user');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            $('#PhoneNumber').inputmask("mask", {
+                "mask": "+(999) 99 999-999",
+                removeMaskOnSubmit: true,
+                autoUnmask: true
+            });
+
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $("#Birthdate").datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+
+            $("#ProfileImage").on('change', function() {
+                read_image(this);
+            });
+        });
+
+        function read_image(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img_upload').prop('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                $('#img_upload').prop('src', '~/images/user-default.png');
+            }
+        }
+    </script>
+}

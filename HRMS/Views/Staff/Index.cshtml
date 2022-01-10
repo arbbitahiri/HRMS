@@ -18,37 +18,38 @@
             @Html.AntiForgeryToken()
             <div class="row form-group">
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                    <label asp-for="Department"></label>
-                    <select asp-for="Department">
+                    <label asp-for="Department">@Resource.Department</label>
+                    <select asp-for="Department" asp-items="await repo.Departments(user.Language)" class="form-control select2">>
                         <option value="">@Resource.Choose</option>
                     </select>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                    <label asp-for="StaffType"></label>
-                    <select asp-for="StaffType">
+                    <label asp-for="StaffType">@Resource.StaffType</label>
+                    <select asp-for="StaffType" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                    <label asp-for="PersonalNumber"></label>
+                    <label asp-for="PersonalNumber">@Resource.PersonalNumber</label>
                     <input asp-for="PersonalNumber" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                    <label asp-for="Firstname"></label>
+                    <label asp-for="Firstname">@Resource.Firstname</label>
                     <input asp-for="Firstname" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                    <label asp-for="Lastname"></label>
+                    <label asp-for="Lastname">@Resource.Lastname</label>
                     <input asp-for="Lastname" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary" value="@Resource.Search"></button>
+                <div class="col-md-4 form-group ml-4 text-right">
+                    <label class="invisible"></label><br />
+                    <input type="submit" class="btn btn-primary" value="@Resource.Search" />
                 </div>
             </div>
         </form>
@@ -90,10 +91,12 @@
             });
 
             $.validator.setDefaults({ ingore: '' });
-            var form = $('.form');
+            var form = $('#frm_search_staff');
             form.removeData('validator');
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
+
+            $('#frm_search_staff').submit();
         });
 
         function search_success(data) {

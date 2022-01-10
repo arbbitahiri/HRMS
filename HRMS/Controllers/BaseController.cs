@@ -233,9 +233,9 @@ public class BaseController : Controller
         resizer.Write(filePath);
     }
 
-    protected async Task<string> SaveImage(IWebHostEnvironment environment, IFormFile file, string folder)
+    protected async Task<string> SaveImage(IWebHostEnvironment environment, IFormFile file, string folder, int type = 512)
     {
-        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+        //string fileName = Path.GetFileNameWithoutExtension(file.FileName);
         string extension = Path.GetExtension(file.FileName);
 
         string uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
@@ -244,14 +244,15 @@ public class BaseController : Controller
             Directory.CreateDirectory(uploads);
         }
 
-        fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+        string fileName = Guid.NewGuid().ToString() + extension;
         string filePath = Path.Combine(uploads, fileName);
+        await ResizeImage(file, filePath, type);
 
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(fileStream);
         }
-        return fileName;
+        return filePath;
     }
 
     protected void SendEmailAsync(IConfiguration configuration, string email, string subject, string htmlMessage, string name, bool addHeader = true)

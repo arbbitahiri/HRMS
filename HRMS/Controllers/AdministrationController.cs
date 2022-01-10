@@ -131,7 +131,7 @@ public class AdministrationController : BaseController
             return View(create);
         }
 
-        if (create.Roles.Any())
+        if (create.Roles != null)
         {
             result = await userManager.AddToRolesAsync(firstUser, db.AspNetRoles.Where(a => create.Roles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
@@ -159,12 +159,11 @@ public class AdministrationController : BaseController
             ImagePath = user.ProfileImage,
             PersonalNumber = user.PersonalNumber,
             Username = user.UserName,
-            Firsname = user.FirstName,
+            Firstname = user.FirstName,
             Lastname = user.LastName,
             Birthdate = user.Birthdate,
             PhoneNumber = user.PhoneNumber,
-            Email = user.Email,
-            Language = user.Language
+            Email = user.Email
         };
         return View(edit);
     }
@@ -175,17 +174,16 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         if (await appDb.Users.AnyAsync(a => a.Email == edit.Email || a.UserName == edit.Username))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.UserHasAccount });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.UserHasAccount });
         }
 
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(edit.UserId));
         user.PhoneNumber = edit.PhoneNumber;
-        user.Language = edit.Language;
         user.ProfileImage = edit.ProfileImage != null ? await SaveImage(environment, edit.ProfileImage, "Users") : null;
 
         if (user.UserName != edit.Username)
@@ -215,8 +213,8 @@ public class AdministrationController : BaseController
             return View(edit);
         }
 
-        await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return RedirectToAction(nameof(Index));
     }
 
     #endregion
@@ -347,11 +345,29 @@ public class AdministrationController : BaseController
         }
 
         var userToAdd = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(addRole.UserId));
+        var roleToAdd = await db.AspNetRoles.Where(a => addRole.Role.Contains(a.Id)).Select(a => a.NormalizedName).ToListAsync();
+
+        foreach (var role in addRole.Role)
+        {
+            db.RealRole.Add(new RealRole
+            {
+                UserId = userToAdd.Id,
+                RoleId = role,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
 
         if (!(await userManager.GetRolesAsync(userToAdd)).Any())
         {
-            await userManager.AddToRoleAsync(userToAdd, addRole.Role);
+            var result = await userManager.AddToRolesAsync(userToAdd, roleToAdd);
+            if (!result.Succeeded)
+            {
+                return Json(new ErrorVM { Status = ErrorStatus.Error, Description = "<ul>" + string.Join("", result.Errors.Select(t => "<li>" + t.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}!</li>" + "</ul>" });
+            }
         }
+
+        await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.RoleAddedSuccess });
     }
 
