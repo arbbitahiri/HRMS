@@ -8,4 +8,5 @@ public class Documents
     public string PathExtension { get; set; }
     public string DocumentType { get; set; }
     public string Description { get; set; }
+    public bool Active { get; set; }
 }

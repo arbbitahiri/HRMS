@@ -1,6 +1,26 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.w5 {
+    width: 5% !important;
+}
+
+.w10 {
+    width: 10% !important;
+}
+
+.w15 {
+    width: 15% !important;
+}
+
+.w20 {
+    width: 20% !important;
+}
+
+.w30 {
+    width: 30% !important;
+}
+
 .required:after {
     content: " *";
     color: #ea585a;

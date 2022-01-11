@@ -1,0 +1,121 @@
+﻿@using HRMS.Models.Staff
+@model IEnumerable<Subjects>
+
+<div class="row">
+    <div class="col-md-8">
+        <h6 class="font-weight-bolder form-group">@Resource.ListOfSubjects</h6>
+    </div>
+</div>
+
+<table id="tbl_profile_subject" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Resource.ProfessionType</th>
+            <th>@Resource.EducationLevel</th>
+            <th>@Resource.Title</th>
+            <th>@Resource.FieldOfStudy</th>
+            <th>@Resource.CreditsNumber</th>
+            <th data-orderable="false">@Resource.Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        render_subject_tbl(@Json.Serialize(Model));
+    });
+
+    function render_subject_tbl(data) {
+        var rowCount = 1;
+        $('#tbl_profile_subject').DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 15,
+            data: data,
+            deferRender: true,
+            columnDefs: [
+                { className: "w10 vertikal", targets: [0, 5] },
+                { className: "w20 vertikal", targets: [2, 3, 4] },
+                { className: "w30 vertikal", targets: [1] }
+            ],
+            order: [[0, "asc"]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { data: "subject" },
+                {
+                    data: function(row, type, set) {
+                        var date = new Date(Date.parse(row.startDate));
+                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        var date = new Date(Date.parse(row.startDate));
+                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        var date = new Date(Date.parse(row.insertDate));
+                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var dropdown = '<div class="input-group-prepend">' +
+                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu" role="menu">' +
+                            '<button type="button" class="dropdown-item" onclick="edit_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="delete_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
+                            '</div></div>';
+                        return dropdown;
+                    }
+                }
+            ]
+        });
+    }
+
+    function add_subject(ide) {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_AddSubject", "Staff")?ide=' + ide, function () {
+            $('#modal-lg').modal('toggle');
+        });
+    }
+
+    function edit_subject(ide) {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubject", "Staff")?ide=' + ide, function () {
+            $('#modal-lg').modal('toggle');
+        });
+    }
+
+    function delete_subject(ide) {
+        Swal.fire({
+            title: "@Html.Raw(Resource.AreYouSure)",
+            text: "@Html.Raw(Resource.SureYouWantToDeleteSubjectForStaff)",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: "@Resource.Yes",
+            cancelButtonText: "@Resource.No"
+        }).then((result) => {
+            if (result.value) {
+                $.post('@Url.Action("DeleteSubject", "Staff")', {
+                    ide: ide,
+                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    }, function (data) {
+                        handle_success(data, SubmitPathType.RELOAD, "");
+                });
+            }
+        });
+    }
+</script>

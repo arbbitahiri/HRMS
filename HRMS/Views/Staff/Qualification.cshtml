@@ -39,6 +39,7 @@
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -71,7 +72,7 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
 
-            render_tbl(@Json.Serialize(Model.Qualifications));
+            render_tbl_qualifications(@Json.Serialize(Model.Qualifications));
         });
 
         function go_back_register(ide) {
@@ -82,7 +83,7 @@
             window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
         }
 
-        function render_tbl(data) {
+        function render_tbl_qualifications(data) {
             $('#tbl_qualifications').DataTable({
                 destroy: true,
                 language: {
@@ -96,8 +97,7 @@
                 columnDefs: [
                     { width: 10, targets: [0, 5, 6] },
                     { width: 20, targets: [1, 2, 4] },
-                    { width: 30, targets: [3] },
-                    { className: "vertikal", targets: "_all" }
+                    { width: 30, targets: [3] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -109,10 +109,14 @@
                     { data: "professionType" },
                     { data: "educationLevel" },
                     { data: "title" },
-                    { data: "fieldOfStudy" },
                     {
                         data: function (row, type, set) {
-                            return row.creditNumber != null ? row.creditNumber : "///";
+                            return row.fieldOfStudy ?? "///";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return row.creditNumber != null ? (row.creditType != null ? `${row.creditNumber} ${row.creditType}`: row.creditNumber) : "///";
                         }
                     },
                     {
@@ -121,6 +125,7 @@
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
                                 '<button type="button" class="dropdown-item" onclick="edit_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="details_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>'+
                                 '<button type="button" class="dropdown-item" onclick="delete_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
                                 '</div></div>';
                             return dropdown;
@@ -142,6 +147,12 @@
             });
         }
 
+        function details_qualification(ide) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_DetailsQualification", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
+            });
+        }
+
         function delete_qualification(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
@@ -154,8 +165,11 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteQualification", "Staff")', { ide: ide }, function (data) {
-                        handle_success(data, SubmitPathType.RELOAD, "");
+                    $.post('@Url.Action("DeleteQualification", "Staff")', {
+                        ide: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });

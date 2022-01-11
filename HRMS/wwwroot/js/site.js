@@ -44,7 +44,6 @@ function hide_loading(timeout = 0) {
 }
 
 function handle_success(data, path_type, path) {
-    console.log(path);
     if (data.status == ErrorStatus.SUCCESS) {
         Swal.fire({
             icon: 'success',

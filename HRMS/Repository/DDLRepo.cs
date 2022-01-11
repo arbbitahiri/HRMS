@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace HRMS.Repository;
 public class DDLRepo : IDDLRepo
 {
-    private readonly HRMSContext db;
+    private readonly HRMS_WorkContext db;
 
-    public DDLRepo(HRMSContext db)
+    public DDLRepo(HRMS_WorkContext db)
     {
         this.db = db;
     }
@@ -40,8 +40,8 @@ public class DDLRepo : IDDLRepo
         await db.Department.Select(a => new SelectListItem
         {
             Value = a.DepartmentId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+        }).ToListAsync();
 
     public async Task<List<SelectListItem>> StaffTypes(LanguageEnum lang) =>
         await db.StaffType.Select(a => new SelectListItem
@@ -49,4 +49,32 @@ public class DDLRepo : IDDLRepo
             Value = a.StaffTypeId.ToString(),
             Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
         }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> ProfessionTypes(LanguageEnum lang) =>
+        await db.ProfessionType.Select(a => new SelectListItem
+        {
+            Value = a.ProfessionTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+        }).ToListAsync();
+
+    public async Task<List<SelectListItem>> EducationLevelTypes(LanguageEnum lang) =>
+        await db.EducationLevelType.Select(a => new SelectListItem
+        {
+            Value = a.EducationLevelTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> DocumentTypes(LanguageEnum lang) =>
+        await db.DocumentType.Select(a => new SelectListItem
+        {
+            Value = a.DocumentTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> Subjects(LanguageEnum lang) =>
+        await db.Subject.Select(a => new SelectListItem
+        {
+            Value = a.SubjectId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+        }).ToListAsync();
 }

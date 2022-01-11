@@ -1,0 +1,88 @@
+﻿@using HRMS.Models.Staff
+@model ProfileVM
+@{
+    ViewData["Title"] = Resource.Profile;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle"
+                        src='@Url.Content(Model.StaffDetails.ProfileImage ?? "~/images/user-default.png")'
+                        alt="User profile picture">
+                </div>
+
+                <h3 class="profile-username text-center">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</h3>
+
+                <p class="text-muted text-center">@Model.StaffDetails.StaffType</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>@Resource.Qualifications</b> <a class="float-right">@Model.QualificationsCount</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>@Resource.Documents</b> <a class="float-right">@Model.DocumentsCount</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>@Resource.Subjects</b> <a class="float-right">@Model.SubjectsCount</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link" onclick="department_tab('@Model.StaffDetails.Ide')" id="tab_department" href="#kt_department" data-toggle="tab">@Resource.Department</a></li>
+                  <li class="nav-item"><a class="nav-link" onclick="qualification_tab('@Model.StaffDetails.Ide')" id="tab_qualification" href="#kt_qualification" data-toggle="tab">@Resource.Qualifications</a></li>
+                  <li class="nav-item"><a class="nav-link" onclick="document_tab('@Model.StaffDetails.Ide')" id="tab_document" href="#kt_document" data-toggle="tab">@Resource.Documents</a></li>
+                  <li class="nav-item"><a class="nav-link" onclick="subject_tab('@Model.StaffDetails.Ide')" id="tab_subject" href="#kt_subject" data-toggle="tab">@Resource.Subjects</a></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane" id="kt_department"></div>
+                    <div class="tab-pane" id="kt_qualification"></div>
+                    <div class="tab-pane" id="kt_document"></div>
+                    <div class="tab-pane" id="kt_subject"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (sessionStorage.getItem("tab_id") == null) {
+                $('#tab_qualification').trigger("click");
+            } else {
+                $('#' + sessionStorage.getItem("tab_id")).trigger("click");
+            }
+        });
+
+        function department_tab(ide) {
+            $("#kt_qualification").load('@Url.Action("_ProfileDepartment", "Staff")', { ide: ide });
+            sessionStorage.setItem("tab_id", "tab_qualification");
+        }
+
+        function qualification_tab(ide) {
+            $("#kt_qualification").load('@Url.Action("_ProfileQualification", "Staff")', { ide: ide });
+            sessionStorage.setItem("tab_id", "tab_qualification");
+        }
+
+        function document_tab(ide) {
+            $("#kt_document").load('@Url.Action("_ProfileDocument", "Staff")', { ide: ide });
+            sessionStorage.setItem("tab_id", "tab_document");
+        }
+
+        function subject_tab(ide) {
+            $("#kt_subject").load('@Url.Action("_ProfileSubject", "Staff")', { ide: ide });
+            sessionStorage.setItem("tab_id", "tab_subject");
+        }
+    </script>
+}

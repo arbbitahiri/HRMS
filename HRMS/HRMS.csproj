@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\General\" />
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 

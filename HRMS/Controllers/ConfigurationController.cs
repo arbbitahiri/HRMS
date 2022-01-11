@@ -3,6 +3,7 @@ using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.AppSettings;
 using HRMS.Models.Authorization;
+using HRMS.Models.Configuration.Subject;
 using HRMS.Models.Menu;
 using HRMS.Models.SubMenu;
 using HRMS.Repository;
@@ -29,7 +30,7 @@ public class ConfigurationController : BaseController
     private readonly RoleManager<ApplicationRole> roleManager;
     private readonly IFunctionRepo func;
 
-    public ConfigurationController(HRMSContext db,
+    public ConfigurationController(HRMS_WorkContext db,
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
@@ -453,6 +454,133 @@ public class ConfigurationController : BaseController
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
+
+    #endregion
+
+    #region Subjects
+
+    #region => List
+
+    [Authorize(Policy = "22s:r"), Description("Entry form, list of subjects.")]
+    public async Task<IActionResult> SubjectIndex()
+    {
+        var subjects = await db.Subject
+            .Select(a => new SubjectList
+            {
+                SubjectIde = CryptoSecurity.Encrypt(a.SubjectId),
+                Code = a.Code,
+                NameSq = a.NameSq,
+                NameEn = a.NameEn,
+                Active = a.Active
+            }).ToListAsync();
+        return View(subjects);
+    }
+
+    #endregion
+
+    #region => Create
+
+    [Authorize(Policy = "22s:r"), Description("Form to add a subject.")]
+    public IActionResult _CreateSubject() => PartialView();
+
+    [HttpPost, Authorize(Policy = "22s:r"), ValidateAntiForgeryToken]
+    [Description("Action to add a subject.")]
+    public async Task<IActionResult> CreateSubject(CreateSubject create)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        if (await db.Subject.AnyAsync(a => a.Active && a.Code == create.Code))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+        }
+
+        db.Subject.Add(new Subject
+        {
+            Code = create.Code,
+            NameSq = create.NameSq,
+            NameEn = create.NameEn,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+    }
+
+    #endregion
+
+    #region => Edit
+
+    [HttpGet, Authorize(Policy = "22s:r"), Description("Form to edit a subject.")]
+    public async Task<IActionResult> _EditSubject(string ide)
+    {
+        var subject = await db.Subject
+            .Where(a => a.SubjectId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new CreateSubject
+            {
+                SubjectIde = ide,
+                Code = a.Code,
+                NameSq = a.NameSq,
+                NameEn = a.NameEn,
+                Active = a.Active
+            }).FirstOrDefaultAsync();
+        return PartialView(subject);
+    }
+
+    [HttpPost, Authorize(Policy = "22s:r"), ValidateAntiForgeryToken]
+    [Description("Action to edit a subject.")]
+    public async Task<IActionResult> EditSubject(CreateSubject edit)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        if (await db.Subject.AnyAsync(a => a.Active && a.Code == edit.Code))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+        }
+
+        var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(edit.SubjectIde));
+        subject.Code = edit.Code;
+        subject.NameSq = edit.NameSq;
+        subject.NameEn = edit.NameEn;
+        subject.Active = edit.Active;
+        subject.UpdatedDate = DateTime.Now;
+        subject.UpdatedFrom = user.Id;
+        subject.UpdatedNo++;
+
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+    }
+
+    #endregion
+
+    #region => Delete
+
+    [HttpPost, Authorize(Policy = "22s:r"), ValidateAntiForgeryToken]
+    [Description("Action to delete a subject.")]
+    public async Task<IActionResult> DeleteSubject(string ide)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(ide));
+        subject.Active = false;
+        subject.UpdatedDate = DateTime.Now;
+        subject.UpdatedFrom = user.Id;
+        subject.UpdatedNo++;
+
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+    }
+
+    #endregion
 
     #endregion
 }

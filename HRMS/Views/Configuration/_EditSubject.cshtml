@@ -1,0 +1,71 @@
+﻿@using HRMS.Models.Configuration.Subject
+@model CreateSubject
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Edit</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="EditSubject" asp-controller="Configuration" id="frm_edit_subject" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_edit_subject" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="SubjectIde" type="hidden"/>
+
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="Code" class="required"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameSq" class="required"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameEn" class="required"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 d-flex flex-column pl-2">
+                <label asp-for="Active" class="required">@Resource.Active</label>
+                <div class="icheck-primary d-inline">
+                    <input asp-for="Active" id="inp_active" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="Active" id="lbl_active" onclick="change_active(this)"></label>
+                </div>
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Edit</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_edit_subject');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $('#lbl_active').text('');
+    });
+
+    function change_active(e) {
+        if($('#inp_active').is(":checked")) {
+            $('#inp_active').removeAttr('checked');
+        } else {
+            $('#inp_active').attr('checked', true);
+        }
+    }
+
+    function success_edit_subject(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

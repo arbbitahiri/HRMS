@@ -759,4 +759,64 @@
   <data name="ListOfSubjects" xml:space="preserve">
     <value>List of subjects</value>
   </data>
+  <data name="CreditNumber" xml:space="preserve">
+    <value>Credit number</value>
+  </data>
+  <data name="CreditType" xml:space="preserve">
+    <value>Credit type</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Drop10Files" xml:space="preserve">
+    <value>Drop up to 10 documents!</value>
+  </data>
+  <data name="DropFilesHere" xml:space="preserve">
+    <value>Drop files here!</value>
+  </data>
+  <data name="FinalGrade" xml:space="preserve">
+    <value>Final grade</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="OnGoing" xml:space="preserve">
+    <value>On going</value>
+  </data>
+  <data name="Thesis" xml:space="preserve">
+    <value>Thesis</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Training" xml:space="preserve">
+    <value>Is training</value>
+  </data>
+  <data name="Validity" xml:space="preserve">
+    <value>Validity</value>
+  </data>
+  <data name="AllowedFileFormats" xml:space="preserve">
+    <value>Allowed file formats: {0}</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="DocumentMaxFileSize" xml:space="preserve">
+    <value>Maximum document size</value>
+  </data>
+  <data name="Passive" xml:space="preserve">
+    <value>Passive</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="SubjectExistsWithCode" xml:space="preserve">
+    <value>Subject exists with the written code!</value>
+  </data>
+  <data name="Subjects" xml:space="preserve">
+    <value>Subjects</value>
+  </data>
+  <data name="SureYouWantToDeleteSubject" xml:space="preserve">
+    <value>Are you sure you want to delete subject?</value>
+  </data>
 </root>

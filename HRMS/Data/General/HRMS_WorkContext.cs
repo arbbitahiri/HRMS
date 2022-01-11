@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HRMS.Data.General
 {
-    public partial class HRMSContext : DbContext
+    public partial class HRMS_WorkContext : DbContext
     {
-        public HRMSContext()
+        public HRMS_WorkContext()
         {
         }
 
-        public HRMSContext(DbContextOptions<HRMSContext> options)
+        public HRMS_WorkContext(DbContextOptions<HRMS_WorkContext> options)
             : base(options)
         {
         }
@@ -55,8 +55,7 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 

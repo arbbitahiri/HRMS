@@ -53,5 +53,6 @@ public enum LookUpTable
     ProfessionType = 5,
     RateType = 6,
     StaffType = 7,
-    StatusType = 8
+    StatusType = 8,
+    Department = 9
 }

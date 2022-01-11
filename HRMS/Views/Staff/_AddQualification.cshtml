@@ -1,0 +1,188 @@
+﻿@using HRMS.Models.Staff.Qualification
+@model AddQualification
+@inject IDDLRepo repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<style>
+    .bootstrap-switch, .bootstrap-switch-handle-off, .bootstrap-switch-handle-on {
+        width: 190px;
+        height: 36px;
+    }
+
+    .bootstrap-switch-label {
+        width: 95px !important;
+    }
+</style>
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddQualification</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="AddQualification" asp-controller="Staff" id="frm_create_qualification" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_qualification" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="StaffIde" type="hidden"/>
+
+        <div class="row pl-2 pr-2">
+            <div class="col-md-3 form-group">
+                <label asp-for="ProfessionTypeId" class="required"></label>
+                <select asp-for="ProfessionTypeId" asp-items="await repo.ProfessionTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="ProfessionTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="EducationLevelTypeId" class="required"></label>
+                <select asp-for="EducationLevelTypeId" asp-items="await repo.EducationLevelTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="EducationLevelTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Title" class="required"></label>
+                <input asp-for="Title" type="text" class="form-control"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="col-md-2 form-group">
+                <label asp-for="Training" class="required"></label><br />
+                <input asp-for="Training" type="checkbox" class="form-control" onchange="training(this)" data-switch="true" style="cursor: pointer; width: 90px; height: 36px;" data-bootstrap-switch data-off-color="warning" data-on-color="success"/>
+                <span asp-validation-for="Training" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="FieldOfStudy"></label>
+                <input asp-for="FieldOfStudy" type="text" class="form-control"/>
+                <span asp-validation-for="FieldOfStudy" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="From" class="required"></label>
+                <input asp-for="From" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#From"/>
+                <span asp-validation-for="From" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="To"></label>
+                <input asp-for="To" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#To"/>
+                <span asp-validation-for="To" class="text-danger"></span>
+            </div>
+            <div class="col-md-2 form-group">
+                <label asp-for="OnGoing" class="required"></label><br />
+                <input asp-for="OnGoing" type="checkbox" class="form-control" onchange="on_going(this)" data-switch="true" style="cursor: pointer; width: 90px; height: 36px" data-bootstrap-switch data-off-color="warning" data-on-color="success"/>
+                <span asp-validation-for="OnGoing" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="City" class="required"></label>
+                <input asp-for="City" type="text" class="form-control"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Country" class="required"></label>
+                <input asp-for="Country" type="text" class="form-control"/>
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Address" class="required"></label>
+                <input asp-for="Address" type="text" class="form-control"/>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Thesis"></label>
+                <input asp-for="Thesis" type="text" class="form-control"/>
+                <span asp-validation-for="Thesis" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="CreditType"></label>
+                <input asp-for="CreditType" type="text" class="form-control"/>
+                <span asp-validation-for="CreditType" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="CreditNumber"></label>
+                <input asp-for="CreditNumber" type="number" class="form-control"/>
+                <span asp-validation-for="CreditNumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="FinalGrade"></label>
+                <input asp-for="FinalGrade" type="number" class="form-control"/>
+                <span asp-validation-for="FinalGrade" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Validity"></label>
+                <input asp-for="Validity" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Validity"/>
+                <span asp-validation-for="Validity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group pl-2 pr-2">
+            <div class="col-md-12">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" type="text" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $.validator.setDefaults({ ignore: '' });
+        var form = $('#frm_create_qualification');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        if (culture == 'sq-AL') {
+            $('textarea').prop('spellcheck', false);
+        } else {
+            $('textarea').prop('spellcheck', true);
+        }
+
+        $('input[data-bootstrap-switch]').bootstrapSwitch();
+        $('.bootstrap-switch-label').css('width', '95px');
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $(".datetimepicker-input").datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+    });
+
+    function training(e) {
+        if (e.checked == true) {
+            $('#Training').val('True');
+        } else {
+            $('#Training').val('False');
+        }
+    }
+
+    function on_going(e) {
+        if (e.checked == true) {
+            sessionStorage.setItem('to_date', $('#To').val());
+
+            $('#To').val('');
+            $('#To').prop('disabled', true);
+            $('#Training').val('True');
+        } else {
+            $('#To').val(sessionStorage.getItem('to_date'));
+            $('#To').prop('disabled', false);
+            $('#Training').val('False');
+        }
+    }
+
+    function success_create_qualification(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

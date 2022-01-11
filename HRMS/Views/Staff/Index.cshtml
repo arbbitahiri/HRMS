@@ -16,38 +16,38 @@
     <div class="card-body">
         <form asp-action="Search" asp-controller="Staff" method="post" id="frm_search_staff" data-ajax="true" data-ajax-method="post" data-ajax-success="search_success">
             @Html.AntiForgeryToken()
-            <div class="row form-group">
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label asp-for="Department">@Resource.Department</label>
                     <select asp-for="Department" asp-items="await repo.Departments(user.Language)" class="form-control select2">>
                         <option value="">@Resource.Choose</option>
                     </select>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label asp-for="StaffType">@Resource.StaffType</label>
                     <select asp-for="StaffType" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label asp-for="PersonalNumber">@Resource.PersonalNumber</label>
                     <input asp-for="PersonalNumber" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label asp-for="Firstname">@Resource.Firstname</label>
                     <input asp-for="Firstname" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label asp-for="Lastname">@Resource.Lastname</label>
                     <input asp-for="Lastname" type="text" class="form-control"/>
                     <span asp-validation-for="Department" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-4 form-group ml-4 text-right">
+                <div class="col-md-4 form-group ml-4">
                     <label class="invisible"></label><br />
                     <input type="submit" class="btn btn-primary" value="@Resource.Search" />
                 </div>
@@ -130,7 +130,7 @@
                                 name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
                             }
                             name += '</div><div class="ml-4">' +
-                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.firstname + '</div>' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
                                 '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                                 '</div></div>';
                             return name;
@@ -146,7 +146,6 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="add_document(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-file-upload"></i></span><span class="p-1">@Resource.UploadDocument</span></button>' +
                                 '<button type="button" class="dropdown-item" onclick="staff_profile(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-address-card"></i></span><span class="p-1">@Resource.Profile</span></button>' +
                                 '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                                 '</div></div>';
@@ -155,10 +154,6 @@
                     },
                 ]
             })
-        }
-
-        function add_document(ide) {
-            window.location.href = '@Url.Action("AddDocument", "Staff")?ide=' + ide;
         }
 
         function staff_profile(ide) {

@@ -5,6 +5,8 @@ namespace HRMS.Models.Staff.Department;
 
 public class DepartmentVM
 {
+    public string StaffIde { get; set; }
+
     public StaffDetails StaffDetails { get; set; }
     public List<Departments> Departments { get; set; }
     public List<Subjects> Subjects { get; set; }

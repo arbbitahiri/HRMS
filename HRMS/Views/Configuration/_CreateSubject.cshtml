@@ -1,0 +1,50 @@
+﻿@using HRMS.Models.Configuration.Subject
+@model CreateSubject
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddSubject</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="CreateSubject" asp-controller="Configuration" id="frm_create_subject" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_subject" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="Code" class="required"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameSq" class="required"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameEn" class="required"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_create_subject');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+
+    function success_create_subject(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

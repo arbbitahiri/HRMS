@@ -14,7 +14,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>@(Model.Table == LookUpTable.ProfessionType ? Resource.Code : Resource.RateNumber)</th>
+                    <th>@(Model.Table == LookUpTable.RateType ? Resource.RateNumber : Resource.Code)</th>
                     <th>@Resource.NameSq</th>
                     <th>@Resource.NameEn</th>
                     <th>@Resource.Active</th>
@@ -33,7 +33,7 @@
     });
 
     function render_tbl(data) {
-        var bonusColumn = ('@Model.Table' == '@LookUpTable.ProfessionType') || ('@Model.Table' == '@LookUpTable.RateType') ? true : false;
+        var bonusColumn = ('@Model.Table' == '@LookUpTable.ProfessionType') || ('@Model.Table' == '@LookUpTable.RateType') || ('@Model.Table' == '@LookUpTable.Department') ? true : false;
         console.log(bonusColumn);
 
         $('#tbl_table_data').DataTable({

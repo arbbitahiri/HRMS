@@ -5,6 +5,8 @@ namespace HRMS.Models.Staff;
 
 public class QualificationVM
 {
+    public string StaffIde { get; set; }
+
     public StaffDetails StaffDetails { get; set; }
     public List<Qualifications> Qualifications { get; set; }
 

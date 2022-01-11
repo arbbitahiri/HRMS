@@ -19,10 +19,12 @@ namespace HRMS.Controllers;
 [Authorize(Policy = "11t:r")]
 public class TablesController : BaseController
 {
-    public TablesController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public TablesController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
     }
+
+    #region Table list
 
     [Authorize(Policy = "11t:r"), Description("Entry form.")]
     public IActionResult Index() => View();
@@ -39,13 +41,16 @@ public class TablesController : BaseController
             new TableName() { Table = LookUpTable.ProfessionType, Title = Resource.ProfessionType },
             new TableName() { Table = LookUpTable.RateType, Title = Resource.RateType },
             new TableName() { Table = LookUpTable.StaffType, Title = Resource.StaffType },
-            new TableName() { Table = LookUpTable.StatusType, Title = Resource.StatusType }
+            new TableName() { Table = LookUpTable.StatusType, Title = Resource.StatusType },
+            new TableName() { Table = LookUpTable.Department, Title = Resource.Department }
         };
 
         return PartialView(tables);
     }
 
-    #region List
+    #endregion
+
+    #region Table data
 
     [Authorize(Policy = "11t:r"), Description("List of data of look up tables")]
     public async Task<IActionResult> _LookUpData(LookUpTable table, string title)
@@ -126,6 +131,16 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataStatusType, Table = table, Title = title });
+            case LookUpTable.Department:
+                var dataDepartment = await db.Department.Select(a => new DataList
+                {
+                    Ide = CryptoSecurity.Encrypt(a.DepartmentId),
+                    OtherData = a.Code,
+                    NameSQ = a.NameSq,
+                    NameEN = a.NameEn,
+                    Active = a.Active
+                }).ToListAsync();
+                return PartialView(new TableData() { DataList = dataDepartment, Table = table, Title = title });
             default:
                 var dataDefault = await db.DocumentType.Select(a => new DataList
                 {
@@ -154,7 +169,7 @@ public class TablesController : BaseController
             return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var error = new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.DataRegisteredSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully };
 
         switch (create.Table)
         {
@@ -248,11 +263,21 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
+            case LookUpTable.Department:
+                db.Department.Add(new Department
+                {
+                    NameSq = create.NameSQ,
+                    NameEn = create.NameEN,
+                    Code = create.OtherData,
+                    Active = true,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+                await db.SaveChangesAsync();
+                return Json(error);
             default:
-                break;
+                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
-
-        return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
     }
 
     #endregion
@@ -355,11 +380,21 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataStatusType);
+            case LookUpTable.Department:
+                var dataDepartment = await db.Department
+                    .Where(a => a.DepartmentId == id)
+                    .Select(a => new CreateData
+                    {
+                        Ide = CryptoSecurity.Encrypt(a.DepartmentId),
+                        OtherData = a.Code,
+                        NameSQ = a.NameSq,
+                        NameEN = a.NameEn,
+                        Title = title
+                    }).FirstOrDefaultAsync();
+                return PartialView(dataDepartment);
             default:
-                break;
+                return PartialView();
         }
-
-        return PartialView();
     }
 
     [HttpPost, Authorize(Policy = "11t:r"), ValidateAntiForgeryToken]
@@ -458,11 +493,20 @@ public class TablesController : BaseController
                 statusType.UpdatedNo++;
                 await db.SaveChangesAsync();
                 return Json(error);
+            case LookUpTable.Department:
+                var department = await db.Department.FirstOrDefaultAsync(a => a.DepartmentId == id);
+                department.NameSq = edit.NameSQ;
+                department.NameEn = edit.NameEN;
+                department.Code = edit.OtherData;
+                department.Active = edit.Active;
+                department.UpdatedDate = DateTime.Now;
+                department.UpdatedFrom = user.Id;
+                department.UpdatedNo++;
+                await db.SaveChangesAsync();
+                return Json(error);
             default:
-                break;
+                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
-
-        return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
     }
 
     #endregion
@@ -543,11 +587,17 @@ public class TablesController : BaseController
                 statusType.UpdatedNo++;
                 await db.SaveChangesAsync();
                 return Json(error);
+            case LookUpTable.Department:
+                var department = await db.Department.FirstOrDefaultAsync(a => a.DepartmentId == id);
+                department.Active = active;
+                department.UpdatedDate = DateTime.Now;
+                department.UpdatedFrom = user.Id;
+                department.UpdatedNo++;
+                await db.SaveChangesAsync();
+                return Json(error);
             default:
-                break;
+                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
-
-        return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
     }
 
     #endregion

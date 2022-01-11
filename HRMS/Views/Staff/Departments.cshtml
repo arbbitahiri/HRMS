@@ -28,6 +28,7 @@
                         <th>@Resource.StaffType</th>
                         <th>@Resource.StartDate</th>
                         <th>@Resource.EndDate</th>
+                        <th>@Resource.Description</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -47,9 +48,6 @@
                     @subjects
                 </span>
             </h1>
-            <div class="card-tools">
-                <a onclick="add_subject('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddSubject</a>
-            </div>
         </div>
         <div class="card-body">
             <table id="tbl_subjects" class="table table-striped table-bordered table-hover">
@@ -111,6 +109,7 @@
         }
 
         function render_tbl_departments(data) {
+            var rowCount = 1;
             $('#tbl_departments').DataTable({
                 destroy: true,
                 language: {
@@ -122,10 +121,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: 10, targets: [0, 5] },
-                    { width: 20, targets: [2, 3, 4] },
-                    { width: 30, targets: [1] },
-                    { className: "vertikal", targets: "_all" }
+                    { className: "w5 vertikal", targets: [0, 6] },
+                    { className: "w15 vertikal", targets: [1, 2, 3, 4] },
+                    { className: "w30 vertikal", targets: [5] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -149,13 +147,33 @@
                         }
                     },
                     {
+                        data: function(row, type, set) {
+                            var desc = '///';
+                            if (row.description != null) {
+                                if (row.description.length > 80) {
+                                    desc = row.description.substring(0, 79) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    desc = row.description ?? "///";
+                                }
+                            }
+                            return desc;
+                        }
+                    },
+                    {
                         data: function (row, type, set) {
+                            var date_time_now = new Date();
+                            var end_date = new Date(Date.parse(row.endDate));
+                            var active = end_date >= date_time_now ? true : false;
+
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
-                                '</div></div>';
+                                '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="add_subject(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Resource.AddSubject</span></button>';
+                            if (active) {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="delete_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                                dropdown += '</div></div>';
                             return dropdown;
                         }
                     }
@@ -175,10 +193,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: 10, targets: [0, 5] },
-                    { width: 20, targets: [2, 3, 4] },
-                    { width: 30, targets: [1] },
-                    { className: "vertikal", targets: "_all" }
+                    { className: "w10 vertikal", targets: [0, 5] },
+                    { className: "w20 vertikal", targets: [2, 3, 4] },
+                    { className: "w30 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -211,8 +228,8 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_document(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
+                                '<button type="button" class="dropdown-item" onclick="edit_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
                                 '</div></div>';
                             return dropdown;
                         }
@@ -221,27 +238,39 @@
             });
         }
 
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
         function add_department(ide) {
-            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddDepartment", "Staff")?ide=' + ide, function () {
-                $('#modal-xl').modal('toggle');
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
             });
         }
 
         function add_subject(ide) {
-            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddSubject", "Staff")?ide=' + ide, function () {
-                $('#modal-xl').modal('toggle');
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddSubject", "Staff")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
             });
         }
 
         function edit_department(ide) {
-            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditDepartment", "Staff")?ide=' + ide, function () {
-                $('#modal-xl').modal('toggle');
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
             });
         }
 
         function edit_subject(ide) {
-            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditSubject", "Staff")?ide=' + ide, function () {
-                $('#modal-xl').modal('toggle');
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubject", "Staff")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
             });
         }
 
@@ -257,8 +286,11 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteDepartment", "Staff")', { ide: ide }, function (data) {
-                        handle_success(data, SubmitPathType.RELOAD, "");
+                    $.post('@Url.Action("DeleteDepartment", "Staff")', {
+                        ide: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });
@@ -276,8 +308,11 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteSubject", "Staff")', { ide: ide }, function (data) {
-                        handle_success(data, SubmitPathType.RELOAD, "");
+                    $.post('@Url.Action("DeleteSubject", "Staff")', {
+                        ide: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
                     });
                 }
             });

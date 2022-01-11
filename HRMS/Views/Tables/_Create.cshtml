@@ -1,7 +1,7 @@
 ﻿@using HRMS.Models.Tables
 @model CreateData
 @{
-    var bonusField = Model.Table == LookUpTable.ProfessionType || Model.Table == LookUpTable.RateType;
+    var bonusField = Model.Table == LookUpTable.ProfessionType || Model.Table == LookUpTable.RateType || Model.Table == LookUpTable.Department;
     var col = bonusField ? "col-md-4" : "col-md-6";
 }
 
@@ -22,7 +22,7 @@
             @if (bonusField)
             {
                 <div class="@col form-group">
-                    <label asp-for="OtherData" class="required">@(Model.Table == LookUpTable.ProfessionType ? Resource.Code : Resource.RateNumber)</label>
+                    <label asp-for="OtherData" class="required">@(Model.Table == LookUpTable.RateType ? Resource.RateNumber : Resource.Code)</label>
                     <input asp-for="OtherData" class="form-control" />
                     <span asp-validation-for="OtherData" class="text-danger"></span>
                 </div>

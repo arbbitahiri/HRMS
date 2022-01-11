@@ -15,4 +15,12 @@ public interface IDDLRepo
     Task<List<SelectListItem>> Departments(LanguageEnum lang);
 
     Task<List<SelectListItem>> StaffTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> ProfessionTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> EducationLevelTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> DocumentTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> Subjects(LanguageEnum lang);
 }

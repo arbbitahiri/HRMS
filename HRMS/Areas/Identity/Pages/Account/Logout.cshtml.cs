@@ -13,7 +13,7 @@ public class LogoutModel : BaseOModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public LogoutModel(SignInManager<ApplicationUser> signInManager, HRMSContext db)
+    public LogoutModel(SignInManager<ApplicationUser> signInManager, HRMS_WorkContext db)
         : base(db)
     {
         _signInManager = signInManager;
