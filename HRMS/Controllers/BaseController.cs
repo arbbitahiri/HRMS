@@ -203,7 +203,7 @@ public class BaseController : Controller
                 using var fileStream = new FileStream(filePath, FileMode.Create);
                 await file.CopyToAsync(fileStream);
             }
-            return $"{folder}/{fileName}";
+            return $"/Uploads/{folder}/{fileName}";
         }
         else return null;
     }
@@ -252,7 +252,7 @@ public class BaseController : Controller
         {
             await file.CopyToAsync(fileStream);
         }
-        return filePath;
+        return $"/Uploads/{folder}/{fileName}";
     }
 
     protected void SendEmailAsync(IConfiguration configuration, string email, string subject, string htmlMessage, string name, bool addHeader = true)

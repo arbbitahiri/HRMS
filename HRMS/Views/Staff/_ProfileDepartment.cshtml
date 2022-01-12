@@ -1,13 +1,13 @@
 ﻿@using HRMS.Models.Staff.Department
 @model DepartmentVM
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-8">
-        <h6 class="font-weight-bolder form-group">@Resource.ListOfDepartments</h6>
+        <h5 class="font-weight-bolder">@Resource.ListOfDepartments</h5>
     </div>
     <div class="col-md-4">
         <div class="justify-content-end">
-            <a onclick="add_department('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
+            <a onclick="add_department('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
         </div>
     </div>
 </div>
@@ -75,7 +75,7 @@
                         var desc = '///';
                         if (row.description != null) {
                             if (row.description.length > 80) {
-                                desc = row.description.substring(0, 79) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
                             } else {
                                 desc = row.description ?? "///";
                             }
@@ -92,7 +92,7 @@
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
                         if (active) {
                             dropdown += '<button type="button" class="dropdown-item" onclick="delete_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                         }
@@ -102,6 +102,18 @@
                 }
             ]
         });
+    }
+
+    function load_more(e) {
+        $(e).parent().find('.load-less-fst').removeClass('d-none');
+        $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+        $(e).addClass('d-none');
+    }
+
+    function load_less(e) {
+        $(e).addClass('d-none');
+        $(e).parent().addClass('d-none');
+        $(e).parent().parent().find('.load-more').removeClass('d-none');
     }
 
     function add_department(ide) {

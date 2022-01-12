@@ -1,9 +1,9 @@
 ﻿@using HRMS.Models.Staff
 @model IEnumerable<Subjects>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-8">
-        <h6 class="font-weight-bolder form-group">@Resource.ListOfSubjects</h6>
+        <h5 class="font-weight-bolder">@Resource.ListOfSubjects</h5>
     </div>
 </div>
 
@@ -11,11 +11,10 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>@Resource.ProfessionType</th>
-            <th>@Resource.EducationLevel</th>
-            <th>@Resource.Title</th>
-            <th>@Resource.FieldOfStudy</th>
-            <th>@Resource.CreditsNumber</th>
+            <th>@Resource.Subject</th>
+            <th>@Resource.StartDate</th>
+            <th>@Resource.EndDate</th>
+            <th>@Resource.InsertDate</th>
             <th data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
@@ -82,12 +81,6 @@
                     }
                 }
             ]
-        });
-    }
-
-    function add_subject(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_AddSubject", "Staff")?ide=' + ide, function () {
-            $('#modal-lg').modal('toggle');
         });
     }
 

@@ -798,11 +798,17 @@
   <data name="AllowedFileFormats" xml:space="preserve">
     <value>Formatet e lejuara janë: {0}</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakti</value>
+  </data>
   <data name="Document" xml:space="preserve">
     <value>Dokumenti</value>
   </data>
   <data name="DocumentMaxFileSize" xml:space="preserve">
     <value>Madhësia maksimale e dokumentit</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Vendodhja</value>
   </data>
   <data name="Passive" xml:space="preserve">
     <value>Pasive</value>

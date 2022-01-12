@@ -1,13 +1,13 @@
 ﻿@using HRMS.Models.Staff
 @model QualificationVM
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-8">
-        <h6 class="font-weight-bolder form-group">@Resource.ListOfQualifications</h6>
+        <h5 class="font-weight-bolder">@Resource.ListOfQualifications</h5>
     </div>
     <div class="col-md-4">
         <div class="justify-content-end">
-            <a onclick="add_document('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddQualification</a>
+            <a onclick="add_qualification('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddQualification</a>
         </div>
     </div>
 </div>
@@ -45,9 +45,9 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { width: 10, targets: [0, 5, 6] },
-                { width: 20, targets: [1, 2, 4] },
-                { width: 30, targets: [3] }
+                { className: "w10 vertikal", targets: [0, 5, 6] },
+                { className: "w20 vertikal", targets: [1, 2, 4] },
+                { className: "w30 vertikal", targets: [3] }
             ],
             order: [[0, "asc"]],
             columns: [

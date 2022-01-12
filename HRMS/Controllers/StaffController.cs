@@ -11,6 +11,7 @@ using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -962,15 +963,20 @@ public class StaffController : BaseController
                 Lastname = a.LastName,
                 PhoneNumber = a.User.PhoneNumber,
                 Email = a.User.Email,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                City = a.City,
+                Country = a.Country,
+                ZIP = a.PostalCode
             }).FirstOrDefaultAsync();
 
         var profile = new ProfileVM
         {
+            PersonalNumber = ide,
             StaffDetails = staffDetails,
-            QualificationsCount = await db.StaffQualification.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide)),
-            DocumentsCount = await db.StaffDocument.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide)),
-            SubjectsCount = await db.StaffDepartmentSubject.CountAsync(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            QualificationsCount = await db.StaffQualification.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
+            DocumentsCount = await db.StaffDocument.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
+            SubjectsCount = await db.StaffDepartmentSubject.CountAsync(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide))
         };
         return View(profile);
     }
@@ -979,7 +985,7 @@ public class StaffController : BaseController
 
     #region 1. Department
 
-    [HttpGet, Authorize(Policy = "21s:r"), Description("Form to display list of departments.")]
+    [Authorize(Policy = "21s:r"), Description("Form to display list of departments.")]
     public async Task<IActionResult> _ProfileDepartment(string ide)
     {
         var departments = await db.StaffDepartment
@@ -1007,7 +1013,7 @@ public class StaffController : BaseController
 
     #region 2. Qualification
 
-    [HttpGet, Authorize(Policy = "21s:r"), Description("Form to display list of qualifications.")]
+    [Authorize(Policy = "21s:r"), Description("Form to display list of qualifications.")]
     public async Task<IActionResult> _ProfileQualification(string ide)
     {
         var departments = await db.StaffQualification
@@ -1036,7 +1042,7 @@ public class StaffController : BaseController
 
     #region 3. Document
 
-    [HttpGet, Authorize(Policy = "21s:r"), Description("Form to display list of documents.")]
+    [Authorize(Policy = "21s:r"), Description("Form to display list of documents.")]
     public async Task<IActionResult> _ProfileDocument(string ide)
     {
         var documents = await db.StaffDocument
@@ -1065,7 +1071,7 @@ public class StaffController : BaseController
 
     #region 4. Subject
 
-    [HttpGet, Authorize(Policy = "21s:r"), Description("Form to display list of subjects.")]
+    [Authorize(Policy = "21s:r"), Description("Form to display list of subjects.")]
     public async Task<IActionResult> _ProfileSubject(string ide)
     {
         var subjects = await db.StaffDepartmentSubject
@@ -1080,6 +1086,28 @@ public class StaffController : BaseController
                 InsertDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(subjects);
+    }
+
+    #endregion
+
+    #region Change image
+
+    [HttpPost, Authorize(Policy = "21s:r"), ValidateAntiForgeryToken]
+    [Description("Action to change profile photo.")]
+    public async Task<IActionResult> ChangeImage(IFormFile Image, string PersonalNumber)
+    {
+        if (string.IsNullOrEmpty(PersonalNumber))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+        }
+
+        string userId = await db.Staff.Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(PersonalNumber)).Select(a => a.UserId).FirstOrDefaultAsync();
+        var aspUser = await db.AspNetUsers.FirstOrDefaultAsync(a => a.Id == userId);
+
+        string filePath = Image != null ? await SaveImage(environment, Image, "Users") : null;
+        aspUser.ProfileImage = filePath;
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
     }
 
     #endregion

@@ -4,6 +4,7 @@ namespace HRMS.Models.Staff;
 
 public class ProfileVM
 {
+    public string PersonalNumber { get; set; }
     public StaffDetails StaffDetails { get; set; }
     //public List<Qualifications> Qualifications { get; set; }
     //public List<Subjects> Subjects { get; set; }

@@ -798,11 +798,17 @@
   <data name="AllowedFileFormats" xml:space="preserve">
     <value>Allowed file formats: {0}</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
   <data name="Document" xml:space="preserve">
     <value>Document</value>
   </data>
   <data name="DocumentMaxFileSize" xml:space="preserve">
     <value>Maximum document size</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
   </data>
   <data name="Passive" xml:space="preserve">
     <value>Passive</value>

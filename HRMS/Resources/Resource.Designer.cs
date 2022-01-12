@@ -475,6 +475,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kontakti.
+        /// </summary>
+        public static string Contact {
+            get {
+                return ResourceManager.GetString("Contact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vazhdo.
         /// </summary>
         public static string Continue {
@@ -1110,6 +1119,15 @@ namespace HRMS.Resources {
         public static string ListSubMenus {
             get {
                 return ResourceManager.GetString("ListSubMenus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendodhja.
+        /// </summary>
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
             }
         }
         

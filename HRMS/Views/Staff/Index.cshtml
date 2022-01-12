@@ -66,8 +66,8 @@
                 <tr>
                     <th>#</th>
                     <th>@Resource.Name</th>
-                    <th>@Resource.StaffType</th>
                     <th>@Resource.Department</th>
+                    <th>@Resource.StaffType</th>
                     <th>@Resource.Gender</th>
                     <th>@Resource.Email</th>
                     <th>@Resource.PhoneNumber</th>
@@ -110,8 +110,9 @@
                 pageLength: 20,
                 data: data,
                 columnDefs: [
-                    { width: 10, targets: [0, 2, 6] },
-                    { className: "vertikal", targets: "_all" }
+                    { className: "w5 vertikal", targets: [0, 4, 7] },
+                    { className: "w15 vertikal", targets: [2, 3, 6] },
+                    { className: "w20 vertikal", targets: [1, 5] },
                 ],
                 order: [[ 0, 'asc' ]],
                 columns: [

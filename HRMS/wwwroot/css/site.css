@@ -17,6 +17,10 @@ for details on configuring this project to bundle and minify static web assets. 
     width: 20% !important;
 }
 
+.w25 {
+    width: 25% !important;
+}
+
 .w30 {
     width: 30% !important;
 }

@@ -14,4 +14,7 @@ public class StaffDetails
     public string PhoneNumber { get; set; }
     public string StaffType { get; set; }
     public bool IsProfessor { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+    public string ZIP { get; set; }
 }

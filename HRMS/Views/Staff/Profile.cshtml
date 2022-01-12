@@ -10,26 +10,47 @@
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
                 <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle"
-                        src='@Url.Content(Model.StaffDetails.ProfileImage ?? "~/images/user-default.png")'
-                        alt="User profile picture">
+                    <form asp-action="ChangeImage" asp-controller="Staff" id="frm_change_image" enctype="multipart/form-data" data-ajax="true" data-ajax-method="post" data-ajax-success="success_change_image">
+                        <input asp-for="PersonalNumber" type="hidden" />
+                        <label>
+                            <img id="img_upload" loading="lazy"
+                                class="profile-user-img img-fluid img-circle"
+                                src='@Url.Content(Model.StaffDetails.ProfileImage ?? "~/images/user-default.png")'
+                                alt="User profile picture"
+                                style="cursor: pointer; object-fit: cover; height: 100px;">
+                            <input id="profile_image" name="Image" type="file" class="d-none" onchange="$('#frm_change_image').submit()"/>
+                        </label>
+                    </form>
                 </div>
 
                 <h3 class="profile-username text-center">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</h3>
 
                 <p class="text-muted text-center">@Model.StaffDetails.StaffType</p>
 
-                <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item border-top-0">
                         <b>@Resource.Qualifications</b> <a class="float-right">@Model.QualificationsCount</a>
                     </li>
                     <li class="list-group-item">
                         <b>@Resource.Documents</b> <a class="float-right">@Model.DocumentsCount</a>
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item border-bottom-0">
                         <b>@Resource.Subjects</b> <a class="float-right">@Model.SubjectsCount</a>
                     </li>
                 </ul>
+            </div>
+        </div>
+
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">@Resource.Details</h3>
+            </div>
+            <div class="card-body">
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> @Resource.Location</strong>
+                <p class="text-muted">@Model.StaffDetails.City @Model.StaffDetails.ZIP, @Model.StaffDetails.Country</p>
+                <hr>
+                <strong><i class="fas fa-address-book mr-1"></i> @Resource.Contact</strong>
+                <p class="text-muted">@Model.StaffDetails.PhoneNumber<br/>@Model.StaffDetails.Email</p>
             </div>
         </div>
     </div>
@@ -55,19 +76,21 @@
     </div>
 </div>
 
+@Html.AntiForgeryToken()
+
 @section Scripts {
     <script>
         $(document).ready(function() {
             if (sessionStorage.getItem("tab_id") == null) {
-                $('#tab_qualification').trigger("click");
+                $('#tab_department').trigger("click");
             } else {
                 $('#' + sessionStorage.getItem("tab_id")).trigger("click");
             }
         });
 
         function department_tab(ide) {
-            $("#kt_qualification").load('@Url.Action("_ProfileDepartment", "Staff")', { ide: ide });
-            sessionStorage.setItem("tab_id", "tab_qualification");
+            $("#kt_department").load('@Url.Action("_ProfileDepartment", "Staff")', { ide: ide });
+            sessionStorage.setItem("tab_id", "tab_department");
         }
 
         function qualification_tab(ide) {
@@ -83,6 +106,11 @@
         function subject_tab(ide) {
             $("#kt_subject").load('@Url.Action("_ProfileSubject", "Staff")', { ide: ide });
             sessionStorage.setItem("tab_id", "tab_subject");
+        }
+
+        function success_change_image(data) {
+            $('#img_upload').prop('src', data.icon);
+            handle_success(data, SubmitPathType.NORELOAD, "");
         }
     </script>
 }
