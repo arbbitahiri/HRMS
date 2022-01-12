@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Resource.Profile;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var cityZIP = string.IsNullOrEmpty(Model.StaffDetails.ZIP) ? $"{Model.StaffDetails.City}," : $"{Model.StaffDetails.City} {Model.StaffDetails.ZIP},";
 }
 
 <div class="row">
@@ -47,7 +48,7 @@
             </div>
             <div class="card-body">
                 <strong><i class="fas fa-map-marker-alt mr-1"></i> @Resource.Location</strong>
-                <p class="text-muted">@Model.StaffDetails.City @Model.StaffDetails.ZIP, @Model.StaffDetails.Country</p>
+                <p class="text-muted">@cityZIP @Model.StaffDetails.Country</p>
                 <hr>
                 <strong><i class="fas fa-address-book mr-1"></i> @Resource.Contact</strong>
                 <p class="text-muted">@Model.StaffDetails.PhoneNumber<br/>@Model.StaffDetails.Email</p>
