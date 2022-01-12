@@ -18,7 +18,7 @@ namespace HRMS.Controllers;
 [Authorize]
 public class HomeController : BaseController
 {
-    public HomeController(HRMS_WorkContext db,
+    public HomeController(HRMSContext db,
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)

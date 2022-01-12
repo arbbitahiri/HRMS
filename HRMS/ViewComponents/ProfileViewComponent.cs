@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace HRMS.ViewComponents;
 public class ProfileViewComponent : ViewComponent
 {
-    private readonly HRMS_WorkContext db;
+    private readonly HRMSContext db;
 
-    public ProfileViewComponent(HRMS_WorkContext db)
+    public ProfileViewComponent(HRMSContext db)
     {
         this.db = db;
     }

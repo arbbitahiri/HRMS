@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HRMS.Data.Migrations
 {
-    [DbContext(typeof(HRMS_WorkContext))]
+    [DbContext(typeof(HRMSContext))]
     partial class HRMS_WorkContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

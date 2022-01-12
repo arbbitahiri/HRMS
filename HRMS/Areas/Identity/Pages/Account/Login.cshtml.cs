@@ -24,7 +24,7 @@ public class LoginModel : BaseOModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
+    public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
         : base(db)
     {
         _userManager = userManager;

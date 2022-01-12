@@ -31,7 +31,7 @@ public class StaffController : BaseController
     private readonly RoleManager<ApplicationRole> roleManager;
 
     public StaffController(IWebHostEnvironment environment, IConfiguration configuration, RoleManager<ApplicationRole> roleManager,
-        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.environment = environment;
@@ -109,10 +109,12 @@ public class StaffController : BaseController
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 };
-
-                staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
                 db.Staff.Add(newStaff);
                 await db.SaveChangesAsync();
+                Console.WriteLine(staffIde);
+
+                staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
+                Console.WriteLine(staffIde);
             }
             catch (Exception ex)
             {
@@ -172,9 +174,8 @@ public class StaffController : BaseController
                 };
 
                 db.Staff.Add(newStaff);
-
-                staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
                 await db.SaveChangesAsync();
+                staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
             }
             catch (Exception ex)
             {
@@ -913,12 +914,12 @@ public class StaffController : BaseController
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
+            .Where(a => //a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                //&& a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                 (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
-                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
+                //&& a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace HRMS.Repository;
 public class DDLRepo : IDDLRepo
 {
-    private readonly HRMS_WorkContext db;
+    private readonly HRMSContext db;
 
-    public DDLRepo(HRMS_WorkContext db)
+    public DDLRepo(HRMSContext db)
     {
         this.db = db;
     }

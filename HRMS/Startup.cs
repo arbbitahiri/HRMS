@@ -45,7 +45,7 @@ public class Startup
             options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
         services.AddDatabaseDeveloperPageExceptionFilter();
 
-        services.AddDbContext<HRMS_WorkContext>(options =>
+        services.AddDbContext<HRMSContext>(options =>
             options.UseSqlServer(Configuration["ConnectionStrings:SqlConnection"]));
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>

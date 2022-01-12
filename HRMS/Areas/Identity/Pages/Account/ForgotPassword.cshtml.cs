@@ -25,7 +25,7 @@ namespace HRMS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration configuration, HRMS_WorkContext db)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration configuration, HRMSContext db)
             : base(db)
         {
             _userManager = userManager;

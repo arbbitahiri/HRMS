@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HRMS.Data.General
 {
-    public partial class HRMS_WorkContext : DbContext
+    public partial class HRMSContext : DbContext
     {
-        public HRMS_WorkContext()
+        public HRMSContext()
         {
         }
 
-        public HRMS_WorkContext(DbContextOptions<HRMS_WorkContext> options)
+        public HRMSContext(DbContextOptions<HRMSContext> options)
             : base(options)
         {
         }

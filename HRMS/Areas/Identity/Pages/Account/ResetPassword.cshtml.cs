@@ -26,7 +26,7 @@ namespace HRMS.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public ResetPasswordModel(UserManager<ApplicationUser> userManager, IConfiguration configuration, HRMS_WorkContext db) : base(db)
+        public ResetPasswordModel(UserManager<ApplicationUser> userManager, IConfiguration configuration, HRMSContext db) : base(db)
         {
             _userManager = userManager;
             _configuration = configuration;
