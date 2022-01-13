@@ -1,4 +1,5 @@
 ﻿using HRMS.Resources;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -45,6 +46,7 @@ public class AddQualification
     public string From { get; set; }
 
     [Display(Name = "To", ResourceType = typeof(Resource))]
+    [Remote("CheckDatesQualification", "Staff", AdditionalFields = nameof(From), ErrorMessageResourceName = "StartDateVSEndDate", ErrorMessageResourceType = typeof(Resource))]
     public string To { get; set; }
 
     [Display(Name = "OnGoing", ResourceType = typeof(Resource))]

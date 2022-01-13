@@ -25,10 +25,10 @@ public class BaseIModel : PageModel
 {
     protected readonly SignInManager<ApplicationUser> signInManager;
     protected readonly UserManager<ApplicationUser> userManager;
-    protected HRMSContext db;
+    protected HRMS_WorkContext db;
     protected ApplicationUser user;
 
-    public BaseIModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
+    public BaseIModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
     {
         this.signInManager = signInManager;
         this.userManager = userManager;
@@ -154,5 +154,40 @@ public class BaseIModel : PageModel
         resizer.Orientation = OrientationType.TopLeft;
 
         resizer.Write(filePath);
+    }
+
+    protected async Task SendToHistory(ApplicationUser user, string reason)
+    {
+        db.AspNetUsers1.Add(new AspNetUsers1
+        {
+            Id = user.Id,
+            AccessFailedCount = user.AccessFailedCount,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            EmailConfirmed = user.EmailConfirmed,
+            ConcurrencyStamp = user.ConcurrencyStamp,
+            Email = user.Email,
+            AllowNotification = user.AllowNotification,
+            Birthdate = user.Birthdate,
+            Language = (int)user.Language,
+            LockoutEnabled = user.LockoutEnabled,
+            LockoutEnd = user.LockoutEnd,
+            Mode = (int)user.Mode,
+            NormalizedEmail = user.NormalizedEmail,
+            NormalizedUserName = user.NormalizedUserName,
+            PasswordHash = user.PasswordHash,
+            PersonalNumber = user.PersonalNumber,
+            PhoneNumber = user.PhoneNumber,
+            PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            ProfileImage = user.ProfileImage,
+            SecurityStamp = user.SecurityStamp,
+            TwoFactorEnabled = user.TwoFactorEnabled,
+            UserName = user.UserName,
+            InsertedDate = user.InsertedDate,
+            InsertedFrom = user.InsertedFrom,
+            Reason = reason
+        });
+
+        await db.SaveChangesAsync();
     }
 }

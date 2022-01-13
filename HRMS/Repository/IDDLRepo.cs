@@ -23,4 +23,8 @@ public interface IDDLRepo
     Task<List<SelectListItem>> DocumentTypes(LanguageEnum lang);
 
     Task<List<SelectListItem>> Subjects(LanguageEnum lang);
+
+    Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> StatusTypes(LanguageEnum lang);
 }

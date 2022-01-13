@@ -31,7 +31,7 @@ public class StaffController : BaseController
     private readonly RoleManager<ApplicationRole> roleManager;
 
     public StaffController(IWebHostEnvironment environment, IConfiguration configuration, RoleManager<ApplicationRole> roleManager,
-        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.environment = environment;
@@ -185,7 +185,7 @@ public class StaffController : BaseController
             }
         }
 
-        return RedirectToAction(nameof(Qualification), new { ide = staffIde, mt = staff.MethodType });
+        return RedirectToAction(nameof(Qualification), new { ide = staffIde, method = staff.MethodType });
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
@@ -582,7 +582,7 @@ public class StaffController : BaseController
                 Ide = ide,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Professor)
+                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
@@ -642,9 +642,9 @@ public class StaffController : BaseController
         }
 
         var getRole = GetRoleFromStaffType(add.StaffTypeId);
-        var staffCollege = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).ToListAsync();
+        var staffDepartment = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).ToListAsync();
 
-        foreach (var item in staffCollege)
+        foreach (var item in staffDepartment)
         {
             if (await db.StaffDepartment.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
             {
@@ -807,7 +807,7 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "21s:c")]
     [Description("Form to add subject.")]
-    public IActionResult _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide });
+    public async Task<IActionResult> _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide, DepartmentEndDate = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.EndDate).FirstOrDefaultAsync() });
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Action to add subject.")]
@@ -903,11 +903,11 @@ public class StaffController : BaseController
 
     #region List
 
-    [HttpGet, Authorize(Policy = "21s:r")]
+    [HttpGet, Authorize(Policy = "21s:c")]
     [Description("Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Form to view searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
@@ -943,7 +943,7 @@ public class StaffController : BaseController
 
     #region Main form
 
-    [HttpGet, Authorize(Policy = "21s:r")]
+    [HttpGet, Authorize(Policy = "21s:c")]
     [Description("Form to view the profile of staff.")]
     public async Task<IActionResult> Profile(string ide)
     {
@@ -986,7 +986,7 @@ public class StaffController : BaseController
 
     #region 1. Department
 
-    [Authorize(Policy = "21s:r"), Description("Form to display list of departments.")]
+    [Authorize(Policy = "21s:c"), Description("Form to display list of departments.")]
     public async Task<IActionResult> _ProfileDepartment(string ide)
     {
         var departments = await db.StaffDepartment
@@ -1014,7 +1014,7 @@ public class StaffController : BaseController
 
     #region 2. Qualification
 
-    [Authorize(Policy = "21s:r"), Description("Form to display list of qualifications.")]
+    [Authorize(Policy = "21s:c"), Description("Form to display list of qualifications.")]
     public async Task<IActionResult> _ProfileQualification(string ide)
     {
         var departments = await db.StaffQualification
@@ -1043,7 +1043,7 @@ public class StaffController : BaseController
 
     #region 3. Document
 
-    [Authorize(Policy = "21s:r"), Description("Form to display list of documents.")]
+    [Authorize(Policy = "21s:c"), Description("Form to display list of documents.")]
     public async Task<IActionResult> _ProfileDocument(string ide)
     {
         var documents = await db.StaffDocument
@@ -1072,7 +1072,7 @@ public class StaffController : BaseController
 
     #region 4. Subject
 
-    [Authorize(Policy = "21s:r"), Description("Form to display list of subjects.")]
+    [Authorize(Policy = "21s:c"), Description("Form to display list of subjects.")]
     public async Task<IActionResult> _ProfileSubject(string ide)
     {
         var subjects = await db.StaffDepartmentSubject
@@ -1093,7 +1093,7 @@ public class StaffController : BaseController
 
     #region Change image
 
-    [HttpPost, Authorize(Policy = "21s:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "21s:c"), ValidateAntiForgeryToken]
     [Description("Action to change profile photo.")]
     public async Task<IActionResult> ChangeImage(IFormFile Image, string PersonalNumber)
     {
@@ -1128,6 +1128,53 @@ public class StaffController : BaseController
         }
 
         if (birthdate <= DateTime.Now.AddYears(-18))
+        {
+            return Json(true);
+        }
+        else
+        {
+            return Json(false);
+        }
+    }
+
+    [Description("Method to check end date of subject.")]
+    public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate)
+    {
+        var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+
+        if (endDate <= DepartmentEndDate)
+        {
+            return Json(true);
+        }
+        else
+        {
+            return Json(false);
+        }
+    }
+
+    [Description("Method to check end date and start date.")]
+    public IActionResult CheckDates(string StartDate, string EndDate)
+    {
+        var startDate = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
+        var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+
+        if (startDate <= endDate)
+        {
+            return Json(true);
+        }
+        else
+        {
+            return Json(false);
+        }
+    }
+
+    [Description("Method to check end date and start date.")]
+    public IActionResult CheckDatesQualification(string From, string To)
+    {
+        var startDate = DateTime.ParseExact(From, "dd/MM/yyyy", null);
+        var endDate = DateTime.ParseExact(To, "dd/MM/yyyy", null);
+
+        if (startDate <= endDate)
         {
             return Json(true);
         }

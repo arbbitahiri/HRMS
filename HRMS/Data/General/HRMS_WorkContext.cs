@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HRMS.Data.General
 {
-    public partial class HRMSContext : DbContext
+    public partial class HRMS_WorkContext : DbContext
     {
-        public HRMSContext()
+        public HRMS_WorkContext()
         {
         }
 
-        public HRMSContext(DbContextOptions<HRMSContext> options)
+        public HRMS_WorkContext(DbContextOptions<HRMS_WorkContext> options)
             : base(options)
         {
         }
@@ -55,7 +55,7 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;");
             }
         }
 
@@ -289,15 +289,17 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<Department>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_Department_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_Department_UpdatedFrom");
+
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.Code).HasMaxLength(50);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -310,8 +312,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.DepartmentInsertedFromNavigation)
@@ -327,6 +327,12 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<Document>(entity =>
             {
+                entity.HasIndex(e => e.DocumentTypeId, "IX_Document_DocumentTypeID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_Document_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_Document_UpdatedFrom");
+
                 entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
 
                 entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
@@ -337,9 +343,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.Path).IsRequired();
 
@@ -348,8 +352,6 @@ namespace HRMS.Data.General
                     .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.Document)
@@ -371,13 +373,15 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<DocumentType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_DocumentType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_DocumentType_UpdatedFrom");
+
                 entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -390,8 +394,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.DocumentTypeInsertedFromNavigation)
@@ -407,13 +409,15 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<EducationLevelType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_EducationLevelType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_EducationLevelType_UpdatedFrom");
+
                 entity.Property(e => e.EducationLevelTypeId).HasColumnName("EducationLevelTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -426,8 +430,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.EducationLevelTypeInsertedFromNavigation)
@@ -443,15 +445,17 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<EvaluationType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_EvaluationType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_EvaluationType_UpdatedFrom");
+
                 entity.Property(e => e.EvaluationTypeId)
                     .ValueGeneratedNever()
                     .HasColumnName("EvaluationTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -464,8 +468,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.EvaluationTypeInsertedFromNavigation)
@@ -498,6 +500,14 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<HolidayRequest>(entity =>
             {
+                entity.HasIndex(e => e.HolidayTypeId, "IX_HolidayRequest_HolidayTypeID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_HolidayRequest_InsertedFrom");
+
+                entity.HasIndex(e => e.StaffId, "IX_HolidayRequest_StaffDepartmentID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequest_UpdatedFrom");
+
                 entity.Property(e => e.HolidayRequestId).HasColumnName("HolidayRequestID");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
@@ -506,17 +516,13 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
-                entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
+                entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.HolidayType)
                     .WithMany(p => p.HolidayRequest)
@@ -530,11 +536,11 @@ namespace HRMS.Data.General
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_HolidayRequest_AspNetUsers_Insert");
 
-                entity.HasOne(d => d.StaffDepartment)
+                entity.HasOne(d => d.Staff)
                     .WithMany(p => p.HolidayRequest)
-                    .HasForeignKey(d => d.StaffDepartmentId)
+                    .HasForeignKey(d => d.StaffId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayRequest_StaffDepartment");
+                    .HasConstraintName("FK_HolidayRequest_Staff");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.HolidayRequestUpdatedFromNavigation)
@@ -544,21 +550,25 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<HolidayRequestStatus>(entity =>
             {
+                entity.HasIndex(e => e.HolidayRequestId, "IX_HolidayRequestStatus_HolidayRequestID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_HolidayRequestStatus_InsertedFrom");
+
+                entity.HasIndex(e => e.StatusTypeId, "IX_HolidayRequestStatus_StatusTypeID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequestStatus_UpdatedFrom");
+
                 entity.Property(e => e.HolidayRequestStatusId).HasColumnName("HolidayRequestStatusID");
 
                 entity.Property(e => e.HolidayRequestId).HasColumnName("HolidayRequestID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.HolidayRequest)
                     .WithMany(p => p.HolidayRequestStatus)
@@ -586,13 +596,15 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<HolidayType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_HolidayType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayType_UpdatedFrom");
+
                 entity.Property(e => e.HolidayTypeId).HasColumnName("HolidayTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -605,8 +617,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.HolidayTypeInsertedFromNavigation)
@@ -636,7 +646,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.Description).HasMaxLength(128);
 
-                entity.Property(e => e.FormContent).HasMaxLength(1024);
+                entity.Property(e => e.FormContent).HasMaxLength(2048);
 
                 entity.Property(e => e.HttpMethod)
                     .IsRequired()
@@ -661,6 +671,10 @@ namespace HRMS.Data.General
             {
                 entity.ToTable("Menu", "Core");
 
+                entity.HasIndex(e => e.InsertedFrom, "IX_Menu_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_Menu_UpdatedFrom");
+
                 entity.Property(e => e.MenuId).HasColumnName("MenuID");
 
                 entity.Property(e => e.Action).HasMaxLength(128);
@@ -675,9 +689,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -693,8 +705,6 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.MenuInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
@@ -709,15 +719,17 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<ProfessionType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_ProfessionType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_ProfessionType_UpdatedFrom");
+
                 entity.Property(e => e.ProfessionTypeId).HasColumnName("ProfessionTypeID");
 
                 entity.Property(e => e.Code).HasMaxLength(24);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -730,8 +742,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.ProfessionTypeInsertedFromNavigation)
@@ -747,13 +757,15 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<RateType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_RateType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_RateType_UpdatedFrom");
+
                 entity.Property(e => e.RateTypeId).HasColumnName("RateTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -766,8 +778,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.RateTypeInsertedFromNavigation)
@@ -785,26 +795,28 @@ namespace HRMS.Data.General
             {
                 entity.ToTable("RealRole", "Core");
 
+                entity.HasIndex(e => e.InsertedFrom, "IX_RealRole_InsertedFrom");
+
+                entity.HasIndex(e => e.RoleId, "IX_RealRole_RoleID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_RealRole_UpdatedFrom");
+
+                entity.HasIndex(e => e.UserId, "IX_RealRole_UserID");
+
                 entity.Property(e => e.RealRoleId).HasColumnName("RealRoleID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.RoleId)
                     .IsRequired()
-                    .HasMaxLength(450)
                     .HasColumnName("RoleID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(450)
                     .HasColumnName("UserID");
 
                 entity.HasOne(d => d.InsertedFromNavigation)
@@ -833,6 +845,10 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<Staff>(entity =>
             {
+                entity.HasIndex(e => e.UpdatedFrom, "IX_Staff_UpdatedFrom");
+
+                entity.HasIndex(e => e.UserId, "IX_Staff_UserID");
+
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.Address)
@@ -873,11 +889,8 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasMaxLength(450)
                     .HasColumnName("UserID");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
@@ -894,6 +907,16 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDepartment>(entity =>
             {
+                entity.HasIndex(e => e.DepartmentId, "IX_StaffDepartment_DepartmentID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffDepartment_InsertedFrom");
+
+                entity.HasIndex(e => e.StaffId, "IX_StaffDepartment_StaffID");
+
+                entity.HasIndex(e => e.StaffTypeId, "IX_StaffDepartment_StaffTypeID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffDepartment_UpdatedFrom");
+
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
@@ -902,9 +925,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
@@ -913,8 +934,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.StaffDepartment)
@@ -948,15 +967,21 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDepartmentEvaluation>(entity =>
             {
+                entity.HasIndex(e => e.EvaluationTypeId, "IX_StaffDepartmentEvaluation_EvaluationTypeID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffDepartmentEvaluation_InsertedFrom");
+
+                entity.HasIndex(e => e.StaffDepartmentId, "IX_StaffDepartmentEvaluation_StaffDepartmentID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffDepartmentEvaluation_UpdatedFrom");
+
                 entity.Property(e => e.StaffDepartmentEvaluationId).HasColumnName("StaffDepartmentEvaluationID");
 
                 entity.Property(e => e.EvaluationTypeId).HasColumnName("EvaluationTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
@@ -965,8 +990,6 @@ namespace HRMS.Data.General
                     .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.EvaluationType)
                     .WithMany(p => p.StaffDepartmentEvaluation)
@@ -994,13 +1017,19 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDepartmentEvaluationQuestionnaire>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffDepartmentEvaluationQuestionnaire_InsertedFrom");
+
+                entity.HasIndex(e => e.RateTypeId, "IX_StaffDepartmentEvaluationQuestionnaire_RateTypeID");
+
+                entity.HasIndex(e => e.StaffDepartmentEvaluationId, "IX_StaffDepartmentEvaluationQuestionnaire_StaffDepartmentEvaluationID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffDepartmentEvaluationQuestionnaire_UpdatedFrom");
+
                 entity.Property(e => e.StaffDepartmentEvaluationQuestionnaireId).HasColumnName("StaffDepartmentEvaluationQuestionnaireID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.RateTypeId).HasColumnName("RateTypeID");
 
@@ -1011,8 +1040,6 @@ namespace HRMS.Data.General
                     .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffDepartmentEvaluationQuestionnaireInsertedFromNavigation)
@@ -1037,6 +1064,10 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDepartmentEvaluationQuestionnaireRate>(entity =>
             {
+                entity.HasIndex(e => e.RateTypeId, "IX_StaffDepartmentEvaluationQuestionnaireRate_RateTypeID");
+
+                entity.HasIndex(e => e.StaffDepartmentEvaluationQuestionnaireId, "IX_StaffDepartmentEvaluationQuestionnaireRate_StaffDepartmentEvaluationQuestionnaireID");
+
                 entity.Property(e => e.StaffDepartmentEvaluationQuestionnaireRateId).HasColumnName("StaffDepartmentEvaluationQuestionnaireRateID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
@@ -1068,15 +1099,21 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDepartmentSubject>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffDepartmentSubject_InsertedFrom");
+
+                entity.HasIndex(e => e.StaffDepartmentId, "IX_StaffDepartmentSubject_StaffDepartmentID");
+
+                entity.HasIndex(e => e.SubjectId, "IX_StaffDepartmentSubject_SubjectID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffDepartmentSubject_UpdatedFrom");
+
                 entity.Property(e => e.StaffDepartmentSubjectId).HasColumnName("StaffDepartmentSubjectID");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
@@ -1085,8 +1122,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffDepartmentSubjectInsertedFromNavigation)
@@ -1114,15 +1149,21 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffDocument>(entity =>
             {
+                entity.HasIndex(e => e.DocumentTypeId, "IX_StaffDocument_DocumentTypeID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffDocument_InsertedFrom");
+
+                entity.HasIndex(e => e.StaffId, "IX_StaffDocument_StaffID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffDocument_UpdatedFrom");
+
                 entity.Property(e => e.StaffDocumentId).HasColumnName("StaffDocumentID");
 
                 entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.Path).HasMaxLength(2048);
 
@@ -1133,8 +1174,6 @@ namespace HRMS.Data.General
                     .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.StaffDocument)
@@ -1162,6 +1201,16 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffQualification>(entity =>
             {
+                entity.HasIndex(e => e.EducationLevelTypeId, "IX_StaffQualification_EducationLevelTypeID");
+
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffQualification_InsertedFrom");
+
+                entity.HasIndex(e => e.ProfessionTypeId, "IX_StaffQualification_ProfessionTypeID");
+
+                entity.HasIndex(e => e.StaffId, "IX_StaffQualification_StaffID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffQualification_UpdatedFrom");
+
                 entity.Property(e => e.StaffQualificationId).HasColumnName("StaffQualificationID");
 
                 entity.Property(e => e.Address)
@@ -1178,6 +1227,8 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.CreditType).HasMaxLength(128);
 
+                entity.Property(e => e.Description).HasMaxLength(2048);
+
                 entity.Property(e => e.EducationLevelTypeId).HasColumnName("EducationLevelTypeID");
 
                 entity.Property(e => e.FieldStudy).HasMaxLength(128);
@@ -1188,9 +1239,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.ProfessionTypeId).HasColumnName("ProfessionTypeID");
 
@@ -1205,8 +1254,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.To).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.Property(e => e.Validity).HasColumnType("datetime");
 
@@ -1242,13 +1289,15 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StaffType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_StaffType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StaffType_UpdatedFrom");
+
                 entity.Property(e => e.StaffTypeId).HasColumnName("StaffTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .HasMaxLength(128)
@@ -1260,8 +1309,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StaffTypeInsertedFromNavigation)
@@ -1277,15 +1324,17 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<StatusType>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_StatusType_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_StatusType_UpdatedFrom");
+
                 entity.Property(e => e.StatusTypeId)
                     .ValueGeneratedNever()
                     .HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -1298,8 +1347,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.StatusTypeInsertedFromNavigation)
@@ -1317,6 +1364,12 @@ namespace HRMS.Data.General
             {
                 entity.ToTable("SubMenu", "Core");
 
+                entity.HasIndex(e => e.InsertedFrom, "IX_SubMenu_InsertedFrom");
+
+                entity.HasIndex(e => e.MenuId, "IX_SubMenu_MenuID");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_SubMenu_UpdatedFrom");
+
                 entity.Property(e => e.SubMenuId).HasColumnName("SubMenuID");
 
                 entity.Property(e => e.Action).HasMaxLength(128);
@@ -1333,9 +1386,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.MenuId).HasColumnName("MenuID");
 
@@ -1352,8 +1403,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.Roles).HasMaxLength(1024);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.SubMenuInsertedFromNavigation)
@@ -1375,15 +1424,17 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<Subject>(entity =>
             {
+                entity.HasIndex(e => e.InsertedFrom, "IX_Subject_InsertedFrom");
+
+                entity.HasIndex(e => e.UpdatedFrom, "IX_Subject_UpdatedFrom");
+
                 entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
 
                 entity.Property(e => e.Code).HasMaxLength(50);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom).IsRequired();
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
@@ -1396,8 +1447,6 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.SubjectInsertedFromNavigation)

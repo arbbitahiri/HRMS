@@ -34,10 +34,10 @@ public class BaseController : Controller
 {
     protected readonly SignInManager<ApplicationUser> signInManager;
     protected readonly UserManager<ApplicationUser> userManager;
-    protected HRMSContext db;
+    protected HRMS_WorkContext db;
     protected ApplicationUser user;
 
-    public BaseController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public BaseController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
     {
         this.db = db;
         this.signInManager = signInManager;
@@ -175,7 +175,9 @@ public class BaseController : Controller
     protected string GetRoleFromStaffType(int staffType) =>
         staffType switch
         {
-            1 => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            (int)StaffTypeEnum.Lecturer => "e062fce5-219c-43df-a6f3-7bc28506259a",
+            (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            (int)StaffTypeEnum.Manager => "4d263424-bd57-4f70-9ecc-b95f287cc149",
             _ => ""
         };
 

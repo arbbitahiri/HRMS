@@ -64,6 +64,7 @@
                 <th>@Resource.Locked</th>
                 <th data-orderable="false">@Resource.Actions</th>
             </thead>
+            <tbody></tbody>
         </table>
     </div>
 </div>
@@ -108,10 +109,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: 10, targets: [0, 5, 6] },
-                    { width: 20, targets: [2, 3, 4] },
-                    { width: 30, targets: [1] },
-                    { className: "vertikal", targets: "_all" }
+                    { className: "w5 vertikal", targets: [0, 5, 6] },
+                    { className: "w20 vertikal", targets: [2, 3, 4] },
+                    { className: "w30 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -166,7 +166,7 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="asdbutton" class="dropdown-item" onclick="edit_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="edit_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                                 '<button type="button" class="dropdown-item" onclick="setPassword(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-key"></i></span><span class="p-1">@Resource.SetPassword</span></button>';
                             if (lockoutDate >= dateTimeNow) {
                                 dropdown += '<button type="button" class="dropdown-item" onclick="lock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.LockAccount</span></button>';

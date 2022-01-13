@@ -1,0 +1,97 @@
+﻿@using HRMS.Models.Holiday
+@model Create
+@inject IDDLRepo repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddHoliday</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="Create" asp-controller="Holiday" id="frm_create_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <label asp-for="AHolidayTypeId" class="required"></label>
+                <select asp-for="AHolidayTypeId" asp-items="await repo.HolidayTypes(user.Language)" onchange="remaining_days()" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="AHolidayTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label>@Resource.RemainingDays</label>
+                <input id="days" type="text" disabled class="form-control"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <label asp-for="StartDate" class="required"></label>
+                <input asp-for="StartDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate"/>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="EndDate" class="required"></label>
+                <input asp-for="EndDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate"/>
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <label asp-for="Description" class="required"></label>
+                <textarea asp-for="Description" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_create_holiday');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        if (culture == 'sq-AL') {
+            $('textarea').prop('spellcheck', false);
+        } else {
+            $('textarea').prop('spellcheck', true);
+        }
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $(".datetimepicker-input").datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+    });
+
+    function remaining_days() {
+        $.get('@Url.Action("RemainingDays", "Holiday")', {
+            htypeId: $('#AHolidayTypeId').val(),
+            userId: '@user.Id'
+        }, function (data) {
+            $('#days').val(data);
+        });
+    }
+
+    function success_create(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

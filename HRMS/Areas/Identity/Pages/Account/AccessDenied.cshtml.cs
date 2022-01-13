@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace HRMS.Areas.Identity.Pages.Account;
 public class AccessDeniedModel : BaseIModel
 {
-    public AccessDeniedModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
+    public AccessDeniedModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
         : base(signInManager, userManager, db)
     {
     }

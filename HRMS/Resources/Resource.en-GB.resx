@@ -825,4 +825,31 @@
   <data name="SureYouWantToDeleteSubject" xml:space="preserve">
     <value>Are you sure you want to delete subject?</value>
   </data>
+  <data name="AddHoliday" xml:space="preserve">
+    <value>Add holiday</value>
+  </data>
+  <data name="CannotRequestHoliday" xml:space="preserve">
+    <value>You cannot make a request for holiday until you finish current holiday!</value>
+  </data>
+  <data name="EndDateVSOtherEndDate" xml:space="preserve">
+    <value>End date cannot be greater than the department end date!</value>
+  </data>
+  <data name="HolidayReviewedSuccessfully" xml:space="preserve">
+    <value>Holiday reviewed successfully!</value>
+  </data>
+  <data name="NoAvailableDaysHoliday" xml:space="preserve">
+    <value>You do not have enough days for holiday. Remaining days: {0}.</value>
+  </data>
+  <data name="RemainingDays" xml:space="preserve">
+    <value>Remaining days</value>
+  </data>
+  <data name="StartDateVSEndDate" xml:space="preserve">
+    <value>Starting date cannot be greater than ending date!</value>
+  </data>
+  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
+    <value>Are you sure you want to delete holiday?</value>
+  </data>
+  <data name="YouHaveHolidayPending" xml:space="preserve">
+    <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
+  </data>
 </root>

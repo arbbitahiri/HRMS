@@ -8,7 +8,11 @@
 <div class="card card-primary card-outline">
     <div class="card-body box-profile">
         <div class="text-center">
-            <img src='@Url.Content(user.ProfileImage ?? "~/images/user-default.png")' class="profile-user-img img-fluid img-circle" alt="User profile picture">
+            <img
+                src='@Url.Content(user.ProfileImage ?? "~/images/user-default.png")'
+                class="profile-user-img img-fluid img-circle"
+                alt="User profile picture"
+                style="cursor: pointer; object-fit: cover; height: 100px;">
         </div>
         <h3 class="profile-username text-center">@user.FirstName @user.LastName</h3>
         <p class="text-muted text-center">@User.FindFirstValue(ClaimTypes.Role)</p>
@@ -31,7 +35,7 @@
             <li class="list-group-item">
                 <a href="/Identity/Account/Manage/Account" class='btn btn-block @(page == "/Account/Manage/Account" ? "btn-primary" : "btn-outline-primary")'>@Resource.AccountData</a>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item border-bottom-0">
                 <a href="/Identity/Account/Manage/ChangePassword" class='btn btn-block @(page == "/Account/Manage/ChangePassword" ? "btn-primary" : "btn-outline-primary")'>@Resource.UpdatePassword</a>
             </li>
         </ul>

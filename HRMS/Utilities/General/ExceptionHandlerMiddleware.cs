@@ -16,7 +16,7 @@ public class ExceptionHandlerMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, HRMSContext db)
+    public async Task Invoke(HttpContext context, HRMS_WorkContext db)
     {
         try
         {
@@ -28,7 +28,7 @@ public class ExceptionHandlerMiddleware
         }
     }
 
-    private static async Task HandleExceptionMessageAsync(HttpContext context, Exception exception, HRMSContext db)
+    private static async Task HandleExceptionMessageAsync(HttpContext context, Exception exception, HRMS_WorkContext db)
     {
         db.ChangeTracker.Clear();
         var log = new Log

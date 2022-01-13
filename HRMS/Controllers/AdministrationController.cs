@@ -31,7 +31,7 @@ public class AdministrationController : BaseController
 
     public AdministrationController(IWebHostEnvironment environment, IConfiguration configuration,
         ApplicationDbContext appDb, RoleManager<ApplicationRole> roleManager,
-        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.environment = environment;

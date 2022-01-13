@@ -1,0 +1,43 @@
+﻿@using HRMS.Models.Holiday
+@model Details
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Details - @Model.StaffName</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    @Html.AntiForgeryToken()
+
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label asp-for="HolidayType">@Resource.HolidayType</label>
+            <input asp-for="HolidayType" type="text" disabled class="form-control"/>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="StatusType">@Resource.RemainingDays</label>
+            <input asp-for="StatusType" type="text" disabled class="form-control"/>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label asp-for="StartDate">@Resource.HolidayType</label>
+            <input asp-for="StartDate" type="text" disabled class="form-control"/>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="EndDate">@Resource.HolidayType</label>
+            <input asp-for="EndDate" type="text" disabled class="form-control"/>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <label asp-for="Description">@Resource.Description</label>
+            <textarea asp-for="Description" rows="2" disabled class="form-control"></textarea>
+        </div>
+    </div>
+</div>
+<div class="modal-footer justify-content-between">
+    <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+</div>

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
 public class ChangePasswordModel : BaseIModel
 {
-    public ChangePasswordModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMSContext db)
+    public ChangePasswordModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMS_WorkContext db)
         : base(signInManager, userManager, db)
     {
     }
@@ -75,6 +75,7 @@ public class ChangePasswordModel : BaseIModel
             return Page();
         }
 
+        await SendToHistory(user, "Ndryshim i fjalëkalimit.");
         var changePasswordResult = await userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
         if (!changePasswordResult.Succeeded)
         {

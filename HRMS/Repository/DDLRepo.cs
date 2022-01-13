@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace HRMS.Repository;
 public class DDLRepo : IDDLRepo
 {
-    private readonly HRMSContext db;
+    private readonly HRMS_WorkContext db;
 
-    public DDLRepo(HRMSContext db)
+    public DDLRepo(HRMS_WorkContext db)
     {
         this.db = db;
     }
@@ -77,4 +77,18 @@ public class DDLRepo : IDDLRepo
             Value = a.SubjectId.ToString(),
             Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
         }).ToListAsync();
+
+    public async Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang) =>
+        await db.HolidayType.Select(a => new SelectListItem
+        {
+            Value = a.HolidayTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> StatusTypes(LanguageEnum lang) =>
+        await db.StatusType.Select(a => new SelectListItem
+        {
+            Value = a.StatusTypeId.ToString(),
+            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
 }

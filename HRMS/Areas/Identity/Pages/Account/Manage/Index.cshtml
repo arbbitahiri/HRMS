@@ -20,13 +20,17 @@
         </div>
     </div>
     <div class="card-body">
-        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal">
+        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal" data-ajax="true" data-ajax-success="success_create">
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <div class="text-center">
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="@Resource.UpdateImage">
-                            <img src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")' class="img-circle" alt="User profile picture">
+                            <img
+                                src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")'
+                                class="profile-user-img img-fluid img-circle"
+                                alt="User profile picture"
+                                style="cursor: pointer; object-fit: cover; height: 150px; width: 150px;">
                             <input type="file" asp-for="Input.ProfileImage" class="d-none" />
                             <input type="hidden" name="profile_avatar_remove" />
                         </label>
@@ -49,33 +53,27 @@
                 </div>
             </div>
             <div class="row form-group">
-                <label asp-for="Input.Address" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <input asp-for="Input.Address" type="text" class="form-control" placeholder="@Resource.Address">
-                    <span asp-validation-for="Input.Address" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row form-group">
                 <label asp-for="Input.PhoneNumber" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                         </div>
-                        <input asp-for="Input.PhoneNumber" type="text" class="form-control" data-inputmask="'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']" data-mask="" inputmode="text">
+                        <input asp-for="Input.PhoneNumber" type="text" class="form-control">
                     </div>
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="row form-group">
-                <label class="col-sm-2 col-form-label">@Resource.Email</label>
+                <label asp-for="Input.Email" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-at"></i></span>
                         </div>
-                        <input type="text" class="form-control" value="@user.Email" placeholder="@Resource.Email" disabled>
+                        <input asp-for="Input.Email" type="text" class="form-control" placeholder="@Resource.Email">
                     </div>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
             </div>
         </form>
@@ -84,6 +82,16 @@
 
 @section Scripts {
     <script>
-        $('[data-mask]').inputmask();
+        $(document).ready(function() {
+            $('#Input_PhoneNumber').inputmask("mask", {
+                "mask": "+(999) 99 999-999",
+                removeMaskOnSubmit: true,
+                autoUnmask: true
+            });
+        });
+
+        function success_create(data) {
+            handle_success(data, SubmitPathType.RELOAD, "");
+        }
     </script>
 }

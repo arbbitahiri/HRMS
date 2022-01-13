@@ -40,8 +40,9 @@ public enum MethodType
 
 public enum StaffTypeEnum
 {
-    Administrator = 1,
-    Professor = 2
+    Lecturer = 1,
+    Administrator = 4,
+    Manager = 5
 }
 
 public enum LookUpTable
@@ -55,4 +56,19 @@ public enum LookUpTable
     StaffType = 7,
     StatusType = 8,
     Department = 9
+}
+
+public enum StatusTypeEnum
+{
+    Approved = 1,
+    Rejected = 2,
+    Pending = 3
+}
+
+public enum HolidayTypeEnum
+{
+    AnnualLeave = 1,
+    SickLeave = 2,
+    MaternityLeave = 3,
+    UnpaidLeave = 4
 }

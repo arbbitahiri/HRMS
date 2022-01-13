@@ -825,4 +825,31 @@
   <data name="SureYouWantToDeleteSubject" xml:space="preserve">
     <value>A jeni të sigurt për fshirjen e lëndë?</value>
   </data>
+  <data name="AddHoliday" xml:space="preserve">
+    <value>Shto pushim</value>
+  </data>
+  <data name="CannotRequestHoliday" xml:space="preserve">
+    <value>Nuk mund të bëni kërkesën për pushim deri sa të përfundoni pushimin aktual!</value>
+  </data>
+  <data name="EndDateVSOtherEndDate" xml:space="preserve">
+    <value>Data e mbarimit nuk mund të jetë më e madhe se data e mbarimit të departamenti!</value>
+  </data>
+  <data name="HolidayReviewedSuccessfully" xml:space="preserve">
+    <value>Pushimi u shqyrtua me sukses!</value>
+  </data>
+  <data name="NoAvailableDaysHoliday" xml:space="preserve">
+    <value>Nuk keni mjaftueshëm ditë për pushim. Ditët e mbetura: {0}.</value>
+  </data>
+  <data name="RemainingDays" xml:space="preserve">
+    <value>Ditët e mbetura</value>
+  </data>
+  <data name="StartDateVSEndDate" xml:space="preserve">
+    <value>Data e fillimit nuk mund të jetë më e madhe se data e mbarimit!</value>
+  </data>
+  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e pushimit?</value>
+  </data>
+  <data name="YouHaveHolidayPending" xml:space="preserve">
+    <value>Nuk mund të bëni kërkesën për pushim përderi sa keni një pushim në pritje për shqyrtim!</value>
+  </data>
 </root>

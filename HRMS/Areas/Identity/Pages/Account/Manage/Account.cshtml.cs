@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
 public class AccountModel : BaseIModel
 {
-    public AccountModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
+    public AccountModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
         : base(signInManager, userManager, db)
     {
     }
@@ -59,7 +59,7 @@ public class AccountModel : BaseIModel
             return Page();
         }
 
-        // TODO: send to history, before changes
+        await SendToHistory(user, "Ndryshim i fjalëkalimit.");
 
         user.Language = Input.Language;
         user.AllowNotification = Input.AllowNotification;

@@ -30,7 +30,7 @@ public class ConfigurationController : BaseController
     private readonly RoleManager<ApplicationRole> roleManager;
     private readonly IFunctionRepo func;
 
-    public ConfigurationController(HRMSContext db,
+    public ConfigurationController(HRMS_WorkContext db,
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,

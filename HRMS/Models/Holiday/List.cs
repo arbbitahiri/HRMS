@@ -14,4 +14,7 @@ public class List
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string StatusType { get; set; }
+
+    public bool Finished { get; set; }
+    public bool Review { get; set; }
 }

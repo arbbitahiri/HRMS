@@ -20,7 +20,7 @@ public partial class IndexModel : BaseIModel
     private readonly IConfiguration configuration;
 
     public IndexModel(IWebHostEnvironment hostEnvironment, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMSContext db)
+        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMS_WorkContext db)
         : base(signInManager, userManager, db)
     {
         this.hostEnvironment = hostEnvironment;
@@ -39,8 +39,12 @@ public partial class IndexModel : BaseIModel
 
     public class InputModel
     {
+        [Display(Name = "Firstname", ResourceType = typeof(Resource))]
+        [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string FirstName { get; set; }
 
+        [Display(Name = "Lastname", ResourceType = typeof(Resource))]
+        [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string LastName { get; set; }
 
         [Phone]
@@ -48,13 +52,16 @@ public partial class IndexModel : BaseIModel
         [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneNumber { get; set; }
 
-        public string Address { get; set; }
-
         [FileExtension(".png,.jpg,.bmp", ErrorMessageResourceName = "AllowedFormatImage", ErrorMessageResourceType = typeof(Resource))]
         [MaxFileSize(10640, ErrorMessageResourceName = "MaxImageSize", ErrorMessageResourceType = typeof(Resource))]
         public IFormFile ProfileImage { get; set; }
 
         public string ImagePath { get; set; }
+
+        [EmailAddress]
+        [Display(Name = "Email", ResourceType = typeof(Resource))]
+        [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+        public string Email { get; set; }
     }
 
     private void LoadAsync(ApplicationUser user)
@@ -67,7 +74,8 @@ public partial class IndexModel : BaseIModel
             PhoneNumber = user.PhoneNumber,
             ImagePath = user.ProfileImage,
             FirstName = user.FirstName,
-            LastName = user.LastName
+            LastName = user.LastName,
+            Email = user.Email
         };
     }
 
@@ -101,9 +109,12 @@ public partial class IndexModel : BaseIModel
             return Page();
         }
 
-        // TODO: send to history, before changes
+        await SendToHistory(user, "Ndryshim i të dhënave personale.");
 
+        user.FirstName = Input.FirstName;
+        user.LastName = Input.LastName;
         user.PhoneNumber = Input.PhoneNumber;
+        user.Email = Input.Email;
         if (Input.ProfileImage != null)
         {
             user.ProfileImage = await SaveFile(hostEnvironment, configuration, Input.ProfileImage, "Users");
