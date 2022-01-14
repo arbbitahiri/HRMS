@@ -74,7 +74,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         Menu menu = null; SubMenu subMenu = null;
@@ -120,7 +120,7 @@ public class ConfigurationController : BaseController
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
     }
 
     #endregion
@@ -136,7 +136,7 @@ public class ConfigurationController : BaseController
         var menus = await db.Menu.Select(a => new MenuDetails
         {
             MenuIde = CryptoSecurity.Encrypt(a.MenuId),
-            Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
+            Title = user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn,
             Controller = a.Controller,
             Action = a.Action,
             HasSubMenu = a.HasSubMenu,
@@ -157,7 +157,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.Menu.Add(new Menu
@@ -177,7 +177,7 @@ public class ConfigurationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -212,7 +212,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(edit.MenuIde));
@@ -229,10 +229,10 @@ public class ConfigurationController : BaseController
         menu.OpenFor = edit.OpenFor;
         menu.UpdatedFrom = user.Id;
         menu.UpdatedDate = DateTime.Now;
-        menu.UpdatedNo++;
+        menu.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -246,7 +246,7 @@ public class ConfigurationController : BaseController
         db.Menu.Remove(await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -262,8 +262,8 @@ public class ConfigurationController : BaseController
             .Select(a => new SubMenuDetails
             {
                 SubMenuIde = CryptoSecurity.Encrypt(a.SubMenuId),
-                Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
-                MenuTitle = user.Language == LanguageEnum.Albanian ? a.Menu.NameSq : a.Menu.NameEn,
+                Title = user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn,
+                MenuTitle = user.Language == LanguageEnum.ALBANIAN ? a.Menu.NameSq : a.Menu.NameEn,
                 Controller = a.Controller,
                 Action = a.Action,
                 Icon = a.Icon
@@ -281,7 +281,7 @@ public class ConfigurationController : BaseController
         var create = new CreateSubMenu
         {
             MenuIde = ide,
-            MenuTitle = user.Language == LanguageEnum.Albanian ? menu.NameSq : menu.NameEn
+            MenuTitle = user.Language == LanguageEnum.ALBANIAN ? menu.NameSq : menu.NameEn
         };
         return PartialView(create);
     }
@@ -292,7 +292,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.SubMenu.Add(new SubMenu
@@ -312,7 +312,7 @@ public class ConfigurationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -346,7 +346,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(edit.SubMenuIde));
@@ -362,10 +362,10 @@ public class ConfigurationController : BaseController
         submenu.OpenFor = edit.OpenFor;
         submenu.UpdatedFrom = user.Id;
         submenu.UpdatedDate = DateTime.Now;
-        submenu.UpdatedNo++;
+        submenu.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -379,7 +379,7 @@ public class ConfigurationController : BaseController
         db.SubMenu.Remove(await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -429,7 +429,7 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         string json = string.Empty;
@@ -452,7 +452,7 @@ public class ConfigurationController : BaseController
             await streamWriter.WriteAsync(JsonConvert.SerializeObject(data));
         }
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -489,12 +489,12 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         if (await db.Subject.AnyAsync(a => a.Active && a.Code == create.Code))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
         }
 
         db.Subject.Add(new Subject
@@ -507,7 +507,7 @@ public class ConfigurationController : BaseController
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -536,12 +536,12 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         if (await db.Subject.AnyAsync(a => a.Active && a.Code == edit.Code))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
         }
 
         var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(edit.SubjectIde));
@@ -551,10 +551,10 @@ public class ConfigurationController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo++;
+        subject.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -567,17 +567,17 @@ public class ConfigurationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(ide));
         subject.Active = false;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo++;
+        subject.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion

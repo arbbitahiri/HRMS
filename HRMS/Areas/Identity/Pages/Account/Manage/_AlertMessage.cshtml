@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    if (Model.Status == ErrorStatus.Success)
+    if (Model.Status == ErrorStatus.SUCCESS)
     {
         <div class='alert alert-success @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -10,12 +10,12 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             }
             <h5>
-                <i class="icon fas fa-ban"></i> @Model.Title!
+                <i class="icon fas fa-check"></i> @Model.Title!
             </h5>
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.Warning)
+    else if (Model.Status == ErrorStatus.WARNING)
     {
         <div class='alert alert-warning @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -28,7 +28,7 @@
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.Info)
+    else if (Model.Status == ErrorStatus.INFO)
     {
         <div class='alert alert-info @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -41,7 +41,7 @@
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.Error)
+    else if (Model.Status == ErrorStatus.ERROR)
     {
         <div class='alert alert-danger @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)

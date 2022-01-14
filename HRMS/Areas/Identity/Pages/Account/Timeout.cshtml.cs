@@ -72,7 +72,7 @@ namespace HRMS.Areas.Identity.Pages.Account
 
             if (!ModelState.IsValid)
             {
-                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.Warning, Description = "Invalid data!" });
+                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.WARNING, Description = "Invalid data!" });
                 return Page();
             }
 
@@ -83,7 +83,7 @@ namespace HRMS.Areas.Identity.Pages.Account
             }
             if (result.IsNotAllowed)
             {
-                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.Warning, Description = "You must confirm your account.", Title = "Warning" });
+                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.WARNING, Description = "You must confirm your account.", Title = "Warning" });
                 return Page();
             }
             if (result.RequiresTwoFactor)
@@ -92,12 +92,12 @@ namespace HRMS.Areas.Identity.Pages.Account
             }
             if (result.IsLockedOut)
             {
-                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.Info, Description = "Account is locked!", Title = "Info", Icon = "icon fas fa-lock" });
+                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.INFO, Description = "Account is locked!", Title = "Info", Icon = "icon fas fa-lock" });
                 return Page();
             }
             else
             {
-                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.Warning, Description = "Invalid login attempt", Title = "Warning" });
+                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.WARNING, Description = "Invalid login attempt", Title = "Warning" });
                 return Page();
             }
         }

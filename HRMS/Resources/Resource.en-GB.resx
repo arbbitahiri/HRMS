@@ -852,4 +852,31 @@
   <data name="YouHaveHolidayPending" xml:space="preserve">
     <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
   </data>
+  <data name="AccountNotLocked" xml:space="preserve">
+    <value>Account not locked</value>
+  </data>
+  <data name="AccountNotUnlocked" xml:space="preserve">
+    <value>Account not unlocked</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="InvalidLogin" xml:space="preserve">
+    <value>Invalid login attempt. Email/username or password are incorrect!</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="TotalDays" xml:space="preserve">
+    <value>Total days</value>
+  </data>
+  <data name="YouMustConfirmEmail" xml:space="preserve">
+    <value>You must confirm your email!</value>
+  </data>
 </root>

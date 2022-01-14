@@ -93,10 +93,10 @@ public class BaseIModel : PageModel
 
         db.Log.Add(log);
         await db.SaveChangesAsync();
-        ViewData["Error"] = TempData.Get<ErrorVM>("ErrorI");
+        ViewData["ErrorIdentity"] = TempData.Get<ErrorVM>("ErrorIdentity");
     }
 
-    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, ImageSizeType type = ImageSizeType.ProfilePhoto)
+    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, ImageSizeType type = ImageSizeType.PROFILEPHOTO)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
         string[] imageFormats = configuration["AppSettings:ImagesFormat"].Split(",");

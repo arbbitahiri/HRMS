@@ -55,7 +55,8 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true;Connection Timeout=100;");
             }
         }
 
@@ -559,6 +560,8 @@ namespace HRMS.Data.General
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequestStatus_UpdatedFrom");
 
                 entity.Property(e => e.HolidayRequestStatusId).HasColumnName("HolidayRequestStatusID");
+
+                entity.Property(e => e.Description).HasMaxLength(1024);
 
                 entity.Property(e => e.HolidayRequestId).HasColumnName("HolidayRequestID");
 
@@ -1328,9 +1331,7 @@ namespace HRMS.Data.General
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_StatusType_UpdatedFrom");
 
-                entity.Property(e => e.StatusTypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("StatusTypeID");
+                entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 

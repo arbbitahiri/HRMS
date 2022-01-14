@@ -157,7 +157,7 @@ public class BaseController : Controller
         var currentUser = await db.AspNetUsers.FindAsync(user.Id);
         currentUser.AllowNotification = mode;
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = "Notification mode changed successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = "Notification mode changed successfully!" });
     }
 
     [AllowAnonymous]
@@ -167,17 +167,17 @@ public class BaseController : Controller
     protected LanguageEnum GetLanguage(string culture) =>
         culture switch
         {
-            "sq-AL" => LanguageEnum.Albanian,
-            "en-GB" => LanguageEnum.English,
-            _ => LanguageEnum.Albanian,
+            "sq-AL" => LanguageEnum.ALBANIAN,
+            "en-GB" => LanguageEnum.ENGLISH,
+            _ => LanguageEnum.ALBANIAN,
         };
 
     protected string GetRoleFromStaffType(int staffType) =>
         staffType switch
         {
-            (int)StaffTypeEnum.Lecturer => "e062fce5-219c-43df-a6f3-7bc28506259a",
-            (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
-            (int)StaffTypeEnum.Manager => "4d263424-bd57-4f70-9ecc-b95f287cc149",
+            (int)StaffTypeEnum.LECTURER => "e062fce5-219c-43df-a6f3-7bc28506259a",
+            (int)StaffTypeEnum.ADMINISTRATOR => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            (int)StaffTypeEnum.MANAGER => "4d263424-bd57-4f70-9ecc-b95f287cc149",
             _ => ""
         };
 

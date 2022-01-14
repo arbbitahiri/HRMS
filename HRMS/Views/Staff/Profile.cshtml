@@ -51,18 +51,18 @@
                 <p class="text-muted">@cityZIP @Model.StaffDetails.Country</p>
                 <hr>
                 <strong><i class="fas fa-address-book mr-1"></i> @Resource.Contact</strong>
-                <p class="text-muted">@Model.StaffDetails.PhoneNumber<br/>@Model.StaffDetails.Email</p>
+                <p class="text-muted">+@Model.StaffDetails.PhoneNumber<br/>@Model.StaffDetails.Email</p>
             </div>
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card">
-            <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link" onclick="department_tab('@Model.StaffDetails.Ide')" id="tab_department" href="#kt_department" data-toggle="tab">@Resource.Department</a></li>
-                  <li class="nav-item"><a class="nav-link" onclick="qualification_tab('@Model.StaffDetails.Ide')" id="tab_qualification" href="#kt_qualification" data-toggle="tab">@Resource.Qualifications</a></li>
-                  <li class="nav-item"><a class="nav-link" onclick="document_tab('@Model.StaffDetails.Ide')" id="tab_document" href="#kt_document" data-toggle="tab">@Resource.Documents</a></li>
-                  <li class="nav-item"><a class="nav-link" onclick="subject_tab('@Model.StaffDetails.Ide')" id="tab_subject" href="#kt_subject" data-toggle="tab">@Resource.Subjects</a></li>
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="department_tab('@Model.StaffDetails.Ide')" id="tab_department" href="#kt_department" data-toggle="tab">@Resource.Department</a></li>
+                  <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="qualification_tab('@Model.StaffDetails.Ide')" id="tab_qualification" href="#kt_qualification" data-toggle="tab">@Resource.Qualifications</a></li>
+                  <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="document_tab('@Model.StaffDetails.Ide')" id="tab_document" href="#kt_document" data-toggle="tab">@Resource.Documents</a></li>
+                  <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="subject_tab('@Model.StaffDetails.Ide')" id="tab_subject" href="#kt_subject" data-toggle="tab">@Resource.Subjects</a></li>
                 </ul>
             </div>
             <div class="card-body">

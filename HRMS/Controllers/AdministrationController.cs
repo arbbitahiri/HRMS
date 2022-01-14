@@ -68,7 +68,7 @@ public class AdministrationController : BaseController
                 Name = $"{a.FirstName} {a.LastName}",
                 Email = a.Email,
                 PhoneNumber = a.PhoneNumber,
-                Roles = string.Join(", ", a.Role.Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).ToArray()),
+                Roles = string.Join(", ", a.Role.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn).ToArray()),
                 LockoutEnd = a.LockoutEnd
             }).ToListAsync();
         return Json(users);
@@ -87,13 +87,13 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
             return View(create);
         }
 
         if (await appDb.Users.AnyAsync(a => a.Email == create.Email || a.UserName == create.Username))
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.UserHasAccount });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
             return View(create);
         }
 
@@ -104,15 +104,16 @@ public class AdministrationController : BaseController
             PersonalNumber = create.PersonalNumber,
             FirstName = create.Firstname,
             LastName = create.Lastname,
-            Birthdate = create.Birthdate,
+            Birthdate = DateTime.ParseExact(create.Birthdate, "dd/MM/yyyy", null),
             Email = create.Email,
             EmailConfirmed = true,
             PhoneNumber = create.PhoneNumber,
             UserName = create.Email,
             ProfileImage = filePath,
             Language = create.Language,
-            Mode = TemplateMode.Light,
+            Mode = TemplateMode.LIGHT,
             LockoutEnd = DateTime.Now.AddYears(99),
+            LockoutEnabled = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         };
@@ -126,7 +127,7 @@ public class AdministrationController : BaseController
             {
                 errors += $"· {identityError.Description} ";
             }
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = errors });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = errors });
             return View(create);
         }
 
@@ -135,12 +136,12 @@ public class AdministrationController : BaseController
             result = await userManager.AddToRolesAsync(firstUser, db.AspNetRoles.Where(a => create.Roles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
                 return RedirectToAction(nameof(Index));
             }
         }
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccountCreatedSuccessfully });
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.AccountCreatedSuccessfully, Dismissible = true });
         return RedirectToAction(nameof(Index));
     }
 
@@ -149,9 +150,9 @@ public class AdministrationController : BaseController
     #region => Edit
 
     [HttpGet, Description("Form to edit a user.")]
-    public async Task<IActionResult> _Edit(string uId)
+    public async Task<IActionResult> _Edit(string uIde)
     {
-        var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uId));
+        var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde));
         var edit = new Edit
         {
             UserId = CryptoSecurity.Encrypt(user.Id),
@@ -160,7 +161,7 @@ public class AdministrationController : BaseController
             Username = user.UserName,
             Firstname = user.FirstName,
             Lastname = user.LastName,
-            Birthdate = user.Birthdate,
+            Birthdate = user.Birthdate.ToString("dd/MM/yyyy"),
             PhoneNumber = user.PhoneNumber,
             Email = user.Email
         };
@@ -169,29 +170,32 @@ public class AdministrationController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Action to edit a user.")]
-    public async Task<IActionResult> _Edit(Edit edit)
+    public async Task<IActionResult> Edit(Edit edit)
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
         }
 
         if (await appDb.Users.AnyAsync(a => a.Email == edit.Email || a.UserName == edit.Username))
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.UserHasAccount });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
         }
 
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(edit.UserId));
         user.PhoneNumber = edit.PhoneNumber;
         user.ProfileImage = edit.ProfileImage != null ? await SaveImage(environment, edit.ProfileImage, "Users") : null;
+        user.Birthdate = DateTime.ParseExact(edit.Birthdate, "dd/MM/yyyy", null);
+        user.PersonalNumber = edit.PersonalNumber;
+        user.FirstName = edit.Firstname;
+        user.LastName = edit.Lastname;
 
         if (user.UserName != edit.Username)
         {
             var result = await userManager.SetUserNameAsync(user, edit.Username);
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-                return View(edit);
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
             }
         }
 
@@ -200,19 +204,17 @@ public class AdministrationController : BaseController
             var result = await userManager.SetEmailAsync(user, edit.Email);
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-                return View(edit);
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
             }
         }
 
         var update = await userManager.UpdateAsync(user);
         if (!update.Succeeded)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, RawContent = true, Description = "<ul>" + string.Join("", update.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-            return View(edit);
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", update.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
         }
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully, Dismissible = true });
         return RedirectToAction(nameof(Index));
     }
 
@@ -225,7 +227,7 @@ public class AdministrationController : BaseController
     public async Task<IActionResult> Delete(string uId)
     {
         await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uId)), DateTime.Now.AddYears(99));
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -235,24 +237,14 @@ public class AdministrationController : BaseController
     #region Check for users
 
     [Description("Check if email already exists.")]
-    public async Task<IActionResult> CheckEmail(string Email)
-    {
-        if (await db.AspNetUsers.AnyAsync(a => a.Email == Email))
+    public async Task<IActionResult> CheckEmail(string Email, string UserId)
+   {
+        if (await db.AspNetUsers.AnyAsync(a => a.Email == Email && (string.IsNullOrEmpty(UserId) || a.Id != CryptoSecurity.Decrypt<string>(UserId))))
         {
             return Json(Resource.EmailExists);
         }
         return Json(true);
     }
-
-    //[HttpPost, Description("Check if email already exists.")]
-    //public async Task<IActionResult> CheckEmail(string uIde, string Email)
-    //{
-    //    if (await db.AspNetUsers.AnyAsync(a => a.Id != CryptoSecurity.Decrypt<string>(uIde) && a.Email == Email))
-    //    {
-    //        return Json(Resource.EmailExists);
-    //    }
-    //    return Json(true);
-    //}
 
     [HttpPost, Description("Check if username already exists.")]
     public async Task<IActionResult> CheckUsername(string uIde, string Username)
@@ -286,7 +278,7 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(set.UserId));
@@ -294,26 +286,34 @@ public class AdministrationController : BaseController
         var result = await userManager.AddPasswordAsync(user, set.NewPassword);
         if (!result.Succeeded)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = $"{Resource.PasswordNotAdded}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()) });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.PasswordNotAdded}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()) });
         }
         await userManager.UpdateAsync(user);
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = $"{Resource.PasswordUpdatedSuccess}" });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = $"{Resource.PasswordUpdatedSuccess}" });
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Action to lock the account.")]
     public async Task<IActionResult> Lock(string uIde)
     {
-        await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now.AddYears(99));
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountLockedSuccess });
+        var result = await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now.AddYears(99));
+        if (!result.Succeeded)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.AccountNotLocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
+        }
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountLockedSuccess });
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Action to unlock the account.")]
     public async Task<IActionResult> Unlock(string uIde)
     {
-        await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now);
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountUnlockedSuccess });
+        var result = await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now);
+        if (!result.Succeeded)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.AccountNotUnlocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
+        }
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountUnlockedSuccess });
     }
 
     [HttpGet, Description("Form to add roles to user.")]
@@ -334,13 +334,13 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var currentUser = await userManager.GetUserAsync(HttpContext.User);
         if (!await userManager.CheckPasswordAsync(currentUser, addRole.Password))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.IncorrectPassword });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.IncorrectPassword });
         }
 
         var userToAdd = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(addRole.UserId));
@@ -362,12 +362,12 @@ public class AdministrationController : BaseController
             var result = await userManager.AddToRolesAsync(userToAdd, roleToAdd);
             if (!result.Succeeded)
             {
-                return Json(new ErrorVM { Status = ErrorStatus.Error, Description = "<ul>" + string.Join("", result.Errors.Select(t => "<li>" + t.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}!</li>" + "</ul>" });
+                return Json(new ErrorVM { Status = ErrorStatus.ERROR, Description = "<ul>" + string.Join("", result.Errors.Select(t => "<li>" + t.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}!</li>" + "</ul>" });
             }
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.RoleAddedSuccess });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.RoleAddedSuccess });
     }
 
     #endregion
@@ -407,12 +407,12 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         if (await roleManager.Roles.AnyAsync(a => a.NameSQ == create.NameSQ || a.NameEN == create.NameEN))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.RoleExists });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.RoleExists });
         }
 
         await roleManager.CreateAsync(new ApplicationRole
@@ -424,7 +424,7 @@ public class AdministrationController : BaseController
             DescriptionEN = create.DescriptionEN
         });
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -454,12 +454,12 @@ public class AdministrationController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         if (await roleManager.Roles.CountAsync(a => a.NameSQ == edit.NameSQ || a.NameEN == edit.NameEN) > 1)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.RoleExists });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.RoleExists });
         }
 
         var role = await roleManager.Roles.FirstOrDefaultAsync(a => a.Id == CryptoSecurity.Decrypt<string>(edit.RoleIde));
@@ -470,7 +470,7 @@ public class AdministrationController : BaseController
         role.DescriptionEN = edit.DescriptionEN;
         await roleManager.UpdateAsync(role);
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -483,7 +483,7 @@ public class AdministrationController : BaseController
     {
         await roleManager.DeleteAsync(await roleManager.Roles.FirstOrDefaultAsync(a => a.Id == CryptoSecurity.Decrypt<string>(rIde)));
 
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion

@@ -20,13 +20,14 @@
         </div>
     </div>
     <div class="card-body">
-        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal" data-ajax="true" data-ajax-success="success_create">
+        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal">
             <div class="row form-group">
-                <label class="col-sm-2 col-form-label"></label>
+                <label asp-for="Input.ProfileImage" class="col-sm-2 col-form-label">@Resource.ProfileImage</label>
+                @* <label class="col-sm-2 col-form-label"></label> *@
                 <div class="col-sm-10">
                     <div class="text-center">
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="@Resource.UpdateImage">
-                            <img
+                            <img id="img_upload"
                                 src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")'
                                 class="profile-user-img img-fluid img-circle"
                                 alt="User profile picture"
@@ -64,18 +65,6 @@
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            <div class="row form-group">
-                <label asp-for="Input.Email" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-at"></i></span>
-                        </div>
-                        <input asp-for="Input.Email" type="text" class="form-control" placeholder="@Resource.Email">
-                    </div>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-            </div>
         </form>
     </div>
 </div>
@@ -88,10 +77,22 @@
                 removeMaskOnSubmit: true,
                 autoUnmask: true
             });
+
+            $("#Input_ProfileImage").on('change', function() {
+                read_image(this);
+            });
         });
 
-        function success_create(data) {
-            handle_success(data, SubmitPathType.RELOAD, "");
+        function read_image(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img_upload').prop('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                $('#img_upload').prop('src', '~/images/user-default.png');
+            }
         }
     </script>
 }

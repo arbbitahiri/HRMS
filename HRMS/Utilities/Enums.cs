@@ -1,34 +1,35 @@
 ﻿namespace HRMS.Utilities;
+
 public enum ErrorStatus
 {
-    Success = 1,
-    Error = 2,
-    Warning = 3,
-    Info = 4
+    SUCCESS = 1,
+    ERROR = 2,
+    WARNING = 3,
+    INFO = 4
 }
 
 public enum GenderEnum
 {
-    Male = 1,
-    Female = 2
+    MALE = 1,
+    FEMALE = 2
 }
 
 public enum TemplateMode
 {
-    Dark = 1,
-    Light = 2
+    DARK = 1,
+    LIGHT = 2
 }
 
 public enum LanguageEnum
 {
-    Albanian = 1,
-    English = 2
+    ALBANIAN = 1,
+    ENGLISH = 2
 }
 
 public enum ImageSizeType
 {
-    ProfilePhoto = 512,
-    News = 1280
+    PROFILEPHOTO = 512,
+    NEWS = 1280
 }
 
 public enum MethodType
@@ -40,35 +41,35 @@ public enum MethodType
 
 public enum StaffTypeEnum
 {
-    Lecturer = 1,
-    Administrator = 4,
-    Manager = 5
+    LECTURER = 1,
+    ADMINISTRATOR = 4,
+    MANAGER = 5
 }
 
 public enum LookUpTable
 {
-    DocumentType = 1,
-    EducationLevelType = 2,
-    EvaluationType = 3,
-    HolidayType = 4,
-    ProfessionType = 5,
-    RateType = 6,
-    StaffType = 7,
-    StatusType = 8,
-    Department = 9
+    DOCUMENTTYPE = 1,
+    EDUCATIONLEVELTYPE = 2,
+    EVALUATIONTYPE = 3,
+    HOLIDAYTYPE = 4,
+    PROFESSIONTYPE = 5,
+    RATETYPE = 6,
+    STAFFTYPE = 7,
+    STATUSTYPE = 8,
+    DEPARTMENT = 9
 }
 
 public enum StatusTypeEnum
 {
-    Approved = 1,
-    Rejected = 2,
-    Pending = 3
+    APPROVED = 1,
+    REJECTED = 2,
+    PENDING = 3
 }
 
 public enum HolidayTypeEnum
 {
-    AnnualLeave = 1,
-    SickLeave = 2,
-    MaternityLeave = 3,
-    UnpaidLeave = 4
+    ANNUALLEAVE = 1,
+    SICKLEAVE = 2,
+    MATERNITYLEAVE = 3,
+    UNPAIDLEAVE = 4
 }

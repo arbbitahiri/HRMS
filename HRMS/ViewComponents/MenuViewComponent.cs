@@ -6,7 +6,6 @@ using HRMS.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,21 +13,13 @@ using System.Threading.Tasks;
 namespace HRMS.ViewComponents;
 public class MenuViewComponent : ViewComponent
 {
-    //private readonly ApplicationDbContext db;
     private readonly UserManager<ApplicationUser> userManager;
     private readonly IFunctionRepo repo;
-    //private IMemoryCache cache;
-    //private MemoryCacheEntryOptions cacheOptions;
 
-    public MenuViewComponent(IMemoryCache cache, IFunctionRepo repo,
-        UserManager<ApplicationUser> userManager,
-        ApplicationDbContext db)
+    public MenuViewComponent(IFunctionRepo repo, UserManager<ApplicationUser> userManager)
     {
-        //this.db = db;
         this.repo = repo;
         this.userManager = userManager;
-        //this.cache = cache;
-        //cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(relative: TimeSpan.FromHours(2));
     }
 
     public async Task<IViewComponentResult> InvokeAsync()

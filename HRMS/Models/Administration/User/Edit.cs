@@ -1,7 +1,6 @@
 ﻿using HRMS.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace HRMS.Models.Administration;
@@ -31,13 +30,13 @@ public class Edit
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Display(Name = "Birthdate", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public DateTime Birthdate { get; set; }
+    public string Birthdate { get; set; }
 
     [Display(Name = "PhoneNumber", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string PhoneNumber { get; set; }
 
-    [Remote("CheckEmail", "Administration", ErrorMessageResourceName = "EmailExists", ErrorMessageResourceType = typeof(Resource))]
+    [Remote("CheckEmail", "Administration", AdditionalFields = nameof(UserId), ErrorMessageResourceName = "EmailExists", ErrorMessageResourceType = typeof(Resource))]
     [Display(Name = "Email", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     [EmailAddress(ErrorMessageResourceName = "EmailNotValid", ErrorMessageResourceType = typeof(Resource))]

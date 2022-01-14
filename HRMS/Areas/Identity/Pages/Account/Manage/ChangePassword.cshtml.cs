@@ -48,7 +48,7 @@ public class ChangePasswordModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             return Page();
         }
 
@@ -71,7 +71,7 @@ public class ChangePasswordModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             return Page();
         }
 
@@ -79,14 +79,14 @@ public class ChangePasswordModel : BaseIModel
         var changePasswordResult = await userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
         if (!changePasswordResult.Succeeded)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, RawContent = true, Description = "<ul>" + string.Join("", changePasswordResult.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, RawContent = true, Description = "<ul>" + string.Join("", changePasswordResult.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
             return Page();
         }
 
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.UpdatedPassword });
+        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.UpdatedPassword });
         Response.Redirect("/Home/Index");
 
         return RedirectToPage();

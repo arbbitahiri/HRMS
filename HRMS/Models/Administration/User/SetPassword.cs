@@ -8,14 +8,14 @@ public class SetPassword
     public string Name { get; set; }
 
     [DataType(DataType.Password)]
-    [Display(Name = "Password", ResourceType = typeof(Resource))]
+    [Display(Name = "NewPassword", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     [StringLength(32, ErrorMessageResourceName = "CharacterLength", ErrorMessageResourceType = typeof(Resource), MinimumLength = 6)]
     public string NewPassword { get; set; }
 
     [DataType(DataType.Password)]
-    [Display(Name = "ConfirmPassword", ResourceType = typeof(Resource))]
+    [Display(Name = "ConfirmNewPassword", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    [Compare("Password", ErrorMessageResourceName = "PasswordNotMatch", ErrorMessageResourceType = typeof(Resource))]
+    [Compare("NewPassword", ErrorMessageResourceName = "PasswordNotMatch", ErrorMessageResourceType = typeof(Resource))]
     public string ConfirmPassword { get; set; }
 }

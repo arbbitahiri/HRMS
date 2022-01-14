@@ -22,13 +22,17 @@
         </div>
     </div>
     <div class="row form-group">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label asp-for="StartDate">@Resource.HolidayType</label>
             <input asp-for="StartDate" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label asp-for="EndDate">@Resource.HolidayType</label>
             <input asp-for="EndDate" type="text" disabled class="form-control"/>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="TotalDays">@Resource.TotalDays</label>
+            <input asp-for="TotalDays" type="text" disabled class="form-control"/>
         </div>
     </div>
     <div class="row form-group">

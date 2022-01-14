@@ -8,8 +8,8 @@ namespace HRMS.Data.General
         public int HolidayRequestStatusId { get; set; }
         public int HolidayRequestId { get; set; }
         public int StatusTypeId { get; set; }
-        public bool Active { get; set; }
         public string Description { get; set; }
+        public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public string UpdatedFrom { get; set; }

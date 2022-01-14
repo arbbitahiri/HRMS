@@ -29,29 +29,17 @@
                     <span asp-validation-for="HolidayTypeId" class="text-danger"></span>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="StatusTypeId">@Resource.StatusType</label>
-                    <select asp-for="StatusTypeId" asp-items="await repo.StatusTypes(user.Language)" class="form-control select2">
-                        <option value="">@Resource.Choose</option>
-                    </select>
-                    <span asp-validation-for="StatusTypeId" class="text-danger"></span>
-                </div>
-                <div class="col-3 form-group">
                     <label asp-for="PersonalNumber">@Resource.PersonalNumber</label>
                     <input asp-for="PersonalNumber" type="text" class="form-control"/>
                     <span asp-validation-for="PersonalNumber" class="text-danger"></span>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="FirstName">@Resource.Firstname</label>
-                    <input asp-for="FirstName" type="text" class="form-control"/>
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                    <label asp-for="Name">@Resource.Firstname</label>
+                    <input asp-for="Name" type="text" class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="LastName">@Resource.Lastname</label>
-                    <input asp-for="LastName" type="text" class="form-control"/>
-                    <span asp-validation-for="LastName" class="text-danger"></span>
-                </div>
-                <div class="col-3 form-group">
-                    <label asp-for="FirstName" style="visibility:hidden"></label><br />
+                    <label asp-for="Name" style="visibility:hidden"></label><br />
                     <button type="submit" class="btn btn-primary">@Resource.Search</button>
                 </div>
             </div>
@@ -60,32 +48,92 @@
 </div>
 
 
-<div class="card">
-    <div class="card-header">
-        <div class="card-title">
-            <h5>@Resource.SearchResult</h5>
-        </div>
-        <div class="card-tools"></div>
+<div class="card card-primary card-outline card-outline-tabs">
+    <div class="card-header p-0 border-bottom-0">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="pending_tab()" id="tab_pending" href="#kt_pending" data-toggle="tab">@Resource.Pending</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="approved_tab()" id="tab_approved" href="#kt_approved" data-toggle="tab">@Resource.Approved</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="rejected_tab()" id="tab_rejected" href="#kt_rejected" data-toggle="tab">@Resource.Rejected</a></li>
+        </ul>
     </div>
     <div class="card-body">
-        <table id="tbl_holidays" class="table table-striped table-hover table-bordered">
-            <thead>
-                <th>#</th>
-                <th>@Resource.Name</th>
-                <th>@Resource.HolidayType</th>
-                <th>@Resource.StartDate</th>
-                <th>@Resource.EndDate</th>
-                <th>@Resource.StatusType</th>
-                <th data-orderable="false">@Resource.Actions</th>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="tab-content">
+            <div class="tab-pane" id="kt_pending">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <h5 class="font-weight-bolder">@Resource.ListOfSubjects</h5>
+                    </div>
+                </div>
+
+                <table id="tbl_holidays_pending" class="table table-striped w-100 table-hover table-bordered">
+                    <thead>
+                        <th>#</th>
+                        <th>@Resource.Name</th>
+                        <th>@Resource.HolidayType</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
+                        <th>@Resource.TotalDays</th>
+                        <th>@Resource.StatusType</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="kt_approved">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <h5 class="font-weight-bolder">@Resource.ListOfSubjects</h5>
+                    </div>
+                </div>
+
+                <table id="tbl_holidays_approved" class="table table-striped w-100 table-hover table-bordered">
+                    <thead>
+                        <th>#</th>
+                        <th>@Resource.Name</th>
+                        <th>@Resource.HolidayType</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
+                        <th>@Resource.TotalDays</th>
+                        <th>@Resource.StatusType</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="kt_rejected">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <h5 class="font-weight-bolder">@Resource.ListOfSubjects</h5>
+                    </div>
+                </div>
+
+                <table id="tbl_holidays_rejected" class="table table-striped w-100 table-hover table-bordered">
+                    <thead>
+                        <th>#</th>
+                        <th>@Resource.Name</th>
+                        <th>@Resource.HolidayType</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
+                        <th>@Resource.TotalDays</th>
+                        <th>@Resource.StatusType</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function(){
+            if (sessionStorage.getItem("tab_holiday") == null) {
+                $('#tab_pending').trigger("click");
+            } else {
+                $('#' + sessionStorage.getItem("tab_holiday")).trigger("click");
+            }
+
             $(".select2").select2({
                 width: "100%",
                 language: {
@@ -103,8 +151,26 @@
             form.submit();
         });
 
+        function pending_tab(ide) {
+            sessionStorage.setItem("tab_holiday", "tab_pending");
+        }
+
+        function approved_tab(ide) {
+            sessionStorage.setItem("tab_holiday", "tab_approved");
+        }
+
+        function rejected_tab(ide) {
+            sessionStorage.setItem("tab_holiday", "tab_rejected");
+        }
+
         function search_success(data) {
-            $('#tbl_holidays').DataTable({
+            render_pending_tbl(data.filter(function (i, n) { return i.statusTypeEnum === StatusType.PENDING }));
+            render_approved_tbl(data.filter(function (i, n) { return i.statusTypeEnum === StatusType.APPROVED }));
+            render_rejected_tbl(data.filter(function (i, n) { return i.statusTypeEnum === StatusType.REJECTED }));
+        }
+
+        function render_pending_tbl(data) {
+            $('#tbl_holidays_pending').DataTable({
                 destroy: true,
                 language: {
                     url: `/Culture/DataTable/${culture}.json`
@@ -115,10 +181,10 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { className: "w10 vertikal", targets: [0, 6] },
-                    { className: "w15 vertikal", targets: [3, 4] },
-                    { className: "w20 vertikal", targets: [2, 5] },
-                    { className: "w30 vertikal", targets: [1] }
+                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w10 vertikal", targets: [3, 4, 5] },
+                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w20 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -156,7 +222,13 @@
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                         }
                     },
-                    { data: "statusType" },
+                    { data: "totalDays" },
+                    {
+                        data: function (row, type, set) {
+                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
+                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                        }
+                    },
                     {
                         data: function (row, type, set) {
                             let dateTimeNow = new Date();
@@ -167,12 +239,180 @@
                                 '<div class="dropdown-menu" role="menu">';
                             if (!row.finished) {
                                 if ('@role' === 'Manager') {
-                                    dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.LockAccount</span></button>';
+                                    dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
                                 }
-                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.LockAccount</span></button>' +
-                                            '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-key"></i></span><span class="p-1">@Resource.SetPassword</span></button>';
+                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                            '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                             }
-                            dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function render_approved_tbl(data) {
+            $('#tbl_holidays_approved').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w10 vertikal", targets: [3, 4, 5] },
+                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w20 vertikal", targets: [1] }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var name = '<div class="d-flex align-items-center">' +
+                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                            if (row.profileImage == null) {
+                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                            } else {
+                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                            }
+                            name += '</div><div class="ml-4">' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                                '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                                '</div></div>';
+                            return name;
+                        }
+                    },
+                    { data: "holidayType" },
+                    {
+                        data: function(row, type, set) {
+                            var date = new Date(Date.parse(row.startDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            var date = new Date(Date.parse(row.endDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                        }
+                    },
+                    { data: "totalDays" },
+                    {
+                        data: function (row, type, set) {
+                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
+                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            let dateTimeNow = new Date();
+                            var lockoutDate = new Date(row.lockoutEnd);
+
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">';
+                            if (!row.finished) {
+                                if ('@role' === 'Manager') {
+                                    dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                                }
+                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                            '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function render_rejected_tbl(data) {
+            $('#tbl_holidays_rejected').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w10 vertikal", targets: [3, 4, 5] },
+                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w20 vertikal", targets: [1] }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var name = '<div class="d-flex align-items-center">' +
+                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                            if (row.profileImage == null) {
+                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                            } else {
+                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                            }
+                            name += '</div><div class="ml-4">' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                                '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                                '</div></div>';
+                            return name;
+                        }
+                    },
+                    { data: "holidayType" },
+                    {
+                        data: function(row, type, set) {
+                            var date = new Date(Date.parse(row.startDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            var date = new Date(Date.parse(row.endDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                        }
+                    },
+                    { data: "totalDays" },
+                    {
+                        data: function (row, type, set) {
+                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
+                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            let dateTimeNow = new Date();
+                            var lockoutDate = new Date(row.lockoutEnd);
+
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">';
+                            if (!row.finished) {
+                                if ('@role' === 'Manager') {
+                                    dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                                }
+                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                            '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
                                 '</div></div>';
                             return dropdown;
                         }

@@ -6,6 +6,7 @@ using HRMS.Utilities;
 using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
@@ -23,11 +24,11 @@ public class AccountModel : BaseIModel
     {
         public string Username { get; set; }
 
+        [EmailAddress, Display(Name = "Email", ResourceType = typeof(Resource))]
+        [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string Email { get; set; }
 
         public LanguageEnum Language { get; set; }
-
-        public bool TemplateMode { get; set; }
 
         public bool AllowNotification { get; set; }
     }
@@ -39,7 +40,6 @@ public class AccountModel : BaseIModel
             Email = user.Email,
             Language = user.Language,
             AllowNotification = user.AllowNotification,
-            TemplateMode = user.Mode == TemplateMode.Dark,
             Username = user.UserName
         };
     }
@@ -53,20 +53,22 @@ public class AccountModel : BaseIModel
                 Email = user.Email,
                 Language = user.Language,
                 AllowNotification = user.AllowNotification,
-                TemplateMode = user.Mode == TemplateMode.Dark,
                 Username = user.UserName
             };
             return Page();
         }
 
-        await SendToHistory(user, "Ndryshim i fjalëkalimit.");
+        await SendToHistory(user, "Ndryshim i të dhënave të llogarisë.");
 
         user.Language = Input.Language;
         user.AllowNotification = Input.AllowNotification;
-        user.Mode = Input.TemplateMode ? TemplateMode.Dark : TemplateMode.Light;
+        user.UserName = Input.Username;
+        user.Email = Input.Email;
+
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.UpdatedProfile });
+
+        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.UpdatedProfile });
         return RedirectToPage();
     }
 }

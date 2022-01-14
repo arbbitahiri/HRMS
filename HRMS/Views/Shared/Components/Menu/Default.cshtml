@@ -3,13 +3,14 @@
 @{
     var controller = this.ViewContext.RouteData.Values["controller"] ?? "";
     var action = this.ViewContext.RouteData.Values["action"] ?? "";
+    var area = this.ViewContext.RouteData.Values["area"] ?? "";
 }
 
 <ul class="nav nav-pills nav-sidebar flex-column nav-child-ident nav-flat" data-widget="treeview" role="menu" data-accordion="false">
     @foreach (var menu in Model)
     {
-        <li class='nav-item @(menu.Submenus.Any(a => a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "menu-open has-treeview" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-open" : "")' aria-haspopup="true" @(menu.HasSubmenu ? "data-menu-toggle=click" : "")>
-            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class="nav-link @(menu.Submenus.Any(a => a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "active" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(',').Contains((string)action) ? "active" : "")">
+        <li class='nav-item @(menu.Submenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "menu-open has-treeview" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-open" : "")' aria-haspopup="true" @(menu.HasSubmenu ? "data-menu-toggle=click" : "")>
+            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class='nav-link @(menu.Submenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "active" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "active" : "")'>
                 <i class="nav-icon @menu.Icon mr-2"></i>
                 <p>
                     @menu.Title

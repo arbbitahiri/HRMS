@@ -124,6 +124,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Llogari nuk u bllokua.
+        /// </summary>
+        public static string AccountNotLocked {
+            get {
+                return ResourceManager.GetString("AccountNotLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Llogari nuk u zhbllokua.
+        /// </summary>
+        public static string AccountNotUnlocked {
+            get {
+                return ResourceManager.GetString("AccountNotUnlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Llogari u zhbllokua me sukses!.
         /// </summary>
         public static string AccountUnlockedSuccess {
@@ -318,6 +336,15 @@ namespace HRMS.Resources {
         public static string AllowNotification {
             get {
                 return ResourceManager.GetString("AllowNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprovuar.
+        /// </summary>
+        public static string Approved {
+            get {
+                return ResourceManager.GetString("Approved", resourceCulture);
             }
         }
         
@@ -1060,6 +1087,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Përpjekje e pavlefshme për hyrje për kyçje. Emaili/username ose fjalëkalimi janë të pasakta!.
+        /// </summary>
+        public static string InvalidLogin {
+            get {
+                return ResourceManager.GetString("InvalidLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Çelësi.
         /// </summary>
         public static string Key {
@@ -1501,6 +1537,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Në pritje.
+        /// </summary>
+        public static string Pending {
+            get {
+                return ResourceManager.GetString("Pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Të dhënat personale.
         /// </summary>
         public static string PersonalData {
@@ -1627,6 +1672,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refuzuar.
+        /// </summary>
+        public static string Rejected {
+            get {
+                return ResourceManager.GetString("Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditët e mbetura.
         /// </summary>
         public static string RemainingDays {
@@ -1659,6 +1713,15 @@ namespace HRMS.Resources {
         public static string ResetPassword {
             get {
                 return ResourceManager.GetString("ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shqyrto.
+        /// </summary>
+        public static string Review {
+            get {
+                return ResourceManager.GetString("Review", resourceCulture);
             }
         }
         
@@ -2077,6 +2140,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ditët totale.
+        /// </summary>
+        public static string TotalDays {
+            get {
+                return ResourceManager.GetString("TotalDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duke u trajnuar.
         /// </summary>
         public static string Training {
@@ -2262,6 +2334,15 @@ namespace HRMS.Resources {
         public static string YouHaveHolidayPending {
             get {
                 return ResourceManager.GetString("YouHaveHolidayPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duhet të konfirmoni emailin tuaj!.
+        /// </summary>
+        public static string YouMustConfirmEmail {
+            get {
+                return ResourceManager.GetString("YouMustConfirmEmail", resourceCulture);
             }
         }
     }

@@ -52,30 +52,22 @@ public partial class IndexModel : BaseIModel
         [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneNumber { get; set; }
 
-        [FileExtension(".png,.jpg,.bmp", ErrorMessageResourceName = "AllowedFormatImage", ErrorMessageResourceType = typeof(Resource))]
+        [FileExtension(".png,.jpg,.bmp,.jpeg", ErrorMessageResourceName = "AllowedFormatImage", ErrorMessageResourceType = typeof(Resource))]
         [MaxFileSize(10640, ErrorMessageResourceName = "MaxImageSize", ErrorMessageResourceType = typeof(Resource))]
         public IFormFile ProfileImage { get; set; }
 
         public string ImagePath { get; set; }
-
-        [EmailAddress]
-        [Display(Name = "Email", ResourceType = typeof(Resource))]
-        [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string Email { get; set; }
     }
 
     private void LoadAsync(ApplicationUser user)
     {
-        Username = user.UserName;
-        Email = user.Email;
-
         Input = new InputModel
         {
             PhoneNumber = user.PhoneNumber,
             ImagePath = user.ProfileImage,
             FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email
+            LastName = user.LastName
         };
     }
 
@@ -84,7 +76,7 @@ public partial class IndexModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             LoadAsync(user);
             return Page();
         }
@@ -98,7 +90,7 @@ public partial class IndexModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             LoadAsync(user);
             return Page();
         }
@@ -114,7 +106,6 @@ public partial class IndexModel : BaseIModel
         user.FirstName = Input.FirstName;
         user.LastName = Input.LastName;
         user.PhoneNumber = Input.PhoneNumber;
-        user.Email = Input.Email;
         if (Input.ProfileImage != null)
         {
             user.ProfileImage = await SaveFile(hostEnvironment, configuration, Input.ProfileImage, "Users");
@@ -123,7 +114,7 @@ public partial class IndexModel : BaseIModel
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.UpdatedProfile });
+        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.UpdatedProfile });
         return RedirectToPage();
     }
 }

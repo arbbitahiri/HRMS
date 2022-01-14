@@ -39,7 +39,7 @@ public class BaseOModel : PageModel
         user = new ApplicationUser
         {
             ProfileImage = "~/images/user-default.png",
-            Language = cultureName == "sq-AL" ? LanguageEnum.Albanian : LanguageEnum.English,
+            Language = cultureName == "sq-AL" ? LanguageEnum.ALBANIAN : LanguageEnum.ENGLISH,
         };
 
         ViewData["InternalUser"] = user;
@@ -127,9 +127,9 @@ public class BaseOModel : PageModel
     protected LanguageEnum GetLanguage(string culture) =>
         culture switch
         {
-            "sq-AL" => LanguageEnum.Albanian,
-            "en-GB" => LanguageEnum.English,
-            _ => LanguageEnum.Albanian,
+            "sq-AL" => LanguageEnum.ALBANIAN,
+            "en-GB" => LanguageEnum.ENGLISH,
+            _ => LanguageEnum.ALBANIAN,
         };
 
     protected void SendEmailAsync(IConfiguration configuration, string email, string subject, string htmlMessage, string name, bool addHeader = true)

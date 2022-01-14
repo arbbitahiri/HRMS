@@ -2,7 +2,6 @@
 using HRMS.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -31,7 +30,7 @@ public class Create
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Display(Name = "Birthdate", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public DateTime Birthdate { get; set; }
+    public string Birthdate { get; set; }
 
     [Display(Name = "PhoneNumber", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

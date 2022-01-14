@@ -8,7 +8,7 @@ public class ApplicationUser : IdentityUser
 {
     public ApplicationUser()
     {
-        Mode = TemplateMode.Light;
+        Mode = TemplateMode.LIGHT;
         InsertedDate = DateTime.Now;
     }
 

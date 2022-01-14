@@ -1,5 +1,13 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ErrorVM error = (ErrorVM)ViewData["ErrorIdentity"] ?? new ErrorVM();
+}
+
+@if (error.Status != 0)
+{
+    <div style="margin: 7px;">
+        <partial name="_AlertMessage" model="error" />
+    </div>
 }
 
 <div class="row">

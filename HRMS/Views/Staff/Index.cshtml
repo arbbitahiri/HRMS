@@ -141,7 +141,11 @@
                     { data: "staffType" },
                     { data: "gender" },
                     { data: "email" },
-                    { data: "phoneNumber" },
+                    {
+                        data: function (row, type, set) {
+                            return `+${row.phoneNumber}`;
+                        }
+                    },
                     {
                         data: function (row, type, set) {
                             var dropdown = '<div class="input-group-prepend">' +

@@ -80,7 +80,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         string staffIde = string.Empty;
@@ -88,7 +88,7 @@ public class StaffController : BaseController
         {
             if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = "Stafi me kete numer personal ekziston!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Description = "Stafi me kete numer personal ekziston!" });
             }
 
             try
@@ -119,7 +119,7 @@ public class StaffController : BaseController
             catch (Exception ex)
             {
                 await LogError(ex);
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
             }
         }
         else
@@ -134,14 +134,14 @@ public class StaffController : BaseController
                 EmailConfirmed = true,
                 PhoneNumber = staff.PhoneNumber,
                 UserName = staff.Email,
-                Language = LanguageEnum.Albanian,
-                Mode = TemplateMode.Light,
+                Language = LanguageEnum.ALBANIAN,
+                Mode = TemplateMode.LIGHT,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             };
 
             string errors = string.Empty;
-            var error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountCreatedSuccessfully };
+            var error = new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountCreatedSuccessfully };
 
             string password = FirstTimePassword(configuration, staff.Firstname, staff.Lastname);
             var result = await userManager.CreateAsync(firstUser, password);
@@ -151,7 +151,7 @@ public class StaffController : BaseController
                 {
                     errors += $"{identityError.Description}. ";
                 }
-                error = new ErrorVM { Status = ErrorStatus.Warning, Description = errors };
+                error = new ErrorVM { Status = ErrorStatus.WARNING, Description = errors };
             }
 
             try
@@ -181,7 +181,7 @@ public class StaffController : BaseController
             {
                 await userManager.DeleteAsync(firstUser);
                 await LogError(ex);
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
             }
         }
 
@@ -194,7 +194,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(edit.StaffIde)).FirstOrDefaultAsync();
@@ -213,7 +213,7 @@ public class StaffController : BaseController
         userStaff.PhoneNumber = edit.PhoneNumber;
         staff.UpdatedDate = DateTime.Now;
         staff.UpdatedFrom = user.Id;
-        staff.UpdatedNo++;
+        staff.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
@@ -242,8 +242,8 @@ public class StaffController : BaseController
             .Select(a => new Qualifications
             {
                 StaffQualificationIde = CryptoSecurity.Encrypt(a.StaffQualificationId),
-                ProfessionType = user.Language == LanguageEnum.Albanian ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
-                EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
+                ProfessionType = user.Language == LanguageEnum.ALBANIAN ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
+                EducationLevel = user.Language == LanguageEnum.ALBANIAN ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
                 CreditNumber = a.CreditNumber,
@@ -274,7 +274,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         db.Add(new StaffQualification
@@ -301,7 +301,7 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -345,7 +345,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var qualification = await db.StaffQualification.Where(a => a.StaffQualificationId == CryptoSecurity.Decrypt<int>(edit.StaffQualificationIde)).FirstOrDefaultAsync();
@@ -368,10 +368,10 @@ public class StaffController : BaseController
         qualification.Validity = !string.IsNullOrEmpty(edit.To) ? DateTime.ParseExact(edit.Validity, "dd/MM/yyyy", null) : null;
         qualification.UpdatedDate = DateTime.Now;
         qualification.UpdatedFrom = user.Id;
-        qualification.UpdatedNo++;
+        qualification.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -419,7 +419,7 @@ public class StaffController : BaseController
         var qualification = await db.StaffQualification.Where(a => a.StaffQualificationId == CryptoSecurity.Decrypt<int>(ide)).FirstOrDefaultAsync();
         db.Remove(qualification);
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -451,7 +451,7 @@ public class StaffController : BaseController
                 Title = a.Title,
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
-                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                DocumentType = user.Language == LanguageEnum.ALBANIAN ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 Description = a.Description,
                 Active = a.Active
             }).ToListAsync();
@@ -480,7 +480,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         string path = await SaveFile(environment, configuration, add.FormFile, "StaffDocuments", null);
@@ -498,7 +498,7 @@ public class StaffController : BaseController
         });
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -529,7 +529,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde));
@@ -539,10 +539,10 @@ public class StaffController : BaseController
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo++;
+        document.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -557,10 +557,10 @@ public class StaffController : BaseController
         document.Active = false;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo++;
+        document.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -582,7 +582,7 @@ public class StaffController : BaseController
                 Ide = ide,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
+                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.LECTURER)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
@@ -591,8 +591,8 @@ public class StaffController : BaseController
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
-                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
+                Department = user.Language == LanguageEnum.ALBANIAN ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
+                StaffType = user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 Description = a.Description
@@ -604,7 +604,7 @@ public class StaffController : BaseController
             .Select(a => new Subjects
             {
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
-                Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
+                Subject = user.Language == LanguageEnum.ALBANIAN ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 InsertDate = a.InsertedDate
@@ -638,7 +638,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var getRole = GetRoleFromStaffType(add.StaffTypeId);
@@ -649,8 +649,8 @@ public class StaffController : BaseController
             if (await db.StaffDepartment.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
             {
                 var role = GetRoleFromStaffType(item.StaffTypeId);
-                var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.ExistsStaffRole, item.Staff.FirstName, item.Staff.LastName, staffRoleName) }); //$"{item.Staff.FirstName} {item.Staff.LastName} ekziston si {staffRoleName}. Duhet të pasivizoni këtë për të regjistruar pastaj!"
+                var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+                return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = string.Format(Resource.ExistsStaffRole, item.Staff.FirstName, item.Staff.LastName, staffRoleName) }); //$"{item.Staff.FirstName} {item.Staff.LastName} ekziston si {staffRoleName}. Duhet të pasivizoni këtë për të regjistruar pastaj!"
             }
         }
 
@@ -675,7 +675,7 @@ public class StaffController : BaseController
             var result = await userManager.AddToRolesAsync(newUser, db.AspNetRoles.Where(a => getRoles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
             }
         }
 
@@ -692,7 +692,7 @@ public class StaffController : BaseController
 
         db.StaffDepartment.Add(newStaffDepartment);
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -724,7 +724,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var department = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentIde)).FirstOrDefaultAsync();
@@ -735,10 +735,10 @@ public class StaffController : BaseController
         department.Description = edit.Description;
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo++;
+        department.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -753,7 +753,7 @@ public class StaffController : BaseController
         department.EndDate = DateTime.Now.AddDays(-1);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo++;
+        department.UpdatedNo += 1;
 
         var subjects = await db.StaffDepartmentSubject.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now).ToListAsync();
         foreach (var subject in subjects)
@@ -762,7 +762,7 @@ public class StaffController : BaseController
             subject.Active = false;
             subject.UpdatedDate = DateTime.Now;
             subject.UpdatedFrom = user.Id;
-            subject.UpdatedNo++;
+            subject.UpdatedNo += 1;
         }
 
         var userToRemove = await userManager.FindByIdAsync(department.Staff.UserId);
@@ -780,7 +780,7 @@ public class StaffController : BaseController
                 var result = await userManager.RemoveFromRolesAsync(userToRemove, db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.Name).ToList());
                 if (!result.Succeeded)
                 {
-                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
                 }
             }
             else
@@ -788,13 +788,13 @@ public class StaffController : BaseController
                 var result = await userManager.AddToRoleAsync(userToRemove, db.AspNetRoles.Where(a => a.Id == anotherRealRoles.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.Name).FirstOrDefault());
                 if (!result.Succeeded)
                 {
-                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
                 }
             }
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -815,7 +815,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         db.StaffDepartmentSubject.Add(new StaffDepartmentSubject
@@ -830,7 +830,7 @@ public class StaffController : BaseController
         });
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -861,7 +861,7 @@ public class StaffController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var subject = await db.StaffDepartmentSubject.FirstOrDefaultAsync(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentSubjectIde));
@@ -871,10 +871,10 @@ public class StaffController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo++;
+        subject.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -889,10 +889,10 @@ public class StaffController : BaseController
         subject.EndDate = DateTime.Now.AddDays(-1);
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo++;
+        subject.UpdatedNo += 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -914,12 +914,12 @@ public class StaffController : BaseController
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => //a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                //&& a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                 (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
+            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
-                //&& a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
+                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -927,12 +927,12 @@ public class StaffController : BaseController
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
                 PersonalNumber = a.PersonalNumber,
-                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
-                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
+                Gender = a.Gender == ((int)GenderEnum.MALE) ? Resource.Male : Resource.Female,
+                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
                 ProfileImage = a.User.ProfileImage,
                 Email = a.User.Email,
                 PhoneNumber = a.User.PhoneNumber,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
             }).ToListAsync();
         return Json(list);
     }
@@ -949,7 +949,7 @@ public class StaffController : BaseController
     {
         if (string.IsNullOrEmpty(ide))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         var staffDetails = await db.Staff
@@ -964,8 +964,8 @@ public class StaffController : BaseController
                 Lastname = a.LastName,
                 PhoneNumber = a.User.PhoneNumber,
                 Email = a.User.Email,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
-                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.Department.NameSq : a.Department.NameEn).ToList()),
                 City = a.City,
                 Country = a.Country,
                 ZIP = a.PostalCode
@@ -995,8 +995,8 @@ public class StaffController : BaseController
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
-                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
+                Department = user.Language == LanguageEnum.ALBANIAN ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
+                StaffType = user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 Description = a.Description
@@ -1023,8 +1023,8 @@ public class StaffController : BaseController
             .Select(a => new Qualifications
             {
                 StaffQualificationIde = CryptoSecurity.Encrypt(a.StaffQualificationId),
-                ProfessionType = user.Language == LanguageEnum.Albanian ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
-                EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
+                ProfessionType = user.Language == LanguageEnum.ALBANIAN ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
+                EducationLevel = user.Language == LanguageEnum.ALBANIAN ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
                 CreditNumber = a.CreditNumber,
@@ -1055,7 +1055,7 @@ public class StaffController : BaseController
                 Title = a.Title,
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
-                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                DocumentType = user.Language == LanguageEnum.ALBANIAN ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 Description = a.Description,
                 Active = a.Active
             }).ToListAsync();
@@ -1081,7 +1081,7 @@ public class StaffController : BaseController
             .Select(a => new Subjects
             {
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
-                Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
+                Subject = user.Language == LanguageEnum.ALBANIAN ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 InsertDate = a.InsertedDate
@@ -1099,7 +1099,7 @@ public class StaffController : BaseController
     {
         if (string.IsNullOrEmpty(PersonalNumber))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
         string userId = await db.Staff.Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(PersonalNumber)).Select(a => a.UserId).FirstOrDefaultAsync();
@@ -1108,7 +1108,7 @@ public class StaffController : BaseController
         string filePath = Image != null ? await SaveImage(environment, Image, "Users") : null;
         aspUser.ProfileImage = filePath;
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
+        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
     }
 
     #endregion

@@ -852,4 +852,31 @@
   <data name="YouHaveHolidayPending" xml:space="preserve">
     <value>Nuk mund të bëni kërkesën për pushim përderi sa keni një pushim në pritje për shqyrtim!</value>
   </data>
+  <data name="AccountNotLocked" xml:space="preserve">
+    <value>Llogari nuk u bllokua</value>
+  </data>
+  <data name="AccountNotUnlocked" xml:space="preserve">
+    <value>Llogari nuk u zhbllokua</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Aprovuar</value>
+  </data>
+  <data name="InvalidLogin" xml:space="preserve">
+    <value>Përpjekje e pavlefshme për hyrje për kyçje. Emaili/username ose fjalëkalimi janë të pasakta!</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Në pritje</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Refuzuar</value>
+  </data>
+  <data name="Review" xml:space="preserve">
+    <value>Shqyrto</value>
+  </data>
+  <data name="TotalDays" xml:space="preserve">
+    <value>Ditët totale</value>
+  </data>
+  <data name="YouMustConfirmEmail" xml:space="preserve">
+    <value>Duhet të konfirmoni emailin tuaj!</value>
+  </data>
 </root>

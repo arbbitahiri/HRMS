@@ -42,7 +42,7 @@ namespace HRMS.Areas.Identity.Pages.Account
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Error while changing email!" };
+                Error = new ErrorVM { Status = Utilities.ErrorStatus.ERROR, Description = "Error while changing email!" };
                 return RedirectToPage("Login");
             }
 
@@ -51,12 +51,12 @@ namespace HRMS.Areas.Identity.Pages.Account
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Error while changing username!" };
+                Error = new ErrorVM { Status = Utilities.ErrorStatus.ERROR, Description = "Error while changing username!" };
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            Error = new ErrorVM { Status = Utilities.ErrorStatus.Error, Description = "Thank you for confirming your email." };
+            Error = new ErrorVM { Status = Utilities.ErrorStatus.ERROR, Description = "Thank you for confirming your email." };
 
             TempData.Set<ErrorVM>("Error", Error);
             return RedirectToPage("Login");

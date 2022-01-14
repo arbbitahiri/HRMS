@@ -1,6 +1,4 @@
-﻿using HRMS.Utilities;
-
-namespace HRMS.Models.Staff;
+﻿namespace HRMS.Models.Staff;
 public class StaffDetails
 {
     public string Ide { get; set; }

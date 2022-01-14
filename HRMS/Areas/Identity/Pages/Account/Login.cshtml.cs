@@ -21,14 +21,14 @@ namespace HRMS.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public class LoginModel : BaseOModel
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> userManager;
+    private readonly SignInManager<ApplicationUser> signInManager;
 
     public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
         : base(db)
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
+        this.userManager = userManager;
+        this.signInManager = signInManager;
     }
 
     [BindProperty]
@@ -65,7 +65,7 @@ public class LoginModel : BaseOModel
 
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-        ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
         ReturnUrl = returnUrl;
     }
@@ -76,13 +76,25 @@ public class LoginModel : BaseOModel
         Language = Thread.CurrentThread.CurrentCulture.Name;
         if (!ModelState.IsValid)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Error, Description = "" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.ERROR, Description = "" });
         }
 
-        var error = new ErrorVM { Status = ErrorStatus.Success, Description = "" };
+        var error = new ErrorVM { Status = ErrorStatus.SUCCESS, Description = "" };
         var request = Request.Form;
 
-        var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+        var userName = Input.Email;
+        if (userName.IndexOf('@') > -1)
+        {
+            var user = await userManager.FindByEmailAsync(Input.Email);
+            if (user == null)
+            {
+                return new JsonResult(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidLogin, Title = Resource.Warning });
+            }
+
+            userName = user.UserName;
+        }
+
+        var result = await signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
         if (result.Succeeded)
         {
             var userId = await db.AspNetUsers.Where(a => a.Email == Input.Email).Select(a => a.Id).FirstOrDefaultAsync();
@@ -91,15 +103,15 @@ public class LoginModel : BaseOModel
         }
         if (result.RequiresTwoFactor)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = "You must confirm account!", Title = Resource.Info, Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.INFO, Description = Resource.YouMustConfirmEmail, Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         if (result.IsLockedOut)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = Resource.AccountLocked, Title = Resource.Info, Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.INFO, Description = Resource.AccountLocked, Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         else
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.Warning, Description = "Invalid login attempt", Title = Resource.Warning });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidLogin, Title = Resource.Warning });
         }
     }
 }

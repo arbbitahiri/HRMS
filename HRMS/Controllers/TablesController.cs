@@ -34,15 +34,15 @@ public class TablesController : BaseController
     {
         var tables = new List<TableName>()
         {
-            new TableName() { Table = LookUpTable.DocumentType, Title = Resource.DocumentType },
-            new TableName() { Table = LookUpTable.EducationLevelType, Title = Resource.EducationLevelType },
-            new TableName() { Table = LookUpTable.EvaluationType, Title = Resource.EvaluationType },
-            new TableName() { Table = LookUpTable.HolidayType, Title = Resource.HolidayType },
-            new TableName() { Table = LookUpTable.ProfessionType, Title = Resource.ProfessionType },
-            new TableName() { Table = LookUpTable.RateType, Title = Resource.RateType },
-            new TableName() { Table = LookUpTable.StaffType, Title = Resource.StaffType },
-            new TableName() { Table = LookUpTable.StatusType, Title = Resource.StatusType },
-            new TableName() { Table = LookUpTable.Department, Title = Resource.Department }
+            new TableName() { Table = LookUpTable.DOCUMENTTYPE, Title = Resource.DocumentType },
+            new TableName() { Table = LookUpTable.EDUCATIONLEVELTYPE, Title = Resource.EducationLevelType },
+            new TableName() { Table = LookUpTable.EVALUATIONTYPE, Title = Resource.EvaluationType },
+            new TableName() { Table = LookUpTable.HOLIDAYTYPE, Title = Resource.HolidayType },
+            new TableName() { Table = LookUpTable.PROFESSIONTYPE, Title = Resource.ProfessionType },
+            new TableName() { Table = LookUpTable.RATETYPE, Title = Resource.RateType },
+            new TableName() { Table = LookUpTable.STAFFTYPE, Title = Resource.StaffType },
+            new TableName() { Table = LookUpTable.STATUSTYPE, Title = Resource.StatusType },
+            new TableName() { Table = LookUpTable.DEPARTMENT, Title = Resource.Department }
         };
 
         return PartialView(tables);
@@ -57,7 +57,7 @@ public class TablesController : BaseController
     {
         switch (table)
         {
-            case LookUpTable.DocumentType:
+            case LookUpTable.DOCUMENTTYPE:
                 var dataDocumentType = await db.DocumentType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.DocumentTypeId),
@@ -66,7 +66,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataDocumentType, Table = table, Title = title });
-            case LookUpTable.EducationLevelType:
+            case LookUpTable.EDUCATIONLEVELTYPE:
                 var dataEducationLevelType = await db.EducationLevelType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.EducationLevelTypeId),
@@ -75,7 +75,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataEducationLevelType, Table = table, Title = title });
-            case LookUpTable.EvaluationType:
+            case LookUpTable.EVALUATIONTYPE:
                 var dataEvaluationType = await db.EvaluationType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.EvaluationTypeId),
@@ -84,7 +84,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataEvaluationType, Table = table, Title = title });
-            case LookUpTable.HolidayType:
+            case LookUpTable.HOLIDAYTYPE:
                 var dataHolidayType = await db.HolidayType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.HolidayTypeId),
@@ -93,7 +93,7 @@ public class TablesController : BaseController
                     Active = true
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataHolidayType, Table = table, Title = title });
-            case LookUpTable.ProfessionType:
+            case LookUpTable.PROFESSIONTYPE:
                 var dataProfessionType = await db.ProfessionType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.ProfessionTypeId),
@@ -103,7 +103,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataProfessionType, Table = table, Title = title });
-            case LookUpTable.RateType:
+            case LookUpTable.RATETYPE:
                 var dataRateType = await db.RateType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.RateTypeId),
@@ -113,7 +113,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataRateType, Table = table, Title = title });
-            case LookUpTable.StaffType:
+            case LookUpTable.STAFFTYPE:
                 var dataStaffType = await db.StaffType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.StaffTypeId),
@@ -122,7 +122,7 @@ public class TablesController : BaseController
                     Active = true
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataStaffType, Table = table, Title = title });
-            case LookUpTable.StatusType:
+            case LookUpTable.STATUSTYPE:
                 var dataStatusType = await db.StatusType.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.StatusTypeId),
@@ -131,7 +131,7 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataStatusType, Table = table, Title = title });
-            case LookUpTable.Department:
+            case LookUpTable.DEPARTMENT:
                 var dataDepartment = await db.Department.Select(a => new DataList
                 {
                     Ide = CryptoSecurity.Encrypt(a.DepartmentId),
@@ -166,14 +166,14 @@ public class TablesController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM() { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
-        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully };
 
         switch (create.Table)
         {
-            case LookUpTable.DocumentType:
+            case LookUpTable.DOCUMENTTYPE:
                 db.DocumentType.Add(new DocumentType
                 {
                     NameSq = create.NameSQ,
@@ -184,7 +184,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EducationLevelType:
+            case LookUpTable.EDUCATIONLEVELTYPE:
                 db.EducationLevelType.Add(new EducationLevelType
                 {
                     NameSq = create.NameSQ,
@@ -195,7 +195,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EvaluationType:
+            case LookUpTable.EVALUATIONTYPE:
                 db.EvaluationType.Add(new EvaluationType
                 {
                     NameSq = create.NameSQ,
@@ -206,7 +206,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.HolidayType:
+            case LookUpTable.HOLIDAYTYPE:
                 db.HolidayType.Add(new HolidayType
                 {
                     NameSq = create.NameSQ,
@@ -217,7 +217,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.ProfessionType:
+            case LookUpTable.PROFESSIONTYPE:
                 db.ProfessionType.Add(new ProfessionType
                 {
                     NameSq = create.NameSQ,
@@ -229,7 +229,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.RateType:
+            case LookUpTable.RATETYPE:
                 db.RateType.Add(new RateType
                 {
                     NameSq = create.NameSQ,
@@ -241,7 +241,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StaffType:
+            case LookUpTable.STAFFTYPE:
                 db.StaffType.Add(new StaffType
                 {
                     NameSq = create.NameSQ,
@@ -252,7 +252,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StatusType:
+            case LookUpTable.STATUSTYPE:
                 db.StatusType.Add(new StatusType
                 {
                     NameSq = create.NameSQ,
@@ -263,7 +263,7 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.Department:
+            case LookUpTable.DEPARTMENT:
                 db.Department.Add(new Department
                 {
                     NameSq = create.NameSQ,
@@ -276,7 +276,7 @@ public class TablesController : BaseController
                 await db.SaveChangesAsync();
                 return Json(error);
             default:
-                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+                return Json(new ErrorVM() { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
     }
 
@@ -290,7 +290,7 @@ public class TablesController : BaseController
         var id = CryptoSecurity.Decrypt<int>(ide);
         switch (table)
         {
-            case LookUpTable.DocumentType:
+            case LookUpTable.DOCUMENTTYPE:
                 var dataDocumentType = await db.DocumentType
                     .Where(a => a.DocumentTypeId == id)
                     .Select(a => new CreateData
@@ -301,7 +301,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataDocumentType);
-            case LookUpTable.EducationLevelType:
+            case LookUpTable.EDUCATIONLEVELTYPE:
                 var dataEducationLevelType = await db.EducationLevelType
                     .Where(a => a.EducationLevelTypeId == id)
                     .Select(a => new CreateData
@@ -312,7 +312,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataEducationLevelType);
-            case LookUpTable.EvaluationType:
+            case LookUpTable.EVALUATIONTYPE:
                 var dataEvaluationType = await db.EvaluationType
                     .Where(a => a.EvaluationTypeId == id)
                     .Select(a => new CreateData
@@ -323,7 +323,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataEvaluationType);
-            case LookUpTable.HolidayType:
+            case LookUpTable.HOLIDAYTYPE:
                 var dataHolidayType = await db.HolidayType
                     .Where(a => a.HolidayTypeId == id)
                     .Select(a => new CreateData
@@ -334,7 +334,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataHolidayType);
-            case LookUpTable.ProfessionType:
+            case LookUpTable.PROFESSIONTYPE:
                 var dataProfessionType = await db.ProfessionType
                     .Where(a => a.ProfessionTypeId == id)
                     .Select(a => new CreateData
@@ -346,7 +346,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataProfessionType);
-            case LookUpTable.RateType:
+            case LookUpTable.RATETYPE:
                 var dataRateType = await db.RateType
                     .Where(a => a.RateTypeId == id)
                     .Select(a => new CreateData
@@ -358,7 +358,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataRateType);
-            case LookUpTable.StaffType:
+            case LookUpTable.STAFFTYPE:
                 var dataStaffType = await db.StaffType
                     .Where(a => a.StaffTypeId == id)
                     .Select(a => new CreateData
@@ -369,7 +369,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataStaffType);
-            case LookUpTable.StatusType:
+            case LookUpTable.STATUSTYPE:
                 var dataStatusType = await db.StatusType
                     .Where(a => a.StatusTypeId == id)
                     .Select(a => new CreateData
@@ -380,7 +380,7 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataStatusType);
-            case LookUpTable.Department:
+            case LookUpTable.DEPARTMENT:
                 var dataDepartment = await db.Department
                     .Where(a => a.DepartmentId == id)
                     .Select(a => new CreateData
@@ -403,55 +403,55 @@ public class TablesController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM() { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
 
-        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully };
         var id = CryptoSecurity.Decrypt<int>(edit.Ide);
 
         switch (edit.Table)
         {
-            case LookUpTable.DocumentType:
+            case LookUpTable.DOCUMENTTYPE:
                 var documentType = await db.DocumentType.FirstOrDefaultAsync(a => a.DocumentTypeId == id);
                 documentType.NameSq = edit.NameSQ;
                 documentType.NameEn = edit.NameEN;
                 documentType.Active = edit.Active;
                 documentType.UpdatedDate = DateTime.Now;
                 documentType.UpdatedFrom = user.Id;
-                documentType.UpdatedNo++;
+                documentType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EducationLevelType:
+            case LookUpTable.EDUCATIONLEVELTYPE:
                 var educationLevelType = await db.EducationLevelType.FirstOrDefaultAsync(a => a.EducationLevelTypeId == id);
                 educationLevelType.NameSq = edit.NameSQ;
                 educationLevelType.NameEn = edit.NameEN;
                 educationLevelType.Active = edit.Active;
                 educationLevelType.UpdatedDate = DateTime.Now;
                 educationLevelType.UpdatedFrom = user.Id;
-                educationLevelType.UpdatedNo++;
+                educationLevelType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EvaluationType:
+            case LookUpTable.EVALUATIONTYPE:
                 var evaluationType = await db.EvaluationType.FirstOrDefaultAsync(a => a.EvaluationTypeId == id);
                 evaluationType.NameSq = edit.NameSQ;
                 evaluationType.NameEn = edit.NameEN;
                 evaluationType.Active = edit.Active;
                 evaluationType.UpdatedDate = DateTime.Now;
                 evaluationType.UpdatedFrom = user.Id;
-                evaluationType.UpdatedNo++;
+                evaluationType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.HolidayType:
+            case LookUpTable.HOLIDAYTYPE:
                 var holidayType = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
                 holidayType.NameSq = edit.NameSQ;
                 holidayType.NameEn = edit.NameEN;
                 //holidayType.Active = edit.Active;
                 holidayType.UpdatedDate = DateTime.Now;
                 holidayType.UpdatedFrom = user.Id;
-                holidayType.UpdatedNo++;
+                holidayType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.ProfessionType:
+            case LookUpTable.PROFESSIONTYPE:
                 var professionType = await db.ProfessionType.FirstOrDefaultAsync(a => a.ProfessionTypeId == id);
                 professionType.NameSq = edit.NameSQ;
                 professionType.NameEn = edit.NameEN;
@@ -459,10 +459,10 @@ public class TablesController : BaseController
                 professionType.Active = edit.Active;
                 professionType.UpdatedDate = DateTime.Now;
                 professionType.UpdatedFrom = user.Id;
-                professionType.UpdatedNo++;
+                professionType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.RateType:
+            case LookUpTable.RATETYPE:
                 var rateType = await db.RateType.FirstOrDefaultAsync(a => a.RateTypeId == id);
                 rateType.NameSq = edit.NameSQ;
                 rateType.NameEn = edit.NameEN;
@@ -470,30 +470,30 @@ public class TablesController : BaseController
                 rateType.Active = edit.Active;
                 rateType.UpdatedDate = DateTime.Now;
                 rateType.UpdatedFrom = user.Id;
-                rateType.UpdatedNo++;
+                rateType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StaffType:
+            case LookUpTable.STAFFTYPE:
                 var staffType = await db.StaffType.FirstOrDefaultAsync(a => a.StaffTypeId == id);
                 staffType.NameSq = edit.NameSQ;
                 staffType.NameEn = edit.NameEN;
                 //staffType.Active = edit.Active;
                 staffType.UpdatedDate = DateTime.Now;
                 staffType.UpdatedFrom = user.Id;
-                staffType.UpdatedNo++;
+                staffType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StatusType:
+            case LookUpTable.STATUSTYPE:
                 var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusTypeId == id);
                 statusType.NameSq = edit.NameSQ;
                 statusType.NameEn = edit.NameEN;
                 statusType.Active = edit.Active;
                 statusType.UpdatedDate = DateTime.Now;
                 statusType.UpdatedFrom = user.Id;
-                statusType.UpdatedNo++;
+                statusType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.Department:
+            case LookUpTable.DEPARTMENT:
                 var department = await db.Department.FirstOrDefaultAsync(a => a.DepartmentId == id);
                 department.NameSq = edit.NameSQ;
                 department.NameEn = edit.NameEN;
@@ -501,11 +501,11 @@ public class TablesController : BaseController
                 department.Active = edit.Active;
                 department.UpdatedDate = DateTime.Now;
                 department.UpdatedFrom = user.Id;
-                department.UpdatedNo++;
+                department.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
             default:
-                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+                return Json(new ErrorVM() { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
     }
 
@@ -517,86 +517,86 @@ public class TablesController : BaseController
     [Description("Action to delete data from a lookup table.")]
     public async Task<IActionResult> Delete(LookUpTable table, string ide, bool active)
     {
-        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully };
 
         var id = CryptoSecurity.Decrypt<int>(ide);
 
         switch (table)
         {
-            case LookUpTable.DocumentType:
+            case LookUpTable.DOCUMENTTYPE:
                 var documentType = await db.DocumentType.FirstOrDefaultAsync(a => a.DocumentTypeId == id);
                 documentType.Active = active;
                 documentType.UpdatedDate = DateTime.Now;
                 documentType.UpdatedFrom = user.Id;
-                documentType.UpdatedNo++;
+                documentType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EducationLevelType:
+            case LookUpTable.EDUCATIONLEVELTYPE:
                 var educationLevelType = await db.EducationLevelType.FirstOrDefaultAsync(a => a.EducationLevelTypeId == id);
                 educationLevelType.Active = active;
                 educationLevelType.UpdatedDate = DateTime.Now;
                 educationLevelType.UpdatedFrom = user.Id;
-                educationLevelType.UpdatedNo++;
+                educationLevelType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.EvaluationType:
+            case LookUpTable.EVALUATIONTYPE:
                 var evaluationType = await db.EvaluationType.FirstOrDefaultAsync(a => a.EvaluationTypeId == id);
                 evaluationType.Active = active;
                 evaluationType.UpdatedDate = DateTime.Now;
                 evaluationType.UpdatedFrom = user.Id;
-                evaluationType.UpdatedNo++;
+                evaluationType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.HolidayType:
+            case LookUpTable.HOLIDAYTYPE:
                 var holidayType = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
                 //holidayType.Active = edit.Active;
                 holidayType.UpdatedDate = DateTime.Now;
                 holidayType.UpdatedFrom = user.Id;
-                holidayType.UpdatedNo++;
+                holidayType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.ProfessionType:
+            case LookUpTable.PROFESSIONTYPE:
                 var professionType = await db.ProfessionType.FirstOrDefaultAsync(a => a.ProfessionTypeId == id);
                 professionType.Active = active;
                 professionType.UpdatedDate = DateTime.Now;
                 professionType.UpdatedFrom = user.Id;
-                professionType.UpdatedNo++;
+                professionType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.RateType:
+            case LookUpTable.RATETYPE:
                 var rateType = await db.RateType.FirstOrDefaultAsync(a => a.RateTypeId == id);
                 rateType.Active = active;
                 rateType.UpdatedDate = DateTime.Now;
                 rateType.UpdatedFrom = user.Id;
-                rateType.UpdatedNo++;
+                rateType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StaffType:
+            case LookUpTable.STAFFTYPE:
                 var staffType = await db.StaffType.FirstOrDefaultAsync(a => a.StaffTypeId == id);
                 //staffType.Active = edit.Active;
                 staffType.UpdatedDate = DateTime.Now;
                 staffType.UpdatedFrom = user.Id;
-                staffType.UpdatedNo++;
+                staffType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.StatusType:
+            case LookUpTable.STATUSTYPE:
                 var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusTypeId == id);
                 statusType.Active = active;
                 statusType.UpdatedDate = DateTime.Now;
                 statusType.UpdatedFrom = user.Id;
-                statusType.UpdatedNo++;
+                statusType.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
-            case LookUpTable.Department:
+            case LookUpTable.DEPARTMENT:
                 var department = await db.Department.FirstOrDefaultAsync(a => a.DepartmentId == id);
                 department.Active = active;
                 department.UpdatedDate = DateTime.Now;
                 department.UpdatedFrom = user.Id;
-                department.UpdatedNo++;
+                department.UpdatedNo += 1;
                 await db.SaveChangesAsync();
                 return Json(error);
             default:
-                return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+                return Json(new ErrorVM() { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
         }
     }
 

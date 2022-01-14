@@ -141,7 +141,7 @@
                             if (row.phoneNumber == null) {
                                 return "///";
                             } else {
-                                return row.phoneNumber;
+                                return `+${row.phoneNumber}`;
                             }
                         }
                     },
@@ -155,7 +155,7 @@
                         data: function (row, type, set) {
                             let dateTimeNow = new Date();
                             var lockoutDate = new Date(row.lockoutEnd);
-                            return lockoutDate >= dateTimeNow ? '<small class="badge badge-success">@Html.Raw(Resource.No)</small>' : '<small class="badge badge-danger">@Html.Raw(Resource.Yes)</small>';
+                            return lockoutDate <= dateTimeNow ? '<small class="badge badge-success">@Html.Raw(Resource.No)</small>' : '<small class="badge badge-danger">@Html.Raw(Resource.Yes)</small>';
                         }
                     },
                     {
@@ -168,7 +168,7 @@
                                 '<div class="dropdown-menu" role="menu">' +
                                 '<button type="button" class="dropdown-item" onclick="edit_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                                 '<button type="button" class="dropdown-item" onclick="setPassword(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-key"></i></span><span class="p-1">@Resource.SetPassword</span></button>';
-                            if (lockoutDate >= dateTimeNow) {
+                            if (lockoutDate <= dateTimeNow) {
                                 dropdown += '<button type="button" class="dropdown-item" onclick="lock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.LockAccount</span></button>';
                             } else {
                                 dropdown += '<button type="button" class="dropdown-item" onclick="unlock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-unlock"></i></span><span class="p-1">@Resource.UnlockAccount</span></button>';

@@ -27,6 +27,12 @@ const SubmitPathType = {
     PATH: 3
 }
 
+const StatusType = {
+    APPROVED: 1,
+    REJECTED: 2,
+    PENDING: 3
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
