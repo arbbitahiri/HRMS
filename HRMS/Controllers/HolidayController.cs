@@ -32,13 +32,15 @@ public class HolidayController : BaseController
     [Description("List of holidays.")]
     public async Task<IActionResult> Search(Search search)
     {
+        var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.MANAGER && a.Staff.UserId == user.Id);
+
         var holidays = await db.HolidayRequest
             .Include(a => a.HolidayType)
             .Where(a => a.Active
                 && a.HolidayTypeId == (search.HolidayTypeId ?? a.HolidayTypeId)
                 && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
                 && (string.IsNullOrEmpty(search.Name) || a.Staff.FirstName == search.Name || a.Staff.LastName == search.Name)
-                && (a.Staff.UserId == user.Id || a.Staff.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.MANAGER)))
+                && (manager || a.Staff.UserId == user.Id))
             .Select(a => new List
             {
                 HolidayRequestIde = CryptoSecurity.Encrypt(a.HolidayRequestId),
@@ -63,10 +65,10 @@ public class HolidayController : BaseController
 
     #region Create
 
-    [Authorize(Policy = "31:r"), Description("Form to create a holiday")]
+    [Authorize(Policy = "31:c"), Description("Form to create a holiday")]
     public IActionResult _Create() => PartialView();
 
-    [HttpPost, Authorize(Policy = "31:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "31:c"), ValidateAntiForgeryToken]
     [Description("Form to create a holiday")]
     public async Task<IActionResult> Create(Create create)
     {
@@ -140,7 +142,7 @@ public class HolidayController : BaseController
 
     #region Review
 
-    [Authorize(Policy = "31:r"), Description("Form to review a holiday request.")]
+    [Authorize(Policy = "31r:r"), Description("Form to review a holiday request.")]
     public async Task<IActionResult> _Review(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -160,7 +162,7 @@ public class HolidayController : BaseController
         return PartialView(holidayReview);
     }
 
-    [HttpPost, Authorize(Policy = "31:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "31r:r"), ValidateAntiForgeryToken]
     [Description("Action to review a holiday request.")]
     public async Task<IActionResult> Review(Review review)
     {
@@ -187,7 +189,7 @@ public class HolidayController : BaseController
 
     #region Edit
 
-    [Authorize(Policy = "31:r"), Description("Form to edit a holiday.")]
+    [Authorize(Policy = "31:e"), Description("Form to edit a holiday.")]
     public async Task<IActionResult> _Edit(string ide)
     {
         var holiday = await db.HolidayRequest
@@ -204,7 +206,7 @@ public class HolidayController : BaseController
         return PartialView(holiday);
     }
 
-    [HttpPost, Authorize(Policy = "31:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "31:e"), ValidateAntiForgeryToken]
     [Description("Action to edit a holiday.")]
     public async Task<IActionResult> Edit(Create edit)
     {
@@ -279,7 +281,7 @@ public class HolidayController : BaseController
 
     #region Delete
 
-    [HttpPost, Authorize(Policy = "31:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "31:d"), ValidateAntiForgeryToken]
     [Description("Action to edit a holiday.")]
     public async Task<IActionResult> Delete(string ide)
     {

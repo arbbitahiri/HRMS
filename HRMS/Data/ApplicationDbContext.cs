@@ -4,32 +4,35 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HRMS.Data
+namespace HRMS.Data;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+    }
 
-        #region SQL Functions
+    #region SQL Functions
 
-        [NotMapped]
-        public DbSet<MenuList> MenuList { get; set; }
+    [NotMapped]
+    public DbSet<MenuList> MenuList { get; set; }
 
-        [NotMapped]
-        public DbSet<MenuListAccess> MenuListAccess { get; set; }
+    [NotMapped]
+    public DbSet<MenuListAccess> MenuListAccess { get; set; }
 
-        #endregion
+    [NotMapped]
+    public DbSet<Logs> Logs { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.Entity<ApplicationUser>().HasIndex(a => new { a.PersonalNumber }).IsUnique(true);
-            builder.Entity<MenuList>().HasNoKey();
-            builder.Entity<MenuListAccess>().HasNoKey();
+    #endregion
 
-            base.OnModelCreating(builder);
-        }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<ApplicationUser>().HasIndex(a => new { a.PersonalNumber }).IsUnique(true);
+        builder.Entity<MenuList>().HasNoKey();
+        builder.Entity<MenuListAccess>().HasNoKey();
+        builder.Entity<Logs>().HasNoKey();
+
+        base.OnModelCreating(builder);
     }
 }

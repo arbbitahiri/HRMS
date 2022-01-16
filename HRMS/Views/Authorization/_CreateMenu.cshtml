@@ -8,7 +8,7 @@
     </button>
 </div>
 
-<form asp-action="CreateMenu" asp-controller="Configuration" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
+<form asp-action="CreateMenu" asp-controller="Authorization" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
 

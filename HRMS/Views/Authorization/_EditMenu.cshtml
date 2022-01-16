@@ -1,5 +1,5 @@
-﻿@using HRMS.Models.SubMenu
-@model EditSubMenu
+﻿@using HRMS.Models.Menu
+@model EditMenu
 
 <div class="modal-header">
     <h5 class="modal-title">@Resource.Edit</h5>
@@ -8,10 +8,10 @@
     </button>
 </div>
 
-<form asp-action="EditSubMenu" asp-controller="Configuration" id="frm_EditSubMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_submenu" role="form">
+<form asp-action="EditMenu" asp-controller="Authorization" id="frm_EditMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="SubMenuIde" type="hidden"/>
+        <input asp-for="MenuIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-4">
@@ -58,6 +58,15 @@
                 <input asp-for="OpenFor" class="form-control" />
                 <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
+            <div class="col-md-4">
+                <label asp-for="HasSubMenu" class="required">@Resource.HasSubMenu</label>
+                <div class="icheck-primary d-inline">
+                    <input asp-for="HasSubMenu" id="has_submenu" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="HasSubMenu" id="lbl_submenu" onclick="change_submenu(this)"></label>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
             <div class="col-md-4 d-flex flex-column pl-2">
                 <label asp-for="Active" class="required">@Resource.Active</label>
                 <div class="icheck-primary d-inline">
@@ -76,13 +85,22 @@
 
 <script>
     $(document).ready(function () {
-        var form = $('#frm_EditSubMenu');
+        var form = $('#frm_EditMenu');
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
 
+        $('#lbl_submenu').text('');
         $('#lbl_active').text('');
     });
+
+    function change_submenu(e) {
+        if($('#has_submenu').is(":checked")) {
+            $('#has_submenu').removeAttr('checked');
+        } else {
+            $('#has_submenu').attr('checked', true);
+        }
+    }
 
     function change_active(e) {
         if($('#inp_active').is(":checked")) {
@@ -92,7 +110,7 @@
         }
     }
 
-    function on_success_submenu(data) {
+    function on_success_menu(data) {
         handle_success(data, SubmitPathType.RELOAD, "");
     }
 </script>

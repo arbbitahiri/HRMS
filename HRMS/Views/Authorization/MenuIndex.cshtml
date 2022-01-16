@@ -48,7 +48,7 @@
             window.location.hash = "menu";
 
             $("#tab_forMenu").html('');
-            $("#tab_forMenu").load('@Url.Action("Menu", "Configuration")');
+            $("#tab_forMenu").load('@Url.Action("Menu", "Authorization")');
         });
 
         $('#tab_SubMenu').on("click", function () {
@@ -59,7 +59,7 @@
             window.location.hash = "submenu";
 
             $("#tab_forSubMenu").html('');
-            $("#tab_forSubMenu").load('@Url.Action("SubMenu", "Configuration")');
+            $("#tab_forSubMenu").load('@Url.Action("SubMenu", "Authorization")');
         });
 
         if (window.location.hash == "#submenu") {

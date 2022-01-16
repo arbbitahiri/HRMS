@@ -34,7 +34,7 @@
     });
 
     function create_menu() {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateMenu", "Configuration")', function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateMenu", "Authorization")', function () {
             $('#modal-lg').modal('toggle');
         });
     }
@@ -82,13 +82,13 @@
     }
 
     function add_submenu(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Configuration")?ide=' + ide, function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_CreateSubMenu", "Authorization")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }
 
     function edit(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditMenu", "Configuration")?ide=' + ide, function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditMenu", "Authorization")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }
@@ -105,7 +105,7 @@
             cancelButtonText: "@Resource.No"
         }).then((result) => {
             if (result.value) {
-                $.post('@Url.Action("DeleteMenu", "Configuration")', {
+                $.post('@Url.Action("DeleteMenu", "Authorization")', {
                     ide: ide,
                     "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                     }, function (data) {

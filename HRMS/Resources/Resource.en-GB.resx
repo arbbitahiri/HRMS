@@ -879,4 +879,49 @@
   <data name="YouMustConfirmEmail" xml:space="preserve">
     <value>You must confirm your email!</value>
   </data>
+  <data name="Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="AuthorizationsForActions" xml:space="preserve">
+    <value>Authorizations for actions in system</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="Failure" xml:space="preserve">
+    <value>Failure</value>
+  </data>
+  <data name="FormContent" xml:space="preserve">
+    <value>Form content</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>HTTP Method</value>
+  </data>
+  <data name="Ip" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="IsError" xml:space="preserve">
+    <value>Is error</value>
+  </data>
+  <data name="MachineName" xml:space="preserve">
+    <value>Machine name</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
 </root>

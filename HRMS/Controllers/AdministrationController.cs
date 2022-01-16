@@ -44,10 +44,10 @@ public class AdministrationController : BaseController
 
     #region => List
 
-    [HttpGet, Description("Entry home.")]
+    [HttpGet, Authorize(Policy = "41:r"), Description("Entry home.")]
     public IActionResult Index() => View();
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41:r"), ValidateAntiForgeryToken]
     [Description("Search for users.")]
     public async Task<IActionResult> Search(Search search)
     {
@@ -78,10 +78,10 @@ public class AdministrationController : BaseController
 
     #region => Create
 
-    [HttpGet, Description("Form to create a user.")]
+    [HttpGet, Authorize(Policy = "41:c"), Description("Form to create a user.")]
     public IActionResult Create() => View();
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41:c"), ValidateAntiForgeryToken]
     [Description("Action to create a user.")]
     public async Task<IActionResult> Create(Create create)
     {
@@ -149,7 +149,7 @@ public class AdministrationController : BaseController
 
     #region => Edit
 
-    [HttpGet, Description("Form to edit a user.")]
+    [HttpGet, Authorize(Policy = "41:e"), Description("Form to edit a user.")]
     public async Task<IActionResult> _Edit(string uIde)
     {
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde));
@@ -168,7 +168,7 @@ public class AdministrationController : BaseController
         return View(edit);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41:e"), ValidateAntiForgeryToken]
     [Description("Action to edit a user.")]
     public async Task<IActionResult> Edit(Edit edit)
     {
@@ -222,7 +222,7 @@ public class AdministrationController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41:d"), ValidateAntiForgeryToken]
     [Description("Action to delete a user.")]
     public async Task<IActionResult> Delete(string uId)
     {
@@ -260,7 +260,7 @@ public class AdministrationController : BaseController
 
     #region Manage users
 
-    [HttpGet, Description("Form to set password for user.")]
+    [HttpGet, Authorize(Policy = "41sp:c"), Description("Form to set password for user.")]
     public async Task<IActionResult> _SetPassword(string uIde)
     {
         var user = await appDb.Users.Where(a => a.Id == CryptoSecurity.Decrypt<string>(uIde))
@@ -272,7 +272,7 @@ public class AdministrationController : BaseController
         return PartialView(user);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41sp:c"), ValidateAntiForgeryToken]
     [Description("Action to set password for user.")]
     public async Task<IActionResult> _SetPassword(SetPassword set)
     {
@@ -292,7 +292,7 @@ public class AdministrationController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = $"{Resource.PasswordUpdatedSuccess}" });
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41l:c"), ValidateAntiForgeryToken]
     [Description("Action to lock the account.")]
     public async Task<IActionResult> Lock(string uIde)
     {
@@ -304,7 +304,7 @@ public class AdministrationController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountLockedSuccess });
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41ul:c"), ValidateAntiForgeryToken]
     [Description("Action to unlock the account.")]
     public async Task<IActionResult> Unlock(string uIde)
     {
@@ -316,7 +316,7 @@ public class AdministrationController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountUnlockedSuccess });
     }
 
-    [HttpGet, Description("Form to add roles to user.")]
+    [HttpGet, Authorize(Policy = "41r:c"), Description("Form to add roles to user.")]
     public async Task<IActionResult> _AddRole(string uIde)
     {
         var user = await db.AspNetUsers.Where(a => a.Id == CryptoSecurity.Decrypt<string>(uIde))
@@ -328,7 +328,7 @@ public class AdministrationController : BaseController
         return PartialView(user);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "41r:c"), ValidateAntiForgeryToken]
     [Description("Action to add roles to user.")]
     public async Task<IActionResult> _AddRole(AddRole addRole)
     {
@@ -376,7 +376,7 @@ public class AdministrationController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "11r:r")]
+    [HttpGet, Authorize(Policy = "42:r")]
     [Description("Entry form for list of roles.")]
     public async Task<IActionResult> Roles()
     {
@@ -398,10 +398,10 @@ public class AdministrationController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "11r:r"), Description("Form to create a role.")]
+    [Authorize(Policy = "42:c"), Description("Form to create a role.")]
     public IActionResult _CreateRole() => PartialView();
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "11r:r")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
     [Description("Action to create a role.")]
     public async Task<IActionResult> CreateRole(CreateRole create)
     {
@@ -431,8 +431,7 @@ public class AdministrationController : BaseController
 
     #region => Edit
 
-    [Authorize(Policy = "11r:r")]
-    [Description("Form to edit a role.")]
+    [Authorize(Policy = "42:c"), Description("Form to edit a role.")]
     public async Task<IActionResult> _EditRole(string rIde)
     {
         var role = await roleManager.Roles
@@ -448,7 +447,7 @@ public class AdministrationController : BaseController
         return PartialView(role);
     }
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "11r:r")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:r")]
     [Description("Action to edit a role.")]
     public async Task<IActionResult> EditRole(CreateRole edit)
     {
@@ -477,7 +476,7 @@ public class AdministrationController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "11r:r")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
     [Description("Action to delete a role.")]
     public async Task<IActionResult> DeleteRole(string rIde)
     {

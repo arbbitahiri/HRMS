@@ -2,11 +2,12 @@
 using HRMS.Data.SqlFunctions;
 using HRMS.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HRMS.Repository;
-public class FunctionRepo : IFunctionRepo
+public class FunctionRepo : IFunctionRepository
 {
     private readonly ApplicationDbContext _db;
 
@@ -20,4 +21,7 @@ public class FunctionRepo : IFunctionRepo
 
     public async Task<List<MenuListAccess>> MenuListAccess(string role, LanguageEnum lang) =>
         await _db.Set<MenuListAccess>().FromSqlInterpolated(sql: $"SELECT * FROM MenuListAccess ({role}, {lang})").ToListAsync();
+
+    public async Task<List<Logs>> Logs(string roleId, string userId, DateTime startDate, DateTime endDate, string ip, string controller, string action, string httpMethod, bool error) =>
+        await _db.Set<Logs>().FromSqlInterpolated(sql: $"SELECT * FROM Logs ({roleId}, {userId}, {startDate}, {endDate}, {ip}, {controller}, {action}, {httpMethod}, {error})").ToListAsync();
 }

@@ -225,7 +225,7 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sq:r")]
     [Description("Entry form for qualification. Second step of registration/edition of staff.")]
     public async Task<IActionResult> Qualification(string ide, MethodType method)
     {
@@ -264,11 +264,11 @@ public class StaffController : BaseController
 
     #region => Create
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sq:c")]
     [Description("Form to add new qualification.")]
     public IActionResult _AddQualification(string ide) => PartialView(new AddQualification { StaffIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:c")]
     [Description("Action to add qualification.")]
     public async Task<IActionResult> AddQualification(AddQualification add)
     {
@@ -308,7 +308,7 @@ public class StaffController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sq:e")]
     [Description("Form to edit staff data.")]
     public async Task<IActionResult> _EditQualification(string ide)
     {
@@ -339,7 +339,7 @@ public class StaffController : BaseController
         return PartialView(qualification);
     }
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:e")]
     [Description("Action to edit a qualification.")]
     public async Task<IActionResult> EditQualification(AddQualification edit)
     {
@@ -378,7 +378,7 @@ public class StaffController : BaseController
 
     #region => Details
 
-    [HttpGet, Authorize(Policy = "21s:c"), Description("Form to display qualification's details.")]
+    [HttpGet, Authorize(Policy = "21sq:r"), Description("Form to display qualification's details.")]
     public async Task<IActionResult> _DetailsQualification(string ide)
     {
         var qualification = await db.StaffQualification
@@ -412,7 +412,7 @@ public class StaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:d")]
     [Description("Action to delete a qualification.")]
     public async Task<IActionResult> DeleteQualification(string ide)
     {
@@ -430,7 +430,7 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sd:r")]
     [Description("Entry form for documents. Third step of registration/editation of staff.")]
     public async Task<IActionResult> Documents(string ide, MethodType method)
     {
@@ -470,11 +470,11 @@ public class StaffController : BaseController
 
     #region => Create
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sd:c")]
     [Description("Form to add documents.")]
     public IActionResult _AddDocument(string ide) => PartialView(new AddDocument { StaffIde = ide, FileSize = $"{Convert.ToDecimal(configuration["AppSettings:FileMaxKB"]) / 1024:N1}MB" });
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:c")]
     [Description("Action to add documents.")]
     public async Task<IActionResult> AddDocument(AddDocument add)
     {
@@ -505,7 +505,7 @@ public class StaffController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sd:e")]
     [Description("Form to edit a document.")]
     public async Task<IActionResult> _EditDocument(string ide)
     {
@@ -523,7 +523,7 @@ public class StaffController : BaseController
         return View(document);
     }
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:e")]
     [Description("Action to edit a document.")]
     public async Task<IActionResult> EditDocument(EditDocument edit)
     {
@@ -549,7 +549,7 @@ public class StaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:d")]
     [Description("Action to delete a document.")]
     public async Task<IActionResult> DeleteDocument(string ide)
     {
@@ -571,7 +571,7 @@ public class StaffController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sds:r")]
     [Description("Entry form for department. Fourth step of registration/editation of staff.")]
     public async Task<IActionResult> Departments(string ide, MethodType method)
     {
@@ -628,11 +628,11 @@ public class StaffController : BaseController
 
     #region ==> Create
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sdp:c")]
     [Description("Form to add department.")]
     public IActionResult _AddDepartment(string ide) => PartialView(new AddDepartment { StaffIde = ide });
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:c")]
     [Description("Action to add new department.")]
     public async Task<IActionResult> AddDepartment(AddDepartment add)
     {
@@ -699,7 +699,7 @@ public class StaffController : BaseController
 
     #region ==> Edit
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21sdp:e")]
     [Description("Form to edit department.")]
     public async Task<IActionResult> _EditDepartment(string ide)
     {
@@ -718,7 +718,7 @@ public class StaffController : BaseController
         return PartialView(department);
     }
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:e")]
     [Description("Action to edit department.")]
     public async Task<IActionResult> EditDepartment(AddDepartment edit)
     {
@@ -745,7 +745,7 @@ public class StaffController : BaseController
 
     #region ==> Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:d")]
     [Description("Action to delete a department.")]
     public async Task<IActionResult> DeleteDepartment(string ide)
     {
@@ -805,11 +805,11 @@ public class StaffController : BaseController
 
     #region ==> Create
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21ssb:c")]
     [Description("Form to add subject.")]
     public async Task<IActionResult> _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide, DepartmentEndDate = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.EndDate).FirstOrDefaultAsync() });
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:c")]
     [Description("Action to add subject.")]
     public async Task<IActionResult> AddSubject(AddSubject add)
     {
@@ -837,7 +837,7 @@ public class StaffController : BaseController
 
     #region ==> Edit
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21ssb:e")]
     [Description("Form to edit subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
@@ -855,7 +855,7 @@ public class StaffController : BaseController
         return PartialView(subject);
     }
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:e")]
     [Description("Action to edit subject.")]
     public async Task<IActionResult> EditSubject(AddSubject edit)
     {
@@ -881,7 +881,7 @@ public class StaffController : BaseController
 
     #region ==> Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:d")]
     [Description("Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
@@ -903,11 +903,11 @@ public class StaffController : BaseController
 
     #region List
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "21s:r")]
     [Description("Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
     [Description("Form to view searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
@@ -943,7 +943,7 @@ public class StaffController : BaseController
 
     #region Main form
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "22p:r")]
     [Description("Form to view the profile of staff.")]
     public async Task<IActionResult> Profile(string ide)
     {
@@ -986,7 +986,7 @@ public class StaffController : BaseController
 
     #region 1. Department
 
-    [Authorize(Policy = "21s:c"), Description("Form to display list of departments.")]
+    [Authorize(Policy = "21sds:r"), Description("Form to display list of departments.")]
     public async Task<IActionResult> _ProfileDepartment(string ide)
     {
         var departments = await db.StaffDepartment
@@ -1014,7 +1014,7 @@ public class StaffController : BaseController
 
     #region 2. Qualification
 
-    [Authorize(Policy = "21s:c"), Description("Form to display list of qualifications.")]
+    [Authorize(Policy = "21sq:c"), Description("Form to display list of qualifications.")]
     public async Task<IActionResult> _ProfileQualification(string ide)
     {
         var departments = await db.StaffQualification
@@ -1043,7 +1043,7 @@ public class StaffController : BaseController
 
     #region 3. Document
 
-    [Authorize(Policy = "21s:c"), Description("Form to display list of documents.")]
+    [Authorize(Policy = "21sd:c"), Description("Form to display list of documents.")]
     public async Task<IActionResult> _ProfileDocument(string ide)
     {
         var documents = await db.StaffDocument
@@ -1072,7 +1072,7 @@ public class StaffController : BaseController
 
     #region 4. Subject
 
-    [Authorize(Policy = "21s:c"), Description("Form to display list of subjects.")]
+    [Authorize(Policy = "21sds:c"), Description("Form to display list of subjects.")]
     public async Task<IActionResult> _ProfileSubject(string ide)
     {
         var subjects = await db.StaffDepartmentSubject
@@ -1093,7 +1093,7 @@ public class StaffController : BaseController
 
     #region Change image
 
-    [HttpPost, Authorize(Policy = "21s:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "22p:r"), ValidateAntiForgeryToken]
     [Description("Action to change profile photo.")]
     public async Task<IActionResult> ChangeImage(IFormFile Image, string PersonalNumber)
     {

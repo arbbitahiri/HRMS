@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HRMS.Repository;
-public interface IDDLRepo
+public interface IDDLRepository
 {
     List<SelectListItem> Languages();
 
     List<SelectListItem> Genders();
+
+    List<SelectListItem> EventLogEntryTypes();
 
     Task<List<SelectListItem>> Roles(LanguageEnum lang);
 

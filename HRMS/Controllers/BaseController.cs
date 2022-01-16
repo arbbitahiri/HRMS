@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -308,4 +309,30 @@ public class BaseController : Controller
         password += "#";
         return password;
     }
+
+    #region Select list items
+
+    /// <summary>
+    /// Method to get first 10 users with specified name
+    /// </summary>
+    /// <param name="name">Can be first or last name, email or username</param>
+    /// <param name="role">Is the selected role in another select list</param>
+    /// <returns>First 10 users with the specified condition</returns>
+    [Description("List of users for select list")]
+    public async Task<IActionResult> AspUsers(string name, string role = "")
+    {
+        var users = await db.AspNetUsers
+            .Where(a => (a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
+                && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role))).Take(10)
+            .Select(a => new Select2
+            {
+                Id = a.Id,
+                Text = $"{a.FirstName} {a.LastName}",
+                Image = a.ProfileImage,
+                Initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
+            }).ToListAsync();
+        return Json(user);
+    }
+
+    #endregion
 }

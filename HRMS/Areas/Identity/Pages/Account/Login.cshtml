@@ -68,6 +68,7 @@
         $('#btn_SubmitLogin').find('.btn-text').removeClass('d-none');
         $('#btn_SubmitLogin').find('.btn-spinner').addClass('d-none');
         if (data.status == ErrorStatus.SUCCESS) {
+            $('#status').html('');
             window.location.href = '/Home/Index';
         } else {
             $.post('/Identity/Account/Message?handler=Filter', {

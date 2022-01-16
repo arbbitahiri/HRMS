@@ -14,9 +14,9 @@ namespace HRMS.ViewComponents;
 public class MenuViewComponent : ViewComponent
 {
     private readonly UserManager<ApplicationUser> userManager;
-    private readonly IFunctionRepo repo;
+    private readonly IFunctionRepository repo;
 
-    public MenuViewComponent(IFunctionRepo repo, UserManager<ApplicationUser> userManager)
+    public MenuViewComponent(IFunctionRepository repo, UserManager<ApplicationUser> userManager)
     {
         this.repo = repo;
         this.userManager = userManager;

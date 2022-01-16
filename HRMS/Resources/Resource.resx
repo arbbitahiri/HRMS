@@ -879,4 +879,49 @@
   <data name="YouMustConfirmEmail" xml:space="preserve">
     <value>Duhet të konfirmoni emailin tuaj!</value>
   </data>
+  <data name="Method" xml:space="preserve">
+    <value>Metoda</value>
+  </data>
+  <data name="AuthorizationsForActions" xml:space="preserve">
+    <value>Autorizimet për veprimet në sistem</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Gabimi</value>
+  </data>
+  <data name="Failure" xml:space="preserve">
+    <value>Dështim</value>
+  </data>
+  <data name="FormContent" xml:space="preserve">
+    <value>Përmbajtja formës</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>Metoda HTTP</value>
+  </data>
+  <data name="Ip" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="IsError" xml:space="preserve">
+    <value>Është gabim</value>
+  </data>
+  <data name="MachineName" xml:space="preserve">
+    <value>Emri kompjuterit</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Mesazhi</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Duke kërkuar...</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Burimi</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Koha</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Lloji</value>
+  </data>
 </root>

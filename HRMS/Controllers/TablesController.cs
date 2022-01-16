@@ -16,7 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
-[Authorize(Policy = "11t:r")]
+[Authorize(Policy = "16:r")]
 public class TablesController : BaseController
 {
     public TablesController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
@@ -26,10 +26,10 @@ public class TablesController : BaseController
 
     #region Table list
 
-    [Authorize(Policy = "11t:r"), Description("Entry form.")]
+    [Authorize(Policy = "16:r"), Description("Entry form.")]
     public IActionResult Index() => View();
 
-    [Authorize(Policy = "11t:r"), Description("List of lookup tables.")]
+    [Authorize(Policy = "16:r"), Description("List of lookup tables.")]
     public IActionResult _LookUpTables()
     {
         var tables = new List<TableName>()
@@ -52,7 +52,7 @@ public class TablesController : BaseController
 
     #region Table data
 
-    [Authorize(Policy = "11t:r"), Description("List of data of look up tables")]
+    [Authorize(Policy = "16:r"), Description("List of data of look up tables")]
     public async Task<IActionResult> _LookUpData(LookUpTable table, string title)
     {
         switch (table)
@@ -157,10 +157,10 @@ public class TablesController : BaseController
 
     #region Create
 
-    [Authorize(Policy = "11t:r"), Description("Form to create data for a look up table.")]
+    [Authorize(Policy = "16:c"), Description("Form to create data for a look up table.")]
     public IActionResult _Create(LookUpTable table, string title) => PartialView(new CreateData { Table = table, Title = title });
 
-    [HttpPost, Authorize(Policy = "11t:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "16:c"), ValidateAntiForgeryToken]
     [Description("Action to create data for a look up table.")]
     public async Task<IActionResult> Create(CreateData create)
     {
@@ -284,7 +284,7 @@ public class TablesController : BaseController
 
     #region Edit
 
-    [Authorize(Policy = "11t:r"), Description("Form to edit data from look up tables.")]
+    [Authorize(Policy = "16:e"), Description("Form to edit data from look up tables.")]
     public async Task<IActionResult> _Edit(LookUpTable table, string title, string ide)
     {
         var id = CryptoSecurity.Decrypt<int>(ide);
@@ -397,7 +397,7 @@ public class TablesController : BaseController
         }
     }
 
-    [HttpPost, Authorize(Policy = "11t:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "16:e"), ValidateAntiForgeryToken]
     [Description("Action to edit data from a look up table.")]
     public async Task<IActionResult> Edit(CreateData edit)
     {
@@ -513,7 +513,7 @@ public class TablesController : BaseController
 
     #region Delete
 
-    [HttpPost, Authorize(Policy = "11t:r"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "16:d"), ValidateAntiForgeryToken]
     [Description("Action to delete data from a lookup table.")]
     public async Task<IActionResult> Delete(LookUpTable table, string ide, bool active)
     {

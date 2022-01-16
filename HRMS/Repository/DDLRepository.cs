@@ -4,30 +4,42 @@ using HRMS.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace HRMS.Repository;
-public class DDLRepo : IDDLRepo
+public class DDLRepository : IDDLRepository
 {
     private readonly HRMS_WorkContext db;
 
-    public DDLRepo(HRMS_WorkContext db)
+    public DDLRepository(HRMS_WorkContext db)
     {
         this.db = db;
     }
 
     public List<SelectListItem> Languages() => new()
-        {
-            new SelectListItem { Text = Resource.Albanian, Value = LanguageEnum.ALBANIAN.ToString() },
-            new SelectListItem { Text = Resource.English, Value = LanguageEnum.ENGLISH.ToString() }
-        };
+    {
+        new SelectListItem { Text = Resource.Albanian, Value = LanguageEnum.ALBANIAN.ToString() },
+        new SelectListItem { Text = Resource.English, Value = LanguageEnum.ENGLISH.ToString() }
+    };
 
     public List<SelectListItem> Genders() => new()
-        {
-            new SelectListItem { Value = ((int)GenderEnum.MALE).ToString(), Text = Resource.Male },
-            new SelectListItem { Value = ((int)GenderEnum.FEMALE).ToString(), Text = Resource.Female },
-        };
+    {
+        new SelectListItem { Value = ((int)GenderEnum.MALE).ToString(), Text = Resource.Male },
+        new SelectListItem { Value = ((int)GenderEnum.FEMALE).ToString(), Text = Resource.Female },
+    };
+
+    [SupportedOSPlatform("windows")]
+    public List<SelectListItem> EventLogEntryTypes() => new()
+    {
+        new SelectListItem { Value = EventLogEntryType.SuccessAudit.ToString(), Text = Resource.Success },
+        new SelectListItem { Value = EventLogEntryType.Information.ToString(), Text = Resource.Info },
+        new SelectListItem { Value = EventLogEntryType.Warning.ToString(), Text = Resource.Warning },
+        new SelectListItem { Value = EventLogEntryType.Error.ToString(), Text = Resource.Error },
+        new SelectListItem { Value = EventLogEntryType.FailureAudit.ToString(), Text = Resource.Failure }
+    };
 
     public async Task<List<SelectListItem>> Roles(LanguageEnum lang) =>
         await db.AspNetRoles.Select(a => new SelectListItem

@@ -1,6 +1,6 @@
 ﻿@using HRMS.Models.Staff
 @model Search
-@inject IDDLRepo repo
+@inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
     var role = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");

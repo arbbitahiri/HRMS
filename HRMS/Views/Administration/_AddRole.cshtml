@@ -1,6 +1,6 @@
 ﻿@using HRMS.Models.Administration
 @model AddRole
-@inject IDDLRepo repo
+@inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
 }
@@ -47,13 +47,13 @@
         $.validator.unobtrusive.parse(form);
 
         $(".select2").select2({
-                width: "100%",
-                language: {
-                    noResults: function () {
-                        return '@Html.Raw(Resource.NoResultsFound)';
-                    },
-                }
-            });
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
     });
 
     function success_add_role(data) {

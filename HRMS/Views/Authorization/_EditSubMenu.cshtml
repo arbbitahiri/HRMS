@@ -1,17 +1,17 @@
 ﻿@using HRMS.Models.SubMenu
-@model CreateSubMenu
+@model EditSubMenu
 
 <div class="modal-header">
-    <h5 class="modal-title">@string.Format(Resource.AddSubMenuFor, Model.MenuTitle)</h5>
+    <h5 class="modal-title">@Resource.Edit</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
 </div>
 
-<form asp-action="CreateSubMenu" asp-controller="Configuration" id="frm_CreateSubMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_submenu" role="form">
+<form asp-action="EditSubMenu" asp-controller="Authorization" id="frm_EditSubMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_submenu" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="MenuIde" type="hidden" />
+        <input asp-for="SubMenuIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-4">
@@ -58,25 +58,39 @@
                 <input asp-for="OpenFor" class="form-control" />
                 <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
+            <div class="col-md-4 d-flex flex-column pl-2">
+                <label asp-for="Active" class="required">@Resource.Active</label>
+                <div class="icheck-primary d-inline">
+                    <input asp-for="Active" id="inp_active" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="Active" id="lbl_active" onclick="change_active(this)"></label>
+                </div>
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
         </div>
     </div>
     <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Edit</button>
     </div>
 </form>
 
-<div>
-
-</div>
-
 <script>
     $(document).ready(function () {
-        var form = $('#frm_CreateSubMenu');
+        var form = $('#frm_EditSubMenu');
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
+
+        $('#lbl_active').text('');
     });
+
+    function change_active(e) {
+        if($('#inp_active').is(":checked")) {
+            $('#inp_active').removeAttr('checked');
+        } else {
+            $('#inp_active').attr('checked', true);
+        }
+    }
 
     function on_success_submenu(data) {
         handle_success(data, SubmitPathType.RELOAD, "");

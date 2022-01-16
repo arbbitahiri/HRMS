@@ -68,7 +68,7 @@
     }
 
     function edit(ide) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubMenu", "Configuration")?ide=' + ide, function () {
+        $('#modal-lg').find('.modal-content').load('@Url.Action("_EditSubMenu", "Authorization")?ide=' + ide, function () {
             $('#modal-lg').modal('toggle');
         });
     }
@@ -85,7 +85,7 @@
             cancelButtonText: "@Resource.No"
         }).then((result) => {
             if (result.value) {
-                $.post('@Url.Action("DeleteSubMenu", "Configuration")', {
+                $.post('@Url.Action("DeleteSubMenu", "Authorization")', {
                     ide: ide,
                     "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                     }, function (data) {

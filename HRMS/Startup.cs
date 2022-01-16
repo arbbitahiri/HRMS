@@ -79,8 +79,8 @@ public class Startup
 
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
-        services.AddScoped<IDDLRepo, DDLRepo>();
-        services.AddScoped<IFunctionRepo, FunctionRepo>();
+        services.AddScoped<IDDLRepository, DDLRepository>();
+        services.AddScoped<IFunctionRepository, FunctionRepo>();
 
         services.ConfigureExternalCookie(options =>
         {
