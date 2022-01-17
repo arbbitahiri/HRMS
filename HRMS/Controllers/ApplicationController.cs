@@ -58,7 +58,7 @@ public class ApplicationController : BaseController
                 Username = a.Username,
                 InsertDate = a.InsertDate
             }).ToList();
-        return Json(list);
+        return Json(list.OrderByDescending(a => a.InsertDate));
     }
 
     #endregion

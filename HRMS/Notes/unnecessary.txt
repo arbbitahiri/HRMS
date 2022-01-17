@@ -1,0 +1,27 @@
+
+                    {
+                        data: function(row, type, set) {
+                            var exc = '///';
+                            if (row.exception != null) {
+                                if (row.exception.length > 80) {
+                                    exc = row.exception.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.exception.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    exc = row.exception ?? "///";
+                                }
+                            }
+                            return exc;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            var frmCont = '///';
+                            if (row.formContent != null) {
+                                if (row.formContent.length > 80) {
+                                    frmCont = row.formContent.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.formContent.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    frmCont = row.formContent ?? "///";
+                                }
+                            }
+                            return frmCont;
+                        }
+                    }

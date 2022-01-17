@@ -3,6 +3,7 @@
 @inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
+    ViewData["Title"] = Resource.ServerLogs;
 }
 
 <div class="card">
@@ -19,8 +20,8 @@
                     <input asp-for="LogTime" type="text" class="form-control"/>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="LogTime">@Resource.User</label>
-                    <select asp-for="LogTime" asp-items="repo.EventLogEntryTypes()" class="form-control select2"></select>
+                    <label asp-for="EventLogEntryType">@Resource.User</label>
+                    <select asp-for="EventLogEntryType" asp-items="repo.EventLogEntryTypes()" class="form-control select2"></select>
                 </div>
                 <div class="col-3 form-group">
                     <label asp-for="LogTime" style="visibility: hidden;">@Resource.IsError</label>
@@ -67,6 +68,60 @@
                     noResults: function () {
                         return '@Html.Raw(Resource.NoResultsFound)';
                     },
+                }
+            });
+
+            $('#LogTime').daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY H:mm",
+                    seperator: " - ",
+                    applyLabel: "@Resource.Continue",
+                    cancelLabel: "@Resource.Cancel",
+                    fromLabel: "@Resource.From",
+                    toLabel: "@Resource.To",
+                    timePicker: true,
+                    timePicker24Hour: true,
+                    timePickerIncrement: 30,
+                    customRangeLabel: "@Resource.OtherDate",
+                    weekLabel: "@Resource.WeekLetter",
+                    daysOfWeek: [
+                        "@Resource.SundayLetter",
+                        "@Resource.MondayLetter",
+                        "@Resource.TuesdayLetter",
+                        "@Resource.WednesdayLetter",
+                        "@Resource.ThursdayLetter",
+                        "@Resource.FridayLetter",
+                        "@Resource.SaturdayLetter"
+                    ],
+                    monthNames: [
+                        "@Resource.January",
+                        "@Resource.February",
+                        "@Resource.March",
+                        "@Resource.April",
+                        "@Resource.May",
+                        "@Resource.June",
+                        "@Resource.July",
+                        "@Resource.August",
+                        "@Resource.September",
+                        "@Resource.October",
+                        "@Resource.November",
+                        "@Resource.December"
+                    ],
+                    firstDay: 1
+                },
+                buttonClasses: 'btn',
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-secondary',
+                ranges: {
+                    '@Resource.Today': [moment(), moment()],
+                    '@Resource.Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '@Resource.Last7Days': [moment().subtract(6, 'days'), moment()],
+                    '@Resource.Last30Days': [moment().subtract(29, 'days'), moment()],
+                    '@Resource.ThisMonth': [moment().startOf('month'), moment().endOf('month')],
+                    '@Resource.LastMonth': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }, function (start, end, label) {
+                    $('#Date .form-control').val(start.format("DD/MM/YYYY H:mm") + ' / ' + end.format('DD/MM/YYYY H:mm'))
+                    $('#Date').val(start.format('DD/MM/YYYY H:mm') + ' / ' + end.format('DD/MM/YYYY H:mm'));
                 }
             });
 

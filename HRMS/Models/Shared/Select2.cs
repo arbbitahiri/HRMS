@@ -2,9 +2,9 @@
 
 public class Select2
 {
-    public bool Selected { get; set; }
-    public string Id { get; set; }
-    public string Text { get; set; }
-    public string Image { get; set; }
-    public string Initials { get; set; }
+    public bool selected { get; set; }
+    public string id { get; set; }
+    public string text { get; set; }
+    public string image { get; set; }
+    public string initials { get; set; }
 }

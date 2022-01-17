@@ -340,11 +340,29 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjurmët e sistemit.
+        /// </summary>
+        public static string ApplicationLogs {
+            get {
+                return ResourceManager.GetString("ApplicationLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aprovuar.
         /// </summary>
         public static string Approved {
             get {
                 return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prill.
+        /// </summary>
+        public static string April {
+            get {
+                return ResourceManager.GetString("April", resourceCulture);
             }
         }
         
@@ -363,6 +381,15 @@ namespace HRMS.Resources {
         public static string AsDiffUser {
             get {
                 return ResourceManager.GetString("AsDiffUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gusht.
+        /// </summary>
+        public static string August {
+            get {
+                return ResourceManager.GetString("August", resourceCulture);
             }
         }
         
@@ -646,6 +673,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dhjetor.
+        /// </summary>
+        public static string December {
+            get {
+                return ResourceManager.GetString("December", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fshij.
         /// </summary>
         public static string Delete {
@@ -925,6 +961,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shkurt.
+        /// </summary>
+        public static string February {
+            get {
+                return ResourceManager.GetString("February", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Femër.
         /// </summary>
         public static string Female {
@@ -1002,6 +1047,15 @@ namespace HRMS.Resources {
         public static string FourthStepStaffRegistration {
             get {
                 return ResourceManager.GetString("FourthStepStaffRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pr.
+        /// </summary>
+        public static string FridayLetter {
+            get {
+                return ResourceManager.GetString("FridayLetter", resourceCulture);
             }
         }
         
@@ -1168,6 +1222,33 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Janar.
+        /// </summary>
+        public static string January {
+            get {
+                return ResourceManager.GetString("January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Korrik.
+        /// </summary>
+        public static string July {
+            get {
+                return ResourceManager.GetString("July", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qershor.
+        /// </summary>
+        public static string June {
+            get {
+                return ResourceManager.GetString("June", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Çelësi.
         /// </summary>
         public static string Key {
@@ -1182,6 +1263,33 @@ namespace HRMS.Resources {
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30 ditët e fundit.
+        /// </summary>
+        public static string Last30Days {
+            get {
+                return ResourceManager.GetString("Last30Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 7 ditët e fundit.
+        /// </summary>
+        public static string Last7Days {
+            get {
+                return ResourceManager.GetString("Last7Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Muajin e kaluar.
+        /// </summary>
+        public static string LastMonth {
+            get {
+                return ResourceManager.GetString("LastMonth", resourceCulture);
             }
         }
         
@@ -1375,6 +1483,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mars.
+        /// </summary>
+        public static string March {
+            get {
+                return ResourceManager.GetString("March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gjatësia maksimale e shkronjave është 10..
         /// </summary>
         public static string MaxChar10 {
@@ -1389,6 +1506,15 @@ namespace HRMS.Resources {
         public static string MaxImageSize {
             get {
                 return ResourceManager.GetString("MaxImageSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maj.
+        /// </summary>
+        public static string May {
+            get {
+                return ResourceManager.GetString("May", resourceCulture);
             }
         }
         
@@ -1443,6 +1569,15 @@ namespace HRMS.Resources {
         public static string MinChar10 {
             get {
                 return ResourceManager.GetString("MinChar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hë.
+        /// </summary>
+        public static string MondayLetter {
+            get {
+                return ResourceManager.GetString("MondayLetter", resourceCulture);
             }
         }
         
@@ -1546,6 +1681,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nëntor.
+        /// </summary>
+        public static string November {
+            get {
+                return ResourceManager.GetString("November", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tetor.
+        /// </summary>
+        public static string October {
+            get {
+                return ResourceManager.GetString("October", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Në rregull.
         /// </summary>
         public static string Okay {
@@ -1587,6 +1740,15 @@ namespace HRMS.Resources {
         public static string OrdinalNumber {
             get {
                 return ResourceManager.GetString("OrdinalNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datë tjetër.
+        /// </summary>
+        public static string OtherDate {
+            get {
+                return ResourceManager.GetString("OtherDate", resourceCulture);
             }
         }
         
@@ -1870,6 +2032,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sh.
+        /// </summary>
+        public static string SaturdayLetter {
+            get {
+                return ResourceManager.GetString("SaturdayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ruaj.
         /// </summary>
         public static string Save {
@@ -1929,6 +2100,24 @@ namespace HRMS.Resources {
         public static string SendEmail {
             get {
                 return ResourceManager.GetString("SendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shtator.
+        /// </summary>
+        public static string September {
+            get {
+                return ResourceManager.GetString("September", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjurmët e serverit.
+        /// </summary>
+        public static string ServerLogs {
+            get {
+                return ResourceManager.GetString("ServerLogs", resourceCulture);
             }
         }
         
@@ -2095,6 +2284,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Di.
+        /// </summary>
+        public static string SundayLetter {
+            get {
+                return ResourceManager.GetString("SundayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e departmentit për stafin?.
         /// </summary>
         public static string SureYouWantToDeleteDepartmentForStaff {
@@ -2239,6 +2437,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Këtë muaj.
+        /// </summary>
+        public static string ThisMonth {
+            get {
+                return ResourceManager.GetString("ThisMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to En.
+        /// </summary>
+        public static string ThursdayLetter {
+            get {
+                return ResourceManager.GetString("ThursdayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Koha.
         /// </summary>
         public static string Time {
@@ -2266,6 +2482,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sot.
+        /// </summary>
+        public static string Today {
+            get {
+                return ResourceManager.GetString("Today", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditët totale.
         /// </summary>
         public static string TotalDays {
@@ -2280,6 +2505,15 @@ namespace HRMS.Resources {
         public static string Training {
             get {
                 return ResourceManager.GetString("Training", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ma.
+        /// </summary>
+        public static string TuesdayLetter {
+            get {
+                return ResourceManager.GetString("TuesdayLetter", resourceCulture);
             }
         }
         
@@ -2455,11 +2689,38 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Më.
+        /// </summary>
+        public static string WednesdayLetter {
+            get {
+                return ResourceManager.GetString("WednesdayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to J.
+        /// </summary>
+        public static string WeekLetter {
+            get {
+                return ResourceManager.GetString("WeekLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Po.
         /// </summary>
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dje.
+        /// </summary>
+        public static string Yesterday {
+            get {
+                return ResourceManager.GetString("Yesterday", resourceCulture);
             }
         }
         

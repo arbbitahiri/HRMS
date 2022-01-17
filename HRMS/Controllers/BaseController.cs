@@ -318,20 +318,20 @@ public class BaseController : Controller
     /// <param name="name">Can be first or last name, email or username</param>
     /// <param name="role">Is the selected role in another select list</param>
     /// <returns>First 10 users with the specified condition</returns>
-    [Description("List of users for select list")]
+    [HttpPost, ValidateAntiForgeryToken, Description("List of users for select list")]
     public async Task<IActionResult> AspUsers(string name, string role = "")
     {
-        var users = await db.AspNetUsers
+        var list = await db.AspNetUsers
             .Where(a => (a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
                 && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role))).Take(10)
             .Select(a => new Select2
             {
-                Id = a.Id,
-                Text = $"{a.FirstName} {a.LastName}",
-                Image = a.ProfileImage,
-                Initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
+                id = a.Id,
+                text = $"{a.FirstName} {a.LastName}",
+                image = a.ProfileImage,
+                initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
             }).ToListAsync();
-        return Json(user);
+        return Json(list);
     }
 
     #endregion

@@ -907,6 +907,8 @@ public class StaffController : BaseController
     [Description("Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
+    #region Main list
+
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
     [Description("Form to view searched list of staff.")]
     public async Task<IActionResult> Search(Search search)

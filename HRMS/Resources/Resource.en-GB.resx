@@ -924,4 +924,85 @@
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FridayLetter" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Last month</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MondayLetter" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="OtherDate" xml:space="preserve">
+    <value>Other date</value>
+  </data>
+  <data name="SaturdayLetter" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SundayLetter" xml:space="preserve">
+    <value>Su</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="ThursdayLetter" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TuesdayLetter" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="WednesdayLetter" xml:space="preserve">
+    <value>We</value>
+  </data>
+  <data name="WeekLetter" xml:space="preserve">
+    <value>W</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
 </root>

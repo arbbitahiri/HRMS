@@ -3,11 +3,12 @@
 @inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
+    ViewData["Title"] = Resource.ApplicationLogs;
 }
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">@Resource.SearchParameters/h3>
+        <h3 class="card-title">@Resource.SearchParameters</h3>
     </div>
     <div class="card-body">
         <form asp-action="SearchLogs" asp-controller="Application" id="frm_search_logs" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_search">
@@ -16,13 +17,13 @@
             <div class="row">
                 <div class="col-3 form-group">
                     <label asp-for="Role">@Resource.Role</label>
-                    <select asp-for="Role" asp-items="await repo.Roles(user.Language)" class="form-control selec2">
+                    <select asp-for="Role" asp-items="await repo.Roles(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                 </div>
                 <div class="col-3 form-group">
                     <label asp-for="User">@Resource.User</label>
-                    <select asp-for="User" class="form-control" onchange="change_users(this)"></select>
+                    <select asp-for="User" class="form-control"></select>
                 </div>
                 <div class="col-3 form-group">
                     <label asp-for="Date">@Resource.Date</label>
@@ -45,11 +46,10 @@
                     <input asp-for="HttpMethod" type="text" class="form-control" />
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="Error">@Resource.IsError</label>
-                    <input asp-for="Error" type="text" class="form-control" />
+                    <label asp-for="Error">@Resource.IsError</label><br />
+                    <input asp-for="Error" type="checkbox" data-switch="true" style="cursor: pointer; width: 90px;" data-bootstrap-switch data-off-color="danger" data-on-color="success" data-off-text="@Resource.No" data-on-text="@Resource.Yes" width="150px"/>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="Error" style="visibility: hidden;">@Resource.IsError</label>
                     <input type="submit" class="btn btn-primary" value="@Resource.Search"/>
                 </div>
             </div>
@@ -71,10 +71,10 @@
                     <th>@Resource.Action</th>
                     <th>@Resource.Description</th>
                     <th>@Resource.Username</th>
-                    <th>@Resource.Exception</th>
-                    <th>@Resource.FormContent</th>
                     <th>@Resource.HttpMethod</th>
                     <th>@Resource.InsertDate</th>
+                    <th>@Resource.FormContent</th>
+                    <th>@Resource.Exception</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -90,6 +90,8 @@
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
 
+            $("input[data-bootstrap-switch]").bootstrapSwitch();
+
             $(".select2").select2({
                 width: "100%",
                 language: {
@@ -99,57 +101,120 @@
                 }
             });
 
+            change_users();
+
+            $('#Date').daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY H:mm",
+                    seperator: " - ",
+                    applyLabel: "@Resource.Continue",
+                    cancelLabel: "@Resource.Cancel",
+                    fromLabel: "@Resource.From",
+                    toLabel: "@Resource.To",
+                    timePicker: true,
+                    timePicker24Hour: true,
+                    timePickerIncrement: 30,
+                    customRangeLabel: "@Resource.OtherDate",
+                    weekLabel: "@Resource.WeekLetter",
+                    daysOfWeek: [
+                        "@Resource.SundayLetter",
+                        "@Resource.MondayLetter",
+                        "@Resource.TuesdayLetter",
+                        "@Resource.WednesdayLetter",
+                        "@Resource.ThursdayLetter",
+                        "@Resource.FridayLetter",
+                        "@Resource.SaturdayLetter"
+                    ],
+                    monthNames: [
+                        "@Resource.January",
+                        "@Resource.February",
+                        "@Resource.March",
+                        "@Resource.April",
+                        "@Resource.May",
+                        "@Resource.June",
+                        "@Resource.July",
+                        "@Resource.August",
+                        "@Resource.September",
+                        "@Resource.October",
+                        "@Resource.November",
+                        "@Resource.December"
+                    ],
+                    firstDay: 1
+                },
+                buttonClasses: 'btn',
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-secondary',
+                ranges: {
+                    '@Resource.Today': [moment(), moment()],
+                    '@Resource.Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '@Resource.Last7Days': [moment().subtract(6, 'days'), moment()],
+                    '@Resource.Last30Days': [moment().subtract(29, 'days'), moment()],
+                    '@Resource.ThisMonth': [moment().startOf('month'), moment().endOf('month')],
+                    '@Resource.LastMonth': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }, function (start, end, label) {
+                    $('#Date .form-control').val(start.format("DD/MM/YYYY H:mm") + ' / ' + end.format('DD/MM/YYYY H:mm'))
+                    $('#Date').val(start.format('DD/MM/YYYY H:mm') + ' / ' + end.format('DD/MM/YYYY H:mm'));
+                }
+            });
+
             form.submit();
         });
 
         function change_users() {
-            $.get('@Url.Action("AspUsers")', {
-                name: "",
-                role: $("#Role").val()
-            }, function (data) {
-                $('#User').select2({
-                    width: "100%",
-                    language: {
-                        noResults: function () {
-                            return '@Html.Raw(Resource.NoResultsFound)';
-                        },
-                        searching: function() {
-                            return '@Html.Raw(Resource.Searching)';
-                        },
+            $('#User').select2({
+                width: "100%",
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
                     },
-                    ajax: {
-                        url: '@Url.Action("AspUsers")',
-                        type: 'post',
-                        datatype: 'json',
-                        data: function (params) {
-                            return {
-                                name: params.term,
-                                role: $("#Role").val()
-                            };
-                        },
-                        processResults: function (response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        catch: true
+                    searching: function() {
+                        return '@Html.Raw(Resource.Searching)';
                     },
-                    templateResult: formatState,
-                    templateSelection: formatState
-                })
+                },
+                ajax: {
+                    url: '@Url.Action("AspUsers")',
+                    type: 'post',
+                    datatype: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            role: $("#Role").val(),
+                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        };
+                    },
+                    processResults: function (response) {
+                        console.log(response);
+                        return {
+                            results: response
+                        };
+                    },
+                    catch: true
+                },
+                placeholder: '@Resource.Choose',
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
             });
         }
 
-        function formatState(state) {
-            if (state.loading) {
-                return state.text;
+        function formatRepo (repo) {
+            if (repo.loading) {
+                return repo.text;
             }
 
-            var $state = $('<span>' + (state.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + state.initials + '</span></div>') : ('<img src="../..' + state.image +'" width="40" height="40" class="flag-icon circle rounded rounded-circle" />')) + state.text + '</span>');
-            return $state;
+            var $container = $(
+                '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+            );
+            return $container;
+        }
+
+        function formatRepoSelection (repo) {
+            return repo.text;
         }
 
         function success_search(data) {
+            var rowCount = 1;
             $('#tbl_logs').DataTable({
                 destroy: true,
                 language: {
@@ -160,8 +225,8 @@
                 pageLength: 20,
                 data: data,
                 columnDefs: [
-                    { className: "w5 vertikal", targets: [0, 1, 8] },
-                    { className: "w10 vertikal", targets: [2, 3, 9] },
+                    { className: "w5 vertikal", targets: [0, 1, 6] },
+                    { className: "w10 vertikal", targets: [2, 3] },
                     { className: "w15 vertikal", targets: [5] },
                     { className: "w20 vertikal", targets: [4, 6, 7] },
                 ],
@@ -169,20 +234,58 @@
                 columns: [
                     {
                         data: function (data, type, row, meta) {
+                            rowCount++;
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     { "data": "ip" },
                     { "data": "controller" },
                     { "data": "action" },
-                    { "data": "description" },
-                    { "data": "username" },
-                    { "data": "exception" },
-                    { "data": "formContent" },
+                    {
+                        data: function(row, type, set) {
+                            var desc = '///';
+                            if (row.description != null) {
+                                if (row.description.length > 80) {
+                                    desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    desc = row.description ?? "///";
+                                }
+                            }
+                            return desc;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            if (row.username != null && row.username !== " ") {
+                                return row.username;
+                            } else {
+                                return "///";
+                            }
+                        }
+                    },
                     { "data": "httpMethod" },
-                    { "data": "insertedDate" }
+                    {
+                        data: function (row, type, set) {
+                            var date = new Date(Date.parse(row.insertDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`;
+                        }
+                    },
+                    { "data": "formContent" },
+                    { "data": "exception" }
                 ]
             });
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
         }
     </script>
 }

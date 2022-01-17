@@ -924,4 +924,91 @@
   <data name="Type" xml:space="preserve">
     <value>Lloji</value>
   </data>
+  <data name="ApplicationLogs" xml:space="preserve">
+    <value>Gjurmët e sistemit</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Prill</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Gusht</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Dhjetor</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Shkurt</value>
+  </data>
+  <data name="FridayLetter" xml:space="preserve">
+    <value>Pr</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Janar</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Korrik</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Qershor</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>30 ditët e fundit</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>7 ditët e fundit</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Muajin e kaluar</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Mars</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Maj</value>
+  </data>
+  <data name="MondayLetter" xml:space="preserve">
+    <value>Hë</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Nëntor</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Tetor</value>
+  </data>
+  <data name="OtherDate" xml:space="preserve">
+    <value>Datë tjetër</value>
+  </data>
+  <data name="SaturdayLetter" xml:space="preserve">
+    <value>Sh</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Shtator</value>
+  </data>
+  <data name="ServerLogs" xml:space="preserve">
+    <value>Gjurmët e serverit</value>
+  </data>
+  <data name="SundayLetter" xml:space="preserve">
+    <value>Di</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Këtë muaj</value>
+  </data>
+  <data name="ThursdayLetter" xml:space="preserve">
+    <value>En</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Sot</value>
+  </data>
+  <data name="TuesdayLetter" xml:space="preserve">
+    <value>Ma</value>
+  </data>
+  <data name="WednesdayLetter" xml:space="preserve">
+    <value>Më</value>
+  </data>
+  <data name="WeekLetter" xml:space="preserve">
+    <value>J</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Dje</value>
+  </data>
 </root>
