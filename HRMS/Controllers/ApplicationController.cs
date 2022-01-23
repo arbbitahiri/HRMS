@@ -2,13 +2,13 @@
 using HRMS.Data.General;
 using HRMS.Models.Application;
 using HRMS.Repository;
+using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -28,16 +28,16 @@ public class ApplicationController : BaseController
         this.function = function;
     }
 
-    [Authorize(Policy = "60:r"), Description("Entry form.")]
+    [Authorize(Policy = "60:r"), Description("Arb Tahiri", "Entry form.")]
     public IActionResult Index() => View();
 
     #region Application logs
 
-    [HttpGet, Authorize(Policy = "61:r"), Description("Entry form for application logs.")]
+    [HttpGet, Authorize(Policy = "61:r"), Description("Arb Tahiri", "Entry form for application logs.")]
     public IActionResult Logs() => View();
 
     [HttpPost, Authorize(Policy = "61:r"), ValidateAntiForgeryToken]
-    [Description("Action to search for logs.")]
+    [Description("Arb Tahiri", "Action to search for logs.")]
     public async Task<IActionResult> SearchLogs(LogSearch search)
     {
         string[] dates = search.Date.Split(" - ");
@@ -65,12 +65,12 @@ public class ApplicationController : BaseController
 
     #region Security logs
 
-    [Authorize(Policy = "62:r"), Description("Entry form for security logs.")]
+    [Authorize(Policy = "62:r"), Description("Arb Tahiri", "Entry form for security logs.")]
     public IActionResult Security() => View();
 
     [SupportedOSPlatform("windows")]
     [HttpPost, Authorize(Policy = "62:r"), ValidateAntiForgeryToken]
-    [Description("Action to search for security logs.")]
+    [Description("Arb Tahiri", "Action to search for security logs.")]
     public IActionResult SearchSecurity(ServerSearch search)
     {
         string[] dates = search.LogTime.Split(" - ");

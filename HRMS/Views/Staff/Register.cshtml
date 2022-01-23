@@ -8,7 +8,7 @@
     UserModel user = (UserModel)ViewData["User"];
 }
 
-<form asp-action='@(Model.MethodType == MethodType.POST ? "Register" : "Edit")' asp-controller="Staff" id="frm_staff_registration" method="post">
+<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="Staff" id="frm_staff_registration" method="post">
     @Html.AntiForgeryToken()
     <input asp-for="StaffIde" type="hidden"/>
     <input asp-for="MethodType" type="hidden"/>

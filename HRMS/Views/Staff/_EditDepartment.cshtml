@@ -45,6 +45,26 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
         </div>
+        <div class="row form-group pl-2 pr-2">
+            <div class='@(Model.Outsider ? "col-md-12" : "col-md-4")'>
+                <label asp-for="Salary" class="required"></label>
+                <input asp-for="Salary" type="number" min="1" class="form-control" autocomplete="off"/>
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            @if (Model.Outsider)
+            {
+                <div class="col-md-4">
+                    <label asp-for="EmployeeContribution" class="required"></label>
+                    <input asp-for="EmployeeContribution" type="number" min="5" max="15" class="form-control" autocomplete="off"/>
+                    <span asp-validation-for="EmployeeContribution" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="EmployerContribution" class="required"></label>
+                    <input asp-for="EmployerContribution" type="number" min="5" max="15" class="form-control" autocomplete="off"/>
+                    <span asp-validation-for="EmployerContribution" class="text-danger"></span>
+                </div>
+            }
+        </div>
         <div class="row form-group pl-2 pr-2 pt-2">
             <div class="col-md-12">
                 <label asp-for="Description"></label>

@@ -7,7 +7,7 @@ namespace HRMS.Data.General
     {
         public EvaluationType()
         {
-            StaffDepartmentEvaluation = new HashSet<StaffDepartmentEvaluation>();
+            Evaluation = new HashSet<Evaluation>();
         }
 
         public int EvaluationTypeId { get; set; }
@@ -22,6 +22,6 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluation { get; set; }
+        public virtual ICollection<Evaluation> Evaluation { get; set; }
     }
 }

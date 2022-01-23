@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    if (Model.Status == ErrorStatus.SUCCESS)
+    if (Model.Status == ErrorStatus.Success)
     {
         <div class='callout callout-success'>
             <h5>
@@ -13,7 +13,7 @@
             </p>
         </div>
     }
-    else if (Model.Status == ErrorStatus.WARNING)
+    else if (Model.Status == ErrorStatus.Warning)
     {
         <div class='callout callout-warning'>
             <h5>
@@ -24,7 +24,7 @@
             </p>
         </div>
     }
-    else if (Model.Status == ErrorStatus.INFO)
+    else if (Model.Status == ErrorStatus.Info)
     {
         <div class='callout callout-info'>
             <h5>
@@ -35,7 +35,7 @@
             </p>
         </div>
     }
-    else if (Model.Status == ErrorStatus.ERROR)
+    else if (Model.Status == ErrorStatus.Error)
     {
         <div class='callout callout-danger'>
             <h5>

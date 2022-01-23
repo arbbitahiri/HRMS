@@ -1,0 +1,90 @@
+@using HRMS.Models.Staff
+@model IEnumerable<StaffDetails>
+
+<table id="tbl_staff_processing" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Resource.Name</th>
+            <th>@Resource.Gender</th>
+            <th>@Resource.Email</th>
+            <th>@Resource.PhoneNumber</th>
+            <th>@Resource.StartDate</th>
+            <th data-orderable="false">@Resource.Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        render_processing_tbl(@Json.Serialize(Model));
+    });
+
+    function render_processing_tbl(data) {
+        $("#tbl_staff_processing").DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 20,
+            data: data,
+            columnDefs: [
+                { className: "w5 vertikal", targets: [0, 6] },
+                { className: "w10 vertikal", targets: [2, 4, 5] },
+                { className: "w15 vertikal", targets: [3] },
+                { className: "w25 vertikal", targets: [1] },
+            ],
+            order: [[ 0, 'asc' ]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var name = '<div class="d-flex align-items-center">' +
+                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                        if (row.profileImage == null) {
+                            name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                        } else {
+                            name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                        }
+                        name += '</div><div class="ml-4">' +
+                            '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                            '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                            '</div></div>';
+                        return name;
+                    }
+                },
+                { data: "gender" },
+                { data: "email" },
+                {
+                    data: function (row, type, set) {
+                        return `+${row.phoneNumber}`;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        var date = new Date(Date.parse(row.insertedDate));
+                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var dropdown = '<div class="input-group-prepend">' +
+                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu" role="menu">' +
+                            '<button type="button" class="dropdown-item" onclick="staff_profile(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-address-card"></i></span><span class="p-1">@Resource.Profile</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                            '</div></div>';
+                        return dropdown;
+                    }
+                },
+            ]
+        });
+    }
+</script>

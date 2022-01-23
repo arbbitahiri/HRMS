@@ -5,6 +5,11 @@ namespace HRMS.Data.General
 {
     public partial class StaffDepartmentSubject
     {
+        public StaffDepartmentSubject()
+        {
+            EvaluationStudents = new HashSet<EvaluationStudents>();
+        }
+
         public int StaffDepartmentSubjectId { get; set; }
         public int StaffDepartmentId { get; set; }
         public int SubjectId { get; set; }
@@ -21,5 +26,6 @@ namespace HRMS.Data.General
         public virtual StaffDepartment StaffDepartment { get; set; }
         public virtual Subject Subject { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationStudents> EvaluationStudents { get; set; }
     }
 }

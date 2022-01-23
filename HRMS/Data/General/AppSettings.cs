@@ -10,5 +10,7 @@ namespace HRMS.Data.General
         public string UpdatedVersion { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime IndertedDate { get; set; }
+
+        public virtual AspNetUsers InsertedFromNavigation { get; set; }
     }
 }

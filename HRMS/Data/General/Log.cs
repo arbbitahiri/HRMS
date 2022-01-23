@@ -10,6 +10,7 @@ namespace HRMS.Data.General
         public string Ip { get; set; }
         public string Controller { get; set; }
         public string Action { get; set; }
+        public string Developer { get; set; }
         public string Description { get; set; }
         public string HttpMethod { get; set; }
         public string Url { get; set; }

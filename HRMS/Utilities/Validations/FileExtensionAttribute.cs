@@ -6,52 +6,51 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 
-namespace HRMS.Utilities.Validations
+namespace HRMS.Utilities.Validations;
+
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+public class FileExtensionAttribute : ValidationAttribute, IClientModelValidator
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class FileExtensionAttribute : ValidationAttribute, IClientModelValidator
+    private readonly string allowedFormats;
+
+    public FileExtensionAttribute(string allowedFormats)
     {
-        private readonly string allowedFormats;
+        this.allowedFormats = allowedFormats;
+    }
 
-        public FileExtensionAttribute(string allowedFormats)
+    public void AddValidation(ClientModelValidationContext context)
+    {
+        MergeAttribute(context.Attributes, "data-val", "true");
+        MergeAttribute(context.Attributes, "accept", allowedFormats);
+
+        //var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+
+        MergeAttribute(context.Attributes, "data-val-fileextesion", $"Nuk lejohet: {allowedFormats}");
+        MergeAttribute(context.Attributes, "data-val-fileextesion-formats", allowedFormats);
+    }
+
+    private static bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
+    {
+        if (attributes.ContainsKey(key))
         {
-            this.allowedFormats = allowedFormats;
+            return false;
         }
+        attributes.Add(key, value);
+        return true;
+    }
 
-        public void AddValidation(ClientModelValidationContext context)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    {
+        var file = value as IFormFile;
+        string[] formats = allowedFormats.Split(",");
+        if (file != null)
         {
-            MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "accept", allowedFormats);
-
-            //var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
-
-            MergeAttribute(context.Attributes, "data-val-fileextesion", $"Nuk lejohet: {allowedFormats}");
-            MergeAttribute(context.Attributes, "data-val-fileextesion-formats", allowedFormats);
-        }
-
-        private static bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
-        {
-            if (attributes.ContainsKey(key))
+            string extension = Path.GetExtension(file.FileName);
+            if (!formats.Contains(extension))
             {
-                return false;
+                return new ValidationResult($"Nuk eshte ne formatin e duhur: {allowedFormats}");
             }
-            attributes.Add(key, value);
-            return true;
         }
-
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            var file = value as IFormFile;
-            string[] formats = allowedFormats.Split(",");
-            if (file != null)
-            {
-                string extension = Path.GetExtension(file.FileName);
-                if (!formats.Contains(extension))
-                {
-                    return new ValidationResult($"Nuk eshte ne formatin e duhur: {allowedFormats}");
-                }
-            }
-            return ValidationResult.Success;
-        }
+        return ValidationResult.Success;
     }
 }

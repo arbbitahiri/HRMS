@@ -96,7 +96,7 @@ public class BaseIModel : PageModel
         ViewData["ErrorIdentity"] = TempData.Get<ErrorVM>("ErrorIdentity");
     }
 
-    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, ImageSizeType type = ImageSizeType.PROFILEPHOTO)
+    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, ImageSizeType type = ImageSizeType.ProfilePhoto)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
         string[] imageFormats = configuration["AppSettings:ImagesFormat"].Split(",");
@@ -158,7 +158,7 @@ public class BaseIModel : PageModel
 
     protected async Task SendToHistory(ApplicationUser user, string reason)
     {
-        db.AspNetUsers1.Add(new AspNetUsers1
+        db.AspNetUsersH.Add(new AspNetUsersH
         {
             Id = user.Id,
             AccessFailedCount = user.AccessFailedCount,

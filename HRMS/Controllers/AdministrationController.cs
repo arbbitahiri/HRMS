@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -44,16 +43,16 @@ public class AdministrationController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "41:r"), Description("Entry home.")]
+    [HttpGet, Authorize(Policy = "41:r"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index() => View();
 
     [HttpPost, Authorize(Policy = "41:r"), ValidateAntiForgeryToken]
-    [Description("Search for users.")]
+    [Description("Arb Tahiri", "Search for users.")]
     public async Task<IActionResult> Search(Search search)
     {
         var users = await db.AspNetUsers
-            .Where(a => ((search.Roles ?? new List<string>()).Any() ? search.Roles.Contains(a.Role.Select(a => a.Id).FirstOrDefault()) : true)
-                && (string.IsNullOrEmpty(search.PersonalNumber) || search.PersonalNumber.Contains(a.PersonalNumber))
+            .Where(a => /*((search.Roles ?? new List<string>()).Any() ? search.Roles.Contains(a.R.Select(a => a.Id).FirstOrDefault()) : true)*/
+                /*&&*/ (string.IsNullOrEmpty(search.PersonalNumber) || search.PersonalNumber.Contains(a.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || search.Firstname.Contains(a.FirstName))
                 && (string.IsNullOrEmpty(search.Lastname) || search.Lastname.Contains(a.LastName))
                 && (string.IsNullOrEmpty(search.Email) || search.Email.Contains(a.Email)))
@@ -68,7 +67,7 @@ public class AdministrationController : BaseController
                 Name = $"{a.FirstName} {a.LastName}",
                 Email = a.Email,
                 PhoneNumber = a.PhoneNumber,
-                Roles = string.Join(", ", a.Role.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn).ToArray()),
+                //Roles = string.Join(", ", a.Role.Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).ToArray()),
                 LockoutEnd = a.LockoutEnd
             }).ToListAsync();
         return Json(users);
@@ -78,22 +77,22 @@ public class AdministrationController : BaseController
 
     #region => Create
 
-    [HttpGet, Authorize(Policy = "41:c"), Description("Form to create a user.")]
+    [HttpGet, Authorize(Policy = "41:c"), Description("Arb Tahiri", "Form to create a user.")]
     public IActionResult Create() => View();
 
     [HttpPost, Authorize(Policy = "41:c"), ValidateAntiForgeryToken]
-    [Description("Action to create a user.")]
+    [Description("Arb Tahiri", "Action to create a user.")]
     public async Task<IActionResult> Create(Create create)
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
             return View(create);
         }
 
         if (await appDb.Users.AnyAsync(a => a.Email == create.Email || a.UserName == create.Username))
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
             return View(create);
         }
 
@@ -111,7 +110,7 @@ public class AdministrationController : BaseController
             UserName = create.Email,
             ProfileImage = filePath,
             Language = create.Language,
-            Mode = TemplateMode.LIGHT,
+            Mode = TemplateMode.Light,
             LockoutEnd = DateTime.Now.AddYears(99),
             LockoutEnabled = true,
             InsertedDate = DateTime.Now,
@@ -127,7 +126,7 @@ public class AdministrationController : BaseController
             {
                 errors += $"· {identityError.Description} ";
             }
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = errors });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = errors });
             return View(create);
         }
 
@@ -136,12 +135,12 @@ public class AdministrationController : BaseController
             result = await userManager.AddToRolesAsync(firstUser, db.AspNetRoles.Where(a => create.Roles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
                 return RedirectToAction(nameof(Index));
             }
         }
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.AccountCreatedSuccessfully, Dismissible = true });
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccountCreatedSuccessfully, Dismissible = true });
         return RedirectToAction(nameof(Index));
     }
 
@@ -149,7 +148,7 @@ public class AdministrationController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "41:e"), Description("Form to edit a user.")]
+    [HttpGet, Authorize(Policy = "41:e"), Description("Arb Tahiri", "Form to edit a user.")]
     public async Task<IActionResult> _Edit(string uIde)
     {
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde));
@@ -169,17 +168,17 @@ public class AdministrationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "41:e"), ValidateAntiForgeryToken]
-    [Description("Action to edit a user.")]
+    [Description("Arb Tahiri", "Action to edit a user.")]
     public async Task<IActionResult> Edit(Edit edit)
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData, Dismissible = true });
         }
 
         if (await appDb.Users.AnyAsync(a => a.Email == edit.Email || a.UserName == edit.Username))
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.UserHasAccount, Dismissible = true });
         }
 
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(edit.UserId));
@@ -195,7 +194,7 @@ public class AdministrationController : BaseController
             var result = await userManager.SetUserNameAsync(user, edit.Username);
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
             }
         }
 
@@ -204,17 +203,17 @@ public class AdministrationController : BaseController
             var result = await userManager.SetEmailAsync(user, edit.Email);
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
             }
         }
 
         var update = await userManager.UpdateAsync(user);
         if (!update.Succeeded)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", update.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", update.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
         }
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully, Dismissible = true });
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully, Dismissible = true });
         return RedirectToAction(nameof(Index));
     }
 
@@ -223,11 +222,11 @@ public class AdministrationController : BaseController
     #region => Delete
 
     [HttpPost, Authorize(Policy = "41:d"), ValidateAntiForgeryToken]
-    [Description("Action to delete a user.")]
+    [Description("Arb Tahiri", "Action to delete a user.")]
     public async Task<IActionResult> Delete(string uId)
     {
         await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uId)), DateTime.Now.AddYears(99));
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -236,7 +235,7 @@ public class AdministrationController : BaseController
 
     #region Check for users
 
-    [Description("Check if email already exists.")]
+    [Description("Arb Tahiri", "Check if email already exists.")]
     public async Task<IActionResult> CheckEmail(string Email, string UserId)
    {
         if (await db.AspNetUsers.AnyAsync(a => a.Email == Email && (string.IsNullOrEmpty(UserId) || a.Id != CryptoSecurity.Decrypt<string>(UserId))))
@@ -246,7 +245,7 @@ public class AdministrationController : BaseController
         return Json(true);
     }
 
-    [HttpPost, Description("Check if username already exists.")]
+    [HttpPost, Description("Arb Tahiri", "Check if username already exists.")]
     public async Task<IActionResult> CheckUsername(string uIde, string Username)
     {
         if (await db.AspNetUsers.AnyAsync(a => a.Id != CryptoSecurity.Decrypt<string>(uIde) && a.UserName == Username))
@@ -260,7 +259,7 @@ public class AdministrationController : BaseController
 
     #region Manage users
 
-    [HttpGet, Authorize(Policy = "41sp:c"), Description("Form to set password for user.")]
+    [HttpGet, Authorize(Policy = "41sp:c"), Description("Arb Tahiri", "Form to set password for user.")]
     public async Task<IActionResult> _SetPassword(string uIde)
     {
         var user = await appDb.Users.Where(a => a.Id == CryptoSecurity.Decrypt<string>(uIde))
@@ -273,12 +272,12 @@ public class AdministrationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "41sp:c"), ValidateAntiForgeryToken]
-    [Description("Action to set password for user.")]
+    [Description("Arb Tahiri", "Action to set password for user.")]
     public async Task<IActionResult> _SetPassword(SetPassword set)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var user = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(set.UserId));
@@ -286,37 +285,37 @@ public class AdministrationController : BaseController
         var result = await userManager.AddPasswordAsync(user, set.NewPassword);
         if (!result.Succeeded)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.PasswordNotAdded}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()) });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = $"{Resource.PasswordNotAdded}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()) });
         }
         await userManager.UpdateAsync(user);
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = $"{Resource.PasswordUpdatedSuccess}" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = $"{Resource.PasswordUpdatedSuccess}" });
     }
 
     [HttpPost, Authorize(Policy = "41l:c"), ValidateAntiForgeryToken]
-    [Description("Action to lock the account.")]
+    [Description("Arb Tahiri", "Action to lock the account.")]
     public async Task<IActionResult> Lock(string uIde)
     {
         var result = await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now.AddYears(99));
         if (!result.Succeeded)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.AccountNotLocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = $"{Resource.AccountNotLocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
         }
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountLockedSuccess });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountLockedSuccess });
     }
 
     [HttpPost, Authorize(Policy = "41ul:c"), ValidateAntiForgeryToken]
-    [Description("Action to unlock the account.")]
+    [Description("Arb Tahiri", "Action to unlock the account.")]
     public async Task<IActionResult> Unlock(string uIde)
     {
         var result = await userManager.SetLockoutEndDateAsync(await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(uIde)), DateTime.Now);
         if (!result.Succeeded)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = $"{Resource.AccountNotUnlocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = $"{Resource.AccountNotUnlocked}: " + string.Join(", ", result.Errors.Select(t => t.Description).ToArray()).ToLower() });
         }
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountUnlockedSuccess });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountUnlockedSuccess });
     }
 
-    [HttpGet, Authorize(Policy = "41r:c"), Description("Form to add roles to user.")]
+    [HttpGet, Authorize(Policy = "41r:c"), Description("Arb Tahiri", "Form to add roles to user.")]
     public async Task<IActionResult> _AddRole(string uIde)
     {
         var user = await db.AspNetUsers.Where(a => a.Id == CryptoSecurity.Decrypt<string>(uIde))
@@ -329,18 +328,18 @@ public class AdministrationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "41r:c"), ValidateAntiForgeryToken]
-    [Description("Action to add roles to user.")]
+    [Description("Arb Tahiri", "Action to add roles to user.")]
     public async Task<IActionResult> _AddRole(AddRole addRole)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var currentUser = await userManager.GetUserAsync(HttpContext.User);
         if (!await userManager.CheckPasswordAsync(currentUser, addRole.Password))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.IncorrectPassword });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.IncorrectPassword });
         }
 
         var userToAdd = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(addRole.UserId));
@@ -362,12 +361,12 @@ public class AdministrationController : BaseController
             var result = await userManager.AddToRolesAsync(userToAdd, roleToAdd);
             if (!result.Succeeded)
             {
-                return Json(new ErrorVM { Status = ErrorStatus.ERROR, Description = "<ul>" + string.Join("", result.Errors.Select(t => "<li>" + t.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}!</li>" + "</ul>" });
+                return Json(new ErrorVM { Status = ErrorStatus.Error, Description = "<ul>" + string.Join("", result.Errors.Select(t => "<li>" + t.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}!</li>" + "</ul>" });
             }
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.RoleAddedSuccess });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.RoleAddedSuccess });
     }
 
     #endregion
@@ -377,7 +376,7 @@ public class AdministrationController : BaseController
     #region => List
 
     [HttpGet, Authorize(Policy = "42:r")]
-    [Description("Entry form for list of roles.")]
+    [Description("Arb Tahiri", "Entry form for list of roles.")]
     public async Task<IActionResult> Roles()
     {
         var roles = await roleManager.Roles
@@ -398,21 +397,21 @@ public class AdministrationController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "42:c"), Description("Form to create a role.")]
+    [Authorize(Policy = "42:c"), Description("Arb Tahiri", "Form to create a role.")]
     public IActionResult _CreateRole() => PartialView();
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
-    [Description("Action to create a role.")]
+    [Description("Arb Tahiri", "Action to create a role.")]
     public async Task<IActionResult> CreateRole(CreateRole create)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         if (await roleManager.Roles.AnyAsync(a => a.NameSQ == create.NameSQ || a.NameEN == create.NameEN))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.RoleExists });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.RoleExists });
         }
 
         await roleManager.CreateAsync(new ApplicationRole
@@ -424,14 +423,14 @@ public class AdministrationController : BaseController
             DescriptionEN = create.DescriptionEN
         });
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
 
     #region => Edit
 
-    [Authorize(Policy = "42:c"), Description("Form to edit a role.")]
+    [Authorize(Policy = "42:c"), Description("Arb Tahiri", "Form to edit a role.")]
     public async Task<IActionResult> _EditRole(string rIde)
     {
         var role = await roleManager.Roles
@@ -448,17 +447,17 @@ public class AdministrationController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:r")]
-    [Description("Action to edit a role.")]
+    [Description("Arb Tahiri", "Action to edit a role.")]
     public async Task<IActionResult> EditRole(CreateRole edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         if (await roleManager.Roles.CountAsync(a => a.NameSQ == edit.NameSQ || a.NameEN == edit.NameEN) > 1)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.RoleExists });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.RoleExists });
         }
 
         var role = await roleManager.Roles.FirstOrDefaultAsync(a => a.Id == CryptoSecurity.Decrypt<string>(edit.RoleIde));
@@ -469,7 +468,7 @@ public class AdministrationController : BaseController
         role.DescriptionEN = edit.DescriptionEN;
         await roleManager.UpdateAsync(role);
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -477,12 +476,12 @@ public class AdministrationController : BaseController
     #region => Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
-    [Description("Action to delete a role.")]
+    [Description("Arb Tahiri", "Action to delete a role.")]
     public async Task<IActionResult> DeleteRole(string rIde)
     {
         await roleManager.DeleteAsync(await roleManager.Roles.FirstOrDefaultAsync(a => a.Id == CryptoSecurity.Decrypt<string>(rIde)));
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion

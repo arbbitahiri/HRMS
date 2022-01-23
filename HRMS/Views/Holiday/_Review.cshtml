@@ -15,7 +15,7 @@
 <form asp-action="Review" asp-controller="Holiday" id="frm_review_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_review" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="HolidayRequestIde" type="hidden"/>
+        <input asp-for="HolidayIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-6">

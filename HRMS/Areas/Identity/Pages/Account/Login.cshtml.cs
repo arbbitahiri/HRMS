@@ -76,10 +76,10 @@ public class LoginModel : BaseOModel
         Language = Thread.CurrentThread.CurrentCulture.Name;
         if (!ModelState.IsValid)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.ERROR, Description = "" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Error, Description = "" });
         }
 
-        var error = new ErrorVM { Status = ErrorStatus.SUCCESS, Description = "" };
+        var error = new ErrorVM { Status = ErrorStatus.Success, Description = "" };
         var request = Request.Form;
 
         var userName = Input.Email;
@@ -88,7 +88,7 @@ public class LoginModel : BaseOModel
             var user = await userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                return new JsonResult(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidLogin, Title = Resource.Warning });
+                return new JsonResult(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidLogin, Title = Resource.Warning });
             }
 
             userName = user.UserName;
@@ -103,15 +103,15 @@ public class LoginModel : BaseOModel
         }
         if (result.RequiresTwoFactor)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.INFO, Description = Resource.YouMustConfirmEmail, Title = Resource.Info, Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = Resource.YouMustConfirmEmail, Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         if (result.IsLockedOut)
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.INFO, Description = Resource.AccountLocked, Title = Resource.Info, Icon = "icon fas fa-lock" });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Info, Description = Resource.AccountLocked, Title = Resource.Info, Icon = "icon fas fa-lock" });
         }
         else
         {
-            return new JsonResult(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidLogin, Title = Resource.Warning });
+            return new JsonResult(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidLogin, Title = Resource.Warning });
         }
     }
 }

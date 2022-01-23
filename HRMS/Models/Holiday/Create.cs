@@ -6,7 +6,7 @@ namespace HRMS.Models.Holiday;
 
 public class Create
 {
-    public string HolidayRequestIde { get; set; }
+    public string HolidayIde { get; set; }
 
     [Display(Name = "HolidayType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

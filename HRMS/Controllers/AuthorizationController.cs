@@ -8,6 +8,7 @@ using HRMS.Models.SubMenu;
 using HRMS.Repository;
 using HRMS.Resources;
 using HRMS.Utilities;
+using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -37,16 +37,16 @@ public class AuthorizationController : BaseController
         this.function = function;
     }
 
-    [Authorize("50:r"), Description("Entry form for authorizations.")]
+    [Authorize("50:r"), Description("Arb Tahiri", "Entry form for authorizations.")]
     public IActionResult Index() => View();
 
     #region Authorization
 
-    [Description("Authorization configuration.")]
+    [Description("Arb Tahiri", "Authorization configuration.")]
     public IActionResult Authorization() => View();
 
     [HttpPost, Authorize(Policy = "51:c"), ValidateAntiForgeryToken]
-    [Description("Form to search through authorizations.")]
+    [Description("Arb Tahiri", "Form to search through authorizations.")]
     public async Task<IActionResult> Search(Search search)
     {
         var roleDetails = (await function.MenuListAccess(search.Role, user.Language))
@@ -65,12 +65,12 @@ public class AuthorizationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "51:c"), ValidateAntiForgeryToken]
-    [Description("Form to search through authorizations.")]
+    [Description("Arb Tahiri", "Form to search through authorizations.")]
     public async Task<IActionResult> ChangeAccess(ChangeAccess change)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         Menu menu = null; SubMenu subMenu = null;
@@ -116,14 +116,14 @@ public class AuthorizationController : BaseController
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
     }
 
     #endregion
 
     #region Application rules
 
-    [Description("Entry form in application rules")]
+    [Description("Arb Tahiri", "Entry form in application rules")]
     public async Task<IActionResult> Rules(string role)
     {
         var rules = new List<Rule>();
@@ -174,12 +174,12 @@ public class AuthorizationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "12:c"), ValidateAntiForgeryToken]
-    [Description("Action to change access for methods with policies")]
+    [Description("Arb Tahiri", "Action to change access for methods with policies")]
     public async Task<IActionResult> ChangeMethodAccess(Claims claim)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         string claimType = claim.Policy.Split(":")[0], claimValue = claim.Policy.Split(":")[1];
@@ -192,25 +192,25 @@ public class AuthorizationController : BaseController
         {
             await roleManager.RemoveClaimAsync(await roleManager.FindByIdAsync(claim.Role), new Claim(claimType, claimValue));
         }
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.AccessChangedSuccessfully });
     }
 
     #endregion
 
-    [Description("Form to display tabs for Menu and Submenu.")]
+    [Description("Arb Tahiri", "Form to display tabs for Menu and Submenu.")]
     public IActionResult MenuIndex() => View();
 
     #region Menu
 
     #region => List
 
-    [Authorize(Policy = "52:r"), Description("Form to display list of menus.")]
+    [Authorize(Policy = "52:r"), Description("Arb Tahiri", "Form to display list of menus.")]
     public async Task<IActionResult> Menu()
     {
         var menus = await db.Menu.Select(a => new MenuDetails
         {
             MenuIde = CryptoSecurity.Encrypt(a.MenuId),
-            Title = user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn,
+            Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
             Controller = a.Controller,
             Action = a.Action,
             HasSubMenu = a.HasSubMenu,
@@ -223,16 +223,16 @@ public class AuthorizationController : BaseController
 
     #region => Create
 
-    [HttpGet, Authorize(Policy = "52:c"), Description("Form to create a new menu.")]
+    [HttpGet, Authorize(Policy = "52:c"), Description("Arb Tahiri", "Form to create a new menu.")]
     public IActionResult _CreateMenu() => PartialView();
 
     [HttpPost, Authorize(Policy = "52:c"), ValidateAntiForgeryToken]
-    [Description("Action to create a new menu.")]
+    [Description("Arb Tahiri", "Action to create a new menu.")]
     public async Task<IActionResult> CreateMenu(CreateMenu create)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.Menu.Add(new Menu
@@ -252,14 +252,14 @@ public class AuthorizationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "52:e"), Description("Form to edit a new menu.")]
+    [HttpGet, Authorize(Policy = "52:e"), Description("Arb Tahiri", "Form to edit a new menu.")]
     public async Task<IActionResult> _EditMenu(string ide)
     {
         var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
@@ -281,12 +281,12 @@ public class AuthorizationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "52:e"), ValidateAntiForgeryToken]
-    [Description("Action to edit a new menu.")]
+    [Description("Arb Tahiri", "Action to edit a new menu.")]
     public async Task<IActionResult> EditMenu(EditMenu edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(edit.MenuIde));
@@ -303,10 +303,10 @@ public class AuthorizationController : BaseController
         menu.OpenFor = edit.OpenFor;
         menu.UpdatedFrom = user.Id;
         menu.UpdatedDate = DateTime.Now;
-        menu.UpdatedNo += 1;
+        menu.UpdatedNo = menu.UpdatedNo.HasValue ? ++menu.UpdatedNo : menu.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -314,13 +314,13 @@ public class AuthorizationController : BaseController
     #region => Delete
 
     [HttpPost, Authorize(Policy = "52:d"), ValidateAntiForgeryToken]
-    [Description("Form to edit a new menu.")]
+    [Description("Arb Tahiri", "Form to edit a new menu.")]
     public async Task<IActionResult> DeleteMenu(string ide)
     {
         db.Menu.Remove(await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -331,15 +331,15 @@ public class AuthorizationController : BaseController
 
     #region => List
 
-    [Authorize(Policy = "53:r"), Description("Form to dipslay list of submenus.")]
+    [Authorize(Policy = "53:r"), Description("Arb Tahiri", "Form to dipslay list of submenus.")]
     public async Task<IActionResult> SubMenu()
     {
         var menus = await db.SubMenu.Include(a => a.Menu)
             .Select(a => new SubMenuDetails
             {
                 SubMenuIde = CryptoSecurity.Encrypt(a.SubMenuId),
-                Title = user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn,
-                MenuTitle = user.Language == LanguageEnum.ALBANIAN ? a.Menu.NameSq : a.Menu.NameEn,
+                Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
+                MenuTitle = user.Language == LanguageEnum.Albanian ? a.Menu.NameSq : a.Menu.NameEn,
                 Controller = a.Controller,
                 Action = a.Action,
                 Icon = a.Icon
@@ -351,25 +351,25 @@ public class AuthorizationController : BaseController
 
     #region => Create
 
-    [HttpGet, Authorize(Policy = "53:c"), Description("Form to create a new submenu.")]
+    [HttpGet, Authorize(Policy = "53:c"), Description("Arb Tahiri", "Form to create a new submenu.")]
     public async Task<IActionResult> _CreateSubMenu(string ide)
     {
         var menu = await db.Menu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
         var create = new CreateSubMenu
         {
             MenuIde = ide,
-            MenuTitle = user.Language == LanguageEnum.ALBANIAN ? menu.NameSq : menu.NameEn
+            MenuTitle = user.Language == LanguageEnum.Albanian ? menu.NameSq : menu.NameEn
         };
         return PartialView(create);
     }
 
     [HttpPost, Authorize(Policy = "53:c"), ValidateAntiForgeryToken]
-    [Description("Action to create a new submenu.")]
+    [Description("Arb Tahiri", "Action to create a new submenu.")]
     public async Task<IActionResult> CreateSubMenu(CreateSubMenu create)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         db.SubMenu.Add(new SubMenu
@@ -389,7 +389,7 @@ public class AuthorizationController : BaseController
             InsertedDate = DateTime.Now
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -397,7 +397,7 @@ public class AuthorizationController : BaseController
     #region => Edit
 
     [HttpGet, Authorize(Policy = "53:e")]
-    [Description("Form to edit a new submenu.")]
+    [Description("Arb Tahiri", "Form to edit a new submenu.")]
     public async Task<IActionResult> _EditSubMenu(string ide)
     {
         var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide));
@@ -418,12 +418,12 @@ public class AuthorizationController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "53:e")]
-    [Description("Action to edit a new submenu.")]
+    [Description("Arb Tahiri", "Action to edit a new submenu.")]
     public async Task<IActionResult> EditSubMenu(EditSubMenu edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var submenu = await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(edit.SubMenuIde));
@@ -439,10 +439,10 @@ public class AuthorizationController : BaseController
         submenu.OpenFor = edit.OpenFor;
         submenu.UpdatedFrom = user.Id;
         submenu.UpdatedDate = DateTime.Now;
-        submenu.UpdatedNo += 1;
+        submenu.UpdatedNo = submenu.UpdatedNo.HasValue ? ++submenu.UpdatedNo : submenu.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -450,13 +450,13 @@ public class AuthorizationController : BaseController
     #region => Delete
 
     [HttpPost, Authorize(Policy = "53:d"), ValidateAntiForgeryToken]
-    [Description("Form to edit a new submenu.")]
+    [Description("Arb Tahiri", "Form to edit a new submenu.")]
     public async Task<IActionResult> DeleteSubMenu(string ide)
     {
         db.SubMenu.Remove(await db.SubMenu.FindAsync(CryptoSecurity.Decrypt<int>(ide)));
         await db.SaveChangesAsync();
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion

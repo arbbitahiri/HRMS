@@ -1005,4 +1005,37 @@
   <data name="Yesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
+  <data name="BruttoSalary" xml:space="preserve">
+    <value>Brutto(Gross) Salary</value>
+  </data>
+  <data name="EmployeeContribution" xml:space="preserve">
+    <value>Employee contribution</value>
+  </data>
+  <data name="EmployeeContributionRange" xml:space="preserve">
+    <value>Employee contribution must be between 5% and 15%!</value>
+  </data>
+  <data name="EmployerContribution" xml:space="preserve">
+    <value>Employer contribution</value>
+  </data>
+  <data name="EmployerContributionRange" xml:space="preserve">
+    <value>Employer contribution must be between 5% and 15%!</value>
+  </data>
+  <data name="ListOfStaffInProcessRegistration" xml:space="preserve">
+    <value>List of staff in process of registration!</value>
+  </data>
+  <data name="SalaryRange" xml:space="preserve">
+    <value>Salary must be greater than 0!</value>
+  </data>
+  <data name="StaffWithPersonalExists" xml:space="preserve">
+    <value>Staff with this personal number exists!</value>
+  </data>
+  <data name="RequestedDate" xml:space="preserve">
+    <value>Requested date</value>
+  </data>
+  <data name="ReviewDate" xml:space="preserve">
+    <value>Review date</value>
+  </data>
+  <data name="ReviewedFrom" xml:space="preserve">
+    <value>Reviewed from</value>
+  </data>
 </root>

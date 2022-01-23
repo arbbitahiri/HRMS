@@ -53,7 +53,7 @@ public partial class IndexModel : BaseIModel
         public string PhoneNumber { get; set; }
 
         [FileExtension(".png,.jpg,.bmp,.jpeg", ErrorMessageResourceName = "AllowedFormatImage", ErrorMessageResourceType = typeof(Resource))]
-        [MaxFileSize(10640, ErrorMessageResourceName = "MaxImageSize", ErrorMessageResourceType = typeof(Resource))]
+        [MaxFileSizeAttribute(10640, ErrorMessageResourceName = "MaxImageSize", ErrorMessageResourceType = typeof(Resource))]
         public IFormFile ProfileImage { get; set; }
 
         public string ImagePath { get; set; }
@@ -76,7 +76,7 @@ public partial class IndexModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             LoadAsync(user);
             return Page();
         }
@@ -90,7 +90,7 @@ public partial class IndexModel : BaseIModel
         var user = await userManager.GetUserAsync(User);
         if (user == null)
         {
-            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, Description = Resource.UnableToLoadUser });
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.UnableToLoadUser });
             LoadAsync(user);
             return Page();
         }
@@ -114,7 +114,7 @@ public partial class IndexModel : BaseIModel
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
 
-        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.UpdatedProfile });
+        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.UpdatedProfile });
         return RedirectToPage();
     }
 }

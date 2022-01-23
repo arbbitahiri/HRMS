@@ -457,6 +457,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paga BRUTTO.
+        /// </summary>
+        public static string BruttoSalary {
+            get {
+                return ResourceManager.GetString("BruttoSalary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anulo.
         /// </summary>
         public static string Cancel {
@@ -858,6 +867,42 @@ namespace HRMS.Resources {
         public static string EmailNotValid {
             get {
                 return ResourceManager.GetString("EmailNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kontributi punëtorit.
+        /// </summary>
+        public static string EmployeeContribution {
+            get {
+                return ResourceManager.GetString("EmployeeContribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kontributi punëtorit duhet të jetë në mes 5% dhe 15%!.
+        /// </summary>
+        public static string EmployeeContributionRange {
+            get {
+                return ResourceManager.GetString("EmployeeContributionRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kuntributi punëdhënësit.
+        /// </summary>
+        public static string EmployerContribution {
+            get {
+                return ResourceManager.GetString("EmployerContribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kuntributi punëdhënësit duhet të jetë në mes 5% dhe 15%!.
+        /// </summary>
+        public static string EmployerContributionRange {
+            get {
+                return ResourceManager.GetString("EmployerContributionRange", resourceCulture);
             }
         }
         
@@ -1353,6 +1398,15 @@ namespace HRMS.Resources {
         public static string ListOfRoles {
             get {
                 return ResourceManager.GetString("ListOfRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e stafit në process të regjistrimit!.
+        /// </summary>
+        public static string ListOfStaffInProcessRegistration {
+            get {
+                return ResourceManager.GetString("ListOfStaffInProcessRegistration", resourceCulture);
             }
         }
         
@@ -1951,6 +2005,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data kërkesës.
+        /// </summary>
+        public static string RequestedDate {
+            get {
+                return ResourceManager.GetString("RequestedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kjo fushë është obligative!.
         /// </summary>
         public static string RequiredField {
@@ -1983,6 +2046,24 @@ namespace HRMS.Resources {
         public static string Review {
             get {
                 return ResourceManager.GetString("Review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data shqyrtimit.
+        /// </summary>
+        public static string ReviewDate {
+            get {
+                return ResourceManager.GetString("ReviewDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shqyrtuar nga.
+        /// </summary>
+        public static string ReviewedFrom {
+            get {
+                return ResourceManager.GetString("ReviewedFrom", resourceCulture);
             }
         }
         
@@ -2028,6 +2109,15 @@ namespace HRMS.Resources {
         public static string RolesAddThroughList {
             get {
                 return ResourceManager.GetString("RolesAddThroughList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paga duhet të jetë më e madhe se 0!.
+        /// </summary>
+        public static string SalaryRange {
+            get {
+                return ResourceManager.GetString("SalaryRange", resourceCulture);
             }
         }
         
@@ -2181,6 +2271,15 @@ namespace HRMS.Resources {
         public static string StaffType {
             get {
                 return ResourceManager.GetString("StaffType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stafi me numrin personal të dhënë ekziston!.
+        /// </summary>
+        public static string StaffWithPersonalExists {
+            get {
+                return ResourceManager.GetString("StaffWithPersonalExists", resourceCulture);
             }
         }
         

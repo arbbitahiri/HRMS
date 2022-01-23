@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class Document
+    public partial class HolidayStatus
     {
-        public int DocumentId { get; set; }
-        public int DocumentTypeId { get; set; }
-        public string Title { get; set; }
-        public string FileName { get; set; }
-        public string Path { get; set; }
+        public int HolidayStatusId { get; set; }
+        public int HolidayId { get; set; }
+        public int StatusTypeId { get; set; }
+        public string Description { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
@@ -17,8 +16,9 @@ namespace HRMS.Data.General
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedNo { get; set; }
 
-        public virtual DocumentType DocumentType { get; set; }
+        public virtual Holiday Holiday { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
+        public virtual StatusType StatusType { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }
 }

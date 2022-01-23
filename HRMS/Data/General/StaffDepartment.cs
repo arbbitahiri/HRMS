@@ -7,7 +7,8 @@ namespace HRMS.Data.General
     {
         public StaffDepartment()
         {
-            StaffDepartmentEvaluation = new HashSet<StaffDepartmentEvaluation>();
+            EvaluationManager = new HashSet<EvaluationManager>();
+            EvaluationSelf = new HashSet<EvaluationSelf>();
             StaffDepartmentSubject = new HashSet<StaffDepartmentSubject>();
         }
 
@@ -17,6 +18,9 @@ namespace HRMS.Data.General
         public int StaffTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public decimal BruttoSalary { get; set; }
+        public decimal? EmployeeContribution { get; set; }
+        public decimal? EmployerContribution { get; set; }
         public string Description { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
@@ -29,7 +33,8 @@ namespace HRMS.Data.General
         public virtual Staff Staff { get; set; }
         public virtual StaffType StaffType { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffDepartmentEvaluation> StaffDepartmentEvaluation { get; set; }
+        public virtual ICollection<EvaluationManager> EvaluationManager { get; set; }
+        public virtual ICollection<EvaluationSelf> EvaluationSelf { get; set; }
         public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubject { get; set; }
     }
 }

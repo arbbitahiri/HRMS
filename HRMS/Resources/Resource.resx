@@ -1011,4 +1011,37 @@
   <data name="Yesterday" xml:space="preserve">
     <value>Dje</value>
   </data>
+  <data name="BruttoSalary" xml:space="preserve">
+    <value>Paga BRUTTO</value>
+  </data>
+  <data name="EmployeeContribution" xml:space="preserve">
+    <value>Kontributi punëtorit</value>
+  </data>
+  <data name="EmployeeContributionRange" xml:space="preserve">
+    <value>Kontributi punëtorit duhet të jetë në mes 5% dhe 15%!</value>
+  </data>
+  <data name="EmployerContribution" xml:space="preserve">
+    <value>Kuntributi punëdhënësit</value>
+  </data>
+  <data name="EmployerContributionRange" xml:space="preserve">
+    <value>Kuntributi punëdhënësit duhet të jetë në mes 5% dhe 15%!</value>
+  </data>
+  <data name="ListOfStaffInProcessRegistration" xml:space="preserve">
+    <value>Lista e stafit në process të regjistrimit!</value>
+  </data>
+  <data name="SalaryRange" xml:space="preserve">
+    <value>Paga duhet të jetë më e madhe se 0!</value>
+  </data>
+  <data name="StaffWithPersonalExists" xml:space="preserve">
+    <value>Stafi me numrin personal të dhënë ekziston!</value>
+  </data>
+  <data name="RequestedDate" xml:space="preserve">
+    <value>Data kërkesës</value>
+  </data>
+  <data name="ReviewDate" xml:space="preserve">
+    <value>Data shqyrtimit</value>
+  </data>
+  <data name="ReviewedFrom" xml:space="preserve">
+    <value>Shqyrtuar nga</value>
+  </data>
 </root>

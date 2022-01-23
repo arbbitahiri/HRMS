@@ -19,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -68,7 +67,8 @@ public class BaseController : Controller
             Mode = user.Mode,
             Language = user.Language,
             Notification = user.AllowNotification,
-            PersonalNumber = user.PersonalNumber
+            PersonalNumber = user.PersonalNumber,
+            DepartmentId = user.DepartmentId
         };
 
         var con = context.ActionDescriptor as ControllerActionDescriptor;
@@ -80,6 +80,7 @@ public class BaseController : Controller
             Ip = context.HttpContext.Connection.RemoteIpAddress.ToString(),
             Controller = context.HttpContext.Request.RouteValues["controller"].ToString(),
             Action = context.HttpContext.Request.RouteValues["action"].ToString(),
+            Developer = description.Developer,
             Description = description.Description,
             HttpMethod = context.HttpContext.Request.Method,
             Url = context.HttpContext.Request.GetDisplayUrl(),
@@ -126,7 +127,7 @@ public class BaseController : Controller
         await db.SaveChangesAsync();
     }
 
-    [Description("Change language.")]
+    [Description("Arb Tahiri", "Change language.")]
     public async Task<ActionResult> ChangeLanguage(string culture, string returnUrl = "/")
     {
         var cultureInfo = new CultureInfo(culture);
@@ -152,33 +153,33 @@ public class BaseController : Controller
     }
 
     [HttpPost]
-    [Description("Change notification mode.")]
+    [Description("Arb Tahiri", "Change notification mode.")]
     public async Task<IActionResult> ChangeNotificationMode(bool mode)
     {
         var currentUser = await db.AspNetUsers.FindAsync(user.Id);
         currentUser.AllowNotification = mode;
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = "Notification mode changed successfully!" });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = "Notification mode changed successfully!" });
     }
 
     [AllowAnonymous]
-    [Description("Error status message.")]
+    [Description("Arb Tahiri", "Error status message.")]
     public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
 
     protected LanguageEnum GetLanguage(string culture) =>
         culture switch
         {
-            "sq-AL" => LanguageEnum.ALBANIAN,
-            "en-GB" => LanguageEnum.ENGLISH,
-            _ => LanguageEnum.ALBANIAN,
+            "sq-AL" => LanguageEnum.Albanian,
+            "en-GB" => LanguageEnum.English,
+            _ => LanguageEnum.Albanian,
         };
 
     protected string GetRoleFromStaffType(int staffType) =>
         staffType switch
         {
-            (int)StaffTypeEnum.LECTURER => "e062fce5-219c-43df-a6f3-7bc28506259a",
-            (int)StaffTypeEnum.ADMINISTRATOR => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
-            (int)StaffTypeEnum.MANAGER => "4d263424-bd57-4f70-9ecc-b95f287cc149",
+            (int)StaffTypeEnum.Lecturer => "e062fce5-219c-43df-a6f3-7bc28506259a",
+            (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            (int)StaffTypeEnum.Manager => "4d263424-bd57-4f70-9ecc-b95f287cc149",
             _ => ""
         };
 
@@ -318,12 +319,12 @@ public class BaseController : Controller
     /// <param name="name">Can be first or last name, email or username</param>
     /// <param name="role">Is the selected role in another select list</param>
     /// <returns>First 10 users with the specified condition</returns>
-    [HttpPost, ValidateAntiForgeryToken, Description("List of users for select list")]
+    [HttpPost, ValidateAntiForgeryToken, Description("Arb Tahiri", "List of users for select list")]
     public async Task<IActionResult> AspUsers(string name, string role = "")
     {
         var list = await db.AspNetUsers
             .Where(a => (a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
-                && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role))).Take(10)
+                /*&& (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role))*/).Take(10)
             .Select(a => new Select2
             {
                 id = a.Id,

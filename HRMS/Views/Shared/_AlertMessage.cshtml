@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    if (Model.Status == ErrorStatus.SUCCESS)
+    if (Model.Status == ErrorStatus.Success)
     {
         <div class='alert alert-success @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -10,12 +10,12 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             }
             <h5>
-                <i class="icon fas fa-check"></i> @Model.Title!
+                <i class="icon fas fa-check"></i> @(Model.Title ?? Resource.Success)!
             </h5>
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.WARNING)
+    else if (Model.Status == ErrorStatus.Warning)
     {
         <div class='alert alert-warning @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -23,12 +23,12 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             }
             <h5>
-                <i class="icon fas fa-exclamation-triangle"></i> @Model.Title!
+                <i class="icon fas fa-exclamation-triangle"></i> @(Model.Title ?? Resource.Warning)!
             </h5>
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.INFO)
+    else if (Model.Status == ErrorStatus.Info)
     {
         <div class='alert alert-info @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -36,12 +36,12 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             }
             <h5>
-                <i class="icon fas fa-info"></i> @Model.Title!
+                <i class="icon fas fa-info"></i> @(Model.Title ?? Resource.Info)!
             </h5>
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.ERROR)
+    else if (Model.Status == ErrorStatus.Error)
     {
         <div class='alert alert-danger @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -49,7 +49,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             }
             <h5>
-                <i class="icon fas fa-ban"></i> @Model.Title!
+                <i class="icon fas fa-ban"></i> @(Model.Title ?? Resource.Error)!
             </h5>
             @Html.Raw(Model.Description)
         </div>

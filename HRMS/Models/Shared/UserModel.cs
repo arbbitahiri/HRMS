@@ -14,5 +14,5 @@ public class UserModel
     public LanguageEnum Language { get; set; }
     public bool Notification { get; set; }
     public string PersonalNumber { get; set; }
-    public string Address { get; set; }
+    public int? DepartmentId { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿namespace HRMS.Models.Staff;
+﻿using System;
+
+namespace HRMS.Models.Staff;
 public class StaffDetails
 {
     public string Ide { get; set; }
@@ -15,4 +17,6 @@ public class StaffDetails
     public string City { get; set; }
     public string Country { get; set; }
     public string ZIP { get; set; }
+
+    public DateTime InsertedDate { get; set; }
 }

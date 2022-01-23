@@ -7,12 +7,13 @@ namespace HRMS.Data.General
     {
         public HolidayType()
         {
-            HolidayRequest = new HashSet<HolidayRequest>();
+            Holiday = new HashSet<Holiday>();
         }
 
         public int HolidayTypeId { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
+        public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public string UpdatedFrom { get; set; }
@@ -21,6 +22,6 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<HolidayRequest> HolidayRequest { get; set; }
+        public virtual ICollection<Holiday> Holiday { get; set; }
     }
 }

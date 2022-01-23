@@ -1,4 +1,5 @@
 ﻿using HRMS.Resources;
+using HRMS.Utilities.Validations;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,6 +27,23 @@ public class AddDepartment
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string EndDate { get; set; }
 
+    [Display(Name = "BruttoSalary", ResourceType = typeof(Resource))]
+    [Range(1, int.MaxValue, ErrorMessageResourceName = "SalaryRange", ErrorMessageResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public decimal Salary { get; set; }
+
+    [Display(Name = "EmployeeContribution", ResourceType = typeof(Resource))]
+    [IfRange(nameof(Outsider), 5, 15, ErrorMessageResourceName = "EmployeeContributionRange", ErrorMessageResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public decimal? EmployeeContribution { get; set; }
+
+    [Display(Name = "EmployerContribution", ResourceType = typeof(Resource))]
+    [IfRange(nameof(Outsider), 5, 15, ErrorMessageResourceName = "EmployerContributionRange", ErrorMessageResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public decimal? EmployerContribution { get; set; }
+
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     public string Description { get; set; }
+
+    public bool Outsider { get; set; }
 }

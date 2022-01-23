@@ -68,7 +68,7 @@ public class AccountModel : BaseIModel
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
 
-        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.UpdatedProfile });
+        TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.UpdatedProfile });
         return RedirectToPage();
     }
 }

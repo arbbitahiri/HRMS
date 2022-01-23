@@ -26,7 +26,7 @@ public class LogoutModel : BaseOModel
     public async Task<IActionResult> OnPost(string returnUrl = null)
     {
         await _signInManager.SignOutAsync();
-        TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = Utilities.ErrorStatus.SUCCESS, Description = "You are logged out." });
+        TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = Utilities.ErrorStatus.Success, Description = "You are logged out." });
         return RedirectToPage("Login");
     }
 }

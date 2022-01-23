@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,12 +41,12 @@ public class StaffController : BaseController
     #region 1. Register and edit
 
     [HttpGet, Authorize(Policy = "21s:c")]
-    [Description("Form to register or update staff. First step of registration/edition of staff.")]
+    [Description("Arb Tahiri", "Form to register or update staff. First step of registration/edition of staff.")]
     public async Task<IActionResult> Register(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
-            return View(new StaffPost() { MethodType = MethodType.POST });
+            return View(new StaffPost() { MethodType = MethodType.Post });
         }
         else
         {
@@ -55,7 +54,7 @@ public class StaffController : BaseController
                 .Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(ide))
                 .Select(a => new StaffPost
                 {
-                    MethodType = MethodType.PUT,
+                    MethodType = MethodType.Put,
                     StaffIde = CryptoSecurity.Encrypt(a.StaffId),
                     PersonalNumber = CryptoSecurity.Decrypt<string>(ide),
                     Firstname = a.FirstName,
@@ -75,12 +74,12 @@ public class StaffController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
-    [Description("Action to register staff.")]
+    [Description("Arb Tahiri", "Action to register staff.")]
     public async Task<IActionResult> Register(StaffPost staff)
     {
         if (!ModelState.IsValid)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         string staffIde = string.Empty;
@@ -88,7 +87,7 @@ public class StaffController : BaseController
         {
             if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.WARNING, Description = "Stafi me kete numer personal ekziston!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffWithPersonalExists });
             }
 
             try
@@ -109,17 +108,24 @@ public class StaffController : BaseController
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 };
+
                 db.Staff.Add(newStaff);
+                db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+                {
+                    StaffId = newStaff.StaffId,
+                    StatusTypeId = (int)StatusTypeEnum.Processing,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+
                 await db.SaveChangesAsync();
-                Console.WriteLine(staffIde);
 
                 staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
-                Console.WriteLine(staffIde);
             }
             catch (Exception ex)
             {
                 await LogError(ex);
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
             }
         }
         else
@@ -134,14 +140,14 @@ public class StaffController : BaseController
                 EmailConfirmed = true,
                 PhoneNumber = staff.PhoneNumber,
                 UserName = staff.Email,
-                Language = LanguageEnum.ALBANIAN,
-                Mode = TemplateMode.LIGHT,
+                Language = LanguageEnum.Albanian,
+                Mode = TemplateMode.Light,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             };
 
             string errors = string.Empty;
-            var error = new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.AccountCreatedSuccessfully };
+            var error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountCreatedSuccessfully };
 
             string password = FirstTimePassword(configuration, staff.Firstname, staff.Lastname);
             var result = await userManager.CreateAsync(firstUser, password);
@@ -151,7 +157,7 @@ public class StaffController : BaseController
                 {
                     errors += $"{identityError.Description}. ";
                 }
-                error = new ErrorVM { Status = ErrorStatus.WARNING, Description = errors };
+                error = new ErrorVM { Status = ErrorStatus.Warning, Description = errors };
             }
 
             try
@@ -174,6 +180,14 @@ public class StaffController : BaseController
                 };
 
                 db.Staff.Add(newStaff);
+                db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+                {
+                    StaffId = newStaff.StaffId,
+                    StatusTypeId = (int)StatusTypeEnum.Processing,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+
                 await db.SaveChangesAsync();
                 staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
             }
@@ -181,7 +195,7 @@ public class StaffController : BaseController
             {
                 await userManager.DeleteAsync(firstUser);
                 await LogError(ex);
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Description = "Ka ndodhur nje gabim gjate regjistrimit!" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
             }
         }
 
@@ -189,12 +203,12 @@ public class StaffController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
-    [Description("Action to edit staff data.")]
+    [Description("Arb Tahiri", "Action to edit staff data.")]
     public async Task<IActionResult> Edit(StaffPost edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(edit.StaffIde)).FirstOrDefaultAsync();
@@ -213,7 +227,7 @@ public class StaffController : BaseController
         userStaff.PhoneNumber = edit.PhoneNumber;
         staff.UpdatedDate = DateTime.Now;
         staff.UpdatedFrom = user.Id;
-        staff.UpdatedNo += 1;
+        staff.UpdatedNo = staff.UpdatedNo.HasValue ? ++staff.UpdatedNo : staff.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
@@ -226,7 +240,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Authorize(Policy = "21sq:r")]
-    [Description("Entry form for qualification. Second step of registration/edition of staff.")]
+    [Description("Arb Tahiri", "Entry form for qualification. Second step of registration/edition of staff.")]
     public async Task<IActionResult> Qualification(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -242,8 +256,8 @@ public class StaffController : BaseController
             .Select(a => new Qualifications
             {
                 StaffQualificationIde = CryptoSecurity.Encrypt(a.StaffQualificationId),
-                ProfessionType = user.Language == LanguageEnum.ALBANIAN ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
-                EducationLevel = user.Language == LanguageEnum.ALBANIAN ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
+                ProfessionType = user.Language == LanguageEnum.Albanian ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
+                EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
                 CreditNumber = a.CreditNumber,
@@ -265,16 +279,16 @@ public class StaffController : BaseController
     #region => Create
 
     [HttpGet, Authorize(Policy = "21sq:c")]
-    [Description("Form to add new qualification.")]
+    [Description("Arb Tahiri", "Form to add new qualification.")]
     public IActionResult _AddQualification(string ide) => PartialView(new AddQualification { StaffIde = ide });
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:c")]
-    [Description("Action to add qualification.")]
+    [Description("Arb Tahiri", "Action to add qualification.")]
     public async Task<IActionResult> AddQualification(AddQualification add)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         db.Add(new StaffQualification
@@ -301,7 +315,7 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -309,7 +323,7 @@ public class StaffController : BaseController
     #region => Edit
 
     [HttpGet, Authorize(Policy = "21sq:e")]
-    [Description("Form to edit staff data.")]
+    [Description("Arb Tahiri", "Form to edit staff data.")]
     public async Task<IActionResult> _EditQualification(string ide)
     {
         var qualification = await db.StaffQualification
@@ -340,12 +354,12 @@ public class StaffController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:e")]
-    [Description("Action to edit a qualification.")]
+    [Description("Arb Tahiri", "Action to edit a qualification.")]
     public async Task<IActionResult> EditQualification(AddQualification edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var qualification = await db.StaffQualification.Where(a => a.StaffQualificationId == CryptoSecurity.Decrypt<int>(edit.StaffQualificationIde)).FirstOrDefaultAsync();
@@ -368,17 +382,17 @@ public class StaffController : BaseController
         qualification.Validity = !string.IsNullOrEmpty(edit.To) ? DateTime.ParseExact(edit.Validity, "dd/MM/yyyy", null) : null;
         qualification.UpdatedDate = DateTime.Now;
         qualification.UpdatedFrom = user.Id;
-        qualification.UpdatedNo += 1;
+        qualification.UpdatedNo = qualification.UpdatedNo.HasValue ? ++qualification.UpdatedNo : qualification.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
 
     #region => Details
 
-    [HttpGet, Authorize(Policy = "21sq:r"), Description("Form to display qualification's details.")]
+    [HttpGet, Authorize(Policy = "21sq:r"), Description("Arb Tahiri", "Form to display qualification's details.")]
     public async Task<IActionResult> _DetailsQualification(string ide)
     {
         var qualification = await db.StaffQualification
@@ -413,13 +427,13 @@ public class StaffController : BaseController
     #region => Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sq:d")]
-    [Description("Action to delete a qualification.")]
+    [Description("Arb Tahiri", "Action to delete a qualification.")]
     public async Task<IActionResult> DeleteQualification(string ide)
     {
         var qualification = await db.StaffQualification.Where(a => a.StaffQualificationId == CryptoSecurity.Decrypt<int>(ide)).FirstOrDefaultAsync();
         db.Remove(qualification);
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -431,7 +445,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Authorize(Policy = "21sd:r")]
-    [Description("Entry form for documents. Third step of registration/editation of staff.")]
+    [Description("Arb Tahiri", "Entry form for documents. Third step of registration/editation of staff.")]
     public async Task<IActionResult> Documents(string ide, MethodType method)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -451,7 +465,7 @@ public class StaffController : BaseController
                 Title = a.Title,
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
-                DocumentType = user.Language == LanguageEnum.ALBANIAN ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 Description = a.Description,
                 Active = a.Active
             }).ToListAsync();
@@ -471,16 +485,16 @@ public class StaffController : BaseController
     #region => Create
 
     [HttpGet, Authorize(Policy = "21sd:c")]
-    [Description("Form to add documents.")]
+    [Description("Arb Tahiri", "Form to add documents.")]
     public IActionResult _AddDocument(string ide) => PartialView(new AddDocument { StaffIde = ide, FileSize = $"{Convert.ToDecimal(configuration["AppSettings:FileMaxKB"]) / 1024:N1}MB" });
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:c")]
-    [Description("Action to add documents.")]
+    [Description("Arb Tahiri", "Action to add documents.")]
     public async Task<IActionResult> AddDocument(AddDocument add)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         string path = await SaveFile(environment, configuration, add.FormFile, "StaffDocuments", null);
@@ -498,7 +512,7 @@ public class StaffController : BaseController
         });
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -506,7 +520,7 @@ public class StaffController : BaseController
     #region => Edit
 
     [HttpGet, Authorize(Policy = "21sd:e")]
-    [Description("Form to edit a document.")]
+    [Description("Arb Tahiri", "Form to edit a document.")]
     public async Task<IActionResult> _EditDocument(string ide)
     {
         var document = await db.StaffDocument
@@ -524,12 +538,12 @@ public class StaffController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:e")]
-    [Description("Action to edit a document.")]
+    [Description("Arb Tahiri", "Action to edit a document.")]
     public async Task<IActionResult> EditDocument(EditDocument edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde));
@@ -539,10 +553,10 @@ public class StaffController : BaseController
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo += 1;
+        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -550,17 +564,17 @@ public class StaffController : BaseController
     #region => Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sd:d")]
-    [Description("Action to delete a document.")]
+    [Description("Arb Tahiri", "Action to delete a document.")]
     public async Task<IActionResult> DeleteDocument(string ide)
     {
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(ide));
         document.Active = false;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo += 1;
+        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -572,7 +586,7 @@ public class StaffController : BaseController
     #region => List
 
     [HttpGet, Authorize(Policy = "21sds:r")]
-    [Description("Entry form for department. Fourth step of registration/editation of staff.")]
+    [Description("Arb Tahiri", "Entry form for department. Fourth step of registration/editation of staff.")]
     public async Task<IActionResult> Departments(string ide, MethodType method)
     {
         var staff = await db.Staff
@@ -582,7 +596,7 @@ public class StaffController : BaseController
                 Ide = ide,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.LECTURER)
+                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
@@ -591,8 +605,8 @@ public class StaffController : BaseController
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                Department = user.Language == LanguageEnum.ALBANIAN ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
-                StaffType = user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn,
+                Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
+                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 Description = a.Description
@@ -604,7 +618,7 @@ public class StaffController : BaseController
             .Select(a => new Subjects
             {
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
-                Subject = user.Language == LanguageEnum.ALBANIAN ? a.Subject.NameSq : a.Subject.NameEn,
+                Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 InsertDate = a.InsertedDate
@@ -629,16 +643,25 @@ public class StaffController : BaseController
     #region ==> Create
 
     [HttpGet, Authorize(Policy = "21sdp:c")]
-    [Description("Form to add department.")]
-    public IActionResult _AddDepartment(string ide) => PartialView(new AddDepartment { StaffIde = ide });
+    [Description("Arb Tahiri", "Form to add department.")]
+    public async Task<IActionResult> _AddDepartment(string ide)
+    {
+        var staffDetails = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new AddDepartment
+            {
+                StaffIde = ide,
+                Outsider = a.Country.ToLower().Contains("kosov")
+            }).FirstOrDefaultAsync();
+        return PartialView(staffDetails);
+    }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:c")]
-    [Description("Action to add new department.")]
+    [Description("Arb Tahiri", "Action to add new department.")]
     public async Task<IActionResult> AddDepartment(AddDepartment add)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var getRole = GetRoleFromStaffType(add.StaffTypeId);
@@ -649,8 +672,8 @@ public class StaffController : BaseController
             if (await db.StaffDepartment.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
             {
                 var role = GetRoleFromStaffType(item.StaffTypeId);
-                var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.ALBANIAN ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-                return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = string.Format(Resource.ExistsStaffRole, item.Staff.FirstName, item.Staff.LastName, staffRoleName) }); //$"{item.Staff.FirstName} {item.Staff.LastName} ekziston si {staffRoleName}. Duhet të pasivizoni këtë për të regjistruar pastaj!"
+                var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.ExistsStaffRole, item.Staff.FirstName, item.Staff.LastName, staffRoleName) }); //$"{item.Staff.FirstName} {item.Staff.LastName} ekziston si {staffRoleName}. Duhet të pasivizoni këtë për të regjistruar pastaj!"
             }
         }
 
@@ -665,6 +688,9 @@ public class StaffController : BaseController
             DepartmentId = add.DepartmentId,
             StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
             EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
+            BruttoSalary = add.Salary,
+            EmployeeContribution = add.EmployeeContribution,
+            EmployerContribution = add.EmployerContribution,
             Description = add.Description,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -675,7 +701,7 @@ public class StaffController : BaseController
             var result = await userManager.AddToRolesAsync(newUser, db.AspNetRoles.Where(a => getRoles.Contains(a.Id)).Select(a => a.Name).ToList());
             if (!result.Succeeded)
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
             }
         }
 
@@ -692,7 +718,7 @@ public class StaffController : BaseController
 
         db.StaffDepartment.Add(newStaffDepartment);
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -700,7 +726,7 @@ public class StaffController : BaseController
     #region ==> Edit
 
     [HttpGet, Authorize(Policy = "21sdp:e")]
-    [Description("Form to edit department.")]
+    [Description("Arb Tahiri", "Form to edit department.")]
     public async Task<IActionResult> _EditDepartment(string ide)
     {
         var department = await db.StaffDepartment
@@ -712,19 +738,23 @@ public class StaffController : BaseController
                 StaffTypeId = a.StaffTypeId,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
-                Description = a.Description
+                Salary = a.BruttoSalary,
+                EmployeeContribution = a.EmployeeContribution,
+                EmployerContribution = a.EmployerContribution,
+                Description = a.Description,
+                Outsider = a.Staff.Country.ToLower().Contains("kosov")
             }).FirstOrDefaultAsync();
 
         return PartialView(department);
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:e")]
-    [Description("Action to edit department.")]
+    [Description("Arb Tahiri", "Action to edit department.")]
     public async Task<IActionResult> EditDepartment(AddDepartment edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var department = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentIde)).FirstOrDefaultAsync();
@@ -732,13 +762,15 @@ public class StaffController : BaseController
         department.StaffTypeId = edit.StaffTypeId;
         department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
         department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
-        department.Description = edit.Description;
+        department.BruttoSalary = edit.Salary;
+        department.EmployeeContribution = edit.EmployeeContribution;
+        department.EmployerContribution = edit.EmployerContribution;
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo += 1;
+        department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -746,14 +778,14 @@ public class StaffController : BaseController
     #region ==> Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21sdp:d")]
-    [Description("Action to delete a department.")]
+    [Description("Arb Tahiri", "Action to delete a department.")]
     public async Task<IActionResult> DeleteDepartment(string ide)
     {
         var department = await db.StaffDepartment.Include(a => a.Staff).FirstOrDefaultAsync(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide));
         department.EndDate = DateTime.Now.AddDays(-1);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo += 1;
+        department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
 
         var subjects = await db.StaffDepartmentSubject.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now).ToListAsync();
         foreach (var subject in subjects)
@@ -762,7 +794,7 @@ public class StaffController : BaseController
             subject.Active = false;
             subject.UpdatedDate = DateTime.Now;
             subject.UpdatedFrom = user.Id;
-            subject.UpdatedNo += 1;
+            subject.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
         }
 
         var userToRemove = await userManager.FindByIdAsync(department.Staff.UserId);
@@ -780,7 +812,7 @@ public class StaffController : BaseController
                 var result = await userManager.RemoveFromRolesAsync(userToRemove, db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.Name).ToList());
                 if (!result.Succeeded)
                 {
-                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
                 }
             }
             else
@@ -788,13 +820,13 @@ public class StaffController : BaseController
                 var result = await userManager.AddToRoleAsync(userToRemove, db.AspNetRoles.Where(a => a.Id == anotherRealRoles.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.Name).FirstOrDefault());
                 if (!result.Succeeded)
                 {
-                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.ERROR, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
                 }
             }
         }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -806,16 +838,16 @@ public class StaffController : BaseController
     #region ==> Create
 
     [HttpGet, Authorize(Policy = "21ssb:c")]
-    [Description("Form to add subject.")]
+    [Description("Arb Tahiri", "Form to add subject.")]
     public async Task<IActionResult> _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide, DepartmentEndDate = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.EndDate).FirstOrDefaultAsync() });
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:c")]
-    [Description("Action to add subject.")]
+    [Description("Arb Tahiri", "Action to add subject.")]
     public async Task<IActionResult> AddSubject(AddSubject add)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         db.StaffDepartmentSubject.Add(new StaffDepartmentSubject
@@ -830,7 +862,7 @@ public class StaffController : BaseController
         });
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -838,7 +870,7 @@ public class StaffController : BaseController
     #region ==> Edit
 
     [HttpGet, Authorize(Policy = "21ssb:e")]
-    [Description("Form to edit subject.")]
+    [Description("Arb Tahiri", "Form to edit subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
         var subject = await db.StaffDepartmentSubject
@@ -856,12 +888,12 @@ public class StaffController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:e")]
-    [Description("Action to edit subject.")]
+    [Description("Arb Tahiri", "Action to edit subject.")]
     public async Task<IActionResult> EditSubject(AddSubject edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var subject = await db.StaffDepartmentSubject.FirstOrDefaultAsync(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentSubjectIde));
@@ -871,10 +903,10 @@ public class StaffController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo += 1;
+        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -882,17 +914,17 @@ public class StaffController : BaseController
     #region ==> Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:d")]
-    [Description("Action to delete a subject.")]
+    [Description("Arb Tahiri", "Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
         var subject = await db.StaffDepartmentSubject.FirstOrDefaultAsync(a => a.StaffDepartmentSubjectId == CryptoSecurity.Decrypt<int>(ide));
         subject.EndDate = DateTime.Now.AddDays(-1);
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo += 1;
+        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
@@ -901,27 +933,54 @@ public class StaffController : BaseController
 
     #endregion
 
+    #region Finish
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
+    [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
+    public async Task<IActionResult> Finish(string ide, MethodType method)
+    {
+        if (string.IsNullOrEmpty(ide))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+        }
+
+        if (method == MethodType.Post)
+        {
+            db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+            {
+                StaffId = CryptoSecurity.Decrypt<int>(ide),
+                StatusTypeId = (int)StatusTypeEnum.Finished,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+            await db.SaveChangesAsync();
+        }
+
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
+        return RedirectToAction(nameof(Index));
+    }
+
+    #endregion
+
     #region List
 
     [HttpGet, Authorize(Policy = "21s:r")]
-    [Description("Entry home. Search for staff.")]
+    [Description("Arb Tahiri", "Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
-    #region Main list
-
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
-    [Description("Form to view searched list of staff.")]
+    [Description("Arb Tahiri", "Form to list searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+            .Where(a => (a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
                 && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
+                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
                 && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname))
-                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -929,14 +988,38 @@ public class StaffController : BaseController
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
                 PersonalNumber = a.PersonalNumber,
-                Gender = a.Gender == ((int)GenderEnum.MALE) ? Resource.Male : Resource.Female,
-                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
                 ProfileImage = a.User.ProfileImage,
+                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
                 Email = a.User.Email,
                 PhoneNumber = a.User.PhoneNumber,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
             }).ToListAsync();
         return Json(list);
+    }
+
+    [HttpGet, Authorize(Policy = "21s:r")]
+    [Description("Arb Tahiri", "Form to display list of staff that are in process of registration.")]
+    public async Task<IActionResult> InProcess()
+    {
+        var list = await db.Staff
+            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
+            .Include(a => a.User)
+            .Where(a => !a.StaffRegistrationStatus.Any(a => a.StatusTypeId == (int)StatusTypeEnum.Finished))
+            .AsSplitQuery()
+            .Select(a => new StaffDetails
+            {
+                Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
+                Firstname = a.FirstName,
+                Lastname = a.LastName,
+                PersonalNumber = a.PersonalNumber,
+                ProfileImage = a.User.ProfileImage,
+                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Email = a.User.Email,
+                PhoneNumber = a.User.PhoneNumber,
+                InsertedDate = a.InsertedDate
+            }).ToListAsync();
+        return PartialView(list);
     }
 
     #endregion
@@ -946,12 +1029,12 @@ public class StaffController : BaseController
     #region Main form
 
     [HttpGet, Authorize(Policy = "22p:r")]
-    [Description("Form to view the profile of staff.")]
+    [Description("Arb Tahiri", "Form to view the profile of staff.")]
     public async Task<IActionResult> Profile(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         var staffDetails = await db.Staff
@@ -966,8 +1049,8 @@ public class StaffController : BaseController
                 Lastname = a.LastName,
                 PhoneNumber = a.User.PhoneNumber,
                 Email = a.User.Email,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
-                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
                 City = a.City,
                 Country = a.Country,
                 ZIP = a.PostalCode
@@ -988,7 +1071,7 @@ public class StaffController : BaseController
 
     #region 1. Department
 
-    [Authorize(Policy = "21sds:r"), Description("Form to display list of departments.")]
+    [Authorize(Policy = "21sds:r"), Description("Arb Tahiri", "Form to display list of departments.")]
     public async Task<IActionResult> _ProfileDepartment(string ide)
     {
         var departments = await db.StaffDepartment
@@ -997,8 +1080,8 @@ public class StaffController : BaseController
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                Department = user.Language == LanguageEnum.ALBANIAN ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
-                StaffType = user.Language == LanguageEnum.ALBANIAN ? a.StaffType.NameSq : a.StaffType.NameEn,
+                Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
+                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 Description = a.Description
@@ -1016,7 +1099,7 @@ public class StaffController : BaseController
 
     #region 2. Qualification
 
-    [Authorize(Policy = "21sq:c"), Description("Form to display list of qualifications.")]
+    [Authorize(Policy = "21sq:c"), Description("Arb Tahiri", "Form to display list of qualifications.")]
     public async Task<IActionResult> _ProfileQualification(string ide)
     {
         var departments = await db.StaffQualification
@@ -1025,8 +1108,8 @@ public class StaffController : BaseController
             .Select(a => new Qualifications
             {
                 StaffQualificationIde = CryptoSecurity.Encrypt(a.StaffQualificationId),
-                ProfessionType = user.Language == LanguageEnum.ALBANIAN ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
-                EducationLevel = user.Language == LanguageEnum.ALBANIAN ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
+                ProfessionType = user.Language == LanguageEnum.Albanian ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
+                EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
                 Title = a.Title,
                 FieldOfStudy = a.FieldStudy,
                 CreditNumber = a.CreditNumber,
@@ -1045,7 +1128,7 @@ public class StaffController : BaseController
 
     #region 3. Document
 
-    [Authorize(Policy = "21sd:c"), Description("Form to display list of documents.")]
+    [Authorize(Policy = "21sd:c"), Description("Arb Tahiri", "Form to display list of documents.")]
     public async Task<IActionResult> _ProfileDocument(string ide)
     {
         var documents = await db.StaffDocument
@@ -1057,7 +1140,7 @@ public class StaffController : BaseController
                 Title = a.Title,
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
-                DocumentType = user.Language == LanguageEnum.ALBANIAN ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 Description = a.Description,
                 Active = a.Active
             }).ToListAsync();
@@ -1074,7 +1157,7 @@ public class StaffController : BaseController
 
     #region 4. Subject
 
-    [Authorize(Policy = "21sds:c"), Description("Form to display list of subjects.")]
+    [Authorize(Policy = "21sds:c"), Description("Arb Tahiri", "Form to display list of subjects.")]
     public async Task<IActionResult> _ProfileSubject(string ide)
     {
         var subjects = await db.StaffDepartmentSubject
@@ -1083,7 +1166,7 @@ public class StaffController : BaseController
             .Select(a => new Subjects
             {
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
-                Subject = user.Language == LanguageEnum.ALBANIAN ? a.Subject.NameSq : a.Subject.NameEn,
+                Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
                 InsertDate = a.InsertedDate
@@ -1096,12 +1179,12 @@ public class StaffController : BaseController
     #region Change image
 
     [HttpPost, Authorize(Policy = "22p:r"), ValidateAntiForgeryToken]
-    [Description("Action to change profile photo.")]
+    [Description("Arb Tahiri", "Action to change profile photo.")]
     public async Task<IActionResult> ChangeImage(IFormFile Image, string PersonalNumber)
     {
         if (string.IsNullOrEmpty(PersonalNumber))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
         string userId = await db.Staff.Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(PersonalNumber)).Select(a => a.UserId).FirstOrDefaultAsync();
@@ -1110,7 +1193,7 @@ public class StaffController : BaseController
         string filePath = Image != null ? await SaveImage(environment, Image, "Users") : null;
         aspUser.ProfileImage = filePath;
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
     }
 
     #endregion
@@ -1119,7 +1202,7 @@ public class StaffController : BaseController
 
     #region Remote
 
-    [Description("Method to check birthday.")]
+    [Description("Arb Tahiri", "Method to check birthday.")]
     public IActionResult CheckBirthdate(string BirthDate)
     {
         var birthdate = DateTime.ParseExact(BirthDate, "dd/MM/yyyy", null);
@@ -1139,7 +1222,7 @@ public class StaffController : BaseController
         }
     }
 
-    [Description("Method to check end date of subject.")]
+    [Description("Arb Tahiri", "Method to check end date of subject.")]
     public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate)
     {
         var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
@@ -1154,7 +1237,7 @@ public class StaffController : BaseController
         }
     }
 
-    [Description("Method to check end date and start date.")]
+    [Description("Arb Tahiri", "Method to check end date and start date.")]
     public IActionResult CheckDates(string StartDate, string EndDate)
     {
         var startDate = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
@@ -1170,7 +1253,7 @@ public class StaffController : BaseController
         }
     }
 
-    [Description("Method to check end date and start date.")]
+    [Description("Arb Tahiri", "Method to check end date and start date.")]
     public IActionResult CheckDatesQualification(string From, string To)
     {
         var startDate = DateTime.ParseExact(From, "dd/MM/yyyy", null);
@@ -1190,7 +1273,7 @@ public class StaffController : BaseController
 
     #region Open document
 
-    [HttpGet, Description("Action to open documents.")]
+    [HttpGet, Description("Arb Tahiri", "Action to open documents.")]
     public async Task<IActionResult> OpenDocument(string ide)
     {
         var getDocument = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(ide));

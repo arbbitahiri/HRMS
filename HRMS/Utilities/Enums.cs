@@ -2,74 +2,83 @@
 
 public enum ErrorStatus
 {
-    SUCCESS = 1,
-    ERROR = 2,
-    WARNING = 3,
-    INFO = 4
+    Success = 1,
+    Error = 2,
+    Warning = 3,
+    Info = 4
 }
 
 public enum GenderEnum
 {
-    MALE = 1,
-    FEMALE = 2
+    Male = 1,
+    Female = 2
 }
 
 public enum TemplateMode
 {
-    DARK = 1,
-    LIGHT = 2
+    Dark = 1,
+    Light = 2
 }
 
 public enum LanguageEnum
 {
-    ALBANIAN = 1,
-    ENGLISH = 2
+    Albanian = 1,
+    English = 2
 }
 
 public enum ImageSizeType
 {
-    PROFILEPHOTO = 512,
-    NEWS = 1280
+    ProfilePhoto = 512,
+    News = 1280
 }
 
 public enum MethodType
 {
-    GET = 1,
-    POST = 2,
-    PUT = 3
+    Get = 1,
+    Post = 2,
+    Put = 3
 }
 
 public enum StaffTypeEnum
 {
-    LECTURER = 1,
-    ADMINISTRATOR = 4,
-    MANAGER = 5
+    Lecturer = 1,
+    Administrator = 4,
+    Manager = 5
 }
 
 public enum LookUpTable
 {
-    DOCUMENTTYPE = 1,
-    EDUCATIONLEVELTYPE = 2,
-    EVALUATIONTYPE = 3,
-    HOLIDAYTYPE = 4,
-    PROFESSIONTYPE = 5,
-    RATETYPE = 6,
-    STAFFTYPE = 7,
-    STATUSTYPE = 8,
-    DEPARTMENT = 9
+    Document = 1,
+    EducationLevel = 2,
+    Evaluation = 3,
+    Holiday = 4,
+    Profession = 5,
+    Rate = 6,
+    Staff = 7,
+    Status = 8,
+    Department = 9
 }
 
 public enum StatusTypeEnum
 {
-    APPROVED = 1,
-    REJECTED = 2,
-    PENDING = 3
+    Approved = 1,
+    Rejected = 2,
+    Pending = 3,
+    Processing = 5,
+    Finished = 6
 }
 
 public enum HolidayTypeEnum
 {
-    ANNUALLEAVE = 1,
-    SICKLEAVE = 2,
-    MATERNITYLEAVE = 3,
-    UNPAIDLEAVE = 4
+    Annual = 1,
+    Sick = 2,
+    Maternity = 3,
+    Unpaid = 4
+}
+
+public enum EvaluationTypeEnum
+{
+    Manager = 1,
+    Student = 2,
+    Self = 3
 }

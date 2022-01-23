@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class HolidayRequest
+    public partial class Holiday
     {
-        public HolidayRequest()
+        public Holiday()
         {
-            HolidayRequestStatus = new HashSet<HolidayRequestStatus>();
+            HolidayStatus = new HashSet<HolidayStatus>();
         }
 
-        public int HolidayRequestId { get; set; }
+        public int HolidayId { get; set; }
         public int HolidayTypeId { get; set; }
         public int StaffId { get; set; }
         public DateTime StartDate { get; set; }
@@ -28,6 +28,6 @@ namespace HRMS.Data.General
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual Staff Staff { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<HolidayRequestStatus> HolidayRequestStatus { get; set; }
+        public virtual ICollection<HolidayStatus> HolidayStatus { get; set; }
     }
 }

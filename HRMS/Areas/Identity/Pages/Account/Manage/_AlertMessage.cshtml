@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    if (Model.Status == ErrorStatus.SUCCESS)
+    if (Model.Status == ErrorStatus.Success)
     {
         <div class='alert alert-success @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -15,7 +15,7 @@
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.WARNING)
+    else if (Model.Status == ErrorStatus.Warning)
     {
         <div class='alert alert-warning @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -28,7 +28,7 @@
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.INFO)
+    else if (Model.Status == ErrorStatus.Info)
     {
         <div class='alert alert-info @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)
@@ -41,7 +41,7 @@
             @Html.Raw(Model.Description)
         </div>
     }
-    else if (Model.Status == ErrorStatus.ERROR)
+    else if (Model.Status == ErrorStatus.Error)
     {
         <div class='alert alert-danger @(Model.Dismissible ? "alert-dismissible" : "")'>
             @if (Model.Dismissible)

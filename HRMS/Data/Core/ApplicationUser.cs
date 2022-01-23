@@ -8,7 +8,7 @@ public class ApplicationUser : IdentityUser
 {
     public ApplicationUser()
     {
-        Mode = TemplateMode.LIGHT;
+        Mode = TemplateMode.Light;
         InsertedDate = DateTime.Now;
     }
 
@@ -24,4 +24,5 @@ public class ApplicationUser : IdentityUser
     public bool AllowNotification { get; set; }
     public string InsertedFrom { get; set; }
     public DateTime InsertedDate { get; set; }
+    public int? DepartmentId { get; set; }
 }

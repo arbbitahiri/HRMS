@@ -5,11 +5,11 @@
 
 <li class="nav-item dropdown">
     <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-        @if (Model == LanguageEnum.ALBANIAN)
+        @if (Model == LanguageEnum.Albanian)
         {
             <i class="flag-icon flag-icon-al"></i>
         }
-        else if (Model == LanguageEnum.ENGLISH)
+        else if (Model == LanguageEnum.English)
         {
             <i class="flag-icon flag-icon-gb"></i>
         }
@@ -19,10 +19,10 @@
         }
     </a>
     <div class="dropdown-menu dropdown-menu-right p-0" style="left: inherit; right: 0px;">
-        <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.ALBANIAN ? "active" : "")">
+        <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.Albanian ? "active" : "")">
             <i class="flag-icon flag-icon-al mr-2"></i> @Resource.Albanian
         </a>
-        <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.ENGLISH ? "active" : "")">
+        <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="dropdown-item @(Model == LanguageEnum.English ? "active" : "")">
             <i class="flag-icon flag-icon-gb mr-2"></i> @Resource.English
         </a>
     </div>

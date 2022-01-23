@@ -8,7 +8,7 @@ public class Review
     public string StaffName { get; set; }
     public string HolidayType { get; set; }
 
-    public string HolidayRequestIde { get; set; }
+    public string HolidayIde { get; set; }
 
     [Display(Name = "StatusType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

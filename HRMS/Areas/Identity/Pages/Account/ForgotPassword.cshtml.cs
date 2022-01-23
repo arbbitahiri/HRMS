@@ -64,7 +64,7 @@ namespace HRMS.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
-                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.INFO, Description = "Please check your email for further details." });
+                TempData.Set("ErrorI", new ErrorVM { Status = ErrorStatus.Info, Description = "Please check your email for further details." });
                 return RedirectToPage("./Login");
             }
 
@@ -80,7 +80,7 @@ namespace HRMS.Areas.Identity.Pages.Account
                 Input.Email,
                 "Reset Password",
                 $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-            TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.INFO, Description = "Please check your email for further details." });
+            TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.Info, Description = "Please check your email for further details." });
 
             return RedirectToPage("./Login");
         }

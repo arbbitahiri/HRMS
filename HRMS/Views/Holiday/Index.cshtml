@@ -72,8 +72,7 @@
                         <th>@Resource.HolidayType</th>
                         <th>@Resource.StartDate</th>
                         <th>@Resource.EndDate</th>
-                        <th>@Resource.TotalDays</th>
-                        <th>@Resource.StatusType</th>
+                        <th>@Resource.RequestedDate</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </thead>
                     <tbody></tbody>
@@ -93,8 +92,8 @@
                         <th>@Resource.HolidayType</th>
                         <th>@Resource.StartDate</th>
                         <th>@Resource.EndDate</th>
-                        <th>@Resource.TotalDays</th>
-                        <th>@Resource.StatusType</th>
+                        <th>@Resource.RequestedDate</th>
+                        <th>@Resource.ReviewDate</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </thead>
                     <tbody></tbody>
@@ -114,8 +113,8 @@
                         <th>@Resource.HolidayType</th>
                         <th>@Resource.StartDate</th>
                         <th>@Resource.EndDate</th>
-                        <th>@Resource.TotalDays</th>
-                        <th>@Resource.StatusType</th>
+                        <th>@Resource.RequestedDate</th>
+                        <th>@Resource.ReviewDate</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </thead>
                     <tbody></tbody>
@@ -181,9 +180,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w5 vertikal", targets: [0, 6] },
                     { className: "w10 vertikal", targets: [3, 4, 5] },
-                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w15 vertikal", targets: [2] },
                     { className: "w20 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
@@ -222,11 +221,10 @@
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                         }
                     },
-                    { data: "totalDays" },
                     {
                         data: function (row, type, set) {
-                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
-                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                            var date = new Date(Date.parse(row.insertedDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
                         }
                     },
                     {
@@ -266,8 +264,8 @@
                 deferRender: true,
                 columnDefs: [
                     { className: "w5 vertikal", targets: [0, 7] },
-                    { className: "w10 vertikal", targets: [3, 4, 5] },
-                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w10 vertikal", targets: [3, 4] },
+                    { className: "w15 vertikal", targets: [2, 5, 6] },
                     { className: "w20 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
@@ -306,11 +304,16 @@
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                         }
                     },
-                    { data: "totalDays" },
                     {
                         data: function (row, type, set) {
-                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
-                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                            var date = new Date(Date.parse(row.insertedDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var date = new Date(Date.parse(row.updatedDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
                         }
                     },
                     {
@@ -350,8 +353,8 @@
                 deferRender: true,
                 columnDefs: [
                     { className: "w5 vertikal", targets: [0, 7] },
-                    { className: "w10 vertikal", targets: [3, 4, 5] },
-                    { className: "w15 vertikal", targets: [2, 6] },
+                    { className: "w10 vertikal", targets: [3, 4] },
+                    { className: "w15 vertikal", targets: [2, 5, 6] },
                     { className: "w20 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
@@ -390,11 +393,16 @@
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                         }
                     },
-                    { data: "totalDays" },
                     {
                         data: function (row, type, set) {
-                            var badgeColour = row.statusTypeEnum == StatusType.APPROVED ? 'success' : (row.statusTypeEnum == StatusType.PENDING ? 'warning' : 'danger');
-                            return '<small class="badge badge-' + badgeColour + '">' + row.statusType + '</small>';
+                            var date = new Date(Date.parse(row.insertedDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var date = new Date(Date.parse(row.updatedDate));
+                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
                         }
                     },
                     {

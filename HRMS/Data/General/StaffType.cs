@@ -13,6 +13,7 @@ namespace HRMS.Data.General
         public int StaffTypeId { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
+        public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public string UpdatedFrom { get; set; }

@@ -12,11 +12,15 @@
     @Html.AntiForgeryToken()
 
     <div class="row form-group">
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <label asp-for="StaffReviewer">@Resource.ReviewedFrom</label>
+            <input asp-for="StaffReviewer" type="text" disabled class="form-control" value='@(Model.StaffReviewer ?? "///")'/>
+        </div>
+        <div class="col-md-4">
             <label asp-for="HolidayType">@Resource.HolidayType</label>
             <input asp-for="HolidayType" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label asp-for="StatusType">@Resource.RemainingDays</label>
             <input asp-for="StatusType" type="text" disabled class="form-control"/>
         </div>
@@ -33,6 +37,16 @@
         <div class="col-md-4">
             <label asp-for="TotalDays">@Resource.TotalDays</label>
             <input asp-for="TotalDays" type="text" disabled class="form-control"/>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label asp-for="InsertedDate">@Resource.RequestedDate</label>
+            <input asp-for="InsertedDate" type="text" disabled class="form-control"/>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UpdatedDate">@Resource.ReviewDate</label>
+            <input asp-for="UpdatedDate" type="text" disabled class="form-control"/>
         </div>
     </div>
     <div class="row form-group">

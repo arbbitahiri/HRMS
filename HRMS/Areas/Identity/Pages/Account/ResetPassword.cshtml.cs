@@ -94,14 +94,14 @@ namespace HRMS.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.ERROR, Description = "Error while reseting password!", Title = "Error!" });
+                TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.Error, Description = "Error while reseting password!", Title = "Error!" });
                 return RedirectToPage("./Login");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.SUCCESS, Description = "Password has been reset!", Title = "Success!" });
+                TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.Success, Description = "Password has been reset!", Title = "Success!" });
                 return RedirectToPage("./Login");
             }
 
@@ -109,7 +109,7 @@ namespace HRMS.Areas.Identity.Pages.Account
             {
                 errors += $"{error.Description}. ";
             }
-            TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.WARNING, Description = errors, Title = "Warning!" });
+            TempData.Set<ErrorVM>("ErrorI", new ErrorVM { Status = ErrorStatus.Warning, Description = errors, Title = "Warning!" });
             return Page();
         }
     }

@@ -7,7 +7,9 @@ namespace HRMS.Data.General
     {
         public StatusType()
         {
-            HolidayRequestStatus = new HashSet<HolidayRequestStatus>();
+            EvaluationStatus = new HashSet<EvaluationStatus>();
+            HolidayStatus = new HashSet<HolidayStatus>();
+            StaffRegistrationStatus = new HashSet<StaffRegistrationStatus>();
         }
 
         public int StatusTypeId { get; set; }
@@ -22,6 +24,8 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<HolidayRequestStatus> HolidayRequestStatus { get; set; }
+        public virtual ICollection<EvaluationStatus> EvaluationStatus { get; set; }
+        public virtual ICollection<HolidayStatus> HolidayStatus { get; set; }
+        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using HRMS.Models.Configuration.Subject;
 using HRMS.Repository;
 using HRMS.Resources;
 using HRMS.Utilities;
+using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,13 +37,13 @@ public class ConfigurationController : BaseController
         this.func = func;
     }
 
-    [Description("Entry home.")]
+    [Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index() => View();
 
     #region Application settings
 
     [HttpGet, Authorize(Policy = "15:r")]
-    [Description("Form to display list of application settings.")]
+    [Description("Arb Tahiri", "Form to display list of application settings.")]
     public IActionResult AppSettings()
     {
         ViewData["Title"] = "Parametrat e aplikacionit";
@@ -78,12 +78,12 @@ public class ConfigurationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "15:r")]
-    [Description("Form to edit application settings.")]
+    [Description("Arb Tahiri", "Form to edit application settings.")]
     public async Task<IActionResult> _EditAppSetings(ApplicationSettings edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         string json = string.Empty;
@@ -106,7 +106,7 @@ public class ConfigurationController : BaseController
             await streamWriter.WriteAsync(JsonConvert.SerializeObject(data));
         }
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
@@ -115,7 +115,7 @@ public class ConfigurationController : BaseController
 
     #region => List
 
-    [Authorize(Policy = "33:r"), Description("Entry form, list of subjects.")]
+    [Authorize(Policy = "33:r"), Description("Arb Tahiri", "Entry form, list of subjects.")]
     public async Task<IActionResult> SubjectIndex()
     {
         var subjects = await db.Subject
@@ -134,21 +134,21 @@ public class ConfigurationController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "33:c"), Description("Form to add a subject.")]
+    [Authorize(Policy = "33:c"), Description("Arb Tahiri", "Form to add a subject.")]
     public IActionResult _CreateSubject() => PartialView();
 
     [HttpPost, Authorize(Policy = "33:c"), ValidateAntiForgeryToken]
-    [Description("Action to add a subject.")]
+    [Description("Arb Tahiri", "Action to add a subject.")]
     public async Task<IActionResult> CreateSubject(CreateSubject create)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         if (await db.Subject.AnyAsync(a => a.Active && a.Code == create.Code))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
         }
 
         db.Subject.Add(new Subject
@@ -161,14 +161,14 @@ public class ConfigurationController : BaseController
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "33:e"), Description("Form to edit a subject.")]
+    [HttpGet, Authorize(Policy = "33:e"), Description("Arb Tahiri", "Form to edit a subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
         var subject = await db.Subject
@@ -185,17 +185,17 @@ public class ConfigurationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "33:e"), ValidateAntiForgeryToken]
-    [Description("Action to edit a subject.")]
+    [Description("Arb Tahiri", "Action to edit a subject.")]
     public async Task<IActionResult> EditSubject(CreateSubject edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         if (await db.Subject.AnyAsync(a => a.Active && a.Code == edit.Code))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.SubjectExistsWithCode });
         }
 
         var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(edit.SubjectIde));
@@ -205,10 +205,10 @@ public class ConfigurationController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo += 1;
+        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
@@ -216,22 +216,22 @@ public class ConfigurationController : BaseController
     #region => Delete
 
     [HttpPost, Authorize(Policy = "33:d"), ValidateAntiForgeryToken]
-    [Description("Action to delete a subject.")]
+    [Description("Arb Tahiri", "Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Title = Resource.Warning, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
         var subject = await db.Subject.FirstOrDefaultAsync(a => a.SubjectId == CryptoSecurity.Decrypt<int>(ide));
         subject.Active = false;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo += 1;
+        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion

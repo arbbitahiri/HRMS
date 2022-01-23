@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class AspNetUsers1
+    public partial class AspNetUsersH
     {
         public int HistoryAspNetUsersId { get; set; }
         public string Id { get; set; }

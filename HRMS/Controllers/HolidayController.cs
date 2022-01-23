@@ -4,13 +4,13 @@ using HRMS.Models;
 using HRMS.Models.Holiday;
 using HRMS.Resources;
 using HRMS.Utilities;
+using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,18 +23,18 @@ public class HolidayController : BaseController
     {
     }
 
-    [Authorize("31:r"), Description("Entry form. List of holidays.")]
+    [Authorize("31:r"), Description("Arb Tahiri", "Entry form. List of holidays.")]
     public IActionResult Index() => View();
 
     #region List
 
     [HttpPost, ValidateAntiForgeryToken, Authorize("31:r")]
-    [Description("List of holidays.")]
+    [Description("Arb Tahiri", "List of holidays.")]
     public async Task<IActionResult> Search(Search search)
     {
-        var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.MANAGER && a.Staff.UserId == user.Id);
+        var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.Manager && a.Staff.UserId == user.Id);
 
-        var holidays = await db.HolidayRequest
+        var holidays = await db.Holiday
             .Include(a => a.HolidayType)
             .Where(a => a.Active
                 && a.HolidayTypeId == (search.HolidayTypeId ?? a.HolidayTypeId)
@@ -43,19 +43,18 @@ public class HolidayController : BaseController
                 && (manager || a.Staff.UserId == user.Id))
             .Select(a => new List
             {
-                HolidayRequestIde = CryptoSecurity.Encrypt(a.HolidayRequestId),
+                HolidayIde = CryptoSecurity.Encrypt(a.HolidayId),
                 Firstname = a.Staff.FirstName,
                 Lastname = a.Staff.LastName,
                 ProfileImage = a.Staff.User.ProfileImage,
                 PersonalNumber = a.Staff.PersonalNumber,
-                HolidayType = user.Language == LanguageEnum.ALBANIAN ? a.HolidayType.NameSq : a.HolidayType.NameEn,
+                HolidayType = user.Language == LanguageEnum.Albanian ? a.HolidayType.NameSq : a.HolidayType.NameEn,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
-                TotalDays = WorkingDays(a.StartDate, a.EndDate),
-                StatusType = a.HolidayRequestStatus.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
-                StatusTypeEnum = (StatusTypeEnum)a.HolidayRequestStatus.Select(a => a.StatusTypeId).FirstOrDefault(),
-                Description = a.Description,
-                Finished = a.HolidayRequestStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.PENDING)
+                StatusTypeEnum = (StatusTypeEnum)a.HolidayStatus.Select(a => a.StatusTypeId).FirstOrDefault(),
+                InsertedDate = a.InsertedDate,
+                UpdatedDate = a.UpdatedDate,
+                Finished = a.HolidayStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Pending)
             }).ToListAsync();
 
         return Json(holidays);
@@ -65,26 +64,26 @@ public class HolidayController : BaseController
 
     #region Create
 
-    [Authorize(Policy = "31:c"), Description("Form to create a holiday")]
+    [Authorize(Policy = "31:c"), Description("Arb Tahiri", "Form to create a holiday")]
     public IActionResult _Create() => PartialView();
 
     [HttpPost, Authorize(Policy = "31:c"), ValidateAntiForgeryToken]
-    [Description("Form to create a holiday")]
+    [Description("Arb Tahiri", "Form to create a holiday")]
     public async Task<IActionResult> Create(Create create)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (await db.HolidayRequest.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.PENDING)))
+        if (await db.Holiday.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.Pending)))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.YouHaveHolidayPending });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.YouHaveHolidayPending });
         }
 
-        if (await db.HolidayRequest.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.EndDate >= DateTime.Now && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.APPROVED)))
+        if (await db.Holiday.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.EndDate >= DateTime.Now && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.Approved)))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.CannotRequestHoliday });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.CannotRequestHoliday });
         }
 
         var staffId = await db.Staff.Where(a => a.UserId == user.Id).Select(a => a.StaffId).FirstOrDefaultAsync();
@@ -94,20 +93,20 @@ public class HolidayController : BaseController
 
         if (startDate >= endDate)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.StartDateVSEndDate });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StartDateVSEndDate });
         }
 
         var days = WorkingDays(startDate, endDate);
         int remainingDays;
-        var lastHoliday = await db.HolidayRequest.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == create.AHolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.REJECTED)).OrderBy(a => a.HolidayRequestId).LastOrDefaultAsync();
+        var lastHoliday = await db.Holiday.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == create.AHolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.Rejected)).OrderBy(a => a.HolidayId).LastOrDefaultAsync();
         remainingDays = lastHoliday != null ? lastHoliday.RemainingDays : 20;
 
         if (remainingDays - days < 0)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = string.Format(Resource.NoAvailableDaysHoliday, remainingDays) });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysHoliday, remainingDays) });
         }
 
-        var holiday = new HolidayRequest
+        var holiday = new Holiday
         {
             HolidayTypeId = create.AHolidayTypeId,
             StaffId = staffId,
@@ -119,13 +118,13 @@ public class HolidayController : BaseController
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         };
-        db.HolidayRequest.Add(holiday);
+        db.Holiday.Add(holiday);
         await db.SaveChangesAsync();
 
-        db.HolidayRequestStatus.Add(new HolidayRequestStatus
+        db.HolidayStatus.Add(new HolidayStatus
         {
-            HolidayRequestId = holiday.HolidayRequestId,
-            StatusTypeId = (int)StatusTypeEnum.PENDING,
+            HolidayId = holiday.HolidayId,
+            StatusTypeId = (int)StatusTypeEnum.Pending,
             Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -135,68 +134,68 @@ public class HolidayController : BaseController
         // TODO: send email
         // TODO: send email to staff for the holiday. Remind of remaining days.
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataRegisteredSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
 
     #endregion
 
     #region Review
 
-    [Authorize(Policy = "31r:r"), Description("Form to review a holiday request.")]
+    [Authorize(Policy = "31r:r"), Description("Arb Tahiri", "Form to review a holiday request.")]
     public async Task<IActionResult> _Review(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var holidayReview = await db.HolidayRequest
-            .Where(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(ide))
+        var holidayReview = await db.Holiday
+            .Where(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Review
             {
-                HolidayRequestIde = ide,
+                HolidayIde = ide,
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
-                HolidayType = user.Language == LanguageEnum.ALBANIAN ? a.HolidayType.NameSq : a.HolidayType.NameEn
+                HolidayType = user.Language == LanguageEnum.Albanian ? a.HolidayType.NameSq : a.HolidayType.NameEn
             }).FirstOrDefaultAsync();
 
         return PartialView(holidayReview);
     }
 
     [HttpPost, Authorize(Policy = "31r:r"), ValidateAntiForgeryToken]
-    [Description("Action to review a holiday request.")]
+    [Description("Arb Tahiri", "Action to review a holiday request.")]
     public async Task<IActionResult> Review(Review review)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var holidayStatus = await db.HolidayRequestStatus.FirstOrDefaultAsync(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(review.HolidayRequestIde));
+        var holidayStatus = await db.HolidayStatus.FirstOrDefaultAsync(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(review.HolidayIde));
         holidayStatus.StatusTypeId = review.StatusTypeId;
         holidayStatus.Description = review.Description;
         holidayStatus.Active = true;
         holidayStatus.UpdatedDate = DateTime.Now;
         holidayStatus.UpdatedFrom = user.Id;
-        holidayStatus.UpdatedNo += 1;
+        holidayStatus.UpdatedNo = holidayStatus.UpdatedNo.HasValue ? ++holidayStatus.UpdatedNo : holidayStatus.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
         // TODO: send email to inform staff for the holiday request. Remind of remaining days.
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.HolidayReviewedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.HolidayReviewedSuccessfully });
     }
 
     #endregion
 
     #region Edit
 
-    [Authorize(Policy = "31:e"), Description("Form to edit a holiday.")]
+    [Authorize(Policy = "31:e"), Description("Arb Tahiri", "Form to edit a holiday.")]
     public async Task<IActionResult> _Edit(string ide)
     {
-        var holiday = await db.HolidayRequest
-            .Where(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(ide))
+        var holiday = await db.Holiday
+            .Where(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Create
             {
-                HolidayRequestIde = ide,
+                HolidayIde = ide,
                 AHolidayTypeId = a.HolidayTypeId,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
@@ -207,17 +206,17 @@ public class HolidayController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "31:e"), ValidateAntiForgeryToken]
-    [Description("Action to edit a holiday.")]
+    [Description("Arb Tahiri", "Action to edit a holiday.")]
     public async Task<IActionResult> Edit(Create edit)
     {
         if (!ModelState.IsValid)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (await db.HolidayRequest.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.EndDate >= DateTime.Now && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.APPROVED)))
+        if (await db.Holiday.AnyAsync(a => a.Active && a.Staff.UserId == user.Id && a.EndDate >= DateTime.Now && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId == (int)StatusTypeEnum.Approved)))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.CannotRequestHoliday });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.CannotRequestHoliday });
         }
 
         var startDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
@@ -225,53 +224,56 @@ public class HolidayController : BaseController
 
         if (startDate >= endDate)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.StartDateVSEndDate });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StartDateVSEndDate });
         }
 
         var days = WorkingDays(startDate, endDate);
         int remainingDays;
-        var lastHoliday = await db.HolidayRequest.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == edit.AHolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.REJECTED)).OrderBy(a => a.HolidayRequestId).LastOrDefaultAsync();
+        var lastHoliday = await db.Holiday.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == edit.AHolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.Rejected)).OrderBy(a => a.HolidayId).LastOrDefaultAsync();
         remainingDays = lastHoliday != null ? lastHoliday.RemainingDays : 20;
 
         if (remainingDays - days < 0)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = string.Format(Resource.NoAvailableDaysHoliday, remainingDays) });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysHoliday, remainingDays) });
         }
 
-        var holiday = await db.HolidayRequest.FirstOrDefaultAsync(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(edit.HolidayRequestIde));
+        var holiday = await db.Holiday.FirstOrDefaultAsync(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(edit.HolidayIde));
         holiday.StartDate = startDate;
         holiday.EndDate = endDate;
         holiday.RemainingDays = (int)(remainingDays - days);
         holiday.Description = edit.Description;
         holiday.UpdatedDate = DateTime.Now;
         holiday.UpdatedFrom = user.Id;
-        holiday.UpdatedNo += 1;
+        holiday.UpdatedNo = holiday.UpdatedNo.HasValue ? ++holiday.UpdatedNo : holiday.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
 
         // TODO: send email to manager for the change. Changed date from this to this.
         // TODO: send email to staff for the holiday change. Remind of remaining days.
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataUpdatedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
 
     #endregion
 
     #region Details
 
-    [Authorize(Policy = "31:r"), Description("Form to view holiday details.")]
+    [Authorize(Policy = "31:r"), Description("Arb Tahiri", "Form to view holiday details.")]
     public async Task<IActionResult> _Details(string ide)
     {
-        var holiday = await db.HolidayRequest
-            .Where(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(ide))
+        var holiday = await db.Holiday
+            .Where(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Details
             {
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
-                HolidayType = user.Language == LanguageEnum.ALBANIAN ? a.HolidayType.NameSq : a.HolidayType.NameEn,
-                StatusType = a.HolidayRequestStatus.Select(a => user.Language == LanguageEnum.ALBANIAN ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                StaffReviewer = $"{a.HolidayStatus.Select(a => a.UpdatedFromNavigation.FirstName).FirstOrDefault()} {a.HolidayStatus.Select(a => a.UpdatedFromNavigation.LastName).FirstOrDefault()}",
+                HolidayType = user.Language == LanguageEnum.Albanian ? a.HolidayType.NameSq : a.HolidayType.NameEn,
+                StatusType = a.HolidayStatus.Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
                 TotalDays = WorkingDays(a.StartDate, a.EndDate),
+                InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy"),
+                UpdatedDate = a.UpdatedDate.HasValue ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
                 Description = a.Description
             }).FirstOrDefaultAsync();
         return PartialView(holiday);
@@ -282,35 +284,35 @@ public class HolidayController : BaseController
     #region Delete
 
     [HttpPost, Authorize(Policy = "31:d"), ValidateAntiForgeryToken]
-    [Description("Action to edit a holiday.")]
+    [Description("Arb Tahiri", "Action to edit a holiday.")]
     public async Task<IActionResult> Delete(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
-            return Json(new ErrorVM { Status = ErrorStatus.WARNING, Description = Resource.InvalidData });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var holiday = await db.HolidayRequest.FirstOrDefaultAsync(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(ide));
+        var holiday = await db.Holiday.FirstOrDefaultAsync(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(ide));
         holiday.Active = false;
         holiday.UpdatedDate = DateTime.Now;
         holiday.UpdatedFrom = user.Id;
-        holiday.UpdatedNo += 1;
+        holiday.UpdatedNo  = holiday.UpdatedNo.HasValue ? ++holiday.UpdatedNo : holiday.UpdatedNo = 1;
 
-        var holidayStatus = await db.HolidayRequestStatus.FirstOrDefaultAsync(a => a.Active && a.HolidayRequestId == CryptoSecurity.Decrypt<int>(ide));
-        holidayStatus.StatusTypeId = (int)StatusTypeEnum.REJECTED;
+        var holidayStatus = await db.HolidayStatus.FirstOrDefaultAsync(a => a.Active && a.HolidayId == CryptoSecurity.Decrypt<int>(ide));
+        holidayStatus.StatusTypeId = (int)StatusTypeEnum.Rejected;
         holidayStatus.Active = false;
         holidayStatus.UpdatedDate = DateTime.Now;
         holidayStatus.UpdatedFrom = user.Id;
-        holidayStatus.UpdatedNo += 1;
+        holidayStatus.UpdatedNo = holidayStatus.UpdatedNo.HasValue ? ++holidayStatus.UpdatedNo : holidayStatus.UpdatedNo = 1;
 
-        return Json(new ErrorVM { Status = ErrorStatus.SUCCESS, Description = Resource.DataDeletedSuccessfully });
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
     #endregion
 
     #region Remote
 
-    [Description("Method to check startdate and enddate.")]
+    [Description("Arb Tahiri", "Method to check startdate and enddate.")]
     public async Task<IActionResult> CheckDate(string StartDate, string EndDate, int HolidayTypeId)
     {
         var startDate = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
@@ -323,7 +325,7 @@ public class HolidayController : BaseController
 
         var days = WorkingDays(startDate, endDate);
         int remainingDays;
-        var lastHoliday = await db.HolidayRequest.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == HolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.REJECTED)).OrderBy(a => a.HolidayRequestId).LastOrDefaultAsync();
+        var lastHoliday = await db.Holiday.Where(a => a.Active && a.Staff.UserId == user.Id && a.HolidayTypeId == HolidayTypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.Rejected)).OrderBy(a => a.HolidayId).LastOrDefaultAsync();
         remainingDays = lastHoliday != null ? lastHoliday.RemainingDays : 20;
 
         if (remainingDays - days >= 0)
@@ -340,7 +342,7 @@ public class HolidayController : BaseController
 
     #region Methods
 
-    [HttpGet, Description("Method to get remaining days depending on selected holiday type.")]
+    [HttpGet, Description("Arb Tahiri", "Method to get remaining days depending on selected holiday type.")]
     public async Task<IActionResult> RemainingDays(int htypeId, string userId)
     {
         if (htypeId == 0 || string.IsNullOrEmpty(userId))
@@ -349,7 +351,7 @@ public class HolidayController : BaseController
         }
 
         int remainingDays;
-        var lastHoliday = await db.HolidayRequest.Where(a => a.Active && a.Staff.UserId == userId && a.HolidayTypeId == htypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayRequestStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.REJECTED)).OrderBy(a => a.HolidayRequestId).LastOrDefaultAsync();
+        var lastHoliday = await db.Holiday.Where(a => a.Active && a.Staff.UserId == userId && a.HolidayTypeId == htypeId && a.StartDate.Year == DateTime.Now.Year && a.HolidayStatus.Any(b => b.Active && b.StatusTypeId != (int)StatusTypeEnum.Rejected)).OrderBy(a => a.HolidayId).LastOrDefaultAsync();
         remainingDays = lastHoliday != null ? lastHoliday.RemainingDays : 20;
 
         return Json(remainingDays);
