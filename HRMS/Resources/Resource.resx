@@ -1044,4 +1044,88 @@
   <data name="ReviewedFrom" xml:space="preserve">
     <value>Shqyrtuar nga</value>
   </data>
+  <data name="ChooseEvaluationType" xml:space="preserve">
+    <value>Zgjedhni llojin e vlerësimit</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Përfunduar</value>
+  </data>
+  <data name="ManagerEvaluation" xml:space="preserve">
+    <value>Vlerësimi nga menaxheri</value>
+  </data>
+  <data name="SelfEvaluation" xml:space="preserve">
+    <value>Vetëvlerësimi</value>
+  </data>
+  <data name="StudentsEvaluation" xml:space="preserve">
+    <value>Vlerësimi nga studentët</value>
+  </data>
+  <data name="Evaluation" xml:space="preserve">
+    <value>Vlerësimi</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Shto pyetje</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Pergjigja</value>
+  </data>
+  <data name="Answered" xml:space="preserve">
+    <value>Përgjigjur</value>
+  </data>
+  <data name="AnsweredIn" xml:space="preserve">
+    <value>Përgjigjur në</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Zhvilluesi</value>
+  </data>
+  <data name="Evaluated" xml:space="preserve">
+    <value>U vlerësua</value>
+  </data>
+  <data name="FirstStepEvaluation" xml:space="preserve">
+    <value>1. Të dhënat e pyetësorit</value>
+  </data>
+  <data name="ListOfAnswers" xml:space="preserve">
+    <value>Lista përgjigjeve</value>
+  </data>
+  <data name="ListOfQuestions" xml:space="preserve">
+    <value>Lista pyetjeve</value>
+  </data>
+  <data name="NoDocuments" xml:space="preserve">
+    <value>Nuk ka dokumente</value>
+  </data>
+  <data name="NoQualifications" xml:space="preserve">
+    <value>Nuk ka qualifikime</value>
+  </data>
+  <data name="NoQuestions" xml:space="preserve">
+    <value>Nuk ka pyetje</value>
+  </data>
+  <data name="NoSubjects" xml:space="preserve">
+    <value>Nuk ka lëndë</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Nuk ka përgjigje</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pyetja</value>
+  </data>
+  <data name="QuestionnaireData" xml:space="preserve">
+    <value>Të dhënat për pyetësorin</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Pyetjet</value>
+  </data>
+  <data name="QuestionsLower" xml:space="preserve">
+    <value>pyetje</value>
+  </data>
+  <data name="SecondStepEvaluation" xml:space="preserve">
+    <value>2. Pyetjet dhe përgjigjet</value>
+  </data>
+  <data name="SureYouWantToDeleteQuestion" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e pyetjes?</value>
+  </data>
+  <data name="ThirdStepEvaluation" xml:space="preserve">
+    <value>3. Dokumentet</value>
+  </data>
+  <data name="YouHaveEvaluationProcessing" xml:space="preserve">
+    <value>Nuk mund të vendosni vlerësimin, pasi që keni një vlerësim në proces!</value>
+  </data>
 </root>

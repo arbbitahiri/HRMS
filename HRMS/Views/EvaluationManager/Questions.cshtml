@@ -1,0 +1,286 @@
+﻿@using HRMS.Models.EvaluationManager
+@model QuestionVM
+@{
+    ViewData["Title"] = Resource.SecondStepEvaluation;
+    Layout = "~/Views/EvaluationManager/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+    var questions = Model.NumericalQuestionsCount == 0 ? Resource.NoQuestions + ". " : Resource.QuestionsLower + ". ";
+}
+
+<style>
+    fieldset {
+        border: 1px solid #6993ff;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    legend {
+        width: auto;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 0 6px;
+        margin-left: 10px
+    }
+</style>
+
+<div class="flex-row-fluid">
+    <div class="card" style="box-shadow: none !important;">
+        <div class="card-header border-0">
+            <div class="card-title align-items-start flex-column">
+                <span class="text-dark text-lg">@Model.EvaluationDetails.Firstname @Model.EvaluationDetails.Lastname</span> <br />
+                <span class="text-muted mt-1 font-weight-bold font-size-sm">
+                    @if (Model.NumericalQuestionsCount >= 1)
+                    {
+                        @Resource.Has <b class="text-primary">@Model.NumericalQuestionsCount </b>
+                    }
+                    @questions
+                </span>
+            </div>
+            <div class="card-tools">
+                <a onclick="add_question('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddQuestion</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tbl_questions" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>@Resource.Question</th>
+                        <th>@Resource.Answer</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    @if (Model.Optionals.Any())
+    {
+        <hr/>
+        <div class="card" style="box-shadow: none !important;">
+            @* <div class="card-header border-0">
+                <div class="card-tools">
+                    <a onclick="add_question('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddQuestion</a>
+                </div>
+            </div> *@
+            <div class="card-body">
+                @foreach (var optional in Model.Optionals)
+                {
+                    <fieldset class="mb-4 px-4 ml-0">
+                        <legend>@optional.Question</legend>
+                        @foreach (var option in optional.Options)
+                        {
+                            var isChecked = option.Checked ? "checked" : "";
+                            <ul class="icheck-primary">
+                                <input id="@option.EvaluationQuestionnaireOptionalOptionIde" type="radio" @isChecked style="cursor: pointer;"/>
+                                <label for="@option.EvaluationQuestionnaireOptionalOptionIde"
+                                    onclick="change_option(@option.EvaluationQuestionnaireOptionalOptionIde)">@option.Option</label>
+                            </ul>
+                        }
+                    </fieldset>
+                }
+            </div>
+        </div>
+    }
+    @if (Model.Topics.Any())
+    {
+        <hr/>
+        <div class="card" style="box-shadow: none !important;">
+            @* <div class="card-header border-0">
+                <div class="card-tools">
+                    <a onclick="add_question('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddQuestion</a>
+                </div>
+            </div> *@
+            <div class="card-body">
+                @foreach (var topic in Model.Topics)
+                {
+                    <fieldset class="mb-4 px-4 ml-0">
+                        <legend>@topic.Question</legend>
+                        <textarea id="@topic.EvaluationQuestionnaireTopicIde" class="form-control" rows="2">@topic.Answer</textarea>
+                        <button type="button" class="btn btn-primary" onclick="submit_topic(@topic.EvaluationQuestionnaireTopicIde)"></button>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between border-top mt-5">
+        <input type="button" value="@Resource.Back" onclick="back_to_register('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.Continue" onclick="continue_to_document('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@((int)Model.Method) == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: 'cursor: default' });
+                $('#tab2').attr({ href: '', style: '' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_documents_form').attr({ disabled: true });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+            }
+
+            render_numerical_tbl(@Json.Serialize(Model.Numericals));
+        });
+
+        function render_numerical_tbl(data) {
+            var rowCount = 1;
+            $('#tbl_questions').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0, 4] },
+                    { className: "w15 vertikal", targets: [1] },
+                    { className: "w30 vertikal", targets: [2] }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            rowCount++;
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            var desc = '///';
+                            if (row.title != null) {
+                                if (row.title.length > 80) {
+                                    desc = row.title.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.title.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    desc = row.title ?? "///";
+                                }
+                            }
+                            return desc;
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="form-group clearfix">' +
+                                '<div class="icheck-primary d-inline"><input id="zero" style="cursor: pointer;" type="radio" ' + row.grade == 0 ? "checked" : "" + '/><label for="zero" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 0)"></label></div>' +
+                                '<div class="icheck-primary d-inline"><input id="one" style="cursor: pointer;" type="radio" ' + row.grade == 1 ? "checked" : "" + '/><label for="one" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 1)"></label></div>' +
+                                '<div class="icheck-primary d-inline"><input id="two" style="cursor: pointer;" type="radio" ' + row.grade == 2 ? "checked" : "" + '/><label for="two" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 2)"></label></div>' +
+                                '<div class="icheck-primary d-inline"><input id="three" style="cursor: pointer;" type="radio" ' + row.grade == 3 ? "checked" : "" + '/><label for="three" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 3)"></label></div>' +
+                                '<div class="icheck-primary d-inline"><input id="four" style="cursor: pointer;" type="radio" ' + row.grade == 4 ? "checked" : "" + '/><label for="four" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 4)"></label></div>' +
+                                '<div class="icheck-primary d-inline"><input id="five" style="cursor: pointer;" type="radio" ' + row.grade == 5 ? "checked" : "" + '/><label for="five" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 5)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_question(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_question(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function change_option(ide) {
+            $.post('@Url.Action("TopicAnswer", "EvaluationManager")', {
+                ide: ide,
+                txt: $('textarea#' + ide)
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                handle_success(data, SubmitPathType.NORELOAD, "");
+            });
+        }
+
+        function submit_topic(ide) {
+            $.post('@Url.Action("OptionalAnswer", "EvaluationManager")', {
+                ide: ide,
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                handle_success(data, SubmitPathType.NORELOAD, "");
+            });
+        }
+
+        function change_grade(ide, num) {
+            $.post('@Url.Action("NumericalAnswer", "EvaluationManager")', {
+                ide: ide,
+                num: num,
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                handle_success(data, SubmitPathType.NORELOAD, "");
+            });
+        }
+
+        function add_question(ide) {
+            $('#modal-default').find('.modal-content').load('@Url.Action("_AddQuestion", "EvaluationManager")?ide=' + ide, function () {
+                $('#modal-default').modal('toggle');
+            });
+        }
+
+        function edit_question(ide) {
+            $('#modal-default').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")?ide=' + ide, function () {
+                $('#modal-default').modal('toggle');
+            });
+        }
+
+        function delete_question(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteQuestion)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("DeleteQuestion", "EvaluationManager")', {
+                        ide: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
+                    });
+                }
+            });
+        }
+
+        function back_to_register(ide) {
+            window.location.href = '@Url.Action("Index", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
+        }
+
+        function continue_to_document(ide) {
+            window.location.href = '@Url.Action("Documents", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
+        }
+    </script>
+}

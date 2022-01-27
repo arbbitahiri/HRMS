@@ -29,6 +29,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<ApplicationUser>().HasIndex(a => new { a.PersonalNumber }).IsUnique(true);
+
         builder.Entity<MenuList>().HasNoKey();
         builder.Entity<MenuListAccess>().HasNoKey();
         builder.Entity<Logs>().HasNoKey();

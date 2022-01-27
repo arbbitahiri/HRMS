@@ -7,7 +7,11 @@ namespace HRMS.Data.General
     {
         public Evaluation()
         {
+            EvaluationDocument = new HashSet<EvaluationDocument>();
             EvaluationManager = new HashSet<EvaluationManager>();
+            EvaluationQuestionnaireNumerical = new HashSet<EvaluationQuestionnaireNumerical>();
+            EvaluationQuestionnaireOptional = new HashSet<EvaluationQuestionnaireOptional>();
+            EvaluationQuestionnaireTopic = new HashSet<EvaluationQuestionnaireTopic>();
             EvaluationSelf = new HashSet<EvaluationSelf>();
             EvaluationStatus = new HashSet<EvaluationStatus>();
             EvaluationStudents = new HashSet<EvaluationStudents>();
@@ -24,7 +28,11 @@ namespace HRMS.Data.General
         public virtual EvaluationType EvaluationType { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationDocument> EvaluationDocument { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManager { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumerical { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptional { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopic { get; set; }
         public virtual ICollection<EvaluationSelf> EvaluationSelf { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatus { get; set; }
         public virtual ICollection<EvaluationStudents> EvaluationStudents { get; set; }

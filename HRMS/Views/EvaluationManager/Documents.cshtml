@@ -1,5 +1,5 @@
-﻿@using HRMS.Models.Staff.Document
-@model DocumentsVM
+﻿@using HRMS.Models.EvaluationManager
+@model DocumentVM
 @{
     ViewData["Title"] = Resource.ThirdStepStaffRegistration;
     Layout = "~/Views/Staff/_Layout.cshtml";
@@ -12,7 +12,7 @@
     <div class="card" style="box-shadow: none !important;">
         <div class="card-header border-0">
             <h1 class="card-title align-items-start flex-column">
-                <span class="text-dark text-lg">@Model.StaffDetails.Firstname @Model.StaffDetails.Lastname</span><br />
+                <span class="text-dark text-lg">@Model.EvaluationDetails.Firstname @Model.EvaluationDetails.Lastname</span><br />
                 <span class="text-muted mt-1 font-weight-bold font-size-sm">
                     @if (Model.DocumentCount >= 1)
                     {
@@ -22,7 +22,7 @@
                 </span>
             </h1>
             <div class="card-tools">
-                <a onclick="add_document('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+                <a onclick="add_document('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
             </div>
         </div>
         <div class="card-body">
@@ -44,29 +44,27 @@
     </div>
 
     <div class="d-flex justify-content-between border-top mt-5">
-        <input type="button" value="@Resource.Back" onclick="go_back_qualification('@Model.StaffDetails.Ide')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
-        <input type="button" value="@Resource.Continue" onclick="continue_to_department('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.Back" onclick="go_back_questions('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.Continue" onclick="submit_form('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
     </div>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            if (@((int)Model.MethodType) == MethodType.POST) {
+            if (@((int)Model.Method) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: 'cursor: pointer' });
                 $('#tab2').attr({ href: '', style: 'cursor: pointer' });
                 $('#tab3').attr({ href: '', style: '' });
-                $('#tab4').attr({ href: '', style: 'cursor: default' });
 
-                $('#trigger_staff_department').attr({ disabled: true });
+                $('#trigger_documents_form').attr({ disabled: true });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
@@ -75,12 +73,18 @@
             render_tbl_documents(@Json.Serialize(Model.Documents));
         });
 
-        function go_back_qualification(ide) {
-            window.location.href = '@Url.Action("Qualification", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
+        function go_back_questions(ide) {
+            window.location.href = '@Url.Action("Questions", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
         }
 
-        function continue_to_department(ide) {
-            window.location.href = '@Url.Action("Departments", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
+        function submit_form(ide) {
+            $.post('@Url.Action("Finish", "EvaluationManager")', {
+                ide: ide,
+                method: '@Model.Method'
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function() {
+                window.location.href = '@Url.Action("Index", "Evalaution")';
+            });
         }
 
         function render_tbl_documents(data) {
@@ -162,20 +166,20 @@
         }
 
         function add_document(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDocument", "Staff")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDocument", "EvaluationManager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
         function edit_document(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDocument", "Staff")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDocument", "EvaluationManager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
         function download_doc(ide, file_type) {
             if (file_type.contains(".pdf")) {
-                window.open('@Url.Action("OpenDocument", "Staff")?ide=' + ide, '_blank');
+                window.open('@Url.Action("OpenDocument", "EvaluationManager")?ide=' + ide, '_blank');
             }
         }
 
@@ -191,7 +195,7 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteDocument", "Staff")', {
+                    $.post('@Url.Action("DeleteDocument", "EvaluationManager")', {
                         ide: ide,
                         "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                         }, function (data) {

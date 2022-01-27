@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class EvaluationStudentsQuestionnaire
+    public partial class EvaluationQuestionnaireTopic
     {
-        public int EvaluationStudentsQuestionnaireId { get; set; }
-        public int EvaluationStudentsId { get; set; }
+        public int EvaluationQuestionnaireTopicId { get; set; }
+        public int EvaluationId { get; set; }
         public string Question { get; set; }
-        public decimal? Grade { get; set; }
-        public string Description { get; set; }
+        public string Answer { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
@@ -17,7 +16,7 @@ namespace HRMS.Data.General
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedNo { get; set; }
 
-        public virtual EvaluationStudents EvaluationStudents { get; set; }
+        public virtual Evaluation Evaluation { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }

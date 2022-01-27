@@ -28,16 +28,15 @@ namespace HRMS.Data.General
         public virtual DbSet<DocumentType> DocumentType { get; set; }
         public virtual DbSet<EducationLevelType> EducationLevelType { get; set; }
         public virtual DbSet<Evaluation> Evaluation { get; set; }
+        public virtual DbSet<EvaluationDocument> EvaluationDocument { get; set; }
         public virtual DbSet<EvaluationManager> EvaluationManager { get; set; }
-        public virtual DbSet<EvaluationManagerDocument> EvaluationManagerDocument { get; set; }
-        public virtual DbSet<EvaluationManagerQuestionnaire> EvaluationManagerQuestionnaire { get; set; }
+        public virtual DbSet<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumerical { get; set; }
+        public virtual DbSet<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptional { get; set; }
+        public virtual DbSet<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOption { get; set; }
+        public virtual DbSet<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopic { get; set; }
         public virtual DbSet<EvaluationSelf> EvaluationSelf { get; set; }
-        public virtual DbSet<EvaluationSelfDocument> EvaluationSelfDocument { get; set; }
-        public virtual DbSet<EvaluationSelfQuestionnaire> EvaluationSelfQuestionnaire { get; set; }
         public virtual DbSet<EvaluationStatus> EvaluationStatus { get; set; }
         public virtual DbSet<EvaluationStudents> EvaluationStudents { get; set; }
-        public virtual DbSet<EvaluationStudentsDocument> EvaluationStudentsDocument { get; set; }
-        public virtual DbSet<EvaluationStudentsQuestionnaire> EvaluationStudentsQuestionnaire { get; set; }
         public virtual DbSet<EvaluationType> EvaluationType { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<Holiday> Holiday { get; set; }
@@ -64,7 +63,7 @@ namespace HRMS.Data.General
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -97,8 +96,6 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
             {
-                entity.ToTable("AspNetRoleClaims", "NET");
-
                 entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
                 entity.Property(e => e.RoleId).IsRequired();
@@ -110,8 +107,6 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<AspNetRoles>(entity =>
             {
-                entity.ToTable("AspNetRoles", "NET");
-
                 entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
@@ -141,8 +136,6 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<AspNetUserClaims>(entity =>
             {
-                entity.ToTable("AspNetUserClaims", "NET");
-
                 entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
                 entity.Property(e => e.UserId).IsRequired();
@@ -155,8 +148,6 @@ namespace HRMS.Data.General
             modelBuilder.Entity<AspNetUserLogins>(entity =>
             {
                 entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
-
-                entity.ToTable("AspNetUserLogins", "NET");
 
                 entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
@@ -175,8 +166,6 @@ namespace HRMS.Data.General
             {
                 entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
 
-                entity.ToTable("AspNetUserTokens", "NET");
-
                 entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
                 entity.Property(e => e.Name).HasMaxLength(128);
@@ -188,8 +177,6 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
-                entity.ToTable("AspNetUsers", "NET");
-
                 entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
                 entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
@@ -253,7 +240,7 @@ namespace HRMS.Data.General
                         {
                             j.HasKey("UserId", "RoleId");
 
-                            j.ToTable("AspNetUserRoles", "NET");
+                            j.ToTable("AspNetUserRoles");
 
                             j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                         });
@@ -463,13 +450,65 @@ namespace HRMS.Data.General
                     .HasConstraintName("FK_Evaluation_AspNetUsers_Updated");
             });
 
+            modelBuilder.Entity<EvaluationDocument>(entity =>
+            {
+                entity.Property(e => e.EvaluationDocumentId).HasColumnName("EvaluationDocumentID");
+
+                entity.Property(e => e.Description).HasMaxLength(2048);
+
+                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
+
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasMaxLength(2048);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.DocumentType)
+                    .WithMany(p => p.EvaluationDocument)
+                    .HasForeignKey(d => d.DocumentTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationDocument_DocumentType");
+
+                entity.HasOne(d => d.Evaluation)
+                    .WithMany(p => p.EvaluationDocument)
+                    .HasForeignKey(d => d.EvaluationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationDocument_Evaluation");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.EvaluationDocumentInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationDocument_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationDocumentUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_EvaluationDocument_AspNetUsers_Updated");
+            });
+
             modelBuilder.Entity<EvaluationManager>(entity =>
             {
                 entity.Property(e => e.EvaluationManagerId).HasColumnName("EvaluationManagerID");
 
                 entity.Property(e => e.Description).HasMaxLength(2048);
 
-                entity.Property(e => e.EvalutaionId).HasColumnName("EvalutaionID");
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -489,9 +528,9 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
-                entity.HasOne(d => d.Evalutaion)
+                entity.HasOne(d => d.Evaluation)
                     .WithMany(p => p.EvaluationManager)
-                    .HasForeignKey(d => d.EvalutaionId)
+                    .HasForeignKey(d => d.EvaluationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EvaluationManager_Evaluation");
 
@@ -519,63 +558,11 @@ namespace HRMS.Data.General
                     .HasConstraintName("FK_EvaluationManager_AspNetUsers_Updated");
             });
 
-            modelBuilder.Entity<EvaluationManagerDocument>(entity =>
+            modelBuilder.Entity<EvaluationQuestionnaireNumerical>(entity =>
             {
-                entity.Property(e => e.EvaluationManagerDocumentId).HasColumnName("EvaluationManagerDocumentID");
+                entity.Property(e => e.EvaluationQuestionnaireNumericalId).HasColumnName("EvaluationQuestionnaireNumericalID");
 
-                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
-
-                entity.Property(e => e.EvaluationManagerId).HasColumnName("EvaluationManagerID");
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Path).HasMaxLength(2048);
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-                entity.HasOne(d => d.DocumentType)
-                    .WithMany(p => p.EvaluationManagerDocument)
-                    .HasForeignKey(d => d.DocumentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationManagerDocument_DocumentType");
-
-                entity.HasOne(d => d.EvaluationManager)
-                    .WithMany(p => p.EvaluationManagerDocument)
-                    .HasForeignKey(d => d.EvaluationManagerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationManagerDocument_EvaluationManager");
-
-                entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationManagerDocumentInsertedFromNavigation)
-                    .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationManagerDocument_AspNetUsers_Inserted");
-
-                entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationManagerDocumentUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationManagerDocument_AspNetUsers_Updated");
-            });
-
-            modelBuilder.Entity<EvaluationManagerQuestionnaire>(entity =>
-            {
-                entity.Property(e => e.EvaluationManagerQuestionnaireId).HasColumnName("EvaluationManagerQuestionnaireID");
-
-                entity.Property(e => e.Description).HasMaxLength(1024);
-
-                entity.Property(e => e.EvaluationManagerId).HasColumnName("EvaluationManagerID");
-
-                entity.Property(e => e.Grade).HasColumnType("decimal(5, 2)");
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -585,28 +572,142 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.Question)
                     .IsRequired()
+                    .HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.Evaluation)
+                    .WithMany(p => p.EvaluationQuestionnaireNumerical)
+                    .HasForeignKey(d => d.EvaluationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaire_Evaluation");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireNumericalInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaire_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireNumericalUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_EvaluationQuestionnaire_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<EvaluationQuestionnaireOptional>(entity =>
+            {
+                entity.Property(e => e.EvaluationQuestionnaireOptionalId).HasColumnName("EvaluationQuestionnaireOptionalID");
+
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.Question).HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.Evaluation)
+                    .WithMany(p => p.EvaluationQuestionnaireOptional)
+                    .HasForeignKey(d => d.EvaluationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptional_Evaluation");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireOptionalInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptional_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireOptionalUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptional_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<EvaluationQuestionnaireOptionalOption>(entity =>
+            {
+                entity.Property(e => e.EvaluationQuestionnaireOptionalOptionId).HasColumnName("EvaluationQuestionnaireOptionalOptionID");
+
+                entity.Property(e => e.EvaluationQuestionnaireOptionalId).HasColumnName("EvaluationQuestionnaireOptionalID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.OptionTitle)
+                    .IsRequired()
                     .HasMaxLength(512);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
-                entity.HasOne(d => d.EvaluationManager)
-                    .WithMany(p => p.EvaluationManagerQuestionnaire)
-                    .HasForeignKey(d => d.EvaluationManagerId)
+                entity.HasOne(d => d.EvaluationQuestionnaireOptional)
+                    .WithMany(p => p.EvaluationQuestionnaireOptionalOption)
+                    .HasForeignKey(d => d.EvaluationQuestionnaireOptionalId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationManagerQuestionnaire_EvaluationManager");
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptionalOption_EvaluationQuestionnaireOptional");
 
                 entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationManagerQuestionnaireInsertedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireOptionalOptionInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationManagerQuestionnaire_AspNetUsers_Inserted");
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptionalOption_AspNetUsers_Inserted");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationManagerQuestionnaireUpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireOptionalOptionUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationManagerQuestionnaire_AspNetUsers_Updated");
+                    .HasConstraintName("FK_EvaluationQuestionnaireOptionalOption_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<EvaluationQuestionnaireTopic>(entity =>
+            {
+                entity.Property(e => e.EvaluationQuestionnaireTopicId).HasColumnName("EvaluationQuestionnaireTopicID");
+
+                entity.Property(e => e.Answer).IsRequired();
+
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.Question)
+                    .IsRequired()
+                    .HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.Evaluation)
+                    .WithMany(p => p.EvaluationQuestionnaireTopic)
+                    .HasForeignKey(d => d.EvaluationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaireTopic_Evaluation");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireTopicInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionnaireTopic_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionnaireTopicUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_EvaluationQuestionnaireTopic_AspNetUsers_Updated");
             });
 
             modelBuilder.Entity<EvaluationSelf>(entity =>
@@ -655,96 +756,6 @@ namespace HRMS.Data.General
                     .WithMany(p => p.EvaluationSelfUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
                     .HasConstraintName("FK_EvaluationSelf_AspNetUsers_Updated");
-            });
-
-            modelBuilder.Entity<EvaluationSelfDocument>(entity =>
-            {
-                entity.Property(e => e.EvaluationSelfDocumentId).HasColumnName("EvaluationSelfDocumentID");
-
-                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
-
-                entity.Property(e => e.EvaluationSelfId).HasColumnName("EvaluationSelfID");
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Path).HasMaxLength(2048);
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-                entity.HasOne(d => d.DocumentType)
-                    .WithMany(p => p.EvaluationSelfDocument)
-                    .HasForeignKey(d => d.DocumentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelfDocument_DocumentType");
-
-                entity.HasOne(d => d.EvaluationSelf)
-                    .WithMany(p => p.EvaluationSelfDocument)
-                    .HasForeignKey(d => d.EvaluationSelfId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelfDocument_EvaluationSelf");
-
-                entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationSelfDocumentInsertedFromNavigation)
-                    .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelfDocument_AspNetUsers_Inserted");
-
-                entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationSelfDocumentUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationSelfDocument_AspNetUsers_Updated");
-            });
-
-            modelBuilder.Entity<EvaluationSelfQuestionnaire>(entity =>
-            {
-                entity.Property(e => e.EvaluationSelfQuestionnaireId).HasColumnName("EvaluationSelfQuestionnaireID");
-
-                entity.Property(e => e.Description).HasMaxLength(1024);
-
-                entity.Property(e => e.EvaluationSelfId).HasColumnName("EvaluationSelfID");
-
-                entity.Property(e => e.Grade).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Question)
-                    .IsRequired()
-                    .HasMaxLength(512);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-                entity.HasOne(d => d.EvaluationSelf)
-                    .WithMany(p => p.EvaluationSelfQuestionnaire)
-                    .HasForeignKey(d => d.EvaluationSelfId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelfQuestionnaire_EvaluationSelf");
-
-                entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationSelfQuestionnaireInsertedFromNavigation)
-                    .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelfQuestionnaire_AspNetUsers_Inserted");
-
-                entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationSelfQuestionnaireUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationSelfQuestionnaire_AspNetUsers_Updated");
             });
 
             modelBuilder.Entity<EvaluationStatus>(entity =>
@@ -797,7 +808,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.Description).HasMaxLength(2048);
 
-                entity.Property(e => e.EvalutaionId).HasColumnName("EvalutaionID");
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -815,9 +826,9 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
-                entity.HasOne(d => d.Evalutaion)
+                entity.HasOne(d => d.Evaluation)
                     .WithMany(p => p.EvaluationStudents)
-                    .HasForeignKey(d => d.EvalutaionId)
+                    .HasForeignKey(d => d.EvaluationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EvaluationStudents_Evaluation");
 
@@ -839,105 +850,13 @@ namespace HRMS.Data.General
                     .HasConstraintName("FK_EvaluationStudents_AspNetUsers_Updated");
             });
 
-            modelBuilder.Entity<EvaluationStudentsDocument>(entity =>
-            {
-                entity.Property(e => e.EvaluationStudentsDocumentId).HasColumnName("EvaluationStudentsDocumentID");
-
-                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
-
-                entity.Property(e => e.EvaluationStudentsId).HasColumnName("EvaluationStudentsID");
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Path).HasMaxLength(2048);
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-                entity.HasOne(d => d.DocumentType)
-                    .WithMany(p => p.EvaluationStudentsDocument)
-                    .HasForeignKey(d => d.DocumentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsDocument_DocumentType");
-
-                entity.HasOne(d => d.EvaluationStudents)
-                    .WithMany(p => p.EvaluationStudentsDocument)
-                    .HasForeignKey(d => d.EvaluationStudentsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsDocument_EvaluationStudents");
-
-                entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationStudentsDocumentInsertedFromNavigation)
-                    .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsDocument_AspNetUsers_Inserted");
-
-                entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationStudentsDocumentUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationStudentsDocument_AspNetUsers_Updated");
-            });
-
-            modelBuilder.Entity<EvaluationStudentsQuestionnaire>(entity =>
-            {
-                entity.Property(e => e.EvaluationStudentsQuestionnaireId).HasColumnName("EvaluationStudentsQuestionnaireID");
-
-                entity.Property(e => e.Description).HasMaxLength(1024);
-
-                entity.Property(e => e.EvaluationStudentsId).HasColumnName("EvaluationStudentsID");
-
-                entity.Property(e => e.Grade).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InsertedFrom)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Question)
-                    .IsRequired()
-                    .HasMaxLength(512);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-                entity.HasOne(d => d.EvaluationStudents)
-                    .WithMany(p => p.EvaluationStudentsQuestionnaire)
-                    .HasForeignKey(d => d.EvaluationStudentsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsQuestionnaire_EvaluationStudents");
-
-                entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.EvaluationStudentsQuestionnaireInsertedFromNavigation)
-                    .HasForeignKey(d => d.InsertedFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsQuestionnaire_AspNetUsers_Inserted");
-
-                entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.EvaluationStudentsQuestionnaireUpdatedFromNavigation)
-                    .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_EvaluationStudentsQuestionnaire_AspNetUsers_Updated");
-            });
-
             modelBuilder.Entity<EvaluationType>(entity =>
             {
                 entity.HasIndex(e => e.InsertedFrom, "IX_EvaluationType_InsertedFrom");
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_EvaluationType_UpdatedFrom");
 
-                entity.Property(e => e.EvaluationTypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("EvaluationTypeID");
+                entity.Property(e => e.EvaluationTypeId).HasColumnName("EvaluationTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 

@@ -149,7 +149,8 @@ public class AuthorizationController : BaseController
                         }
                         else if (attr.AttributeType.Name == "DescriptionAttribute")
                         {
-                            rule.Description = attr.ConstructorArguments[0].ToString();
+                            rule.Developer = attr.ConstructorArguments[0].ToString();
+                            rule.Description = attr.ConstructorArguments[1].ToString();
                         }
                     });
 

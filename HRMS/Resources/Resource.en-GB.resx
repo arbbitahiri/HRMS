@@ -1038,4 +1038,85 @@
   <data name="ReviewedFrom" xml:space="preserve">
     <value>Reviewed from</value>
   </data>
+  <data name="ChooseEvaluationType" xml:space="preserve">
+    <value>Choose evaluation type</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="ManagerEvaluation" xml:space="preserve">
+    <value>Manager evaluation</value>
+  </data>
+  <data name="SelfEvaluation" xml:space="preserve">
+    <value>Self evaluation</value>
+  </data>
+  <data name="StudentsEvaluation" xml:space="preserve">
+    <value>Students evaluation</value>
+  </data>
+  <data name="Evaluation" xml:space="preserve">
+    <value>Evaluation</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="Answered" xml:space="preserve">
+    <value>Answered</value>
+  </data>
+  <data name="AnsweredIn" xml:space="preserve">
+    <value>Answered in</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="Evaluated" xml:space="preserve">
+    <value>Evaluated</value>
+  </data>
+  <data name="FirstStepEvaluation" xml:space="preserve">
+    <value>1. Questionnaire data</value>
+  </data>
+  <data name="ListOfAnswers" xml:space="preserve">
+    <value>List of answers</value>
+  </data>
+  <data name="ListOfQuestions" xml:space="preserve">
+    <value>List of questions</value>
+  </data>
+  <data name="NoDocuments" xml:space="preserve">
+    <value>No documents</value>
+  </data>
+  <data name="NoQualifications" xml:space="preserve">
+    <value>No qualifications</value>
+  </data>
+  <data name="NoQuestions" xml:space="preserve">
+    <value>No questions</value>
+  </data>
+  <data name="NoSubjects" xml:space="preserve">
+    <value>No subjects</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="QuestionnaireData" xml:space="preserve">
+    <value>Questionnaire data</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="QuestionsLower" xml:space="preserve">
+    <value>questions</value>
+  </data>
+  <data name="SecondStepEvaluation" xml:space="preserve">
+    <value>2. Questions and answers</value>
+  </data>
+  <data name="SureYouWantToDeleteQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete question?</value>
+  </data>
+  <data name="ThirdStepEvaluation" xml:space="preserve">
+    <value>3. Documents</value>
+  </data>
 </root>

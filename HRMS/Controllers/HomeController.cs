@@ -2,6 +2,7 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.Home.SideProfile;
+using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ public class HomeController : BaseController
     {
     }
 
-    [Description("Entry home.")]
+    [Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index()
     {
         ViewData["Title"] = "Home";
@@ -33,7 +33,7 @@ public class HomeController : BaseController
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [Description("Error view")]
+    [Description("Arb Tahiri", "Error view")]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

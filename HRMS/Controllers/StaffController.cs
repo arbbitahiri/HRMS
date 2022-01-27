@@ -80,6 +80,7 @@ public class StaffController : BaseController
         if (!ModelState.IsValid)
         {
             TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return View(staff);
         }
 
         string staffIde = string.Empty;
@@ -88,6 +89,7 @@ public class StaffController : BaseController
             if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
             {
                 TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffWithPersonalExists });
+                return View(staff);
             }
 
             try
@@ -126,6 +128,7 @@ public class StaffController : BaseController
             {
                 await LogError(ex);
                 TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
+                return View(staff);
             }
         }
         else
@@ -196,6 +199,7 @@ public class StaffController : BaseController
                 await userManager.DeleteAsync(firstUser);
                 await LogError(ex);
                 TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
+                return View(staff);
             }
         }
 

@@ -5,7 +5,7 @@
     Layout = "~/Views/Staff/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
-    var subjects = Model.SubjectCount == 1 ? Resource.SubjectsLower.Substring(0, Resource.SubjectsLower.Length - 1) : (Model.SubjectCount == 0 ? "Nuk ka lëndë" : Resource.SubjectsLower);
+    var subjects = Model.SubjectCount == 1 ? Resource.SubjectsLower.Substring(0, Resource.SubjectsLower.Length - 1) : (Model.SubjectCount == 0 ? Resource.NoQuestions : Resource.SubjectsLower);
 }
 
 <div class="flex-row-fluid">
@@ -104,7 +104,13 @@
         }
 
         function submit_form(ide) {
-            window.location.href = '@Url.Action("Index", "Staff")';
+            $.post('@Url.Action("Finish", "Staff")', {
+                ide: ide,
+                method: '@Model.MethodType'
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function() {
+                window.location.href = '@Url.Action("Index", "Staff")';
+            });
         }
 
         function render_tbl_departments(data) {

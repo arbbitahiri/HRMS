@@ -319,12 +319,31 @@ public class BaseController : Controller
     /// <param name="name">Can be first or last name, email or username</param>
     /// <param name="role">Is the selected role in another select list</param>
     /// <returns>First 10 users with the specified condition</returns>
-    [HttpPost, ValidateAntiForgeryToken, Description("Arb Tahiri", "List of users for select list")]
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "List of users for select list")]
     public async Task<IActionResult> AspUsers(string name, string role = "")
     {
         var list = await db.AspNetUsers
             .Where(a => (a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
-                /*&& (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role))*/).Take(10)
+                && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role)))
+            .Take(10)
+            .Select(a => new Select2
+            {
+                id = a.Id,
+                text = $"{a.FirstName} {a.LastName}",
+                image = a.ProfileImage,
+                initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
+            }).ToListAsync();
+        return Json(list);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "List of staff for select list")]
+    public async Task<IActionResult> GetStaff(string name)
+    {
+        var list = await db.AspNetUsers
+            .Where(a => a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
+            .Take(10)
             .Select(a => new Select2
             {
                 id = a.Id,

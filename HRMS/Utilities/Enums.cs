@@ -64,8 +64,9 @@ public enum StatusTypeEnum
     Approved = 1,
     Rejected = 2,
     Pending = 3,
-    Processing = 5,
-    Finished = 6
+    Processing = 4,
+    Finished = 5,
+    Deleted = 6
 }
 
 public enum HolidayTypeEnum

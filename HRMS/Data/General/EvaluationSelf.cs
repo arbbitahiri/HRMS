@@ -5,12 +5,6 @@ namespace HRMS.Data.General
 {
     public partial class EvaluationSelf
     {
-        public EvaluationSelf()
-        {
-            EvaluationSelfDocument = new HashSet<EvaluationSelfDocument>();
-            EvaluationSelfQuestionnaire = new HashSet<EvaluationSelfQuestionnaire>();
-        }
-
         public int EvaluationSelfId { get; set; }
         public int EvaluationId { get; set; }
         public int StaffDepartmentId { get; set; }
@@ -26,7 +20,5 @@ namespace HRMS.Data.General
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual StaffDepartment StaffDepartment { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationSelfDocument> EvaluationSelfDocument { get; set; }
-        public virtual ICollection<EvaluationSelfQuestionnaire> EvaluationSelfQuestionnaire { get; set; }
     }
 }

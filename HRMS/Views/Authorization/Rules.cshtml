@@ -7,6 +7,7 @@
             <th>#</th>
             <th>@Resource.Controller</th>
             <th>@Resource.Method</th>
+            <th>@Resource.Developer</th>
             <th>@Resource.Description</th>
             <th>@Resource.Policy</th>
             <th style="width: 20% !important;">@Resource.HasAccess</th>
@@ -50,7 +51,16 @@
                     }
                 },
                 { data: "method" },
-                { data: "description" },
+                {
+                    data: function (row, type, set) {
+                        return row.developer.substring(1, row.developer.length - 1);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return row.description.substring(1, row.description.length - 1);
+                    }
+                },
                 { data: "policy" },
                 {
                     data: function (row, type, set) {

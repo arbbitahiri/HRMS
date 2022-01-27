@@ -7,9 +7,7 @@ namespace HRMS.Data.General
     {
         public DocumentType()
         {
-            EvaluationManagerDocument = new HashSet<EvaluationManagerDocument>();
-            EvaluationSelfDocument = new HashSet<EvaluationSelfDocument>();
-            EvaluationStudentsDocument = new HashSet<EvaluationStudentsDocument>();
+            EvaluationDocument = new HashSet<EvaluationDocument>();
             StaffDocument = new HashSet<StaffDocument>();
         }
 
@@ -25,9 +23,7 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationManagerDocument> EvaluationManagerDocument { get; set; }
-        public virtual ICollection<EvaluationSelfDocument> EvaluationSelfDocument { get; set; }
-        public virtual ICollection<EvaluationStudentsDocument> EvaluationStudentsDocument { get; set; }
+        public virtual ICollection<EvaluationDocument> EvaluationDocument { get; set; }
         public virtual ICollection<StaffDocument> StaffDocument { get; set; }
     }
 }

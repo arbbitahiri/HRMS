@@ -33,6 +33,12 @@ const StatusType = {
     PENDING: 3
 }
 
+const EvaluationType = {
+    MANAGER: 1,
+    STUDENT: 2,
+    SELF: 3
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 

@@ -5,7 +5,7 @@
     Layout = "~/Views/Staff/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
-    var qualifications = Model.QualificationCount == 1 ? Resource.QualificationsLower.Substring(0, Resource.QualificationsLower.Length - 1) : (Model.QualificationCount == 0 ? "Nuk ka kualifikime" : Resource.QualificationsLower);
+    var qualifications = Model.QualificationCount == 1 ? Resource.QualificationsLower.Substring(0, Resource.QualificationsLower.Length - 1) : (Model.QualificationCount == 0 ? Resource.NoQualifications : Resource.QualificationsLower);
 }
 
 <div class="flex-row-fluid">

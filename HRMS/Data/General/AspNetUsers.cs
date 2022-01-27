@@ -17,26 +17,24 @@ namespace HRMS.Data.General
             DocumentTypeUpdatedFromNavigation = new HashSet<DocumentType>();
             EducationLevelTypeInsertedFromNavigation = new HashSet<EducationLevelType>();
             EducationLevelTypeUpdatedFromNavigation = new HashSet<EducationLevelType>();
+            EvaluationDocumentInsertedFromNavigation = new HashSet<EvaluationDocument>();
+            EvaluationDocumentUpdatedFromNavigation = new HashSet<EvaluationDocument>();
             EvaluationInsertedFromNavigation = new HashSet<Evaluation>();
-            EvaluationManagerDocumentInsertedFromNavigation = new HashSet<EvaluationManagerDocument>();
-            EvaluationManagerDocumentUpdatedFromNavigation = new HashSet<EvaluationManagerDocument>();
             EvaluationManagerInsertedFromNavigation = new HashSet<EvaluationManager>();
-            EvaluationManagerQuestionnaireInsertedFromNavigation = new HashSet<EvaluationManagerQuestionnaire>();
-            EvaluationManagerQuestionnaireUpdatedFromNavigation = new HashSet<EvaluationManagerQuestionnaire>();
             EvaluationManagerUpdatedFromNavigation = new HashSet<EvaluationManager>();
-            EvaluationSelfDocumentInsertedFromNavigation = new HashSet<EvaluationSelfDocument>();
-            EvaluationSelfDocumentUpdatedFromNavigation = new HashSet<EvaluationSelfDocument>();
+            EvaluationQuestionnaireNumericalInsertedFromNavigation = new HashSet<EvaluationQuestionnaireNumerical>();
+            EvaluationQuestionnaireNumericalUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireNumerical>();
+            EvaluationQuestionnaireOptionalInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptional>();
+            EvaluationQuestionnaireOptionalOptionInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalOption>();
+            EvaluationQuestionnaireOptionalOptionUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalOption>();
+            EvaluationQuestionnaireOptionalUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireOptional>();
+            EvaluationQuestionnaireTopicInsertedFromNavigation = new HashSet<EvaluationQuestionnaireTopic>();
+            EvaluationQuestionnaireTopicUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireTopic>();
             EvaluationSelfInsertedFromNavigation = new HashSet<EvaluationSelf>();
-            EvaluationSelfQuestionnaireInsertedFromNavigation = new HashSet<EvaluationSelfQuestionnaire>();
-            EvaluationSelfQuestionnaireUpdatedFromNavigation = new HashSet<EvaluationSelfQuestionnaire>();
             EvaluationSelfUpdatedFromNavigation = new HashSet<EvaluationSelf>();
             EvaluationStatusInsertedFromNavigation = new HashSet<EvaluationStatus>();
             EvaluationStatusUpdatedFromNavigation = new HashSet<EvaluationStatus>();
-            EvaluationStudentsDocumentInsertedFromNavigation = new HashSet<EvaluationStudentsDocument>();
-            EvaluationStudentsDocumentUpdatedFromNavigation = new HashSet<EvaluationStudentsDocument>();
             EvaluationStudentsInsertedFromNavigation = new HashSet<EvaluationStudents>();
-            EvaluationStudentsQuestionnaireInsertedFromNavigation = new HashSet<EvaluationStudentsQuestionnaire>();
-            EvaluationStudentsQuestionnaireUpdatedFromNavigation = new HashSet<EvaluationStudentsQuestionnaire>();
             EvaluationStudentsUpdatedFromNavigation = new HashSet<EvaluationStudents>();
             EvaluationTypeInsertedFromNavigation = new HashSet<EvaluationType>();
             EvaluationTypeUpdatedFromNavigation = new HashSet<EvaluationType>();
@@ -116,26 +114,24 @@ namespace HRMS.Data.General
         public virtual ICollection<DocumentType> DocumentTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<EducationLevelType> EducationLevelTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<EducationLevelType> EducationLevelTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationDocument> EvaluationDocumentInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationDocument> EvaluationDocumentUpdatedFromNavigation { get; set; }
         public virtual ICollection<Evaluation> EvaluationInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationManagerDocument> EvaluationManagerDocumentInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationManagerDocument> EvaluationManagerDocumentUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManagerInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationManagerQuestionnaire> EvaluationManagerQuestionnaireInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationManagerQuestionnaire> EvaluationManagerQuestionnaireUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManagerUpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationSelfDocument> EvaluationSelfDocumentInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationSelfDocument> EvaluationSelfDocumentUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumericalInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumericalUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptionalInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOptionInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOptionUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptionalUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopicInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopicUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationSelf> EvaluationSelfInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationSelfQuestionnaire> EvaluationSelfQuestionnaireInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationSelfQuestionnaire> EvaluationSelfQuestionnaireUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationSelf> EvaluationSelfUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatusInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatusUpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudentsDocument> EvaluationStudentsDocumentInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudentsDocument> EvaluationStudentsDocumentUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStudents> EvaluationStudentsInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudentsQuestionnaire> EvaluationStudentsQuestionnaireInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudentsQuestionnaire> EvaluationStudentsQuestionnaireUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStudents> EvaluationStudentsUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeUpdatedFromNavigation { get; set; }
