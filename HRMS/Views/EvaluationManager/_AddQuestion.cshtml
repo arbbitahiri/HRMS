@@ -18,7 +18,7 @@
         <input asp-for="EvaluationIde" type="hidden"/>
 
         <div class="row">
-            <div class="col-md-4 form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="QuestionTypeId" class="required"></label>
                 <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
                 <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
@@ -28,21 +28,26 @@
                 <input asp-for="Question" type="text" class="form-control"/>
                 <span asp-validation-for="Question" class="text-danger"></span>
             </div>
-            <div id="rpt_options" data-repeater-list data-limit="8" class="col-md-12 repeater d-none">
-                <div class="row">
-                    <div class="col-md-8">
-                        <label name="option">@Resource.Option</label>
-                        <input type="text" name="option" class="form-control"/>
-                        <span name="option" class="text-danger"></span>
+            <div id="rpt_options" class="col-md-12 d-none">
+                <div data-repeater-list="" data-limit="8" class="row repeater">
+                    <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
+                        <div class="col-md-8">
+                            <label name="option">@Resource.Option</label>
+                            <input type="text" name="option" class="form-control"/>
+                            <span name="option" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label name="option" style="visibility: hidden;"></label><br />
+                            <div class="mt-2">
+                                <a data-repeater-delete class="btn btn-sm btn-danger"><i class="fas fa-trash"> @Resource.Delete</i></a>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div class="form-group row">
                     <div class="col-md-4">
-                        <label name="option" style="visibility: hidden;"></label>
-                        <a data-repeater-delete class="btn btn-sm btn-danger">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                        <a data-repeater-create class="btn btn-sm btn-primary">
-                            <i class="fas fa-plus"></i>
-                        </a>
+                        <a data-repeater-create class="btn btn-sm btn-primary"><i class="fas fa-plus"> @Resource.Add</i></a>
                     </div>
                 </div>
             </div>
@@ -95,7 +100,8 @@
             show: function() {
                 var limitCount = $(this).parents(".repeater").data("limit");
                 var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
-
+                //var limitCount = $('#rpt_options').data("limit");
+                //var itemCount = $(this).find("div[data-repeater-item]").length;
                 if (limitCount) {
                     if (itemCount <= limitCount) {
                         $(this).slideDown();
@@ -111,12 +117,15 @@
                 }
             },
             hide: function(deleteElement) {
+                //var limitCount = $('#rpt_options').data("limit");
+                //var itemCount = $('#rpt_options').find("div[data-repeater-item]").length;
                 var limitCount = $(this).parents(".repeater").data("limit");
                 var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
+
                 $(this).slideUp(deleteElement);
 
                 if (itemCount <= limitCount) {
-                    $(".repeater input[data-repeater-create]").hide("slow");
+                    $(".repeater input[data-repeater-create]").show("slow");
                 }
             }
         });
