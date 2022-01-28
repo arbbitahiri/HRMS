@@ -26,6 +26,31 @@
 
 <div class="flex-row-fluid">
     <div class="card" style="box-shadow: none !important;">
+        <div class="card-body">
+            <div class="slider-green" disabled="disabled">
+                <div class="slider slider-horizontal" id="" style="width: 100%;">
+                    <div class="slider-track" style="width: 100%;">
+                    </div>
+                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 0%;" aria-valuenow="-200" tabindex="0"></div>
+                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 20%;" aria-valuenow="-120" tabindex="0"></div>
+                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 40%;" aria-valuenow="-40" tabindex="0"></div>
+                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 60%;" aria-valuenow="40" tabindex="0"></div>
+                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 80%;" aria-valuenow="120" tabindex="0"></div>
+                    <div class="slider-handle max-slider-handle round" role="slider" style="left: 100%;" aria-valuenow="200" tabindex="0"></div>
+                </div>
+            </div>
+            <p>
+                <small class="text-muted" style="position: absolute; left: 0%">@Resource.DontKnow</small>
+                <small class="text-muted" style="position: absolute; left: 17%">@Resource.DontAgreeAll</small>
+                <small class="text-muted" style="position: absolute; left: 38%">@Resource.DontAgree</small>
+                <small class="text-muted" style="position: absolute; left: 55%">@Resource.AgreeNorDisagree</small>
+                <small class="text-muted" style="position: absolute; left: 78%">@Resource.Agree</small>
+                <small class="text-muted" style="position: absolute; left: 97%">@Resource.AgreeTotally</small>
+            </p>
+        </div>
+    </div>
+
+    <div class="card" style="box-shadow: none !important;">
         <div class="card-header border-0">
             <div class="card-title align-items-start flex-column">
                 <span class="text-dark text-lg">@Model.EvaluationDetails.Firstname @Model.EvaluationDetails.Lastname</span> <br />
@@ -215,7 +240,7 @@
         function change_option(ide) {
             $.post('@Url.Action("TopicAnswer", "EvaluationManager")', {
                 ide: ide,
-                txt: $('textarea#' + ide)
+                txt: $('textarea#' + ide).val(),
                 "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
             }, function(data) {
                 handle_success(data, SubmitPathType.NORELOAD, "");
@@ -242,14 +267,14 @@
         }
 
         function add_question(ide) {
-            $('#modal-default').find('.modal-content').load('@Url.Action("_AddQuestion", "EvaluationManager")?ide=' + ide, function () {
-                $('#modal-default').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddQuestion", "EvaluationManager")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 
         function edit_question(ide) {
-            $('#modal-default').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")?ide=' + ide, function () {
-                $('#modal-default').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 

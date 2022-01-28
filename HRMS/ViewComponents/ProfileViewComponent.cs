@@ -1,6 +1,8 @@
 ﻿using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models.Home.SideProfile;
+using HRMS.Utilities;
+using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -26,7 +28,13 @@ public class ProfileViewComponent : ViewComponent
                 Name = $"{a.FirstName} {a.LastName}",
                 ProfileImage = a.ProfileImage ?? null,
                 Username = a.UserName,
-                Roles = null
+                Mode = (TemplateMode)a.Mode,
+                Roles = a.RealRoleUser.Select(a => new ProfileRoles
+                {
+                    RoleIde = CryptoSecurity.Encrypt(a.RoleId),
+                    Name = a.Role.Name,
+                    Title = user.Language == LanguageEnum.Albanian ? a.Role.NameSq : a.Role.NameEn
+                }).ToList()
             }).FirstOrDefaultAsync();
 
         return View(sideProfile);

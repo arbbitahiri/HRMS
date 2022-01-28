@@ -22,6 +22,8 @@ namespace HRMS.Data.General
             EvaluationInsertedFromNavigation = new HashSet<Evaluation>();
             EvaluationManagerInsertedFromNavigation = new HashSet<EvaluationManager>();
             EvaluationManagerUpdatedFromNavigation = new HashSet<EvaluationManager>();
+            EvaluationQuestionTypeInsertedFromNavigation = new HashSet<EvaluationQuestionType>();
+            EvaluationQuestionTypeUpdatedFromNavigation = new HashSet<EvaluationQuestionType>();
             EvaluationQuestionnaireNumericalInsertedFromNavigation = new HashSet<EvaluationQuestionnaireNumerical>();
             EvaluationQuestionnaireNumericalUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireNumerical>();
             EvaluationQuestionnaireOptionalInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptional>();
@@ -119,6 +121,8 @@ namespace HRMS.Data.General
         public virtual ICollection<Evaluation> EvaluationInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManagerInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManagerUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionType> EvaluationQuestionTypeInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionType> EvaluationQuestionTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumericalInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumericalUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptionalInsertedFromNavigation { get; set; }

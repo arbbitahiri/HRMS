@@ -7631,3 +7631,52 @@ for details on configuring this project to bundle and minify static web assets. 
         .symbol-list .symbol:last-child {
             margin-right: 0
         }
+
+
+
+.repeater .repeater-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap
+}
+
+    .repeater .repeater-row > input {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1
+    }
+
+    .repeater .repeater-row .repeater-close {
+        background-color: transparent;
+        border: none
+    }
+
+    .repeater .repeater-row .form-text {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%
+    }
+
+.repeater .repeater-item {
+    position: relative
+}
+
+    .repeater .repeater-item .btn-icon {
+        height: auto
+    }
+
+    .repeater .repeater-item:first-child .form-control {
+        border-top-right-radius: .25rem;
+        border-bottom-right-radius: .25rem
+    }
+
+    .repeater .repeater-item:first-child .input-group-append {
+        display: none
+    }
+
+.repeater .repeater-close-align-right {
+    position: absolute;
+    top: 0;
+    right: 0
+}

@@ -30,6 +30,7 @@ namespace HRMS.Data.General
         public virtual DbSet<Evaluation> Evaluation { get; set; }
         public virtual DbSet<EvaluationDocument> EvaluationDocument { get; set; }
         public virtual DbSet<EvaluationManager> EvaluationManager { get; set; }
+        public virtual DbSet<EvaluationQuestionType> EvaluationQuestionType { get; set; }
         public virtual DbSet<EvaluationQuestionnaireNumerical> EvaluationQuestionnaireNumerical { get; set; }
         public virtual DbSet<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptional { get; set; }
         public virtual DbSet<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOption { get; set; }
@@ -556,6 +557,42 @@ namespace HRMS.Data.General
                     .WithMany(p => p.EvaluationManagerUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
                     .HasConstraintName("FK_EvaluationManager_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<EvaluationQuestionType>(entity =>
+            {
+                entity.Property(e => e.EvaluationQuestionTypeId).HasColumnName("EvaluationQuestionTypeID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.NameEn)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("NameEN");
+
+                entity.Property(e => e.NameSq)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("NameSQ");
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionTypeInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EvaluationQuestionType_EvaluationQuestionType_Inserted");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.EvaluationQuestionTypeUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_EvaluationQuestionType_EvaluationQuestionType_Updated");
             });
 
             modelBuilder.Entity<EvaluationQuestionnaireNumerical>(entity =>

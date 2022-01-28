@@ -1,6 +1,10 @@
 ﻿@using HRMS.Models.Home.SideProfile
 @model SideProfile
 @{
+    UserModel user = (UserModel)ViewData["User"];
+    var currentRole = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").FirstOrDefault();
+
+    var mode = user.Mode == TemplateMode.Dark ? "checked='checked'" : "";
 }
 
 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" role="menu" id="quick_profile">
@@ -9,17 +13,42 @@
 
         <p>
             @Model.Name
-            <small>@Model.Username</small>
+            <small class="text-muted">@Model.Username</small>
         </p>
     </li>
 
-    <li class="user-body">
-        <div class="row">
-            <div class="col-12 text-center">
-                @Resource.ChangeRole
-            </div>
-        </div>
+    <li class="user-body" style="border-radius: 0px;">
+        <label>@Resource.DarkMode</label><br/>
+        <input data-switch="true" style="cursor: pointer; width: 100%"
+            id="ch_change_mode" type="checkbox" @mode
+            data-size="xs" data-toggle="switchbutton" data-height="75"
+            data-on-text="@Resource.ON" data-off-text="@Resource.OFF"
+            data-on-color="dark" data-off-color="default" onchange="change_mode(this)" />
     </li>
+
+    @if (Model.Roles.Count > 1)
+    {
+        <li class="user-body" style="border-radius: 0px;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    @Resource.ChangeRole
+                    @foreach (var role in Model.Roles)
+                    {
+                        var check = role.Name == currentRole.Value ? "checked" : "";
+                        <div class="d-flex justify-content-between my-2 border p-2 rounded h-40px">
+                            <div class="font-size-h5 font-weight-bolder">
+                                @role.Title
+                            </div>
+                            <div class="icheck-primary">
+                                <input name="group1" @check type="radio" value="role.RoleIde" id="@role.Name" class="with-gap" onchange="change_role(CSS.escape('@role.RoleIde'))">
+                                <label for="@role.Name"></label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </li>
+    }
 
     <li class="user-footer">
         <a href="/Identity/Account/Manage" class="btn btn-default btn-flat">@Resource.Profile</a>

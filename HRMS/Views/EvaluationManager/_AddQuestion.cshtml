@@ -1,4 +1,139 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HRMS.Models.EvaluationManager
+@model ManageQuestion
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddQuestion</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="AddQuestion" asp-controller="EvaluationManager" id="frm_add_question" method="post" data-ajax="true" data-ajax-success="success_create">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="EvaluationIde" type="hidden"/>
+
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label asp-for="QuestionTypeId" class="required"></label>
+                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
+                <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="Question" class="required"></label>
+                <input asp-for="Question" type="text" class="form-control"/>
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+            <div id="rpt_options" data-repeater-list data-limit="8" class="col-md-12 repeater d-none">
+                <div class="row">
+                    <div class="col-md-8">
+                        <label name="option">@Resource.Option</label>
+                        <input type="text" name="option" class="form-control"/>
+                        <span name="option" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label name="option" style="visibility: hidden;"></label>
+                        <a data-repeater-delete class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        <a data-repeater-create class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="kt_description" class="col-md-12 form-group d-none">
+                <label asp-for="Description" class="required"></label>
+                <textarea asp-for="Description" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="button" onclick="add_questions()" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        var form = $('#frm_add_question');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            placeholder: '@Resource.Choose',
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $('#QuestionTypeId').on('change', function() {
+            if ($(this).val() == QuestionType.OPTIONAL) {
+                $('#kt_description').addClass('d-none');
+                $('#rpt_options').removeClass('d-none');
+            } else if ($(this).val() == QuestionType.TOPIC) {
+                $('#rpt_options').addClass('d-none');
+                $('#kt_description').removeClass('d-none');
+            } else {
+                $('#rpt_options').addClass('d-none');
+                $('#kt_description').addClass('d-none');
+            }
+        });
+
+        $('#rpt_options').repeater({
+            initEmpty: false,
+            isFirstItemUndeletable: true,
+            show: function() {
+                var limitCount = $(this).parents(".repeater").data("limit");
+                var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
+
+                if (limitCount) {
+                    if (itemCount <= limitCount) {
+                        $(this).slideDown();
+                    } else {
+                        $(this).remove();
+                    }
+                } else {
+                    $(this).slideDown();
+                }
+
+                if (itemCount >= limitCount) {
+                    $(".repeater input[data-repeater-create]").hide("slow");
+                }
+            },
+            hide: function(deleteElement) {
+                var limitCount = $(this).parents(".repeater").data("limit");
+                var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
+                $(this).slideUp(deleteElement);
+
+                if (itemCount <= limitCount) {
+                    $(".repeater input[data-repeater-create]").hide("slow");
+                }
+            }
+        });
+    });
+
+    function add_questions() {
+        var data = {
+            QuestionTypeId: $('#QuestionTypeId').val(),
+            Question: $('#Question').val(),
+            OptionsIds: $('#rpt_options').repeaterVal()[""],
+            Description: $('#Description').val(),
+        };
+
+        $.post('@Url.Action("AddQuestion", "EvaluationManager")', {
+            create: data
+        }, function (data) {
+            handle_success(data, SubmitPathType.RELOAD, "");
+        });
+    }
+</script>

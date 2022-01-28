@@ -29,4 +29,6 @@ public interface IDDLRepository
     Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang);
 
     Task<List<SelectListItem>> StatusTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> EvaluationQuestionTypes(LanguageEnum lang);
 }

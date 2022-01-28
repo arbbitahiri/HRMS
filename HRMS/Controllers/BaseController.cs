@@ -337,18 +337,24 @@ public class BaseController : Controller
         return Json(list);
     }
 
+    /// <summary>
+    /// Method to get first 10 staff with specified name
+    /// </summary>
+    /// <param name="name">Can be first or last name, email or username</param>
+    /// <returns>First 10 staff with the specified condition</returns>
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "List of staff for select list")]
     public async Task<IActionResult> GetStaff(string name)
     {
-        var list = await db.AspNetUsers
-            .Where(a => a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
+        var list = await db.Staff
+            .Include(a => a.User)
+            .Where(a => a.FirstName.Contains(name) || a.LastName.Contains(name))
             .Take(10)
             .Select(a => new Select2
             {
-                id = a.Id,
+                id = a.StaffId.ToString(),
                 text = $"{a.FirstName} {a.LastName}",
-                image = a.ProfileImage,
+                image = a.User.ProfileImage,
                 initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
             }).ToListAsync();
         return Json(list);

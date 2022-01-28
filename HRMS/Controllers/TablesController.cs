@@ -41,7 +41,8 @@ public class TablesController : BaseController
             new TableName() { Table = LookUpTable.Profession, Title = Resource.ProfessionType },
             new TableName() { Table = LookUpTable.Staff, Title = Resource.StaffType },
             new TableName() { Table = LookUpTable.Status, Title = Resource.StatusType },
-            new TableName() { Table = LookUpTable.Department, Title = Resource.Department }
+            new TableName() { Table = LookUpTable.Department, Title = Resource.Department },
+            new TableName() { Table = LookUpTable.EvaluationQuestion, Title = Resource.EvaluationQuestionType }
         };
 
         return PartialView(tables);
@@ -130,6 +131,15 @@ public class TablesController : BaseController
                     Active = a.Active
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataDepartment, Table = table, Title = title });
+            case LookUpTable.EvaluationQuestion:
+                var dataQuestion = await db.EvaluationQuestionType.Select(a => new DataList
+                {
+                    Ide = CryptoSecurity.Encrypt(a.EvaluationQuestionTypeId),
+                    NameSQ = a.NameSq,
+                    NameEN = a.NameEn,
+                    Active = (bool)a.Active
+                }).ToListAsync();
+                return PartialView(new TableData() { DataList = dataQuestion, Table = table, Title = title });
             default:
                 var dataDefault = await db.DocumentType.Select(a => new DataList
                 {
@@ -252,6 +262,17 @@ public class TablesController : BaseController
                 });
                 await db.SaveChangesAsync();
                 return Json(error);
+            case LookUpTable.EvaluationQuestion:
+                db.EvaluationQuestionType.Add(new EvaluationQuestionType
+                {
+                    NameSq = create.NameSQ,
+                    NameEn = create.NameEN,
+                    Active = true,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+                await db.SaveChangesAsync();
+                return Json(error);
             default:
                 return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
@@ -357,6 +378,17 @@ public class TablesController : BaseController
                         Title = title
                     }).FirstOrDefaultAsync();
                 return PartialView(dataDepartment);
+            case LookUpTable.EvaluationQuestion:
+                var dataQuestion = await db.EvaluationQuestionType
+                    .Where(a => a.EvaluationQuestionTypeId == id)
+                    .Select(a => new CreateData
+                    {
+                        Ide = CryptoSecurity.Encrypt(a.EvaluationQuestionTypeId),
+                        NameSQ = a.NameSq,
+                        NameEN = a.NameEn,
+                        Title = title
+                    }).FirstOrDefaultAsync();
+                return PartialView(dataQuestion);
             default:
                 return PartialView();
         }
@@ -380,7 +412,6 @@ public class TablesController : BaseController
                 var documentType = await db.DocumentType.FirstOrDefaultAsync(a => a.DocumentTypeId == id);
                 documentType.NameSq = edit.NameSQ;
                 documentType.NameEn = edit.NameEN;
-                documentType.Active = edit.Active;
                 documentType.UpdatedDate = DateTime.Now;
                 documentType.UpdatedFrom = user.Id;
                 documentType.UpdatedNo = documentType.UpdatedNo.HasValue ? ++documentType.UpdatedNo : documentType.UpdatedNo = 1;
@@ -390,7 +421,6 @@ public class TablesController : BaseController
                 var educationLevelType = await db.EducationLevelType.FirstOrDefaultAsync(a => a.EducationLevelTypeId == id);
                 educationLevelType.NameSq = edit.NameSQ;
                 educationLevelType.NameEn = edit.NameEN;
-                educationLevelType.Active = edit.Active;
                 educationLevelType.UpdatedDate = DateTime.Now;
                 educationLevelType.UpdatedFrom = user.Id;
                 educationLevelType.UpdatedNo = educationLevelType.UpdatedNo.HasValue ? ++educationLevelType.UpdatedNo : educationLevelType.UpdatedNo = 1;
@@ -400,7 +430,6 @@ public class TablesController : BaseController
                 var evaluationType = await db.EvaluationType.FirstOrDefaultAsync(a => a.EvaluationTypeId == id);
                 evaluationType.NameSq = edit.NameSQ;
                 evaluationType.NameEn = edit.NameEN;
-                evaluationType.Active = edit.Active;
                 evaluationType.UpdatedDate = DateTime.Now;
                 evaluationType.UpdatedFrom = user.Id;
                 evaluationType.UpdatedNo = evaluationType.UpdatedNo.HasValue ? ++evaluationType.UpdatedNo : evaluationType.UpdatedNo = 1;
@@ -410,7 +439,6 @@ public class TablesController : BaseController
                 var holidayType = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
                 holidayType.NameSq = edit.NameSQ;
                 holidayType.NameEn = edit.NameEN;
-                holidayType.Active = edit.Active;
                 holidayType.UpdatedDate = DateTime.Now;
                 holidayType.UpdatedFrom = user.Id;
                 holidayType.UpdatedNo = holidayType.UpdatedNo.HasValue ? ++holidayType.UpdatedNo : holidayType.UpdatedNo = 1;
@@ -421,7 +449,6 @@ public class TablesController : BaseController
                 professionType.NameSq = edit.NameSQ;
                 professionType.NameEn = edit.NameEN;
                 professionType.Code = edit.OtherData;
-                professionType.Active = edit.Active;
                 professionType.UpdatedDate = DateTime.Now;
                 professionType.UpdatedFrom = user.Id;
                 professionType.UpdatedNo = professionType.UpdatedNo.HasValue ? ++professionType.UpdatedNo : professionType.UpdatedNo = 1;
@@ -431,7 +458,6 @@ public class TablesController : BaseController
                 var staffType = await db.StaffType.FirstOrDefaultAsync(a => a.StaffTypeId == id);
                 staffType.NameSq = edit.NameSQ;
                 staffType.NameEn = edit.NameEN;
-                staffType.Active = edit.Active;
                 staffType.UpdatedDate = DateTime.Now;
                 staffType.UpdatedFrom = user.Id;
                 staffType.UpdatedNo = staffType.UpdatedNo.HasValue ? ++staffType.UpdatedNo : staffType.UpdatedNo = 1;
@@ -441,7 +467,6 @@ public class TablesController : BaseController
                 var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusTypeId == id);
                 statusType.NameSq = edit.NameSQ;
                 statusType.NameEn = edit.NameEN;
-                statusType.Active = edit.Active;
                 statusType.UpdatedDate = DateTime.Now;
                 statusType.UpdatedFrom = user.Id;
                 statusType.UpdatedNo = statusType.UpdatedNo.HasValue ? ++statusType.UpdatedNo : statusType.UpdatedNo = 1;
@@ -452,10 +477,18 @@ public class TablesController : BaseController
                 department.NameSq = edit.NameSQ;
                 department.NameEn = edit.NameEN;
                 department.Code = edit.OtherData;
-                department.Active = edit.Active;
                 department.UpdatedDate = DateTime.Now;
                 department.UpdatedFrom = user.Id;
                 department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
+                await db.SaveChangesAsync();
+                return Json(error);
+            case LookUpTable.EvaluationQuestion:
+                var question = await db.EvaluationQuestionType.FirstOrDefaultAsync(a => a.EvaluationQuestionTypeId == id);
+                question.NameSq = edit.NameSQ;
+                question.NameEn = edit.NameEN;
+                question.UpdatedDate = DateTime.Now;
+                question.UpdatedFrom = user.Id;
+                question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
                 await db.SaveChangesAsync();
                 return Json(error);
             default:
@@ -471,7 +504,7 @@ public class TablesController : BaseController
     [Description("Arb Tahiri", "Action to delete data from a lookup table.")]
     public async Task<IActionResult> Delete(LookUpTable table, string ide, bool active)
     {
-        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully };
+        var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully };
 
         var id = CryptoSecurity.Decrypt<int>(ide);
 
@@ -539,6 +572,14 @@ public class TablesController : BaseController
                 department.UpdatedDate = DateTime.Now;
                 department.UpdatedFrom = user.Id;
                 department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
+                await db.SaveChangesAsync();
+                return Json(error);
+            case LookUpTable.EvaluationQuestion:
+                var question = await db.EvaluationQuestionType.FirstOrDefaultAsync(a => a.EvaluationQuestionTypeId == id);
+                question.Active = active;
+                question.UpdatedDate = DateTime.Now;
+                question.UpdatedFrom = user.Id;
+                question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
                 await db.SaveChangesAsync();
                 return Json(error);
             default:

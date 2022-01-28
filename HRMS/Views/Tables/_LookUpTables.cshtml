@@ -12,7 +12,7 @@
             @foreach (var table in Model)
             {
                 <li class="nav-item">
-                    <a id="@((int)table.Table)" onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer;">
+                    <a id="@((int)table.Table)" onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer; border-radius: 0px;">
                         @table.Title
                     </a>
                 </li>

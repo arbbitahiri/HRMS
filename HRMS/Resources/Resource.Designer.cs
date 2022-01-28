@@ -304,6 +304,33 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pajtohem.
+        /// </summary>
+        public static string Agree {
+            get {
+                return ResourceManager.GetString("Agree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to As nuk pajtohem/as pajtohem.
+        /// </summary>
+        public static string AgreeNorDisagree {
+            get {
+                return ResourceManager.GetString("AgreeNorDisagree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pajtohem plotësisht.
+        /// </summary>
+        public static string AgreeTotally {
+            get {
+                return ResourceManager.GetString("AgreeTotally", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SQ.
         /// </summary>
         public static string AL {
@@ -691,11 +718,20 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E errët.
+        ///   Looks up a localized string similar to Errët.
         /// </summary>
         public static string Dark {
             get {
                 return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark mode.
+        /// </summary>
+        public static string DarkMode {
+            get {
+                return ResourceManager.GetString("DarkMode", resourceCulture);
             }
         }
         
@@ -849,6 +885,33 @@ namespace HRMS.Resources {
         public static string DocumentType {
             get {
                 return ResourceManager.GetString("DocumentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk pajtohem.
+        /// </summary>
+        public static string DontAgree {
+            get {
+                return ResourceManager.GetString("DontAgree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk pajtohem aspak.
+        /// </summary>
+        public static string DontAgreeAll {
+            get {
+                return ResourceManager.GetString("DontAgreeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk e di/nuk kam përgjigje.
+        /// </summary>
+        public static string DontKnow {
+            get {
+                return ResourceManager.GetString("DontKnow", resourceCulture);
             }
         }
         
@@ -1047,6 +1110,15 @@ namespace HRMS.Resources {
         public static string Evaluation {
             get {
                 return ResourceManager.GetString("Evaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lloji pyetjes për vlerësim.
+        /// </summary>
+        public static string EvaluationQuestionType {
+            get {
+                return ResourceManager.GetString("EvaluationQuestionType", resourceCulture);
             }
         }
         
@@ -1438,7 +1510,7 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E ndriçuar.
+        ///   Looks up a localized string similar to Ndriçuar.
         /// </summary>
         public static string Light {
             get {
@@ -1915,11 +1987,29 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to JO.
+        /// </summary>
+        public static string OFF {
+            get {
+                return ResourceManager.GetString("OFF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Në rregull.
         /// </summary>
         public static string Okay {
             get {
                 return ResourceManager.GetString("Okay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PO.
+        /// </summary>
+        public static string ON {
+            get {
+                return ResourceManager.GetString("ON", resourceCulture);
             }
         }
         
@@ -1947,6 +2037,24 @@ namespace HRMS.Resources {
         public static string OpenFor {
             get {
                 return ResourceManager.GetString("OpenFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opsioni.
+        /// </summary>
+        public static string Option {
+            get {
+                return ResourceManager.GetString("Option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opsionet.
+        /// </summary>
+        public static string Options {
+            get {
+                return ResourceManager.GetString("Options", resourceCulture);
             }
         }
         
@@ -2158,6 +2266,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lloji pyetjes.
+        /// </summary>
+        public static string QuestionType {
+            get {
+                return ResourceManager.GetString("QuestionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numri vlerësimit.
         /// </summary>
         public static string RateNumber {
@@ -2280,6 +2397,15 @@ namespace HRMS.Resources {
         public static string RoleAddedSuccess {
             get {
                 return ResourceManager.GetString("RoleAddedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Është ndryshuar grupi i qasjes me sukses. Tani të gjitha veprimet do të kryhen në rolin e {0}!.
+        /// </summary>
+        public static string RoleChangedSuccess {
+            get {
+                return ResourceManager.GetString("RoleChangedSuccess", resourceCulture);
             }
         }
         
@@ -2739,6 +2865,15 @@ namespace HRMS.Resources {
         public static string TemplateMode {
             get {
                 return ResourceManager.GetString("TemplateMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ka ndodhur një gabim. Provoni përsëri më vonë!.
+        /// </summary>
+        public static string ThereWasAnError {
+            get {
+                return ResourceManager.GetString("ThereWasAnError", resourceCulture);
             }
         }
         

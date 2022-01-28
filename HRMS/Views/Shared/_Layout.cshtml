@@ -163,12 +163,14 @@
     <script src="~/assets/dist/js/adminlte.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/daterangepicker/daterangepicker.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/repeater.js" asp-append-version="true"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
     <script>
         var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';
         var cultureShort = '@System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2)';
+        $("#ch_change_mode").bootstrapSwitch();
 
         //$(document).idleTimer(@conf["AppSettings:Timeout"]);
         //$(document).on("idle.idleTimer", function (event, elem, obj) {

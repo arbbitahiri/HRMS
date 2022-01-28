@@ -1119,4 +1119,49 @@
   <data name="ThirdStepEvaluation" xml:space="preserve">
     <value>3. Documents</value>
   </data>
+  <data name="Agree" xml:space="preserve">
+    <value>Agree</value>
+  </data>
+  <data name="AgreeNorDisagree" xml:space="preserve">
+    <value>Neither agree nor disagree</value>
+  </data>
+  <data name="AgreeTotally" xml:space="preserve">
+    <value>Totally agree</value>
+  </data>
+  <data name="DarkMode" xml:space="preserve">
+    <value>Dark mode</value>
+  </data>
+  <data name="DontAgree" xml:space="preserve">
+    <value>Do not agree</value>
+  </data>
+  <data name="DontAgreeAll" xml:space="preserve">
+    <value>Do not agree at all</value>
+  </data>
+  <data name="DontKnow" xml:space="preserve">
+    <value>Do not know</value>
+  </data>
+  <data name="EvaluationQuestionType" xml:space="preserve">
+    <value>Evaluation question type</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="QuestionType" xml:space="preserve">
+    <value>Question type</value>
+  </data>
+  <data name="RoleChangedSuccess" xml:space="preserve">
+    <value>Role has been changed successfully. From now on, all actions will be in role {0}!</value>
+  </data>
+  <data name="ThereWasAnError" xml:space="preserve">
+    <value>There was an error. Try again later!</value>
+  </data>
 </root>

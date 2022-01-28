@@ -39,6 +39,12 @@ const EvaluationType = {
     SELF: 3
 }
 
+const QuestionType = {
+    NUMERICAL: 1,
+    OPTIONAL: 2,
+    TOPIC: 3
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
@@ -133,3 +139,20 @@ $(document).on('invalid-form.validate', 'form', function () {
 $(document).ajaxStart(function () {
     Pace.restart();
 });
+
+function change_role(ide) {
+    $.post('/Home/ChangeRole', {
+        ide: ide
+    }, function (data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    });
+}
+
+function change_mode(e) {
+    $.post('/Home/ChangeMode', {
+        mode: $(e).is(':checked')
+    }, function (data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+        $('[aria-labelledby="swal2-title"]').css('width', '12em');
+    });
+}

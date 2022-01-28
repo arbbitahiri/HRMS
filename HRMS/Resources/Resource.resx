@@ -370,7 +370,7 @@
     <value>Fjalëkalimi aktual</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>E errët</value>
+    <value>Errët</value>
   </data>
   <data name="Female" xml:space="preserve">
     <value>Femër</value>
@@ -388,7 +388,7 @@
     <value>Mbiemri</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>E ndriçuar</value>
+    <value>Ndriçuar</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Shkyçu</value>
@@ -1127,5 +1127,50 @@
   </data>
   <data name="YouHaveEvaluationProcessing" xml:space="preserve">
     <value>Nuk mund të vendosni vlerësimin, pasi që keni një vlerësim në proces!</value>
+  </data>
+  <data name="Agree" xml:space="preserve">
+    <value>Pajtohem</value>
+  </data>
+  <data name="AgreeNorDisagree" xml:space="preserve">
+    <value>As nuk pajtohem/as pajtohem</value>
+  </data>
+  <data name="AgreeTotally" xml:space="preserve">
+    <value>Pajtohem plotësisht</value>
+  </data>
+  <data name="DarkMode" xml:space="preserve">
+    <value>Dark mode</value>
+  </data>
+  <data name="DontAgree" xml:space="preserve">
+    <value>Nuk pajtohem</value>
+  </data>
+  <data name="DontAgreeAll" xml:space="preserve">
+    <value>Nuk pajtohem aspak</value>
+  </data>
+  <data name="DontKnow" xml:space="preserve">
+    <value>Nuk e di/nuk kam përgjigje</value>
+  </data>
+  <data name="EvaluationQuestionType" xml:space="preserve">
+    <value>Lloji pyetjes për vlerësim</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>JO</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>PO</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>Opsioni</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Opsionet</value>
+  </data>
+  <data name="QuestionType" xml:space="preserve">
+    <value>Lloji pyetjes</value>
+  </data>
+  <data name="RoleChangedSuccess" xml:space="preserve">
+    <value>Është ndryshuar grupi i qasjes me sukses. Tani të gjitha veprimet do të kryhen në rolin e {0}!</value>
+  </data>
+  <data name="ThereWasAnError" xml:space="preserve">
+    <value>Ka ndodhur një gabim. Provoni përsëri më vonë!</value>
   </data>
 </root>

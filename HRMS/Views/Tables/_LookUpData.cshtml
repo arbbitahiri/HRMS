@@ -34,7 +34,6 @@
 
     function render_tbl(data) {
         var bonusColumn = ('@Model.Table' == '@LookUpTable.Profession') || ('@Model.Table' == '@LookUpTable.Rate') || ('@Model.Table' == '@LookUpTable.Department') ? true : false;
-        console.log(bonusColumn);
 
         $('#tbl_table_data').DataTable({
             destroy: true,
@@ -71,8 +70,8 @@
                     data: function(row, type, set) {
                         var isActive = row.active ? "checked" : "";
                         return '<label class="icheck-success d-inline">' +
-                               '<input style="cursor: pointer;" type="checkbox" id="ch_isActive" ' + isActive + '>' +
-                               '<label for="ch_isActive" onclick="change_active(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\')"></label>' +
+                               '<input style="cursor: pointer;" type="checkbox" id="' + row.ide + '" ' + isActive + '>' +
+                               '<label for="' + row.ide + '" onclick="change_active(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\', this)"></label>' +
                                '</label>';
                     }
                 },
@@ -89,11 +88,11 @@
         });
     }
 
-    function change_active(ide, tbl) {
+    function change_active(ide, tbl, e) {
         $.post('@Url.Action("Delete", "Tables")', {
             table: tbl,
             ide: ide,
-            active: !$('#ch_isActive').is(":checked"),
+            active: !$('input[id="' + ide + '"]').is(":checked"),
             "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
         }, function(data) {
             handle_success(data, SubmitPathType.NORELOAD, "");

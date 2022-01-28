@@ -56,7 +56,8 @@ public enum LookUpTable
     Rate = 6,
     Staff = 7,
     Status = 8,
-    Department = 9
+    Department = 9,
+    EvaluationQuestion = 10
 }
 
 public enum StatusTypeEnum
@@ -82,4 +83,11 @@ public enum EvaluationTypeEnum
     Manager = 1,
     Student = 2,
     Self = 3
+}
+
+public enum QuestionType
+{
+    Numerical = 1,
+    Optional = 2,
+    Topic = 3
 }
