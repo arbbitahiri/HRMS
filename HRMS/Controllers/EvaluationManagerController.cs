@@ -52,7 +52,7 @@ public class EvaluationManagerController : BaseController
         {
             var data = await db.EvaluationManager.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
                 .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
-                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                    && a.EvaluationManagerId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new Register
                 {
                     EvaluationIde = ide,

@@ -1,9 +1,9 @@
-﻿using HRMS.Utilities;
-
-namespace HRMS.Models.Evaluation;
+﻿namespace HRMS.Models.Evaluation;
 
 public class Search
 {
-    public EvaluationTypeEnum EvaluationType { get; set; }
-    public string Name { get; set; }
+    public int? EvaluationTypeId { get; set; }
+    public int? StatusTypeId { get; set; }
+    public int? StaffId { get; set; }
+    public string Title { get; set; }
 }
