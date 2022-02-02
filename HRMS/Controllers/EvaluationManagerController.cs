@@ -37,7 +37,7 @@ public class EvaluationManagerController : BaseController
 
     [HttpGet, Authorize(Policy = "71:c")]
     [Description("Arb Tahiri", "Form to register/edit manager evaluation. First step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Index(string ide)
+    public async Task<IActionResult> Index(string ide, MethodType? method)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -58,7 +58,7 @@ public class EvaluationManagerController : BaseController
                     EvaluationIde = ide,
                     EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
                     InsertedDate = a.InsertedDate,
-                    MethodType = MethodType.Put,
+                    MethodType = method ?? MethodType.Put,
                     ManagerId = a.ManagerId,
                     StaffId = a.StaffId,
                     Title = a.Title,
@@ -102,7 +102,7 @@ public class EvaluationManagerController : BaseController
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = evaluation.EvaluationId,
-            StatusTypeId = (int)StatusTypeEnum.Processing,
+            StatusTypeId = (int)StatusTypeEnum.Unprocessed,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -164,7 +164,7 @@ public class EvaluationManagerController : BaseController
             {
                 EvaluationQuestionnaireTopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireTopicId),
                 Question = a.Question,
-                Answer = a.Answer
+                Answer = a.Answer ?? ""
             }).ToListAsync();
 
         var questionVM = new QuestionVM
@@ -195,14 +195,53 @@ public class EvaluationManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        db.Add(new EvaluationQuestionnaireNumerical
+        if (create.QuestionTypeId == (int)QuestionType.Optional)
         {
-            EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-            Question = create.Question,
-            Active = true,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        });
+            if (create.Options == null)
+            {
+                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            }
+
+            db.EvaluationQuestionnaireOptional.Add(new EvaluationQuestionnaireOptional
+            {
+                EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
+                Question = create.Question,
+                EvaluationQuestionnaireOptionalOption = create.Options.Select(a => new EvaluationQuestionnaireOptionalOption
+                {
+                    OptionTitle = a.Title,
+                    Checked = false,
+                    Active = true,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                }).ToList(),
+                Active = true,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
+        else if (create.QuestionTypeId == (int)QuestionType.Topic)
+        {
+            db.EvaluationQuestionnaireTopic.Add(new EvaluationQuestionnaireTopic
+            {
+                EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
+                Question = create.Question,
+                Active = true,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
+        else
+        {
+            db.EvaluationQuestionnaireNumerical.Add(new EvaluationQuestionnaireNumerical
+            {
+                EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
+                Question = create.Question,
+                Active = true,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
+
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
@@ -212,7 +251,7 @@ public class EvaluationManagerController : BaseController
     #region => Edit
 
     [HttpGet, Authorize(Policy = "71q:e"), Description("Arb Tahiri", "Form to edit a question.")]
-    public async Task<IActionResult> _EditQuestion(string ide)
+    public async Task<IActionResult> _EditQuestion(string ide, MethodType method)
     {
         var question = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
@@ -340,7 +379,7 @@ public class EvaluationManagerController : BaseController
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
                 DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
-                //Description = a.Description,
+                Description = a.Description,
                 Active = a.Active
             }).ToListAsync();
 
@@ -463,12 +502,16 @@ public class EvaluationManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        var checkIfAnswered = await db.EvaluationQuestionnaireNumerical.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && !a.Grade.HasValue)
+            && !await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.Checked)
+            && await db.EvaluationQuestionnaireTopic.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrEmpty(a.Answer));
+
         if (method == MethodType.Post)
         {
-            db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+            db.EvaluationStatus.Add(new EvaluationStatus
             {
-                StaffId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = (int)StatusTypeEnum.Finished,
+                EvaluationId = CryptoSecurity.Decrypt<int>(ide),
+                StatusTypeId = checkIfAnswered ? (int)StatusTypeEnum.PendingForAnswers : (int)StatusTypeEnum.Finished,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });

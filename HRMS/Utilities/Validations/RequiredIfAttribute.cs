@@ -3,16 +3,17 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Resources;
 
 namespace HRMS.Utilities.Validations;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-public class IfRequiredAttribute : ValidationAttribute, IClientModelValidator
+public class RequiredIfAttribute : ValidationAttribute, IClientModelValidator
 {
     private readonly string dependsOn;
     private readonly string valueOn;
 
-    public IfRequiredAttribute(string dependsOn, string valueOn)
+    public RequiredIfAttribute(string dependsOn, string valueOn)
     {
         this.dependsOn = dependsOn;
         this.valueOn = valueOn;
@@ -20,8 +21,9 @@ public class IfRequiredAttribute : ValidationAttribute, IClientModelValidator
 
     public void AddValidation(ClientModelValidationContext context)
     {
+        var resourceManager = new ResourceManager(typeof(Resource));
         MergeAttribute(context.Attributes, "data-val", "true");
-        MergeAttribute(context.Attributes, "data-val-requiredif", Resource.RequiredField);
+        MergeAttribute(context.Attributes, "data-val-requiredif", resourceManager.GetString(ErrorMessageResourceName));
         MergeAttribute(context.Attributes, "data-val-requiredif-value", dependsOn);
         MergeAttribute(context.Attributes, "data-val-requiredif-valueon", valueOn);
     }
@@ -48,7 +50,8 @@ public class IfRequiredAttribute : ValidationAttribute, IClientModelValidator
         {
             if (propertyValue && string.IsNullOrWhiteSpace(value?.ToString()))
             {
-                return new ValidationResult(Resource.RequiredField);
+                var resourceManager = new ResourceManager(typeof(Resource));
+                return new ValidationResult(resourceManager.GetString(ErrorMessageResourceName));
             }
         }
         return ValidationResult.Success;

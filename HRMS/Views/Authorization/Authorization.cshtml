@@ -58,12 +58,6 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            if (sessionStorage.getItem("tab_auth") == null) {
-                $('#tab_menu').trigger("click");
-            } else {
-                $('#' + sessionStorage.getItem("tab_auth")).trigger("click");
-            }
-
             $(".select2").select2({
                 width: "100%",
                 language: {
@@ -81,7 +75,11 @@
 
             $('#btn_search').on('click', function() {
                 $('#kt_authorization').removeClass('d-none');
-                $('#frm_search_role').submit();
+                if (sessionStorage.getItem("tab_auth") == null) {
+                    $('#tab_menu').trigger("click");
+                } else {
+                    $('#' + sessionStorage.getItem("tab_auth")).trigger("click");
+                }
             });
         });
 

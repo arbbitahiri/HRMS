@@ -1,4 +1,118 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HRMS.Models.Evaluation
+@model IEnumerable<EvaluationList>
+
+<div class="row mb-3">
+    <div class="col-md-8">
+        <h5 class="font-weight-bolder">@Resource.SearchResult</h5>
+    </div>
+</div>
+
+<table id="tbl_students_evaluation" class="table table-striped w-100 table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Resource.Title</th>
+            <th>@Resource.Description</th>
+            <th>@Resource.NumberOfStudents</th>
+            <th>@Resource.StatusType</th>
+            <th>@Resource.NumberOfQuestions</th>
+            <th>@Resource.NumberOfAnswers</th>
+            <th>@Resource.InsertedDate</th>
+            <th data-orderable="false">@Resource.Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        render_students_tbl(@Json.Serialize(Model));
+    });
+
+    function render_students_tbl(data) {
+        var rowCount = 1;
+        $('#tbl_students_evaluation').DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 15,
+            data: data,
+            deferRender: true,
+            columnDefs: [
+                { className: "w5 vertikal", targets: [0, 3, 8] },
+                { className: "w10 vertikal", targets: [5, 6] },
+                { className: "w15 vertikal", targets: [4, 7] },
+                { className: "w20 vertikal", targets: [1, 2] }
+            ],
+            order: [[0, "asc"]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return row.title ?? "///";
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        var desc = '///';
+                        if (row.description != null) {
+                            if (row.description.length > 80) {
+                                desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else {
+                                desc = row.description ?? "///";
+                            }
+                        }
+                        return desc;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.students == 0 ? "///" : row.students;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.statusType ?? "///";
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.questions == 0 ? "///" : row.questions;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.answers == 0 ? "///" : row.answers;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var date = new Date(Date.parse(row.insertedDate));
+                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var dropdown = '<div class="input-group-prepend">' +
+                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu" role="menu">';
+                            if (user_role === 'Manager') {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                                            '<button type="button" class="dropdown-item" onclick="delete_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                                        '</div></div>';
+                        return dropdown;
+                    }
+                }
+            ]
+        });
+    }
+</script>

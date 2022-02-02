@@ -403,6 +403,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Përgjigjet.
+        /// </summary>
+        public static string Answers {
+            get {
+                return ResourceManager.GetString("Answers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gjurmët e sistemit.
         /// </summary>
         public static string ApplicationLogs {
@@ -1195,6 +1204,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plotëso.
+        /// </summary>
+        public static string FillIn {
+            get {
+                return ResourceManager.GetString("FillIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nota finale.
         /// </summary>
         public static string FinalGrade {
@@ -1386,9 +1404,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Data insertimit.
         /// </summary>
-        public static string InsertDate {
+        public static string InsertedDate {
             get {
-                return ResourceManager.GetString("InsertDate", resourceCulture);
+                return ResourceManager.GetString("InsertedDate", resourceCulture);
             }
         }
         
@@ -1555,6 +1573,51 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista e vlerësimeve nga menaxheri.
+        /// </summary>
+        public static string ListOfEvaluationManager {
+            get {
+                return ResourceManager.GetString("ListOfEvaluationManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e vetëvlerësimeve.
+        /// </summary>
+        public static string ListOfEvaluationSelf {
+            get {
+                return ResourceManager.GetString("ListOfEvaluationSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e vlerësimeve nga studentët.
+        /// </summary>
+        public static string ListOfEvaluationStudents {
+            get {
+                return ResourceManager.GetString("ListOfEvaluationStudents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista pyetjeve me numër.
+        /// </summary>
+        public static string ListOfNumericalQuestions {
+            get {
+                return ResourceManager.GetString("ListOfNumericalQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista pyetjeve me opsione.
+        /// </summary>
+        public static string ListOfOptionQuestions {
+            get {
+                return ResourceManager.GetString("ListOfOptionQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e kualifikimeve.
         /// </summary>
         public static string ListOfQualifications {
@@ -1596,6 +1659,15 @@ namespace HRMS.Resources {
         public static string ListOfSubjects {
             get {
                 return ResourceManager.GetString("ListOfSubjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista pyetjeve me temë të lirë.
+        /// </summary>
+        public static string ListOfTopicQuestions {
+            get {
+                return ResourceManager.GetString("ListOfTopicQuestions", resourceCulture);
             }
         }
         
@@ -1713,6 +1785,15 @@ namespace HRMS.Resources {
         public static string Male {
             get {
                 return ResourceManager.GetString("Male", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menaxheri.
+        /// </summary>
+        public static string Manager {
+            get {
+                return ResourceManager.GetString("Manager", resourceCulture);
             }
         }
         
@@ -1974,6 +2055,42 @@ namespace HRMS.Resources {
         public static string November {
             get {
                 return ResourceManager.GetString("November", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përgjigjeve.
+        /// </summary>
+        public static string NumberOfAnswers {
+            get {
+                return ResourceManager.GetString("NumberOfAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri pyetjeve.
+        /// </summary>
+        public static string NumberOfQuestions {
+            get {
+                return ResourceManager.GetString("NumberOfQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri studentëve.
+        /// </summary>
+        public static string NumberOfStudents {
+            get {
+                return ResourceManager.GetString("NumberOfStudents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ju lutem përshkruani sa pajtoheni apo nuk pajtoheni me deklaratat më poshtë. Rrumbullakëso 0- nuk e di/nuk kam përgjigje, 1- Nuk pajtohem aspak, 2- Nuk pajtohem, 3- As nuk pajtohem/as pajtohem, 4- Pajtohem, 5- Pajtohem plotësisht.
+        /// </summary>
+        public static string NumericalQuestionsINFO {
+            get {
+                return ResourceManager.GetString("NumericalQuestionsINFO", resourceCulture);
             }
         }
         
@@ -2253,6 +2370,15 @@ namespace HRMS.Resources {
         public static string Questions {
             get {
                 return ResourceManager.GetString("Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pyetje.
+        /// </summary>
+        public static string Questions1 {
+            get {
+                return ResourceManager.GetString("Questions1", resourceCulture);
             }
         }
         
@@ -2595,6 +2721,15 @@ namespace HRMS.Resources {
         public static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stafi.
+        /// </summary>
+        public static string Staff {
+            get {
+                return ResourceManager.GetString("Staff", resourceCulture);
             }
         }
         

@@ -71,7 +71,7 @@ function handle_success(data, path_type, path) {
             showConfirmButton: false
         }).then((result) => {
             if (path_type == SubmitPathType.RELOAD) {
-                window.location.reload();
+                window.location.reload(true);
             } else if (path_type == SubmitPathType.PATH) {
                 window.location.href = path;
             } else { }
@@ -144,6 +144,7 @@ function change_role(ide) {
     $.post('/Home/ChangeRole', {
         ide: ide
     }, function (data) {
+        window.location.href = '/Home/Index';
         handle_success(data, SubmitPathType.RELOAD, "");
     });
 }

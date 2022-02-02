@@ -672,7 +672,7 @@
   <data name="Has" xml:space="preserve">
     <value>Ka</value>
   </data>
-  <data name="InsertDate" xml:space="preserve">
+  <data name="InsertedDate" xml:space="preserve">
     <value>Data insertimit</value>
   </data>
   <data name="QualificationsLower" xml:space="preserve">
@@ -1172,5 +1172,50 @@
   </data>
   <data name="ThereWasAnError" xml:space="preserve">
     <value>Ka ndodhur një gabim. Provoni përsëri më vonë!</value>
+  </data>
+  <data name="FillIn" xml:space="preserve">
+    <value>Plotëso</value>
+  </data>
+  <data name="ListOfEvaluationManager" xml:space="preserve">
+    <value>Lista e vlerësimeve nga menaxheri</value>
+  </data>
+  <data name="ListOfEvaluationSelf" xml:space="preserve">
+    <value>Lista e vetëvlerësimeve</value>
+  </data>
+  <data name="ListOfEvaluationStudents" xml:space="preserve">
+    <value>Lista e vlerësimeve nga studentët</value>
+  </data>
+  <data name="NumberOfAnswers" xml:space="preserve">
+    <value>Numri përgjigjeve</value>
+  </data>
+  <data name="NumberOfQuestions" xml:space="preserve">
+    <value>Numri pyetjeve</value>
+  </data>
+  <data name="NumberOfStudents" xml:space="preserve">
+    <value>Numri studentëve</value>
+  </data>
+  <data name="Answers" xml:space="preserve">
+    <value>Përgjigjet</value>
+  </data>
+  <data name="ListOfNumericalQuestions" xml:space="preserve">
+    <value>Lista pyetjeve me numër</value>
+  </data>
+  <data name="ListOfOptionQuestions" xml:space="preserve">
+    <value>Lista pyetjeve me opsione</value>
+  </data>
+  <data name="ListOfTopicQuestions" xml:space="preserve">
+    <value>Lista pyetjeve me temë të lirë</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Menaxheri</value>
+  </data>
+  <data name="NumericalQuestionsINFO" xml:space="preserve">
+    <value>Ju lutem përshkruani sa pajtoheni apo nuk pajtoheni me deklaratat më poshtë. Rrumbullakëso 0- nuk e di/nuk kam përgjigje, 1- Nuk pajtohem aspak, 2- Nuk pajtohem, 3- As nuk pajtohem/as pajtohem, 4- Pajtohem, 5- Pajtohem plotësisht</value>
+  </data>
+  <data name="Questions1" xml:space="preserve">
+    <value>Pyetje</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Stafi</value>
   </data>
 </root>

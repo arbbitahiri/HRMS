@@ -1,8 +1,11 @@
 ﻿@using HRMS.Models.EvaluationManager
 @model ManageQuestion
 @inject IDDLRepository repo
+
 @{
     UserModel user = (UserModel)ViewData["User"];
+    @* @inject IHttpContextAccessor HttpContextAccessor *@
+    @* string ide = HttpContextAccessor.HttpContext.Session.GetString($"20-ide"); *@
 }
 
 <div class="modal-header">
@@ -32,12 +35,12 @@
                 <div data-repeater-list="" data-limit="8" class="row repeater">
                     <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
                         <div class="col-md-8">
-                            <label name="option">@Resource.Option</label>
-                            <input type="text" name="option" class="form-control"/>
-                            <span name="option" class="text-danger"></span>
+                            <label name="Title" class="required">@Resource.Option</label>
+                            <input type="text" name="Title" class="form-control"/>
+                            <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
                         </div>
                         <div class="col-md-4">
-                            <label name="option" style="visibility: hidden;"></label><br />
+                            <label name="Title" style="visibility: hidden;"></label><br />
                             <div class="mt-2">
                                 <a data-repeater-delete class="btn btn-sm btn-danger"><i class="fas fa-trash"> @Resource.Delete</i></a>
                             </div>
@@ -50,11 +53,6 @@
                         <a data-repeater-create class="btn btn-sm btn-primary"><i class="fas fa-plus"> @Resource.Add</i></a>
                     </div>
                 </div>
-            </div>
-            <div id="kt_description" class="col-md-12 form-group d-none">
-                <label asp-for="Description" class="required"></label>
-                <textarea asp-for="Description" rows="2" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -83,14 +81,11 @@
 
         $('#QuestionTypeId').on('change', function() {
             if ($(this).val() == QuestionType.OPTIONAL) {
-                $('#kt_description').addClass('d-none');
                 $('#rpt_options').removeClass('d-none');
             } else if ($(this).val() == QuestionType.TOPIC) {
                 $('#rpt_options').addClass('d-none');
-                $('#kt_description').removeClass('d-none');
             } else {
                 $('#rpt_options').addClass('d-none');
-                $('#kt_description').addClass('d-none');
             }
         });
 
@@ -100,8 +95,6 @@
             show: function() {
                 var limitCount = $(this).parents(".repeater").data("limit");
                 var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
-                //var limitCount = $('#rpt_options').data("limit");
-                //var itemCount = $(this).find("div[data-repeater-item]").length;
                 if (limitCount) {
                     if (itemCount <= limitCount) {
                         $(this).slideDown();
@@ -117,8 +110,6 @@
                 }
             },
             hide: function(deleteElement) {
-                //var limitCount = $('#rpt_options').data("limit");
-                //var itemCount = $('#rpt_options').find("div[data-repeater-item]").length;
                 var limitCount = $(this).parents(".repeater").data("limit");
                 var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
 
@@ -133,16 +124,24 @@
 
     function add_questions() {
         var data = {
+            EvaluationIde : $('#EvaluationIde').val(),
             QuestionTypeId: $('#QuestionTypeId').val(),
             Question: $('#Question').val(),
-            OptionsIds: $('#rpt_options').repeaterVal()[""],
-            Description: $('#Description').val(),
+            Options: $('#rpt_options').repeaterVal()[""]
         };
 
-        $.post('@Url.Action("AddQuestion", "EvaluationManager")', {
-            create: data
-        }, function (data) {
-            handle_success(data, SubmitPathType.RELOAD, "");
-        });
+        if ($('#frm_add_question').valid()) {
+            if ($('#rpt_options').repeaterVal()[""] == null) {
+                $('#rpt_option').removeClass('d-none');
+            } else {
+                $('#rpt_option').addClass('d-none');
+                $.post('@Url.Action("AddQuestion", "EvaluationManager")', {
+                    create: data,
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                }, function (data) {
+                    handle_success(data, SubmitPathType.RELOAD, "");
+                });
+            }
+        }
     }
 </script>

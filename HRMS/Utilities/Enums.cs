@@ -1,5 +1,17 @@
 ﻿namespace HRMS.Utilities;
 
+public enum StatusTypeEnum
+{
+    Approved = 1,
+    Rejected = 2,
+    Pending = 3,
+    Processing = 4,
+    Finished = 5,
+    Deleted = 6,
+    Unprocessed = 7,
+    PendingForAnswers = 8
+}
+
 public enum ErrorStatus
 {
     Success = 1,
@@ -60,16 +72,6 @@ public enum LookUpTable
     EvaluationQuestion = 10
 }
 
-public enum StatusTypeEnum
-{
-    Approved = 1,
-    Rejected = 2,
-    Pending = 3,
-    Processing = 4,
-    Finished = 5,
-    Deleted = 6
-}
-
 public enum HolidayTypeEnum
 {
     Annual = 1,
@@ -90,4 +92,14 @@ public enum QuestionType
     Numerical = 1,
     Optional = 2,
     Topic = 3
+}
+
+public enum NumericalRate
+{
+    DontKnow = 0,
+    DontAgreeAtAll = 1,
+    DontAgree = 2,
+    AgreeNorDisagree = 3,
+    Agree = 4,
+    AgreeAtAll = 5
 }

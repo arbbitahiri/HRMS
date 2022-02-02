@@ -109,7 +109,6 @@
             $.validator.unobtrusive.parse(form);
 
             $('#kt_in_process').on('expanded.lte.cardwidget', function() {
-                console.log("te dhenat")
                 $('#kt_load_tbl').load('@Url.Action("InProcess", "Staff")');
             });
 

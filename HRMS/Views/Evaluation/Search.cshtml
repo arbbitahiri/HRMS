@@ -1,0 +1,222 @@
+﻿@using HRMS.Models.Evaluation
+@model Search
+@inject IDDLRepository repo
+@{
+    ViewData["Title"] = Resource.Evaluation;
+    UserModel user = (UserModel)ViewData["User"];
+
+    var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">@Resource.SearchParameters</h5>
+        <div class="card-tools">
+            <a asp-action="Index" asp-controller="Evaluation" class="btn btn-primary">@Resource.Add</a>
+        </div>
+    </div>
+    <form asp-action="_SearchManager" asp-controller="Evaluation" id="frm_search_evaluation" method="post" data-ajax="true" data-ajax-method="POST" data-ajax-update="#kt_manager">
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label asp-for="EvaluationTypeId"></label>
+                    <select asp-for="EvaluationTypeId" asp-items="await repo.EvaluationTypes(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="StatusTypeId"></label>
+                    <select asp-for="StatusTypeId" asp-items="await repo.StatusTypes(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="StaffId"></label>
+                    <select asp-for="StaffId" class="form-control"></select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <button id="btn_search" type="button" class="btn btn-primary">@Resource.Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card card-primary card-outline card-outline-tabs d-none" id="kt_evaluation">
+    <div class="card-header p-0 border-bottom-0">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="manager_tab()" id="tab_manager" href="#kt_manager" data-toggle="tab">@Resource.ListOfEvaluationManager</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_tab()" id="tab_student" href="#kt_student" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="self_tab()" id="tab_self" href="#kt_self" data-toggle="tab">@Resource.ListOfEvaluationSelf</a></li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane" id="kt_manager">
+            </div>
+            <div class="tab-pane" id="kt_student">
+            </div>
+            <div class="tab-pane" id="kt_self">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_search_evaluation');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            $(".select2").select2({
+                width: "100%",
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                },
+                placeholder: '@Resource.Choose',
+            });
+
+            change_staff();
+
+            $('#btn_search').on('click', function() {
+                $('#kt_evaluation').removeClass('d-none');
+                if (sessionStorage.getItem("tab_eva") == null) {
+                    $('#tab_manager').click();
+                } else {
+                    $('#' + sessionStorage.getItem("tab_eva")).click();
+                }
+            });
+            $('#btn_search').click();
+        });
+
+        var user_role = '@role';
+
+        function manager_tab() {
+            sessionStorage.setItem("tab_eva", "tab_manager");
+            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchManager")');
+            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_manager');
+            $('#frm_search_evaluation').addClass('noLoading');
+            $('#frm_search_evaluation').submit();
+            $('#frm_search_evaluation').removeClass('noLoading');
+        }
+
+        function student_tab() {
+            sessionStorage.setItem("tab_eva", "tab_student");
+            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchStudent")');
+            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_student');
+            $('#frm_search_evaluation').addClass('noLoading');
+            $('#frm_search_evaluation').submit();
+            $('#frm_search_evaluation').removeClass('noLoading');
+        }
+
+        function self_tab() {
+            sessionStorage.setItem("tab_eva", "tab_self");
+            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchSelf")');
+            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_self');
+            $('#frm_search_evaluation').addClass('noLoading');
+            $('#frm_search_evaluation').submit();
+            $('#frm_search_evaluation').removeClass('noLoading');
+        }
+
+        function change_staff() {
+            $('#StaffId').select2({
+                width: "100%",
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                    searching: function() {
+                        return '@Html.Raw(Resource.Searching)';
+                    },
+                },
+                ajax: {
+                    url: '@Url.Action("GetStaff")',
+                    type: 'post',
+                    datatype: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    catch: true
+                },
+                placeholder: '@Resource.Choose',
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
+            });
+        }
+
+        function formatRepo(repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var $container = $(
+                '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+            );
+            return $container;
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.text;
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function edit_evaluation(ide, controller) {
+            window.location.href = '/' + controller + '/Index?ide=' + ide;
+        }
+
+        function delete_evaluation(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteDocument)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("Delete", "Evaluation")', {
+                        ide: ide,
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
+                    });
+                }
+            });
+        }
+
+        function details_evaluation(ide) {
+
+        }
+    </script>
+}

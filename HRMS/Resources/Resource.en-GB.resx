@@ -117,233 +117,104 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LoginHRMS" xml:space="preserve">
-    <value>Login - HRMS Riinvest</value>
+  <data name="AccessChangedSuccessfully" xml:space="preserve">
+    <value>Access changed successfully!</value>
   </data>
   <data name="AccessDenied" xml:space="preserve">
     <value>Access is denied!</value>
   </data>
-  <data name="InputEmailToResetPassword" xml:space="preserve">
-    <value>Write your email down to send the reset link</value>
-  </data>
-  <data name="Choose" xml:space="preserve">
-    <value>Choose</value>
-  </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
-  </data>
-  <data name="DataRegisteredSuccessfully" xml:space="preserve">
-    <value>Data registered successfully!</value>
-  </data>
-  <data name="DataUpdatedSuccessfully" xml:space="preserve">
-    <value>Data updated successfully!</value>
-  </data>
-  <data name="DataDeletedSuccessfully" xml:space="preserve">
-    <value>Data deleted successfully!</value>
-  </data>
-  <data name="InvalidData" xml:space="preserve">
-    <value>The data is not valid!</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>Success</value>
-  </data>
-  <data name="AL" xml:space="preserve">
-    <value>AL</value>
-  </data>
-  <data name="AddSubMenu" xml:space="preserve">
-    <value>Add submenu</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="Albanian" xml:space="preserve">
-    <value>Albanian</value>
-  </data>
-  <data name="TypePasswordToSession" xml:space="preserve">
-    <value>Type password to retrieve your session</value>
-  </data>
-  <data name="SessionTimedOut" xml:space="preserve">
-    <value>Session timed out</value>
-  </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
-  </data>
-  <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
-  </data>
-  <data name="Policy" xml:space="preserve">
-    <value>Policy</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="OrdinalNumber" xml:space="preserve">
-    <value>Ordinal number</value>
-  </data>
-  <data name="Submenu" xml:space="preserve">
-    <value>Submenu</value>
-  </data>
-  <data name="Okay" xml:space="preserve">
-    <value>Okay</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Action" xml:space="preserve">
-    <value>Method</value>
-  </data>
-  <data name="MenuSubmenu" xml:space="preserve">
-    <value>Menu and submenu</value>
-  </data>
-  <data name="Menu" xml:space="preserve">
-    <value>Menu</value>
-  </data>
-  <data name="AsDiffUser" xml:space="preserve">
-    <value>As different user</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
-  <data name="AccountLocked" xml:space="preserve">
-    <value>Account is locked</value>
-  </data>
-  <data name="ListSubMenus" xml:space="preserve">
-    <value>List of submenus</value>
-  </data>
-  <data name="ListMenus" xml:space="preserve">
-    <value>List menus</value>
-  </data>
-  <data name="LoginInstead" xml:space="preserve">
-    <value>Login instead?</value>
-  </data>
-  <data name="LoginToStart" xml:space="preserve">
-    <value>Login to start your session.</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
-  </data>
-  <data name="Controller" xml:space="preserve">
-    <value>Controller</value>
-  </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="ThisAccountLocked" xml:space="preserve">
-    <value>This account is locked, please try again later.</value>
-  </data>
-  <data name="RequiredField" xml:space="preserve">
-    <value>This field is required!</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="ForgotPassword" xml:space="preserve">
-    <value>Forgot your password?</value>
-  </data>
-  <data name="HasSubMenu" xml:space="preserve">
-    <value>Has submenu</value>
-  </data>
-  <data name="HasAccess" xml:space="preserve">
-    <value>Has access</value>
-  </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>Please wait...</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Icon" xml:space="preserve">
-    <value>Icon</value>
-  </data>
-  <data name="OpenFor" xml:space="preserve">
-    <value>Open for</value>
-  </data>
-  <data name="Role" xml:space="preserve">
-    <value>Role</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="EN" xml:space="preserve">
-    <value>EN</value>
-  </data>
-  <data name="NameSq" xml:space="preserve">
-    <value>Name albanian</value>
-  </data>
-  <data name="SubMenuName" xml:space="preserve">
-    <value>Submenu name</value>
-  </data>
-  <data name="MenuName" xml:space="preserve">
-    <value>Menu name</value>
-  </data>
-  <data name="NameEn" xml:space="preserve">
-    <value>Name english</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="SendEmail" xml:space="preserve">
-    <value>Send email</value>
-  </data>
-  <data name="ClaimPolicy" xml:space="preserve">
-    <value>Claim policy</value>
-  </data>
-  <data name="AccessChangedSuccessfully" xml:space="preserve">
-    <value>Access changed successfully!</value>
-  </data>
-  <data name="Authorization" xml:space="preserve">
-    <value>Authorization</value>
-  </data>
-  <data name="AuthorizationsForMenus" xml:space="preserve">
-    <value>Authorizations for menus</value>
-  </data>
-  <data name="Authorizations" xml:space="preserve">
-    <value>Authorizations</value>
-  </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="AreYouSure" xml:space="preserve">
-    <value>Are you sure?</value>
-  </data>
-  <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
-    <value>Are you sure you want to delete submenu?</value>
-  </data>
-  <data name="SureYouWantToDeleteMenu" xml:space="preserve">
-    <value>Are you sure you want to delete menu?</value>
-  </data>
-  <data name="AddMenu" xml:space="preserve">
-    <value>Add menu</value>
-  </data>
-  <data name="Active" xml:space="preserve">
-    <value>Active</value>
-  </data>
-  <data name="ErrorProcessingData" xml:space="preserve">
-    <value>An error occurred while processing the data! Please try again later.</value>
-  </data>
   <data name="AccessDeniedLong" xml:space="preserve">
     <value>You are not authorized to access this page!</value>
+  </data>
+  <data name="AccountCreatedSuccessfully" xml:space="preserve">
+    <value>Account created successfully!</value>
   </data>
   <data name="AccountData" xml:space="preserve">
     <value>Account data</value>
   </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Account is locked</value>
+  </data>
+  <data name="AccountLockedSuccess" xml:space="preserve">
+    <value>Account locked successfully!</value>
+  </data>
+  <data name="AccountNotLocked" xml:space="preserve">
+    <value>Account not locked</value>
+  </data>
+  <data name="AccountNotUnlocked" xml:space="preserve">
+    <value>Account not unlocked</value>
+  </data>
+  <data name="AccountUnlockedSuccess" xml:space="preserve">
+    <value>Account unlocked successfully!</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddDepartment" xml:space="preserve">
+    <value>Add department</value>
+  </data>
+  <data name="AddDocument" xml:space="preserve">
+    <value>Add document</value>
+  </data>
+  <data name="AddHoliday" xml:space="preserve">
+    <value>Add holiday</value>
+  </data>
+  <data name="AddMenu" xml:space="preserve">
+    <value>Add menu</value>
+  </data>
+  <data name="AddQualification" xml:space="preserve">
+    <value>Add qualification</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
   <data name="Address" xml:space="preserve">
     <value>Address</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Add role</value>
+  </data>
+  <data name="AddRoleFor" xml:space="preserve">
+    <value>Add role - {0}</value>
+  </data>
+  <data name="AddSubject" xml:space="preserve">
+    <value>Add subject</value>
+  </data>
+  <data name="AddSubMenu" xml:space="preserve">
+    <value>Add submenu</value>
+  </data>
+  <data name="AddSubMenuFor" xml:space="preserve">
+    <value>Add submenu - {0}</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Add user</value>
+  </data>
+  <data name="Agree" xml:space="preserve">
+    <value>Agree</value>
+  </data>
+  <data name="AgreeNorDisagree" xml:space="preserve">
+    <value>Neither agree nor disagree</value>
+  </data>
+  <data name="AgreeTotally" xml:space="preserve">
+    <value>Totally agree</value>
+  </data>
+  <data name="AL" xml:space="preserve">
+    <value>AL</value>
+  </data>
+  <data name="Albanian" xml:space="preserve">
+    <value>Albanian</value>
+  </data>
+  <data name="AllowedFileFormats" xml:space="preserve">
+    <value>Allowed file formats: {0}</value>
   </data>
   <data name="AllowedFormatImage" xml:space="preserve">
     <value>Allowed formats for image</value>
@@ -351,11 +222,65 @@
   <data name="AllowNotification" xml:space="preserve">
     <value>Allow notification</value>
   </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="Answered" xml:space="preserve">
+    <value>Answered</value>
+  </data>
+  <data name="AnsweredIn" xml:space="preserve">
+    <value>Answered in</value>
+  </data>
+  <data name="Answers" xml:space="preserve">
+    <value>Answers</value>
+  </data>
+  <data name="ApplicationLogs" xml:space="preserve">
+    <value>Application logs</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="AsDiffUser" xml:space="preserve">
+    <value>As different user</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Authorization" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
+  <data name="Authorizations" xml:space="preserve">
+    <value>Authorizations</value>
+  </data>
+  <data name="AuthorizationsForActions" xml:space="preserve">
+    <value>Authorizations for actions in system</value>
+  </data>
+  <data name="AuthorizationsForMenus" xml:space="preserve">
+    <value>Authorizations for menus</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Birthdate" xml:space="preserve">
+    <value>Birthdate</value>
+  </data>
   <data name="Browse" xml:space="preserve">
     <value>Ngarko</value>
   </data>
+  <data name="BruttoSalary" xml:space="preserve">
+    <value>Brutto(Gross) Salary</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="CannotRequestHoliday" xml:space="preserve">
+    <value>You cannot make a request for holiday until you finish current holiday!</value>
   </data>
   <data name="ChangeRole" xml:space="preserve">
     <value>Ndrysho grupin</value>
@@ -363,8 +288,53 @@
   <data name="CharacterLength" xml:space="preserve">
     <value>You must have at least {2} and maximum {1} characters.</value>
   </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="ChooseEvaluationType" xml:space="preserve">
+    <value>Choose evaluation type</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="ClaimPolicy" xml:space="preserve">
+    <value>Claim policy</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
   <data name="ConfirmNewPassword" xml:space="preserve">
     <value>Confirm new password!</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Controller" xml:space="preserve">
+    <value>Controller</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="CreditNumber" xml:space="preserve">
+    <value>Credit number</value>
+  </data>
+  <data name="CreditsNumber" xml:space="preserve">
+    <value>Credits number</value>
+  </data>
+  <data name="CreditType" xml:space="preserve">
+    <value>Credit type</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>Current password</value>
@@ -372,17 +342,266 @@
   <data name="Dark" xml:space="preserve">
     <value>Dark</value>
   </data>
+  <data name="DarkMode" xml:space="preserve">
+    <value>Dark mode</value>
+  </data>
+  <data name="DataDeletedSuccessfully" xml:space="preserve">
+    <value>Data deleted successfully!</value>
+  </data>
+  <data name="DataRegisteredSuccessfully" xml:space="preserve">
+    <value>Data registered successfully!</value>
+  </data>
+  <data name="DataUpdatedSuccessfully" xml:space="preserve">
+    <value>Data updated successfully!</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Department" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DescriptionEN" xml:space="preserve">
+    <value>Description english</value>
+  </data>
+  <data name="DescriptionSQ" xml:space="preserve">
+    <value>Description albanian</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="DocumentMaxFileSize" xml:space="preserve">
+    <value>Maximum document size</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="DocumentsLower" xml:space="preserve">
+    <value>documents</value>
+  </data>
+  <data name="DocumentType" xml:space="preserve">
+    <value>Document type</value>
+  </data>
+  <data name="DontAgree" xml:space="preserve">
+    <value>Do not agree</value>
+  </data>
+  <data name="DontAgreeAll" xml:space="preserve">
+    <value>Do not agree at all</value>
+  </data>
+  <data name="DontKnow" xml:space="preserve">
+    <value>Do not know</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Drop10Files" xml:space="preserve">
+    <value>Drop up to 10 documents!</value>
+  </data>
+  <data name="DropFilesHere" xml:space="preserve">
+    <value>Drop files here!</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EducationLevel" xml:space="preserve">
+    <value>Education level</value>
+  </data>
+  <data name="EducationLevelType" xml:space="preserve">
+    <value>Education level type</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExists" xml:space="preserve">
+    <value>Email exists!</value>
+  </data>
+  <data name="EmailNotValid" xml:space="preserve">
+    <value>Email is not valid!</value>
+  </data>
+  <data name="EmployeeContribution" xml:space="preserve">
+    <value>Employee contribution</value>
+  </data>
+  <data name="EmployeeContributionRange" xml:space="preserve">
+    <value>Employee contribution must be between 5% and 15%!</value>
+  </data>
+  <data name="EmployerContribution" xml:space="preserve">
+    <value>Employer contribution</value>
+  </data>
+  <data name="EmployerContributionRange" xml:space="preserve">
+    <value>Employer contribution must be between 5% and 15%!</value>
+  </data>
+  <data name="EN" xml:space="preserve">
+    <value>EN</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="EndDateVSOtherEndDate" xml:space="preserve">
+    <value>End date cannot be greater than the department end date!</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorProcessingData" xml:space="preserve">
+    <value>An error occurred while processing the data! Please try again later.</value>
+  </data>
+  <data name="Evaluated" xml:space="preserve">
+    <value>Evaluated</value>
+  </data>
+  <data name="Evaluation" xml:space="preserve">
+    <value>Evaluation</value>
+  </data>
+  <data name="EvaluationQuestionType" xml:space="preserve">
+    <value>Evaluation question type</value>
+  </data>
+  <data name="EvaluationType" xml:space="preserve">
+    <value>Evaluation type</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="ExistsStaffRole" xml:space="preserve">
+    <value>{0} {1} exists as {2}. You need to make this passive, to register then!</value>
+  </data>
+  <data name="Failure" xml:space="preserve">
+    <value>Failure</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
   <data name="Female" xml:space="preserve">
     <value>Female</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="FieldOfStudy" xml:space="preserve">
+    <value>Field of study</value>
+  </data>
+  <data name="FillIn" xml:space="preserve">
+    <value>Fill in</value>
+  </data>
+  <data name="FinalGrade" xml:space="preserve">
+    <value>Final grade</value>
   </data>
   <data name="Firstname" xml:space="preserve">
     <value>Firstname</value>
   </data>
+  <data name="FirstStepEvaluation" xml:space="preserve">
+    <value>1. Questionnaire data</value>
+  </data>
+  <data name="FirstStepStaffRegistration" xml:space="preserve">
+    <value>1. Personal data</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="FormContent" xml:space="preserve">
+    <value>Form content</value>
+  </data>
+  <data name="FourthStepStaffRegistration" xml:space="preserve">
+    <value>4. Departments &amp; Subjects</value>
+  </data>
+  <data name="FridayLetter" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
   <data name="Gender" xml:space="preserve">
     <value>Gender</value>
   </data>
+  <data name="Has" xml:space="preserve">
+    <value>Has</value>
+  </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Has access</value>
+  </data>
+  <data name="HasSubMenu" xml:space="preserve">
+    <value>Has submenu</value>
+  </data>
+  <data name="HelpingTables" xml:space="preserve">
+    <value>Helping tables</value>
+  </data>
+  <data name="HolidayReviewedSuccessfully" xml:space="preserve">
+    <value>Holiday reviewed successfully!</value>
+  </data>
+  <data name="HolidayType" xml:space="preserve">
+    <value>Holiday type</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>HTTP Method</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Incorrect password!</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="InputEmailToResetPassword" xml:space="preserve">
+    <value>Write your email down to send the reset link</value>
+  </data>
+  <data name="InsertedDate" xml:space="preserve">
+    <value>Insert date</value>
+  </data>
+  <data name="InvalidData" xml:space="preserve">
+    <value>The data is not valid!</value>
+  </data>
+  <data name="InvalidLogin" xml:space="preserve">
+    <value>Invalid login attempt. Email/username or password are incorrect!</value>
+  </data>
+  <data name="Ip" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="IsError" xml:space="preserve">
+    <value>Is error</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Last month</value>
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Lastname</value>
@@ -390,38 +609,548 @@
   <data name="Light" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="ListMenus" xml:space="preserve">
+    <value>List menus</value>
+  </data>
+  <data name="ListOfAnswers" xml:space="preserve">
+    <value>List of answers</value>
+  </data>
+  <data name="ListOfDepartments" xml:space="preserve">
+    <value>List of departments</value>
+  </data>
+  <data name="ListOfDocuments" xml:space="preserve">
+    <value>List of documents</value>
+  </data>
+  <data name="ListOfEvaluationManager" xml:space="preserve">
+    <value>List of manager evaluations</value>
+  </data>
+  <data name="ListOfEvaluationSelf" xml:space="preserve">
+    <value>List of self evaluations</value>
+  </data>
+  <data name="ListOfEvaluationStudents" xml:space="preserve">
+    <value>List of students evaluations</value>
+  </data>
+  <data name="ListOfNumericalQuestions" xml:space="preserve">
+    <value>List of numerical questions</value>
+  </data>
+  <data name="ListOfOptionQuestions" xml:space="preserve">
+    <value>List of option questions</value>
+  </data>
+  <data name="ListOfQualifications" xml:space="preserve">
+    <value>List of qualifications</value>
+  </data>
+  <data name="ListOfQuestions" xml:space="preserve">
+    <value>List of questions</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>List of roles</value>
+  </data>
+  <data name="ListOfStaffInProcessRegistration" xml:space="preserve">
+    <value>List of staff in process of registration!</value>
+  </data>
+  <data name="ListOfSubjects" xml:space="preserve">
+    <value>List of subjects</value>
+  </data>
+  <data name="ListOfTopicQuestions" xml:space="preserve">
+    <value>List of topic questions</value>
+  </data>
+  <data name="ListSubMenus" xml:space="preserve">
+    <value>List of submenus</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="LockAccount" xml:space="preserve">
+    <value>Lock account</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginHRMS" xml:space="preserve">
+    <value>Login - HRMS Riinvest</value>
+  </data>
+  <data name="LoginInstead" xml:space="preserve">
+    <value>Login instead?</value>
+  </data>
+  <data name="LoginToStart" xml:space="preserve">
+    <value>Login to start your session.</value>
+  </data>
   <data name="LogOut" xml:space="preserve">
     <value>Shkyçu</value>
+  </data>
+  <data name="LookLess" xml:space="preserve">
+    <value>Look less</value>
+  </data>
+  <data name="LookMore" xml:space="preserve">
+    <value>Look more</value>
+  </data>
+  <data name="MachineName" xml:space="preserve">
+    <value>Machine name</value>
   </data>
   <data name="Male" xml:space="preserve">
     <value>Male</value>
   </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Menaxheri</value>
+  </data>
+  <data name="ManagerEvaluation" xml:space="preserve">
+    <value>Manager evaluation</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="MaxChar10" xml:space="preserve">
+    <value>The maximum character length is 10.</value>
+  </data>
   <data name="MaxImageSize" xml:space="preserve">
     <value>Maximum allowed size for image</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="MenuName" xml:space="preserve">
+    <value>Menu name</value>
+  </data>
+  <data name="MenuSubmenu" xml:space="preserve">
+    <value>Menu and submenu</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="MinChar10" xml:space="preserve">
+    <value>The minimum character length is 10.</value>
+  </data>
+  <data name="MondayLetter" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="MustBe18YearsOld" xml:space="preserve">
+    <value>Staff employee must be 18 years or older.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NameEn" xml:space="preserve">
+    <value>Name english</value>
+  </data>
+  <data name="NameSq" xml:space="preserve">
+    <value>Name albanian</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationality</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
     <value>New password</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoAvailableDaysHoliday" xml:space="preserve">
+    <value>You do not have enough days for holiday. Remaining days: {0}.</value>
+  </data>
+  <data name="NoDocuments" xml:space="preserve">
+    <value>No documents</value>
+  </data>
+  <data name="NoQualifications" xml:space="preserve">
+    <value>No qualifications</value>
+  </data>
+  <data name="NoQuestions" xml:space="preserve">
+    <value>No questions</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="NormalizedName" xml:space="preserve">
+    <value>Normalized name</value>
+  </data>
+  <data name="NoSubjects" xml:space="preserve">
+    <value>No subjects</value>
+  </data>
+  <data name="NotAllowedGreaterDate" xml:space="preserve">
+    <value>Date greater than today is not allowed!</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="NumberOfAnswers" xml:space="preserve">
+    <value>Number of answers</value>
+  </data>
+  <data name="NumberOfQuestions" xml:space="preserve">
+    <value>Number of questions</value>
+  </data>
+  <data name="NumberOfStudents" xml:space="preserve">
+    <value>Number of students</value>
+  </data>
+  <data name="NumericalQuestionsINFO" xml:space="preserve">
+    <value>Please describe how much you agree or disagree with the statements below. Mark as checked 0- do not know / have no answer, 1- Disagree at all, 2- Disagree, 3- Neither agree/disagree, 4- Agree, 5- Strongly agree</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="Okay" xml:space="preserve">
+    <value>Okay</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="OnGoing" xml:space="preserve">
+    <value>On going</value>
+  </data>
+  <data name="OnlyNumbers" xml:space="preserve">
+    <value>Only numbers</value>
+  </data>
+  <data name="OpenFor" xml:space="preserve">
+    <value>Open for</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="OrdinalNumber" xml:space="preserve">
+    <value>Ordinal number</value>
+  </data>
+  <data name="OtherDate" xml:space="preserve">
+    <value>Other date</value>
+  </data>
+  <data name="Passive" xml:space="preserve">
+    <value>Passive</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordNotAdded" xml:space="preserve">
+    <value>Password could not be added:</value>
+  </data>
   <data name="PasswordNotMatch" xml:space="preserve">
     <value>Passwords do not match!</value>
+  </data>
+  <data name="PasswordUpdatedSuccess" xml:space="preserve">
+    <value>Password updated successfully!</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
   </data>
   <data name="PersonalData" xml:space="preserve">
     <value>Personal data</value>
   </data>
+  <data name="PersonalNumber" xml:space="preserve">
+    <value>Personal number</value>
+  </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>Phone number</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="Policy" xml:space="preserve">
+    <value>Policy</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal code</value>
+  </data>
+  <data name="ProfessionType" xml:space="preserve">
+    <value>Profession type</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="ProfileImage" xml:space="preserve">
+    <value>Profile image</value>
+  </data>
+  <data name="Qualifications" xml:space="preserve">
+    <value>Qualifications</value>
+  </data>
+  <data name="QualificationsLower" xml:space="preserve">
+    <value>qualifications</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="QuestionnaireData" xml:space="preserve">
+    <value>Questionnaire data</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Questions1" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="QuestionsLower" xml:space="preserve">
+    <value>questions</value>
+  </data>
+  <data name="QuestionType" xml:space="preserve">
+    <value>Question type</value>
+  </data>
+  <data name="RateNumber" xml:space="preserve">
+    <value>Rate number</value>
+  </data>
+  <data name="RateType" xml:space="preserve">
+    <value>Rate type</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="RemainingDays" xml:space="preserve">
+    <value>Remaining days</value>
+  </data>
+  <data name="RequestedDate" xml:space="preserve">
+    <value>Requested date</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>This field is required!</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="ReviewDate" xml:space="preserve">
+    <value>Review date</value>
+  </data>
+  <data name="ReviewedFrom" xml:space="preserve">
+    <value>Reviewed from</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="RoleAddedSuccess" xml:space="preserve">
+    <value>Role added successfully!</value>
+  </data>
+  <data name="RoleChangedSuccess" xml:space="preserve">
+    <value>Role has been changed successfully. From now on, all actions will be in role {0}!</value>
+  </data>
+  <data name="RoleExists" xml:space="preserve">
+    <value>Role exists with that name!</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="RolesAddThroughList" xml:space="preserve">
+    <value>Roles can also be added through the list of users!</value>
+  </data>
+  <data name="SalaryRange" xml:space="preserve">
+    <value>Salary must be greater than 0!</value>
+  </data>
+  <data name="SaturdayLetter" xml:space="preserve">
+    <value>Sa</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
+  <data name="SearchParameters" xml:space="preserve">
+    <value>Search parameters</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>Search result</value>
+  </data>
+  <data name="SecondStepEvaluation" xml:space="preserve">
+    <value>2. Questions and answers</value>
+  </data>
+  <data name="SecondStepStaffRegistration" xml:space="preserve">
+    <value>2. Qualifications</value>
+  </data>
+  <data name="SelfEvaluation" xml:space="preserve">
+    <value>Self evaluation</value>
+  </data>
+  <data name="SendEmail" xml:space="preserve">
+    <value>Send email</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="ServerLogs" xml:space="preserve">
+    <value>Server logs</value>
+  </data>
+  <data name="SessionTimedOut" xml:space="preserve">
+    <value>Session timed out</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+  <data name="SetPasswordFor" xml:space="preserve">
+    <value>Set password - {0}</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="StaffList" xml:space="preserve">
+    <value>Staff list</value>
+  </data>
+  <data name="StaffType" xml:space="preserve">
+    <value>Staff type</value>
+  </data>
+  <data name="StaffWithPersonalExists" xml:space="preserve">
+    <value>Staff with this personal number exists!</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="StartDateVSEndDate" xml:space="preserve">
+    <value>Starting date cannot be greater than ending date!</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="StatusType" xml:space="preserve">
+    <value>Status type</value>
+  </data>
+  <data name="StudentsEvaluation" xml:space="preserve">
+    <value>Students evaluation</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="SubjectExistsWithCode" xml:space="preserve">
+    <value>Subject exists with the written code!</value>
+  </data>
+  <data name="Subjects" xml:space="preserve">
+    <value>Subjects</value>
+  </data>
+  <data name="SubjectsLower" xml:space="preserve">
+    <value>subjects</value>
+  </data>
+  <data name="Submenu" xml:space="preserve">
+    <value>Submenu</value>
+  </data>
+  <data name="SubMenuName" xml:space="preserve">
+    <value>Submenu name</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="SundayLetter" xml:space="preserve">
+    <value>Su</value>
+  </data>
+  <data name="SureYouWantToDeleteDepartmentForStaff" xml:space="preserve">
+    <value>Are you sure you want to delete department for staff?</value>
+  </data>
+  <data name="SureYouWantToDeleteDocument" xml:space="preserve">
+    <value>Are you sure you want to delete document?</value>
+  </data>
+  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
+    <value>Are you sure you want to delete holiday?</value>
+  </data>
+  <data name="SureYouWantToDeleteMenu" xml:space="preserve">
+    <value>Are you sure you want to delete menu?</value>
+  </data>
+  <data name="SureYouWantToDeleteQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete question?</value>
+  </data>
+  <data name="SureYouWantToDeleteRole" xml:space="preserve">
+    <value>Are you sure you want to delete role?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubject" xml:space="preserve">
+    <value>Are you sure you want to delete subject?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubjectForStaff" xml:space="preserve">
+    <value>Are you sure you want to delete subject for staff?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
+    <value>Are you sure you want to delete submenu?</value>
+  </data>
+  <data name="SureYouWantToDeleteUser" xml:space="preserve">
+    <value>Are you sure you want to delete menu?</value>
+  </data>
+  <data name="SureYouWantToLockUser" xml:space="preserve">
+    <value>Are you sure you want to lock user?</value>
+  </data>
+  <data name="SureYouWantToUnlockUser" xml:space="preserve">
+    <value>Are you sure you want to unlock user?</value>
+  </data>
+  <data name="Tables" xml:space="preserve">
+    <value>Tables</value>
   </data>
   <data name="TemplateMode" xml:space="preserve">
     <value>Application mode</value>
   </data>
+  <data name="ThereWasAnError" xml:space="preserve">
+    <value>There was an error. Try again later!</value>
+  </data>
+  <data name="Thesis" xml:space="preserve">
+    <value>Thesis</value>
+  </data>
+  <data name="ThirdStepEvaluation" xml:space="preserve">
+    <value>3. Documents</value>
+  </data>
+  <data name="ThirdStepStaffRegistration" xml:space="preserve">
+    <value>3. Documents</value>
+  </data>
+  <data name="ThisAccountLocked" xml:space="preserve">
+    <value>This account is locked, please try again later.</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="ThursdayLetter" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TotalDays" xml:space="preserve">
+    <value>Total days</value>
+  </data>
+  <data name="Training" xml:space="preserve">
+    <value>Is training</value>
+  </data>
+  <data name="TuesdayLetter" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="TypePasswordToSession" xml:space="preserve">
+    <value>Type password to retrieve your session</value>
+  </data>
   <data name="UnableToLoadUser" xml:space="preserve">
     <value>Unable to load user.</value>
+  </data>
+  <data name="UnlockAccount" xml:space="preserve">
+    <value>Unlock account</value>
   </data>
   <data name="UpdateAccountData" xml:space="preserve">
     <value>Update account data</value>
@@ -441,74 +1170,17 @@
   <data name="UpdatePersonalData" xml:space="preserve">
     <value>Update personal data</value>
   </data>
-  <data name="Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="UploadDocument" xml:space="preserve">
+    <value>Upload document</value>
   </data>
-  <data name="AccountCreatedSuccessfully" xml:space="preserve">
-    <value>Account created successfully!</value>
-  </data>
-  <data name="AccountLockedSuccess" xml:space="preserve">
-    <value>Account locked successfully!</value>
-  </data>
-  <data name="AccountUnlockedSuccess" xml:space="preserve">
-    <value>Account unlocked successfully!</value>
-  </data>
-  <data name="Birthdate" xml:space="preserve">
-    <value>Birthdate</value>
-  </data>
-  <data name="AddUser" xml:space="preserve">
-    <value>Add user</value>
-  </data>
-  <data name="EmailExists" xml:space="preserve">
-    <value>Email exists!</value>
-  </data>
-  <data name="EmailNotValid" xml:space="preserve">
-    <value>Email is not valid!</value>
-  </data>
-  <data name="IncorrectPassword" xml:space="preserve">
-    <value>Incorrect password!</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>No results found</value>
-  </data>
-  <data name="OnlyNumbers" xml:space="preserve">
-    <value>Only numbers</value>
-  </data>
-  <data name="PasswordNotAdded" xml:space="preserve">
-    <value>Password could not be added:</value>
-  </data>
-  <data name="PasswordUpdatedSuccess" xml:space="preserve">
-    <value>Password updated successfully!</value>
-  </data>
-  <data name="PersonalNumber" xml:space="preserve">
-    <value>Personal number</value>
-  </data>
-  <data name="ProfileImage" xml:space="preserve">
-    <value>Profile image</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
-  </data>
-  <data name="RoleAddedSuccess" xml:space="preserve">
-    <value>Role added successfully!</value>
-  </data>
-  <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
-  </data>
-  <data name="RolesAddThroughList" xml:space="preserve">
-    <value>Roles can also be added through the list of users!</value>
-  </data>
-  <data name="SearchParameters" xml:space="preserve">
-    <value>Search parameters</value>
-  </data>
-  <data name="SearchResult" xml:space="preserve">
-    <value>Search result</value>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
   <data name="UserHasAccount" xml:space="preserve">
     <value>This user has an account!</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
   </data>
   <data name="UsernameExists" xml:space="preserve">
     <value>Username exists!</value>
@@ -516,485 +1188,14 @@
   <data name="Users" xml:space="preserve">
     <value>Users</value>
   </data>
-  <data name="Department" xml:space="preserve">
-    <value>Department</value>
-  </data>
-  <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
-  </data>
-  <data name="Qualifications" xml:space="preserve">
-    <value>Qualifications</value>
-  </data>
-  <data name="ExistsStaffRole" xml:space="preserve">
-    <value>{0} {1} exists as {2}. You need to make this passive, to register then!</value>
-  </data>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Country</value>
-  </data>
-  <data name="MaxChar10" xml:space="preserve">
-    <value>The maximum character length is 10.</value>
-  </data>
-  <data name="MinChar10" xml:space="preserve">
-    <value>The minimum character length is 10.</value>
-  </data>
-  <data name="MustBe18YearsOld" xml:space="preserve">
-    <value>Staff employee must be 18 years or older.</value>
-  </data>
-  <data name="Nationality" xml:space="preserve">
-    <value>Nationality</value>
-  </data>
-  <data name="PostalCode" xml:space="preserve">
-    <value>Postal code</value>
-  </data>
-  <data name="DocumentType" xml:space="preserve">
-    <value>Document type</value>
-  </data>
-  <data name="EducationLevelType" xml:space="preserve">
-    <value>Education level type</value>
-  </data>
-  <data name="EvaluationType" xml:space="preserve">
-    <value>Evaluation type</value>
-  </data>
-  <data name="HolidayType" xml:space="preserve">
-    <value>Holiday type</value>
-  </data>
-  <data name="ProfessionType" xml:space="preserve">
-    <value>Profession type</value>
-  </data>
-  <data name="RateType" xml:space="preserve">
-    <value>Rate type</value>
-  </data>
-  <data name="StaffType" xml:space="preserve">
-    <value>Staff type</value>
-  </data>
-  <data name="StatusType" xml:space="preserve">
-    <value>Status type</value>
-  </data>
-  <data name="Code" xml:space="preserve">
-    <value>Code</value>
-  </data>
-  <data name="Field" xml:space="preserve">
-    <value>Field</value>
-  </data>
-  <data name="HelpingTables" xml:space="preserve">
-    <value>Helping tables</value>
-  </data>
-  <data name="Key" xml:space="preserve">
-    <value>Key</value>
-  </data>
-  <data name="RateNumber" xml:space="preserve">
-    <value>Rate number</value>
-  </data>
-  <data name="Tables" xml:space="preserve">
-    <value>Tables</value>
+  <data name="Validity" xml:space="preserve">
+    <value>Validity</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Value</value>
   </data>
-  <data name="LookLess" xml:space="preserve">
-    <value>Look less</value>
-  </data>
-  <data name="LookMore" xml:space="preserve">
-    <value>Look more</value>
-  </data>
-  <data name="AddRole" xml:space="preserve">
-    <value>Add role</value>
-  </data>
-  <data name="LockAccount" xml:space="preserve">
-    <value>Lock account</value>
-  </data>
-  <data name="SetPassword" xml:space="preserve">
-    <value>Set password</value>
-  </data>
-  <data name="SureYouWantToDeleteUser" xml:space="preserve">
-    <value>Are you sure you want to delete menu?</value>
-  </data>
-  <data name="UnlockAccount" xml:space="preserve">
-    <value>Unlock account</value>
-  </data>
-  <data name="UploadDocument" xml:space="preserve">
-    <value>Upload document</value>
-  </data>
-  <data name="AddDepartment" xml:space="preserve">
-    <value>Add department</value>
-  </data>
-  <data name="AddDocument" xml:space="preserve">
-    <value>Add document</value>
-  </data>
-  <data name="AddQualification" xml:space="preserve">
-    <value>Add qualification</value>
-  </data>
-  <data name="AddSubject" xml:space="preserve">
-    <value>Add subject</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>Back</value>
-  </data>
-  <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
-  </data>
-  <data name="CreditsNumber" xml:space="preserve">
-    <value>Credits number</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="DocumentsLower" xml:space="preserve">
-    <value>documents</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>Download</value>
-  </data>
-  <data name="EducationLevel" xml:space="preserve">
-    <value>Education level</value>
-  </data>
-  <data name="End" xml:space="preserve">
-    <value>End</value>
-  </data>
-  <data name="EndDate" xml:space="preserve">
-    <value>End date</value>
-  </data>
-  <data name="FieldOfStudy" xml:space="preserve">
-    <value>Field of study</value>
-  </data>
-  <data name="FirstStepStaffRegistration" xml:space="preserve">
-    <value>1. Personal data</value>
-  </data>
-  <data name="FourthStepStaffRegistration" xml:space="preserve">
-    <value>4. Departments &amp; Subjects</value>
-  </data>
-  <data name="Has" xml:space="preserve">
-    <value>Has</value>
-  </data>
-  <data name="InsertDate" xml:space="preserve">
-    <value>Insert date</value>
-  </data>
-  <data name="QualificationsLower" xml:space="preserve">
-    <value>qualifications</value>
-  </data>
-  <data name="SecondStepStaffRegistration" xml:space="preserve">
-    <value>2. Qualifications</value>
-  </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>Start date</value>
-  </data>
-  <data name="Subject" xml:space="preserve">
-    <value>Subject</value>
-  </data>
-  <data name="SubjectsLower" xml:space="preserve">
-    <value>subjects</value>
-  </data>
-  <data name="SureYouWantToDeleteDepartmentForStaff" xml:space="preserve">
-    <value>Are you sure you want to delete department for staff?</value>
-  </data>
-  <data name="SureYouWantToDeleteDocument" xml:space="preserve">
-    <value>Are you sure you want to delete document?</value>
-  </data>
-  <data name="SureYouWantToDeleteSubjectForStaff" xml:space="preserve">
-    <value>Are you sure you want to delete subject for staff?</value>
-  </data>
-  <data name="ThirdStepStaffRegistration" xml:space="preserve">
-    <value>3. Documents</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="DescriptionEN" xml:space="preserve">
-    <value>Description english</value>
-  </data>
-  <data name="DescriptionSQ" xml:space="preserve">
-    <value>Description albanian</value>
-  </data>
-  <data name="NormalizedName" xml:space="preserve">
-    <value>Normalized name</value>
-  </data>
-  <data name="RoleExists" xml:space="preserve">
-    <value>Role exists with that name!</value>
-  </data>
-  <data name="SureYouWantToDeleteRole" xml:space="preserve">
-    <value>Are you sure you want to delete role?</value>
-  </data>
-  <data name="User" xml:space="preserve">
-    <value>User</value>
-  </data>
-  <data name="SureYouWantToLockUser" xml:space="preserve">
-    <value>Are you sure you want to lock user?</value>
-  </data>
-  <data name="SureYouWantToUnlockUser" xml:space="preserve">
-    <value>Are you sure you want to unlock user?</value>
-  </data>
-  <data name="AddRoleFor" xml:space="preserve">
-    <value>Add role - {0}</value>
-  </data>
-  <data name="AddSubMenuFor" xml:space="preserve">
-    <value>Add submenu - {0}</value>
-  </data>
-  <data name="ListOfRoles" xml:space="preserve">
-    <value>List of roles</value>
-  </data>
-  <data name="Set" xml:space="preserve">
-    <value>Set</value>
-  </data>
-  <data name="SetPasswordFor" xml:space="preserve">
-    <value>Set password - {0}</value>
-  </data>
-  <data name="NotAllowedGreaterDate" xml:space="preserve">
-    <value>Date greater than today is not allowed!</value>
-  </data>
-  <data name="StaffList" xml:space="preserve">
-    <value>Staff list</value>
-  </data>
-  <data name="ListOfDepartments" xml:space="preserve">
-    <value>List of departments</value>
-  </data>
-  <data name="ListOfDocuments" xml:space="preserve">
-    <value>List of documents</value>
-  </data>
-  <data name="ListOfQualifications" xml:space="preserve">
-    <value>List of qualifications</value>
-  </data>
-  <data name="ListOfSubjects" xml:space="preserve">
-    <value>List of subjects</value>
-  </data>
-  <data name="CreditNumber" xml:space="preserve">
-    <value>Credit number</value>
-  </data>
-  <data name="CreditType" xml:space="preserve">
-    <value>Credit type</value>
-  </data>
-  <data name="Details" xml:space="preserve">
-    <value>Details</value>
-  </data>
-  <data name="Drop10Files" xml:space="preserve">
-    <value>Drop up to 10 documents!</value>
-  </data>
-  <data name="DropFilesHere" xml:space="preserve">
-    <value>Drop files here!</value>
-  </data>
-  <data name="FinalGrade" xml:space="preserve">
-    <value>Final grade</value>
-  </data>
-  <data name="From" xml:space="preserve">
-    <value>From</value>
-  </data>
-  <data name="OnGoing" xml:space="preserve">
-    <value>On going</value>
-  </data>
-  <data name="Thesis" xml:space="preserve">
-    <value>Thesis</value>
-  </data>
-  <data name="To" xml:space="preserve">
-    <value>To</value>
-  </data>
-  <data name="Training" xml:space="preserve">
-    <value>Is training</value>
-  </data>
-  <data name="Validity" xml:space="preserve">
-    <value>Validity</value>
-  </data>
-  <data name="AllowedFileFormats" xml:space="preserve">
-    <value>Allowed file formats: {0}</value>
-  </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
-  </data>
-  <data name="Document" xml:space="preserve">
-    <value>Document</value>
-  </data>
-  <data name="DocumentMaxFileSize" xml:space="preserve">
-    <value>Maximum document size</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="Passive" xml:space="preserve">
-    <value>Passive</value>
-  </data>
-  <data name="State" xml:space="preserve">
-    <value>State</value>
-  </data>
-  <data name="SubjectExistsWithCode" xml:space="preserve">
-    <value>Subject exists with the written code!</value>
-  </data>
-  <data name="Subjects" xml:space="preserve">
-    <value>Subjects</value>
-  </data>
-  <data name="SureYouWantToDeleteSubject" xml:space="preserve">
-    <value>Are you sure you want to delete subject?</value>
-  </data>
-  <data name="AddHoliday" xml:space="preserve">
-    <value>Add holiday</value>
-  </data>
-  <data name="CannotRequestHoliday" xml:space="preserve">
-    <value>You cannot make a request for holiday until you finish current holiday!</value>
-  </data>
-  <data name="EndDateVSOtherEndDate" xml:space="preserve">
-    <value>End date cannot be greater than the department end date!</value>
-  </data>
-  <data name="HolidayReviewedSuccessfully" xml:space="preserve">
-    <value>Holiday reviewed successfully!</value>
-  </data>
-  <data name="NoAvailableDaysHoliday" xml:space="preserve">
-    <value>You do not have enough days for holiday. Remaining days: {0}.</value>
-  </data>
-  <data name="RemainingDays" xml:space="preserve">
-    <value>Remaining days</value>
-  </data>
-  <data name="StartDateVSEndDate" xml:space="preserve">
-    <value>Starting date cannot be greater than ending date!</value>
-  </data>
-  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
-    <value>Are you sure you want to delete holiday?</value>
-  </data>
-  <data name="YouHaveHolidayPending" xml:space="preserve">
-    <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
-  </data>
-  <data name="AccountNotLocked" xml:space="preserve">
-    <value>Account not locked</value>
-  </data>
-  <data name="AccountNotUnlocked" xml:space="preserve">
-    <value>Account not unlocked</value>
-  </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
-  </data>
-  <data name="InvalidLogin" xml:space="preserve">
-    <value>Invalid login attempt. Email/username or password are incorrect!</value>
-  </data>
-  <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
-  </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Rejected</value>
-  </data>
-  <data name="Review" xml:space="preserve">
-    <value>Review</value>
-  </data>
-  <data name="TotalDays" xml:space="preserve">
-    <value>Total days</value>
-  </data>
-  <data name="YouMustConfirmEmail" xml:space="preserve">
-    <value>You must confirm your email!</value>
-  </data>
-  <data name="Method" xml:space="preserve">
-    <value>Method</value>
-  </data>
-  <data name="AuthorizationsForActions" xml:space="preserve">
-    <value>Authorizations for actions in system</value>
-  </data>
-  <data name="Date" xml:space="preserve">
-    <value>Date</value>
-  </data>
-  <data name="Exception" xml:space="preserve">
-    <value>Exception</value>
-  </data>
-  <data name="Failure" xml:space="preserve">
-    <value>Failure</value>
-  </data>
-  <data name="FormContent" xml:space="preserve">
-    <value>Form content</value>
-  </data>
-  <data name="HttpMethod" xml:space="preserve">
-    <value>HTTP Method</value>
-  </data>
-  <data name="Ip" xml:space="preserve">
-    <value>IP address</value>
-  </data>
-  <data name="IsError" xml:space="preserve">
-    <value>Is error</value>
-  </data>
-  <data name="MachineName" xml:space="preserve">
-    <value>Machine name</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="Searching" xml:space="preserve">
-    <value>Searching...</value>
-  </data>
-  <data name="Source" xml:space="preserve">
-    <value>Source</value>
-  </data>
-  <data name="Time" xml:space="preserve">
-    <value>Time</value>
-  </data>
-  <data name="Type" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="April" xml:space="preserve">
-    <value>April</value>
-  </data>
-  <data name="August" xml:space="preserve">
-    <value>August</value>
-  </data>
-  <data name="December" xml:space="preserve">
-    <value>December</value>
-  </data>
-  <data name="February" xml:space="preserve">
-    <value>February</value>
-  </data>
-  <data name="FridayLetter" xml:space="preserve">
-    <value>Fr</value>
-  </data>
-  <data name="January" xml:space="preserve">
-    <value>January</value>
-  </data>
-  <data name="July" xml:space="preserve">
-    <value>July</value>
-  </data>
-  <data name="June" xml:space="preserve">
-    <value>June</value>
-  </data>
-  <data name="Last30Days" xml:space="preserve">
-    <value>Last 30 days</value>
-  </data>
-  <data name="Last7Days" xml:space="preserve">
-    <value>Last 7 days</value>
-  </data>
-  <data name="LastMonth" xml:space="preserve">
-    <value>Last month</value>
-  </data>
-  <data name="March" xml:space="preserve">
-    <value>March</value>
-  </data>
-  <data name="May" xml:space="preserve">
-    <value>May</value>
-  </data>
-  <data name="MondayLetter" xml:space="preserve">
-    <value>Mo</value>
-  </data>
-  <data name="November" xml:space="preserve">
-    <value>November</value>
-  </data>
-  <data name="October" xml:space="preserve">
-    <value>October</value>
-  </data>
-  <data name="OtherDate" xml:space="preserve">
-    <value>Other date</value>
-  </data>
-  <data name="SaturdayLetter" xml:space="preserve">
-    <value>Sa</value>
-  </data>
-  <data name="September" xml:space="preserve">
-    <value>September</value>
-  </data>
-  <data name="SundayLetter" xml:space="preserve">
-    <value>Su</value>
-  </data>
-  <data name="ThisMonth" xml:space="preserve">
-    <value>This month</value>
-  </data>
-  <data name="ThursdayLetter" xml:space="preserve">
-    <value>Th</value>
-  </data>
-  <data name="Today" xml:space="preserve">
-    <value>Today</value>
-  </data>
-  <data name="TuesdayLetter" xml:space="preserve">
-    <value>Tu</value>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="WednesdayLetter" xml:space="preserve">
     <value>We</value>
@@ -1002,166 +1203,19 @@
   <data name="WeekLetter" xml:space="preserve">
     <value>W</value>
   </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
   <data name="Yesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
-  <data name="BruttoSalary" xml:space="preserve">
-    <value>Brutto(Gross) Salary</value>
+  <data name="YouHaveEvaluationProcessing" xml:space="preserve">
+    <value>You cannot add a new evaluation while having a evaluation in process!</value>
   </data>
-  <data name="EmployeeContribution" xml:space="preserve">
-    <value>Employee contribution</value>
+  <data name="YouHaveHolidayPending" xml:space="preserve">
+    <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
   </data>
-  <data name="EmployeeContributionRange" xml:space="preserve">
-    <value>Employee contribution must be between 5% and 15%!</value>
-  </data>
-  <data name="EmployerContribution" xml:space="preserve">
-    <value>Employer contribution</value>
-  </data>
-  <data name="EmployerContributionRange" xml:space="preserve">
-    <value>Employer contribution must be between 5% and 15%!</value>
-  </data>
-  <data name="ListOfStaffInProcessRegistration" xml:space="preserve">
-    <value>List of staff in process of registration!</value>
-  </data>
-  <data name="SalaryRange" xml:space="preserve">
-    <value>Salary must be greater than 0!</value>
-  </data>
-  <data name="StaffWithPersonalExists" xml:space="preserve">
-    <value>Staff with this personal number exists!</value>
-  </data>
-  <data name="RequestedDate" xml:space="preserve">
-    <value>Requested date</value>
-  </data>
-  <data name="ReviewDate" xml:space="preserve">
-    <value>Review date</value>
-  </data>
-  <data name="ReviewedFrom" xml:space="preserve">
-    <value>Reviewed from</value>
-  </data>
-  <data name="ChooseEvaluationType" xml:space="preserve">
-    <value>Choose evaluation type</value>
-  </data>
-  <data name="Complete" xml:space="preserve">
-    <value>Complete</value>
-  </data>
-  <data name="ManagerEvaluation" xml:space="preserve">
-    <value>Manager evaluation</value>
-  </data>
-  <data name="SelfEvaluation" xml:space="preserve">
-    <value>Self evaluation</value>
-  </data>
-  <data name="StudentsEvaluation" xml:space="preserve">
-    <value>Students evaluation</value>
-  </data>
-  <data name="Evaluation" xml:space="preserve">
-    <value>Evaluation</value>
-  </data>
-  <data name="AddQuestion" xml:space="preserve">
-    <value>Add question</value>
-  </data>
-  <data name="Answer" xml:space="preserve">
-    <value>Answer</value>
-  </data>
-  <data name="Answered" xml:space="preserve">
-    <value>Answered</value>
-  </data>
-  <data name="AnsweredIn" xml:space="preserve">
-    <value>Answered in</value>
-  </data>
-  <data name="Developer" xml:space="preserve">
-    <value>Developer</value>
-  </data>
-  <data name="Evaluated" xml:space="preserve">
-    <value>Evaluated</value>
-  </data>
-  <data name="FirstStepEvaluation" xml:space="preserve">
-    <value>1. Questionnaire data</value>
-  </data>
-  <data name="ListOfAnswers" xml:space="preserve">
-    <value>List of answers</value>
-  </data>
-  <data name="ListOfQuestions" xml:space="preserve">
-    <value>List of questions</value>
-  </data>
-  <data name="NoDocuments" xml:space="preserve">
-    <value>No documents</value>
-  </data>
-  <data name="NoQualifications" xml:space="preserve">
-    <value>No qualifications</value>
-  </data>
-  <data name="NoQuestions" xml:space="preserve">
-    <value>No questions</value>
-  </data>
-  <data name="NoSubjects" xml:space="preserve">
-    <value>No subjects</value>
-  </data>
-  <data name="NotAnswered" xml:space="preserve">
-    <value>Not answered</value>
-  </data>
-  <data name="Question" xml:space="preserve">
-    <value>Question</value>
-  </data>
-  <data name="QuestionnaireData" xml:space="preserve">
-    <value>Questionnaire data</value>
-  </data>
-  <data name="Questions" xml:space="preserve">
-    <value>Questions</value>
-  </data>
-  <data name="QuestionsLower" xml:space="preserve">
-    <value>questions</value>
-  </data>
-  <data name="SecondStepEvaluation" xml:space="preserve">
-    <value>2. Questions and answers</value>
-  </data>
-  <data name="SureYouWantToDeleteQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete question?</value>
-  </data>
-  <data name="ThirdStepEvaluation" xml:space="preserve">
-    <value>3. Documents</value>
-  </data>
-  <data name="Agree" xml:space="preserve">
-    <value>Agree</value>
-  </data>
-  <data name="AgreeNorDisagree" xml:space="preserve">
-    <value>Neither agree nor disagree</value>
-  </data>
-  <data name="AgreeTotally" xml:space="preserve">
-    <value>Totally agree</value>
-  </data>
-  <data name="DarkMode" xml:space="preserve">
-    <value>Dark mode</value>
-  </data>
-  <data name="DontAgree" xml:space="preserve">
-    <value>Do not agree</value>
-  </data>
-  <data name="DontAgreeAll" xml:space="preserve">
-    <value>Do not agree at all</value>
-  </data>
-  <data name="DontKnow" xml:space="preserve">
-    <value>Do not know</value>
-  </data>
-  <data name="EvaluationQuestionType" xml:space="preserve">
-    <value>Evaluation question type</value>
-  </data>
-  <data name="OFF" xml:space="preserve">
-    <value>OFF</value>
-  </data>
-  <data name="ON" xml:space="preserve">
-    <value>ON</value>
-  </data>
-  <data name="Option" xml:space="preserve">
-    <value>Option</value>
-  </data>
-  <data name="Options" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="QuestionType" xml:space="preserve">
-    <value>Question type</value>
-  </data>
-  <data name="RoleChangedSuccess" xml:space="preserve">
-    <value>Role has been changed successfully. From now on, all actions will be in role {0}!</value>
-  </data>
-  <data name="ThereWasAnError" xml:space="preserve">
-    <value>There was an error. Try again later!</value>
+  <data name="YouMustConfirmEmail" xml:space="preserve">
+    <value>You must confirm your email!</value>
   </data>
 </root>

@@ -32,9 +32,8 @@
     </div>
 
     <div class="d-flex justify-content-end border-top mt-5">
-        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="submit" value="@Resource.Continue" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
     </div>
-
 </form>
 
 @section Scripts {
@@ -118,13 +117,6 @@
 
         function formatRepoSelection (repo) {
             return repo.text;
-        }
-
-
-        function continue_form() {
-            if($('#frm_register_evaluation').valid()) {
-                $('#frm_register_evaluation').submit();
-            }
         }
     </script>
 }

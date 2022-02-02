@@ -2,6 +2,7 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.Evaluation;
+using HRMS.Models.EvaluationManager;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,10 +27,14 @@ public class EvaluationController : BaseController
     {
     }
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluations.")]
+    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
     public IActionResult Index() => View();
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to search for manager evaluations.")]
+    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
+    public IActionResult Search() => View();
+
+    [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to search for manager evaluations.")]
     public async Task<IActionResult> _SearchManager(Search search)
     {
         var list = await db.EvaluationManager
@@ -39,6 +46,7 @@ public class EvaluationController : BaseController
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
+                EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
                 EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationManagerId),
                 Title = a.Title,
                 Description = a.Description,
@@ -47,10 +55,11 @@ public class EvaluationController : BaseController
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
-        return Json(list);
+        return PartialView(list);
     }
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to search for students evaluation.")]
+    [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to search for students evaluation.")]
     public async Task<IActionResult> _SearchStudent(Search search)
     {
         var list = await db.EvaluationStudents
@@ -62,19 +71,21 @@ public class EvaluationController : BaseController
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
+                EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
                 EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationStudentsId),
                 Title = a.Title,
                 Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
-                //NumberOfStudents = a.StudentsNo
+                Students = a.StudentsNo,
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
-        return Json(list);
+        return PartialView(list);
     }
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to search for evaluation types.")]
+    [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to search for self evaluations.")]
     public async Task<IActionResult> _SearchSelf(Search search)
     {
         var list = await db.EvaluationSelf
@@ -86,6 +97,7 @@ public class EvaluationController : BaseController
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
+                EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
                 EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationSelfId),
                 Title = a.Title,
                 Description = a.Description,
@@ -94,6 +106,163 @@ public class EvaluationController : BaseController
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
-        return Json(list);
+        return PartialView(list);
     }
+
+    [HttpPost, Authorize(Policy = "70:d"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to search for self evaluations.")]
+    public async Task<IActionResult> Delete(string ide)
+    {
+        if (string.IsNullOrEmpty(ide))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+        }
+
+        db.EvaluationStatus.Add(new EvaluationStatus
+        {
+            EvaluationId = CryptoSecurity.Decrypt<int>(ide),
+            StatusTypeId = (int)StatusTypeEnum.Deleted,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+    }
+
+
+    #region Details
+
+    [HttpGet, Authorize(Policy = "71:c"), Description("Arb Tahiri", "Form to display questionnaire details")]
+    public async Task<ActionResult> Details(string ide)
+    {
+        if (string.IsNullOrEmpty(ide))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+        }
+
+        var evaluationType = await db.Evaluation.Where(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide)).Select(a => (EvaluationTypeEnum)a.EvaluationId).FirstOrDefaultAsync();
+        var evaluationDetails = new EvaluationDetails();
+        if (evaluationType == EvaluationTypeEnum.Manager)
+        {
+            evaluationDetails = await db.EvaluationManager.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new EvaluationDetails
+                {
+                    EvaluationIde = ide,
+                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                    InsertedDate = a.InsertedDate,
+                    MethodType = MethodType.Get,
+                    EvaluationTypeEnum = evaluationType,
+                    Manager = $"{a.Manager.Staff.FirstName} {a.Manager.Staff.LastName}",
+                    Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                    Title = a.Title,
+                    Description = a.Description
+                }).FirstOrDefaultAsync();
+        }
+        else if (evaluationType == EvaluationTypeEnum.Student)
+        {
+            evaluationDetails = await db.EvaluationStudents.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new EvaluationDetails
+                {
+                    EvaluationIde = ide,
+                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                    InsertedDate = a.InsertedDate,
+                    MethodType = MethodType.Get,
+                    EvaluationTypeEnum = evaluationType,
+                    Staff = $"{a.StaffDepartmentSubject.StaffDepartment.Staff.FirstName} {a.StaffDepartmentSubject.StaffDepartment.Staff.LastName}",
+                    Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Students = a.StudentsNo
+                }).FirstOrDefaultAsync();
+        }
+        else if (evaluationType == EvaluationTypeEnum.Self)
+        {
+            evaluationDetails = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new EvaluationDetails
+                {
+                    EvaluationIde = ide,
+                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                    InsertedDate = a.InsertedDate,
+                    MethodType = MethodType.Get,
+                    EvaluationTypeEnum = evaluationType,
+                    Staff = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName}",
+                    Title = a.Title,
+                    Description = a.Description
+                }).FirstOrDefaultAsync();
+        }
+
+        var documents = await db.EvaluationDocument
+            .Include(a => a.DocumentType)
+            .Where(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new Document
+            {
+                EvaluationDocumentIde = CryptoSecurity.Encrypt(a.EvaluationDocumentId),
+                Title = a.Title,
+                Path = a.Path,
+                PathExtension = Path.GetExtension(a.Path),
+                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                Description = a.Description,
+                Active = a.Active
+            }).ToListAsync();
+
+        var details = new DetailsVM
+        {
+            EvaluationDetails = evaluationDetails,
+            Documents = documents
+        };
+        return View(details);
+    }
+
+    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    public async Task<IActionResult> _NumericalQuestions(string ide) =>
+        PartialView(await db.EvaluationQuestionnaireNumerical
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new QuestionNumerical
+            {
+                EvaluationQuestionnaireNumericalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireNumericalId),
+                Title = a.Question,
+                Grade = a.Grade,
+                Graded = a.Grade.HasValue
+            }).ToListAsync());
+
+    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    public async Task<IActionResult> _OptionQuestions(string ide) =>
+        PartialView(await db.EvaluationQuestionnaireOptional
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new QuestionOptional
+            {
+                EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
+                Question = a.Question,
+                Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
+                {
+                    EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
+                    Option = a.OptionTitle,
+                    Checked = a.Checked
+                }).ToList()
+            }).ToListAsync());
+
+    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    public async Task<IActionResult> _TopicQuestions(string ide) =>
+        PartialView(await db.EvaluationQuestionnaireTopic
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new QuestionTopic
+            {
+                EvaluationQuestionnaireTopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireTopicId),
+                Question = a.Question,
+                Answer = a.Answer
+            }).ToListAsync());
+
+    #endregion
 }

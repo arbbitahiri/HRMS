@@ -18,11 +18,17 @@ public class ManageQuestion
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Question { get; set; }
 
-    [Display(Name = "Description", ResourceType = typeof(Resource))]
-    [IfRequired(nameof(QuestionTypeId), "3", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string Description { get; set; }
+    //[Display(Name = "Description", ResourceType = typeof(Resource))]
+    //[RequiredIf(nameof(QuestionTypeId), "3", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    //public string Description { get; set; }
 
     [Display(Name = "Options", ResourceType = typeof(Resource))]
-    public List<string> OptionsIds { get; set; }
+    public List<Option> Options { get; set; }
+
     public bool Active { get; set; }
+}
+
+public class Option
+{
+    public string Title { get; set; }
 }

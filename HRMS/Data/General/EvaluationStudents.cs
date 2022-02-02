@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public int EvaluationStudentsId { get; set; }
         public int EvaluationId { get; set; }
         public int StaffDepartmentSubjectId { get; set; }
+        public int StudentsNo { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string InsertedFrom { get; set; }

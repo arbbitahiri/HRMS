@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HRMS.Resources;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Resources;
 
 namespace HRMS.Utilities.Validations;
 
@@ -18,8 +20,9 @@ public class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
 
     public void AddValidation(ClientModelValidationContext context)
     {
+        var resourceManager = new ResourceManager(typeof(Resource));
         MergeAttribute(context.Attributes, "data-val", "true");
-        MergeAttribute(context.Attributes, "data-val-maxfilesize", $"Nuk lejohet kjo madhesi: {KbToMb(maxKb)}");
+        MergeAttribute(context.Attributes, "data-val-maxfilesize", string.Format(resourceManager.GetString(ErrorMessageResourceName), KbToMb(maxKb)));
         MergeAttribute(context.Attributes, "data-val-maxfilesize-size", maxKb.ToString());
     }
 
@@ -42,7 +45,8 @@ public class MaxFileSizeAttribute : ValidationAttribute, IClientModelValidator
         {
             if (file.Length / 1024 > maxKb)
             {
-                return new ValidationResult($"Nuk lejohet kjo madhesi: {maxKb}");
+                var resourceManager = new ResourceManager(typeof(Resource));
+                return new ValidationResult(string.Format(resourceManager.GetString(ErrorMessageResourceName), KbToMb(maxKb)));
             }
         }
         return ValidationResult.Success;

@@ -1,0 +1,46 @@
+﻿@using HRMS.Models.EvaluationManager
+@model IEnumerable<QuestionNumerical>
+@{
+    var numericalRow = 0;
+}
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+<table id="tbl_numerical">
+    <thead>
+        <th>
+            <tr>#</tr>
+            <tr>@Resource.Question</tr>
+            <tr style="background-color: #808080;">0</tr>
+            <tr style="background-color: #f00;">1</tr>
+            <tr style="background-color: #f4b083;">2</tr>
+            <tr style="background-color: #ffff00;">3</tr>
+            <tr style="background-color: #92d050;">4</tr>
+            <tr style="background-color: #00b050;">5</tr>
+        </th>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var answer in Model)
+            {
+                numericalRow++;
+                <tr>
+                    <td>@numericalRow</td>
+                    <td>@answer.Title</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.DontKnow ? "background-color: #808080" : "")'>@answer.Grade</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.DontAgreeAtAll ? "background-color: #f00" : "")'>@answer.Grade</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.DontAgree ? "background-color: #f4b083" : "")'>@answer.Grade</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.AgreeNorDisagree ? "background-color: #ffff00" : "")'>@answer.Grade</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.Agree ? "background-color: #92d050" : "")'>@answer.Grade</td>
+                    <td style='(answer.Grade == (int?)NumericalRate.AgreeAtAll ? "background-color: #00b050" : "")'>@answer.Grade</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

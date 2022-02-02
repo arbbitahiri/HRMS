@@ -22,21 +22,35 @@
         padding: 0 6px;
         margin-left: 10px
     }
+
+    .custom-slider-handle {
+        border-radius: 50%;
+        box-shadow: none;
+        position: absolute;
+        top: 0;
+        width: 20px;
+        height: 20px;
+    }
+
+    .custom-slider-track {
+        position: absolute;
+    }
 </style>
 
 <div class="flex-row-fluid">
-    <div class="card" style="box-shadow: none !important;">
+    <div class="card" style='box-shadow: none !important; @(user.Mode == TemplateMode.Dark ? "background-color: #343a40;" : "")'>
         <div class="card-body">
+            <p style="width: 100%;">@Resource.NumericalQuestionsINFO</p>
             <div class="slider-green" disabled="disabled">
                 <div class="slider slider-horizontal" id="" style="width: 100%;">
                     <div class="slider-track" style="width: 100%;">
                     </div>
-                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 0%;" aria-valuenow="-200" tabindex="0"></div>
-                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 20%;" aria-valuenow="-120" tabindex="0"></div>
-                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 40%;" aria-valuenow="-40" tabindex="0"></div>
-                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 60%;" aria-valuenow="40" tabindex="0"></div>
-                    <div class="slider-handle min-slider-handle round" role="slider" style="left: 80%;" aria-valuenow="120" tabindex="0"></div>
-                    <div class="slider-handle max-slider-handle round" role="slider" style="left: 100%;" aria-valuenow="200" tabindex="0"></div>
+                    <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #6c757d; left: 0%;" aria-valuenow="-200" tabindex="0"></div>
+                    <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #dc3545; left: 20%;" aria-valuenow="-120" tabindex="0"></div>
+                    <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #ff851b; left: 40%;" aria-valuenow="-40" tabindex="0"></div>
+                    <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #ffc107; left: 60%;" aria-valuenow="40" tabindex="0"></div>
+                    <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #17a2b8; left: 80%;" aria-valuenow="120" tabindex="0"></div>
+                    <div class="custom-slider-handle max-slider-handle round" role="slider" style="background: #28a745; left: 100%;" aria-valuenow="200" tabindex="0"></div>
                 </div>
             </div>
             <p>
@@ -53,7 +67,7 @@
     <div class="card" style="box-shadow: none !important;">
         <div class="card-header border-0">
             <div class="card-title align-items-start flex-column">
-                <span class="text-dark text-lg">@Model.EvaluationDetails.Firstname @Model.EvaluationDetails.Lastname</span> <br />
+                <span class='@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark") text-lg'>@Model.EvaluationDetails.Firstname @Model.EvaluationDetails.Lastname</span> <br />
                 <span class="text-muted mt-1 font-weight-bold font-size-sm">
                     @if (Model.NumericalQuestionsCount >= 1)
                     {
@@ -84,11 +98,6 @@
     {
         <hr/>
         <div class="card" style="box-shadow: none !important;">
-            @* <div class="card-header border-0">
-                <div class="card-tools">
-                    <a onclick="add_question('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddQuestion</a>
-                </div>
-            </div> *@
             <div class="card-body">
                 @foreach (var optional in Model.Optionals)
                 {
@@ -97,10 +106,10 @@
                         @foreach (var option in optional.Options)
                         {
                             var isChecked = option.Checked ? "checked" : "";
-                            <ul class="icheck-primary">
+                            <ul class="icheck-primary p-2">
                                 <input id="@option.EvaluationQuestionnaireOptionalOptionIde" type="radio" @isChecked style="cursor: pointer;"/>
                                 <label for="@option.EvaluationQuestionnaireOptionalOptionIde"
-                                    onclick="change_option(@option.EvaluationQuestionnaireOptionalOptionIde)">@option.Option</label>
+                                    onclick="change_option('@option.EvaluationQuestionnaireOptionalOptionIde')">@option.Option</label>
                             </ul>
                         }
                     </fieldset>
@@ -112,25 +121,20 @@
     {
         <hr/>
         <div class="card" style="box-shadow: none !important;">
-            @* <div class="card-header border-0">
-                <div class="card-tools">
-                    <a onclick="add_question('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddQuestion</a>
-                </div>
-            </div> *@
             <div class="card-body">
                 @foreach (var topic in Model.Topics)
                 {
                     <fieldset class="mb-4 px-4 ml-0">
                         <legend>@topic.Question</legend>
-                        <textarea id="@topic.EvaluationQuestionnaireTopicIde" class="form-control" rows="2">@topic.Answer</textarea>
-                        <button type="button" class="btn btn-primary" onclick="submit_topic(@topic.EvaluationQuestionnaireTopicIde)"></button>
+                        <textarea id="@topic.EvaluationQuestionnaireTopicIde" class="form-control" rows="2">@(topic.Answer ?? "///")</textarea>
+                        <button type="button" class="btn btn-primary float-right m-2" onclick="submit_topic('@topic.EvaluationQuestionnaireTopicIde')">@Resource.Answer</button>
                     </fieldset>
                 }
             </div>
         </div>
     }
 
-    <div class="d-flex justify-content-between border-top mt-5">
+    <div class="d-flex justify-content-between border-top">
         <input type="button" value="@Resource.Back" onclick="back_to_register('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
         <input type="button" value="@Resource.Continue" onclick="continue_to_document('@Model.EvaluationDetails.EvaluationIde')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
     </div>
@@ -174,8 +178,8 @@
                 deferRender: true,
                 columnDefs: [
                     { className: "w5 vertikal", targets: [0, 3] },
-                    { className: "w15 vertikal", targets: [1] },
-                    { className: "w30 vertikal", targets: [2] }
+                    { className: "w20 vertikal", targets: [1] },
+                    { className: "w20 vertikal", targets: [2] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -200,13 +204,13 @@
                     },
                     {
                         data: function(row, type, set) {
-                            return '<div class="form-group clearfix">' +
-                                '<div class="icheck-primary d-inline"><input id="zero" style="cursor: pointer;" type="radio" ' + row.grade == 0 ? "checked" : "" + '/><label for="zero" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 0)"></label></div>' +
-                                '<div class="icheck-primary d-inline"><input id="one" style="cursor: pointer;" type="radio" ' + row.grade == 1 ? "checked" : "" + '/><label for="one" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 1)"></label></div>' +
-                                '<div class="icheck-primary d-inline"><input id="two" style="cursor: pointer;" type="radio" ' + row.grade == 2 ? "checked" : "" + '/><label for="two" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 2)"></label></div>' +
-                                '<div class="icheck-primary d-inline"><input id="three" style="cursor: pointer;" type="radio" ' + row.grade == 3 ? "checked" : "" + '/><label for="three" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 3)"></label></div>' +
-                                '<div class="icheck-primary d-inline"><input id="four" style="cursor: pointer;" type="radio" ' + row.grade == 4 ? "checked" : "" + '/><label for="four" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 4)"></label></div>' +
-                                '<div class="icheck-primary d-inline"><input id="five" style="cursor: pointer;" type="radio" ' + row.grade == 5 ? "checked" : "" + '/><label for="five" onclick="change_grade(\'' + row.evaluationQuestionnaireIde + '\', 5)"></label></div>' +
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-secondary d-inline pr-5"><input id="zero" style="cursor: pointer;" type="radio" ' + (row.grade == 0 ? "checked" : "") + '/><label for="zero" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 0)">0</label></div>' +
+                                '<div class="icheck-danger d-inline pr-5"><input id="one" style="cursor: pointer;" type="radio" ' + (row.grade == 1 ? "checked" : "") + '/><label for="one" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 1)">1</label></div>' +
+                                '<div class="icheck-orange d-inline pr-5"><input id="two" style="cursor: pointer;" type="radio" ' + (row.grade == 2 ? "checked" : "") + '/><label for="two" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 2)">2</label></div>' +
+                                '<div class="icheck-warning d-inline pr-5"><input id="three" style="cursor: pointer;" type="radio" ' + (row.grade == 3 ? "checked" : "") + '/><label for="three" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 3)">3</label></div>' +
+                                '<div class="icheck-info d-inline pr-5"><input id="four" style="cursor: pointer;" type="radio" ' + (row.grade == 4 ? "checked" : "") + '/><label for="four" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 4)">4</label></div>' +
+                                '<div class="icheck-success d-inline pr-5"><input id="five" style="cursor: pointer;" type="radio" ' + (row.grade == 5 ? "checked" : "") + '/><label for="five" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 5)">5</label></div>' +
                                 '</div>';
                         }
                     },
@@ -215,8 +219,8 @@
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_question(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_question(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="edit_question(\'' + row.evaluationQuestionnaireNumericalIde + '\', \'' + QuestionType.NUMERICAL + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item" onclick="delete_question(\'' + row.evaluationQuestionnaireNumericalIde + '\', \'' + QuestionType.NUMERICAL + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
                                 '</div></div>';
                             return dropdown;
                         }
@@ -237,22 +241,22 @@
             $(e).parent().parent().find('.load-more').removeClass('d-none');
         }
 
-        function change_option(ide) {
+        function submit_topic(ide) {
             $.post('@Url.Action("TopicAnswer", "EvaluationManager")', {
                 ide: ide,
                 txt: $('textarea#' + ide).val(),
                 "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
             }, function(data) {
-                handle_success(data, SubmitPathType.NORELOAD, "");
+                handle_success(data, SubmitPathType.RELOAD, "");
             });
         }
 
-        function submit_topic(ide) {
+        function change_option(ide) {
             $.post('@Url.Action("OptionalAnswer", "EvaluationManager")', {
                 ide: ide,
                 "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
             }, function(data) {
-                handle_success(data, SubmitPathType.NORELOAD, "");
+                handle_success(data, SubmitPathType.RELOAD, "");
             });
         }
 
@@ -262,7 +266,7 @@
                 num: num,
                 "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
             }, function(data) {
-                handle_success(data, SubmitPathType.NORELOAD, "");
+                handle_success(data, SubmitPathType.RELOAD, "");
             });
         }
 
@@ -272,8 +276,11 @@
             });
         }
 
-        function edit_question(ide) {
-            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")?ide=' + ide, function () {
+        function edit_question(ide, method) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")', {
+                ide: ide,
+                method: method
+            }, function () {
                 $('#modal-xl').modal('toggle');
             });
         }

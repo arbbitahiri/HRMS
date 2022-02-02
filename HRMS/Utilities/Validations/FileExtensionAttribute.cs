@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HRMS.Resources;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Resources;
 
 namespace HRMS.Utilities.Validations;
 
@@ -20,12 +22,10 @@ public class FileExtensionAttribute : ValidationAttribute, IClientModelValidator
 
     public void AddValidation(ClientModelValidationContext context)
     {
+        var resourceManager = new ResourceManager(typeof(Resource));
         MergeAttribute(context.Attributes, "data-val", "true");
         MergeAttribute(context.Attributes, "accept", allowedFormats);
-
-        //var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
-
-        MergeAttribute(context.Attributes, "data-val-fileextesion", $"Nuk lejohet: {allowedFormats}");
+        MergeAttribute(context.Attributes, "data-val-fileextesion", string.Format(resourceManager.GetString(ErrorMessageResourceName), allowedFormats));
         MergeAttribute(context.Attributes, "data-val-fileextesion-formats", allowedFormats);
     }
 
@@ -48,7 +48,8 @@ public class FileExtensionAttribute : ValidationAttribute, IClientModelValidator
             string extension = Path.GetExtension(file.FileName);
             if (!formats.Contains(extension))
             {
-                return new ValidationResult($"Nuk eshte ne formatin e duhur: {allowedFormats}");
+                var resourceManager = new ResourceManager(typeof(Resource));
+                return new ValidationResult(string.Format(resourceManager.GetString(ErrorMessageResourceName), allowedFormats));
             }
         }
         return ValidationResult.Success;

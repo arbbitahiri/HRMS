@@ -1,0 +1,184 @@
+﻿@using HRMS.Models.Evaluation
+@model DetailsVM
+@{
+    var docCount = 1;
+}
+
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-4 order-1 order-md-1">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <h3 class="text-primary"><i class="fas fa-chevron-right"></i> @Model.EvaluationDetails.EvaluationType</h3>
+                <p><b class="d-block">@Model.EvaluationDetails.Title</b></p>
+                <p class="text-muted" style="text-align: justify;">@Model.EvaluationDetails.Description</p>
+                <br />
+                <div class="text-muted">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="text-sm">@Resource.Staff<b class="d-block">@Model.EvaluationDetails.Staff</b></p>
+                        </div>
+                        <div class="col-6">
+                            @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.Manager)
+                            {
+                                <p class="text-sm">@Resource.Manager<b class="d-block">@Model.EvaluationDetails.Manager</b></p>
+                            }
+                            @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.Student)
+                            {
+                                <p class="text-sm">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Documents.Any())
+                {
+                    <h5 class="mt-5 text-muted">@Resource.Documents</h5>
+                    <ul class="list-unstyled">
+                        @foreach (var doc in Model.Documents)
+                        {
+                            docCount++;
+                            <li>
+                                <a href="@doc.Path" class="btn-link text-secondary">
+                                    <i class="far fa-fw @GetIcon(doc.PathExtension)">@doc.Title</i>
+                                </a>
+                                @if (!string.IsNullOrEmpty(doc.Description))
+                                {
+                                    <br />
+                                    <small class="text-muted">
+                                        @if (doc.Description.Length > 80)
+                                        {
+                                            @doc.Description.Substring(0, 79)
+                                            <span class="load-more" onclick="load_more(this)"><b>.. <a href="#@docCount">@Resource.LookMore</a></b></span>
+                                            <span class="d-none load-less-fst">@doc.Description.Substring(80)
+                                                <span class="d-none load-less-snd" onclick="load_less(this)"><b>.. <a href="#@docCount">@Resource.LookLess</a></b></span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @doc.Description
+                                        }
+                                    </small>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-2">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-6 order-1 order-md-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>@Model.EvaluationDetails.Questions</h3><p>@Resource.Questions1</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-help-circled"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-6 order-1 order-md-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>@Model.EvaluationDetails.Answers</h3><p>@Resource.Answers</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-checkmark-circled"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card collapsed-card mt-1" id="kt_numerical">
+            <div class="card-header">
+                <h3 class="card-title">@Resource.ListOfNumericalQuestions</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="card-body" id="kt_load_numerical_tbl">
+            </div>
+        </div>
+
+        <div class="card collapsed-card mt-1" id="kt_option">
+            <div class="card-header">
+                <h3 class="card-title">@Resource.ListOfOptionQuestions</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="card-body" id="kt_load_option_tbl">
+            </div>
+        </div>
+
+        <div class="card collapsed-card mt-1" id="kt_topic">
+            <div class="card-header">
+                <h3 class="card-title">@Resource.ListOfTopicQuestions</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="card-body" id="kt_load_topic_tbl">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#kt_numerical').on('expanded.lte.cardwidget', function() {
+                $('#kt_load_numerical_tbl').load('@Url.Action("_NumericalQuestions", "Staff")', {
+                    ide: '@Model.EvaluationDetails.EvaluationIde',
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                });
+            });
+
+            $('#kt_option').on('expanded.lte.cardwidget', function() {
+                $('#kt_load_option_tbl').load('@Url.Action("_OptionQuestions", "Staff")', {
+                    ide: '@Model.EvaluationDetails.EvaluationIde',
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                });
+            });
+
+            $('#kt_topic').on('expanded.lte.cardwidget', function() {
+                $('#kt_load_topic_tbl').load('@Url.Action("_TopicQuestions", "Staff")', {
+                    ide: '@Model.EvaluationDetails.EvaluationIde',
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                });
+            });
+        });
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+    </script>
+}
+
+@functions {
+    private string GetIcon(string extension) =>
+        extension switch
+        {
+            string a when a.Contains("pdf") => "fa-file-pdf",
+            string a when a.Contains("xl") => "fa-file-excel",
+            string a when a.Contains("do") => "fa-file-word",
+            string a when a.Contains("pp") => "fa-file-powerpoint",
+            _ => "fa-file-pdf"
+        };
+}

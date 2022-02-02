@@ -4,6 +4,7 @@ namespace HRMS.Models.Evaluation;
 
 public class EvaluationList
 {
+    public string EvaluationIde { get; set; }
     public string EvaluationManagerIde { get; set; }
     public string EvaluationStudentIde { get; set; }
     public string EvaluationSelfIde { get; set; }
@@ -15,5 +16,5 @@ public class EvaluationList
     public int Answers { get; set; }
     public DateTime InsertedDate { get; set; }
 
-    public int NumberOfStudents { get; set; }
+    public int Students { get; set; }
 }
