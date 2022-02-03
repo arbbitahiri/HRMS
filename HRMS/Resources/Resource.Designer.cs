@@ -385,6 +385,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Përgjigja u largua me sukses!.
+        /// </summary>
+        public static string AnswerClearedSuccessfully {
+            get {
+                return ResourceManager.GetString("AnswerClearedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Përgjigjur.
         /// </summary>
         public static string Answered {
@@ -399,6 +408,15 @@ namespace HRMS.Resources {
         public static string AnsweredIn {
             get {
                 return ResourceManager.GetString("AnsweredIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përgjigju.
+        /// </summary>
+        public static string AnswerIt {
+            get {
+                return ResourceManager.GetString("AnswerIt", resourceCulture);
             }
         }
         
@@ -606,6 +624,24 @@ namespace HRMS.Resources {
         public static string ClaimPolicy {
             get {
                 return ResourceManager.GetString("ClaimPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Largo.
+        /// </summary>
+        public static string Clear {
+            get {
+                return ResourceManager.GetString("Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to U largua.
+        /// </summary>
+        public static string Cleared {
+            get {
+                return ResourceManager.GetString("Cleared", resourceCulture);
             }
         }
         

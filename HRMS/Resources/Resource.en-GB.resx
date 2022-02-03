@@ -225,11 +225,17 @@
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
   </data>
+  <data name="AnswerClearedSuccessfully" xml:space="preserve">
+    <value>Answer cleared successfully!</value>
+  </data>
   <data name="Answered" xml:space="preserve">
     <value>Answered</value>
   </data>
   <data name="AnsweredIn" xml:space="preserve">
     <value>Answered in</value>
+  </data>
+  <data name="AnswerIt" xml:space="preserve">
+    <value>Answer</value>
   </data>
   <data name="Answers" xml:space="preserve">
     <value>Answers</value>
@@ -299,6 +305,12 @@
   </data>
   <data name="ClaimPolicy" xml:space="preserve">
     <value>Claim policy</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Cleared" xml:space="preserve">
+    <value>Cleared</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>

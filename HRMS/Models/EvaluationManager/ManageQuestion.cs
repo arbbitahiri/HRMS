@@ -1,4 +1,5 @@
 ﻿using HRMS.Resources;
+using HRMS.Utilities;
 using HRMS.Utilities.Validations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,8 @@ namespace HRMS.Models.EvaluationManager;
 public class ManageQuestion
 {
     public string EvaluationQuestionnaireNumericalIde { get; set; }
+    public string EvaluationQuestionnaireOptionalIde { get; set; }
+    public string EvaluationQuestionnaireTopicIde { get; set; }
     public string EvaluationIde { get; set; }
 
     [Display(Name = "QuestionType", ResourceType = typeof(Resource))]
@@ -18,17 +21,14 @@ public class ManageQuestion
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Question { get; set; }
 
-    //[Display(Name = "Description", ResourceType = typeof(Resource))]
-    //[RequiredIf(nameof(QuestionTypeId), "3", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    //public string Description { get; set; }
-
     [Display(Name = "Options", ResourceType = typeof(Resource))]
     public List<Option> Options { get; set; }
 
-    public bool Active { get; set; }
+    public QuestionType QuestionType { get; set; }
 }
 
 public class Option
 {
+    public string OptionIde { get; set; }
     public string Title { get; set; }
 }

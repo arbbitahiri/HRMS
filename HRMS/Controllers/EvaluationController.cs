@@ -129,7 +129,6 @@ public class EvaluationController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
-
     #region Details
 
     [HttpGet, Authorize(Policy = "71:c"), Description("Arb Tahiri", "Form to display questionnaire details")]

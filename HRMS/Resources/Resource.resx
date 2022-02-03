@@ -1218,4 +1218,16 @@
   <data name="Staff" xml:space="preserve">
     <value>Stafi</value>
   </data>
+  <data name="AnswerClearedSuccessfully" xml:space="preserve">
+    <value>Përgjigja u largua me sukses!</value>
+  </data>
+  <data name="AnswerIt" xml:space="preserve">
+    <value>Përgjigju</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Largo</value>
+  </data>
+  <data name="Cleared" xml:space="preserve">
+    <value>U largua</value>
+  </data>
 </root>

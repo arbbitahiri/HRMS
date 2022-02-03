@@ -132,7 +132,8 @@ public class EvaluationManagerController : BaseController
             }).FirstOrDefaultAsync();
 
         var numericals = await db.EvaluationQuestionnaireNumerical
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Active
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
@@ -143,7 +144,8 @@ public class EvaluationManagerController : BaseController
             }).ToListAsync();
 
         var optionals = await db.EvaluationQuestionnaireOptional
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Active
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionOptional
             {
@@ -158,7 +160,8 @@ public class EvaluationManagerController : BaseController
             }).ToListAsync();
 
         var topics = await db.EvaluationQuestionnaireTopic
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Active
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {
@@ -251,16 +254,48 @@ public class EvaluationManagerController : BaseController
     #region => Edit
 
     [HttpGet, Authorize(Policy = "71q:e"), Description("Arb Tahiri", "Form to edit a question.")]
-    public async Task<IActionResult> _EditQuestion(string ide, MethodType method)
+    public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
-        var question = await db.EvaluationQuestionnaireNumerical
-            .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new ManageQuestion
-            {
-                EvaluationQuestionnaireNumericalIde = ide,
-                Question = a.Question,
-                Active = a.Active
-            }).FirstOrDefaultAsync();
+        var question = new ManageQuestion();
+        if (questionType == QuestionType.Numerical)
+        {
+            question = await db.EvaluationQuestionnaireNumerical
+                .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new ManageQuestion
+                {
+                    EvaluationQuestionnaireNumericalIde = ide,
+                    Question = a.Question,
+                    QuestionType = questionType
+                }).FirstOrDefaultAsync();
+        }
+        else if (questionType == QuestionType.Optional)
+        {
+            question = await db.EvaluationQuestionnaireOptional
+                .Where(a => a.Active && a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new ManageQuestion
+                {
+                    EvaluationQuestionnaireOptionalIde = ide,
+                    Question = a.Question,
+                    QuestionType = questionType,
+                    Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new Option
+                    {
+                        OptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
+                        Title = a.OptionTitle
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+        }
+        else
+        {
+            question = await db.EvaluationQuestionnaireTopic
+                .Where(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new ManageQuestion
+                {
+                    EvaluationQuestionnaireTopicIde = ide,
+                    Question = a.Question,
+                    QuestionType = questionType
+                }).FirstOrDefaultAsync();
+        }
+
         return PartialView(question);
     }
 
@@ -273,11 +308,30 @@ public class EvaluationManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
-        question.Question = edit.Question;
-        question.UpdatedDate = DateTime.Now;
-        question.UpdatedFrom = user.Id;
-        question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        if (edit.QuestionType == QuestionType.Numerical)
+        {
+            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
+            question.Question = edit.Question;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+        else if (edit.QuestionType == QuestionType.Optional)
+        {
+            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
+            question.OptionTitle = edit.Question;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+        else
+        {
+            var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
+            question.Question = edit.Question;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -289,16 +343,60 @@ public class EvaluationManagerController : BaseController
 
     [HttpPost, Authorize(Policy = "71q:d"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to delete a question.")]
-    public async Task<IActionResult> DeleteQuestion(string ide)
+    public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
-        var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
-        question.Active = false;
-        question.UpdatedDate = DateTime.Now;
-        question.UpdatedFrom = user.Id;
-        question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        if (questionType == QuestionType.Numerical)
+        {
+            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
+            question.Active = false;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+        else if (questionType == QuestionType.Optional)
+        {
+            var question = await db.EvaluationQuestionnaireOptional.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide));
+            question.Active = false;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+        else
+        {
+            var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(ide));
+            question.Active = false;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+    }
+
+    [HttpPost, Authorize(Policy = "71q:d"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Action to delete a question.")]
+    public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
+    {
+        if (questionType == QuestionType.Numerical)
+        {
+            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
+            question.Grade = null;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+        else
+        {
+            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+            question.Checked = false;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        }
+
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AnswerClearedSuccessfully });
     }
 
     #endregion
@@ -309,36 +407,80 @@ public class EvaluationManagerController : BaseController
     [Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> NumericalAnswer(string ide, int num)
     {
-        var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
-        question.Grade = num;
-        question.UpdatedDate = DateTime.Now;
-        question.UpdatedFrom = user.Id;
-        question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        var error = new ErrorVM();
+        if (await db.EvaluationQuestionnaireNumerical.AnyAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide) && a.Grade == num))
+        {
+            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
+            question.Grade = null;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+
+            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
+        }
+        else
+        {
+            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
+            question.Grade = num;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+
+            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
+        }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated });
+        return Json(error);
     }
 
     [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> OptionalAnswer(string ide)
     {
-        var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
-        question.Checked = true;
-        question.UpdatedDate = DateTime.Now;
-        question.UpdatedFrom = user.Id;
-        question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        var error = new ErrorVM();
+        if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
+        {
+            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+            question.Checked = false;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+
+            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
+        }
+        else
+        {
+            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+            question.Checked = true;
+            question.UpdatedDate = DateTime.Now;
+            question.UpdatedFrom = user.Id;
+            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+
+            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
+        }
 
         await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated });
+        return Json(error);
     }
 
     [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
-    public async Task<IActionResult> TopicAnswer(string ide, string txt)
+    public async Task<IActionResult> _TopicAnswer(string ide) =>
+        PartialView(await db.EvaluationQuestionnaireTopic
+            .Where(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new QuestionTopic
+            {
+                EvaluationQuestionnaireTopicIde = ide,
+                Question = a.Question,
+                InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy")
+            }).FirstOrDefaultAsync());
+
+    [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Action to answer a question.")]
+    public async Task<IActionResult> TopicAnswer(QuestionTopic topicAnswer)
     {
-        var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(ide));
-        question.Answer = txt;
+        var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(topicAnswer.EvaluationQuestionnaireTopicIde));
+        question.Answer = topicAnswer.Answer;
         question.UpdatedDate = DateTime.Now;
         question.UpdatedFrom = user.Id;
         question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;

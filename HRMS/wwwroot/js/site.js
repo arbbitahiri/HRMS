@@ -67,11 +67,11 @@ function handle_success(data, path_type, path) {
             icon: 'success',
             title: data.title,
             text: data.description,
-            timer: 2000,
+            timer: 2500,
             showConfirmButton: false
         }).then((result) => {
             if (path_type == SubmitPathType.RELOAD) {
-                window.location.reload(true);
+                window.location.reload();
             } else if (path_type == SubmitPathType.PATH) {
                 window.location.href = path;
             } else { }
