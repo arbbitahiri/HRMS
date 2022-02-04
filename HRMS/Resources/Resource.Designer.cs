@@ -2392,6 +2392,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pyetja anglisht.
+        /// </summary>
+        public static string QuestionEN {
+            get {
+                return ResourceManager.GetString("QuestionEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Të dhënat për pyetësorin.
         /// </summary>
         public static string QuestionnaireData {
@@ -2424,6 +2433,15 @@ namespace HRMS.Resources {
         public static string QuestionsLower {
             get {
                 return ResourceManager.GetString("QuestionsLower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pyetja shqip.
+        /// </summary>
+        public static string QuestionSQ {
+            get {
+                return ResourceManager.GetString("QuestionSQ", resourceCulture);
             }
         }
         
@@ -3117,6 +3135,24 @@ namespace HRMS.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titulli anglisht.
+        /// </summary>
+        public static string TitleEN {
+            get {
+                return ResourceManager.GetString("TitleEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titulli shqip.
+        /// </summary>
+        public static string TitleSQ {
+            get {
+                return ResourceManager.GetString("TitleSQ", resourceCulture);
             }
         }
         

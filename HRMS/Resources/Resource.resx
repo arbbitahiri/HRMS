@@ -1230,4 +1230,16 @@
   <data name="Cleared" xml:space="preserve">
     <value>U largua</value>
   </data>
+  <data name="QuestionEN" xml:space="preserve">
+    <value>Pyetja anglisht</value>
+  </data>
+  <data name="QuestionSQ" xml:space="preserve">
+    <value>Pyetja shqip</value>
+  </data>
+  <data name="TitleEN" xml:space="preserve">
+    <value>Titulli anglisht</value>
+  </data>
+  <data name="TitleSQ" xml:space="preserve">
+    <value>Titulli shqip</value>
+  </data>
 </root>

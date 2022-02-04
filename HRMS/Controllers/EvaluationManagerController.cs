@@ -137,8 +137,9 @@ public class EvaluationManagerController : BaseController
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
+                NumericalId = a.EvaluationQuestionnaireNumericalId * 6,
                 EvaluationQuestionnaireNumericalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireNumericalId),
-                Title = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Grade = a.Grade,
                 Graded = a.Grade.HasValue
             }).ToListAsync();
@@ -149,12 +150,16 @@ public class EvaluationManagerController : BaseController
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionOptional
             {
+                OptionalId = a.EvaluationQuestionnaireOptionalId * 6,
                 EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
-                Question = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
+                OtherDescription = a.Description,
                 Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
                 {
+                    OptionId = a.EvaluationQuestionnaireOptionalOptionId * 6,
                     EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
-                    Option = a.OptionTitle,
+                    Option = user.Language == LanguageEnum.Albanian ? a.OptionTitleSq : a.OptionTitleEn,
+                    DescNeeded = a.OptionTitleSq.ToLower().Contains("tjet"),
                     Checked = a.Checked
                 }).ToList()
             }).ToListAsync();
@@ -166,8 +171,8 @@ public class EvaluationManagerController : BaseController
             .Select(a => new QuestionTopic
             {
                 EvaluationQuestionnaireTopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireTopicId),
-                Question = a.Question,
-                Answer = a.Answer ?? ""
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
+                Answer = a.Answer
             }).ToListAsync();
 
         var questionVM = new QuestionVM
@@ -176,7 +181,7 @@ public class EvaluationManagerController : BaseController
             Numericals = numericals,
             Optionals = optionals,
             Topics = topics,
-            NumericalQuestionsCount = numericals.Count,
+            TotalQuestions = numericals.Count + optionals.Count + topics.Count,
             Method = method
         };
         return View(questionVM);
@@ -187,7 +192,7 @@ public class EvaluationManagerController : BaseController
     #region => Create
 
     [Authorize(Policy = "71q:c"), Description("Arb Tahiri", "Form to add a question.")]
-    public IActionResult _AddQuestion(string ide) => PartialView(new ManageQuestion { EvaluationIde = ide });
+    public IActionResult _AddQuestion(string ide) => PartialView(new ManageQuestion { EvaluationIde = ide, MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]) });
 
     [HttpPost, Authorize(Policy = "71q:c"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to add a question.")]
@@ -208,10 +213,12 @@ public class EvaluationManagerController : BaseController
             db.EvaluationQuestionnaireOptional.Add(new EvaluationQuestionnaireOptional
             {
                 EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-                Question = create.Question,
+                QuestionSq = create.QuestionSQ,
+                QuestionEn = create.QuestionEN,
                 EvaluationQuestionnaireOptionalOption = create.Options.Select(a => new EvaluationQuestionnaireOptionalOption
                 {
-                    OptionTitle = a.Title,
+                    OptionTitleSq = a.TitleSQ,
+                    OptionTitleEn = a.TitleEN,
                     Checked = false,
                     Active = true,
                     InsertedDate = DateTime.Now,
@@ -227,7 +234,8 @@ public class EvaluationManagerController : BaseController
             db.EvaluationQuestionnaireTopic.Add(new EvaluationQuestionnaireTopic
             {
                 EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-                Question = create.Question,
+                QuestionSq = create.QuestionSQ,
+                QuestionEn = create.QuestionEN,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
@@ -238,7 +246,8 @@ public class EvaluationManagerController : BaseController
             db.EvaluationQuestionnaireNumerical.Add(new EvaluationQuestionnaireNumerical
             {
                 EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-                Question = create.Question,
+                QuestionSq = create.QuestionSQ,
+                QuestionEn = create.QuestionEN,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
@@ -253,7 +262,7 @@ public class EvaluationManagerController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "71q:e"), Description("Arb Tahiri", "Form to edit a question.")]
+    [Authorize(Policy = "71q:e"), Description("Arb Tahiri", "Form to edit a question.")]
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
         var question = new ManageQuestion();
@@ -264,8 +273,9 @@ public class EvaluationManagerController : BaseController
                 .Select(a => new ManageQuestion
                 {
                     EvaluationQuestionnaireNumericalIde = ide,
-                    Question = a.Question,
-                    QuestionType = questionType
+                    QuestionSQ = a.QuestionSq,
+                    QuestionEN = a.QuestionEn,
+                    QuestionTypeEnum = questionType
                 }).FirstOrDefaultAsync();
         }
         else if (questionType == QuestionType.Optional)
@@ -275,12 +285,15 @@ public class EvaluationManagerController : BaseController
                 .Select(a => new ManageQuestion
                 {
                     EvaluationQuestionnaireOptionalIde = ide,
-                    Question = a.Question,
-                    QuestionType = questionType,
+                    QuestionSQ = a.QuestionSq,
+                    QuestionEN = a.QuestionEn,
+                    QuestionTypeEnum = questionType,
+                    MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]),
                     Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new Option
                     {
-                        OptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
-                        Title = a.OptionTitle
+                        OptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
+                        TitleSQ = a.OptionTitleSq,
+                        TitleEN = a.OptionTitleEn
                     }).ToList()
                 }).FirstOrDefaultAsync();
         }
@@ -291,8 +304,10 @@ public class EvaluationManagerController : BaseController
                 .Select(a => new ManageQuestion
                 {
                     EvaluationQuestionnaireTopicIde = ide,
-                    Question = a.Question,
-                    QuestionType = questionType
+                    QuestionSQ = a.QuestionSq,
+                    QuestionEN = a.QuestionEn,
+                    Answer = a.Answer,
+                    QuestionTypeEnum = questionType
                 }).FirstOrDefaultAsync();
         }
 
@@ -308,26 +323,65 @@ public class EvaluationManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (edit.QuestionType == QuestionType.Numerical)
+        if (edit.QuestionTypeEnum == QuestionType.Numerical)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
-            question.Question = edit.Question;
+            question.QuestionSq = edit.QuestionSQ;
+            question.QuestionEn = edit.QuestionEN;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
             question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
         }
-        else if (edit.QuestionType == QuestionType.Optional)
+        else if (edit.QuestionTypeEnum == QuestionType.Optional)
         {
-            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
-            question.OptionTitle = edit.Question;
+            if (edit.Options == null)
+            {
+                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            }
+
+            var question = await db.EvaluationQuestionnaireOptional
+                .Include(a => a.EvaluationQuestionnaireOptionalOption)
+                .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireOptionalIde));
+            question.QuestionSq = edit.QuestionSQ;
+            question.QuestionEn = edit.QuestionEN;
+            foreach (var option in edit.Options)
+            {
+                if (string.IsNullOrEmpty(option.OptionIde))
+                {
+                    db.EvaluationQuestionnaireOptionalOption.Add(new EvaluationQuestionnaireOptionalOption
+                    {
+                        EvaluationQuestionnaireOptionalId = CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireOptionalIde),
+                        OptionTitleSq = option.TitleSQ,
+                        OptionTitleEn = option.TitleEN,
+                        Checked = false,
+                        Active = true,
+                        InsertedDate = DateTime.Now,
+                        InsertedFrom = user.Id
+                    });
+                }
+                else
+                {
+                    foreach (var item in question.EvaluationQuestionnaireOptionalOption.Where(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(option.OptionIde)))
+                    {
+                        item.OptionTitleSq = option.TitleSQ;
+                        item.OptionTitleEn = option.TitleEN;
+                        item.UpdatedDate = DateTime.Now;
+                        item.UpdatedFrom = user.Id;
+                        item.UpdatedNo = item.UpdatedNo.HasValue ? ++item.UpdatedNo : item.UpdatedNo = 1;
+                    }
+                }
+
+            }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
             question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
         }
         else
         {
-            var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
-            question.Question = edit.Question;
+            var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireTopicIde));
+            question.QuestionSq = edit.QuestionSQ;
+            question.QuestionEn = edit.QuestionEN;
+            question.Answer = edit.Answer;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
             question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
@@ -435,7 +489,7 @@ public class EvaluationManagerController : BaseController
 
     [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
-    public async Task<IActionResult> OptionalAnswer(string ide)
+    public async Task<IActionResult> OptionalAnswer(string ide, string txt)
     {
         var error = new ErrorVM();
         if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
@@ -450,8 +504,17 @@ public class EvaluationManagerController : BaseController
         }
         else
         {
-            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+            var question = await db.EvaluationQuestionnaireOptionalOption
+                .Include(a => a.EvaluationQuestionnaireOptional)
+                .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
             question.Checked = true;
+            if (!string.IsNullOrEmpty(txt))
+            {
+                question.EvaluationQuestionnaireOptional.Description = txt;
+                question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
+                question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
+                question.EvaluationQuestionnaireOptional.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
             question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
@@ -463,15 +526,14 @@ public class EvaluationManagerController : BaseController
         return Json(error);
     }
 
-    [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to answer a question.")]
+    [Authorize(Policy = "71q:a"), Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> _TopicAnswer(string ide) =>
         PartialView(await db.EvaluationQuestionnaireTopic
             .Where(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {
                 EvaluationQuestionnaireTopicIde = ide,
-                Question = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionEn,
                 InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy")
             }).FirstOrDefaultAsync());
 
@@ -479,7 +541,7 @@ public class EvaluationManagerController : BaseController
     [Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> TopicAnswer(QuestionTopic topicAnswer)
     {
-        var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(topicAnswer.EvaluationQuestionnaireTopicIde));
+        var question = await db.EvaluationQuestionnaireTopic.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireTopicId == CryptoSecurity.Decrypt<int>(topicAnswer.EvaluationQuestionnaireTopicIde));
         question.Answer = topicAnswer.Answer;
         question.UpdatedDate = DateTime.Now;
         question.UpdatedFrom = user.Id;

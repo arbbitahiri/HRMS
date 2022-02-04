@@ -12,7 +12,9 @@ namespace HRMS.Data.General
 
         public int EvaluationQuestionnaireOptionalId { get; set; }
         public int EvaluationId { get; set; }
-        public string Question { get; set; }
+        public string QuestionSq { get; set; }
+        public string QuestionEn { get; set; }
+        public string Description { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }

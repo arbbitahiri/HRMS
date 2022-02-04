@@ -131,7 +131,7 @@ public class EvaluationController : BaseController
 
     #region Details
 
-    [HttpGet, Authorize(Policy = "71:c"), Description("Arb Tahiri", "Form to display questionnaire details")]
+    [HttpGet, Authorize(Policy = "71de:r"), Description("Arb Tahiri", "Form to display questionnaire details")]
     public async Task<ActionResult> Details(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -218,7 +218,7 @@ public class EvaluationController : BaseController
         return View(details);
     }
 
-    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _NumericalQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireNumerical
@@ -227,12 +227,12 @@ public class EvaluationController : BaseController
             .Select(a => new QuestionNumerical
             {
                 EvaluationQuestionnaireNumericalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireNumericalId),
-                Title = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Grade = a.Grade,
                 Graded = a.Grade.HasValue
             }).ToListAsync());
 
-    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
@@ -241,16 +241,16 @@ public class EvaluationController : BaseController
             .Select(a => new QuestionOptional
             {
                 EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
-                Question = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
                 {
                     EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
-                    Option = a.OptionTitle,
+                    Option = user.Language == LanguageEnum.Albanian ? a.OptionTitleSq : a.OptionTitleEn,
                     Checked = a.Checked
                 }).ToList()
             }).ToListAsync());
 
-    [HttpPost, Authorize(Policy = "71:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _TopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireTopic
@@ -259,7 +259,7 @@ public class EvaluationController : BaseController
             .Select(a => new QuestionTopic
             {
                 EvaluationQuestionnaireTopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireTopicId),
-                Question = a.Question,
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Answer = a.Answer
             }).ToListAsync());
 

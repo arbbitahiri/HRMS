@@ -10,6 +10,6 @@ public class QuestionVM
     public List<QuestionOptional> Optionals { get; set; }
     public List<QuestionTopic> Topics { get; set; }
 
-    public int NumericalQuestionsCount { get; set; }
+    public int TotalQuestions { get; set; }
     public MethodType Method { get; set; }
 }

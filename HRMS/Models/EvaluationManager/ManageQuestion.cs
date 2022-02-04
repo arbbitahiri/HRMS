@@ -14,21 +14,36 @@ public class ManageQuestion
     public string EvaluationIde { get; set; }
 
     [Display(Name = "QuestionType", ResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    [RequiredIf(nameof(MethodTypeEnum), "Post", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public int QuestionTypeId { get; set; }
 
-    [Display(Name = "Question", ResourceType = typeof(Resource))]
+    [Display(Name = "QuestionSQ", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string Question { get; set; }
+    public string QuestionSQ { get; set; }
+
+    [Display(Name = "QuestionEN", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public string QuestionEN { get; set; }
 
     [Display(Name = "Options", ResourceType = typeof(Resource))]
     public List<Option> Options { get; set; }
 
-    public QuestionType QuestionType { get; set; }
+    public string Answer { get; set; }
+
+    public int MaxQuestionOptions { get; set; }
+    public QuestionType QuestionTypeEnum { get; set; }
+    public MethodType MethodTypeEnum { get; set; }
 }
 
 public class Option
 {
     public string OptionIde { get; set; }
-    public string Title { get; set; }
+
+    [Display(Name = "TitleSQ", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public string TitleSQ { get; set; }
+
+    [Display(Name = "TitleEN", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public string TitleEN { get; set; }
 }

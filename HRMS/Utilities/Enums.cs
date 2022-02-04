@@ -93,13 +93,3 @@ public enum QuestionType
     Optional = 2,
     Topic = 3
 }
-
-public enum NumericalRate
-{
-    DontKnow = 0,
-    DontAgreeAtAll = 1,
-    DontAgree = 2,
-    AgreeNorDisagree = 3,
-    Agree = 4,
-    AgreeAtAll = 5
-}

@@ -27,20 +27,30 @@
                 <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-group">
-                <label asp-for="Question" class="required"></label>
-                <input asp-for="Question" type="text" class="form-control"/>
-                <span asp-validation-for="Question" class="text-danger"></span>
+                <label asp-for="QuestionSQ" class="required"></label>
+                <input asp-for="QuestionSQ" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionEN" class="required"></label>
+                <input asp-for="QuestionEN" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionEN" class="text-danger"></span>
             </div>
             <div id="rpt_options" class="col-md-12 d-none">
-                <div data-repeater-list="" data-limit="8" class="row repeater">
+                <div data-repeater-list="" data-limit="@Model.MaxQuestionOptions" class="row repeater">
                     <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
-                        <div class="col-md-8">
-                            <label name="Title" class="required">@Resource.Option</label>
-                            <input type="text" name="Title" class="form-control"/>
+                        <div class="col-md-4">
+                            <label name="OptionTitleSq" class="required">@Resource.Option</label>
+                            <input type="text" name="OptionTitleSq" class="form-control"/>
                             <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
                         </div>
                         <div class="col-md-4">
-                            <label name="Title" style="visibility: hidden;"></label><br />
+                            <label name="OptionTitleEn" class="required">@Resource.Option</label>
+                            <input type="text" name="OptionTitleEn" class="form-control"/>
+                            <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
+                        </div>
+                        <div class="col-md-2">
+                            <label name="OptionTitleEn" style="visibility: hidden;"></label><br />
                             <div class="mt-2">
                                 <a data-repeater-delete class="btn btn-sm btn-danger"><i class="fas fa-trash"> @Resource.Delete</i></a>
                             </div>
@@ -126,7 +136,8 @@
         var data = {
             EvaluationIde : $('#EvaluationIde').val(),
             QuestionTypeId: $('#QuestionTypeId').val(),
-            Question: $('#Question').val(),
+            QuestionSQ: $('#QuestionSQ').val(),
+            QuestionEN: $('#QuestionEN').val(),
             Options: $('#rpt_options').repeaterVal()[""]
         };
 

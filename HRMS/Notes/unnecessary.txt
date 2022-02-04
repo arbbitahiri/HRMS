@@ -1,11 +1,37 @@
 //var checkOptions = await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.Checked);
 //var checkTopic = await db.EvaluationQuestionnaireTopic.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrEmpty(a.Answer));
 
-//if (checkNumerical && !checkOptions && checkTopic)
-//{
+if ('@((int)Model.QuestionTypeEnum)' == QuestionType.OPTIONAL) {
+    if ($('#rpt_options').repeaterVal()["System.Collections.Generic.List`1"]["HRMS.Models.EvaluationManager.Options"] == null) {
+        $('#rpt_option').removeClass('d-none');
+        return;
+    } else {
+        $('#rpt_option').addClass('d-none');
+    }
+}
 
-//}
-//else
-//{
-
-//}
+<div class="card" style='box-shadow: none !important; @(user.Mode == TemplateMode.Dark ? "background-color: #343a40;" : "")'>
+    <div class="card-body p-0 pb-0">
+        <p style="width: 100%;">@Resource.NumericalQuestionsINFO</p>
+        <div class="slider-green" disabled="disabled">
+            <div class="slider slider-horizontal" id="" style="width: 100%;">
+                <div class="slider-track" style="width: 100%; cursor: default;">
+                </div>
+                <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #6c757d; left: 0%;" aria-valuenow="-200" tabindex="0"></div>
+                <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #dc3545; left: 20%;" aria-valuenow="-120" tabindex="0"></div>
+                <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #ff851b; left: 40%;" aria-valuenow="-40" tabindex="0"></div>
+                <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #ffc107; left: 60%;" aria-valuenow="40" tabindex="0"></div>
+                <div class="custom-slider-handle min-slider-handle round" role="slider" style="background: #17a2b8; left: 80%;" aria-valuenow="120" tabindex="0"></div>
+                <div class="custom-slider-handle max-slider-handle round" role="slider" style="background: #28a745; left: 100%;" aria-valuenow="200" tabindex="0"></div>
+            </div>
+        </div>
+        <p>
+            <small class="text-muted" style="position: absolute; left: -1%">@Resource.DontKnow</small>
+            <small class="text-muted" style="position: absolute; left: 17%">@Resource.DontAgreeAll</small>
+            <small class="text-muted" style="position: absolute; left: 38%">@Resource.DontAgree</small>
+            <small class="text-muted" style="position: absolute; left: 55%">@Resource.AgreeNorDisagree</small>
+            <small class="text-muted" style="position: absolute; left: 78%">@Resource.Agree</small>
+            <small class="text-muted" style="position: absolute; left: 97%">@Resource.AgreeTotally</small>
+        </p>
+    </div>
+</div>

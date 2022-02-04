@@ -7,8 +7,10 @@ namespace HRMS.Data.General
     {
         public int EvaluationQuestionnaireOptionalOptionId { get; set; }
         public int EvaluationQuestionnaireOptionalId { get; set; }
-        public string OptionTitle { get; set; }
+        public string OptionTitleSq { get; set; }
+        public string OptionTitleEn { get; set; }
         public bool Checked { get; set; }
+        public string Description { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }

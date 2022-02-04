@@ -7,7 +7,8 @@ namespace HRMS.Data.General
     {
         public int EvaluationQuestionnaireTopicId { get; set; }
         public int EvaluationId { get; set; }
-        public string Question { get; set; }
+        public string QuestionSq { get; set; }
+        public string QuestionEn { get; set; }
         public string Answer { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }

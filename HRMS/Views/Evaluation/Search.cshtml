@@ -193,6 +193,10 @@
             window.location.href = '/' + controller + '/Index?ide=' + ide;
         }
 
+        function details_evaluation(ide) {
+            window.location.href = '/Evaluation/Index?ide=' + ide;
+        }
+
         function delete_evaluation(ide) {
             Swal.fire({
                 title: "@Html.Raw(Resource.AreYouSure)",
@@ -213,10 +217,6 @@
                     });
                 }
             });
-        }
-
-        function details_evaluation(ide) {
-            window.location.href = '/Evaluation/Index?ide=' + ide;
         }
     </script>
 }
