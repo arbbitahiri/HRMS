@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HRMS.Data.General
 {
-    public partial class HRMS_WorkContext : DbContext
+    public partial class HRMSContext : DbContext
     {
-        public HRMS_WorkContext()
+        public HRMSContext()
         {
         }
 
-        public HRMS_WorkContext(DbContextOptions<HRMS_WorkContext> options)
+        public HRMSContext(DbContextOptions<HRMSContext> options)
             : base(options)
         {
         }
@@ -64,7 +64,7 @@ namespace HRMS.Data.General
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=.;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -789,7 +789,7 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(450);
 
-                entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
+                entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -811,11 +811,11 @@ namespace HRMS.Data.General
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EvaluationSelf_AspNetUsers_Inserted");
 
-                entity.HasOne(d => d.StaffDepartment)
+                entity.HasOne(d => d.Staff)
                     .WithMany(p => p.EvaluationSelf)
-                    .HasForeignKey(d => d.StaffDepartmentId)
+                    .HasForeignKey(d => d.StaffId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationSelf_StaffDepartment");
+                    .HasConstraintName("FK_EvaluationSelf_Staff");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.EvaluationSelfUpdatedFromNavigation)

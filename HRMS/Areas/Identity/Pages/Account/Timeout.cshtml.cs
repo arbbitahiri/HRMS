@@ -19,7 +19,7 @@ namespace HRMS.Areas.Identity.Pages.Account
         private SignInManager<ApplicationUser> _signManger;
         private IConfiguration _configuration;
 
-        public TimeoutModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signManger, IConfiguration configuration, HRMS_WorkContext db)
+        public TimeoutModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signManger, IConfiguration configuration, HRMSContext db)
             : base(db)
         {
             _userManager = userManager;

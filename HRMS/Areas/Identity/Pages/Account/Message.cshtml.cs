@@ -8,7 +8,7 @@ namespace HRMS.Areas.Identity.Pages.Account;
 [AllowAnonymous]
 public class MessageModel : BaseOModel
 {
-    public MessageModel(HRMS_WorkContext db) : base(db)
+    public MessageModel(HRMSContext db) : base(db)
     {
 
     }

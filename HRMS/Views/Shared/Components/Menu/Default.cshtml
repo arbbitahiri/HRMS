@@ -26,7 +26,7 @@
                     @foreach (var submenu in menu.Submenus)
                     {
                         <li class="nav-item" aria-haspopup="true">
-                            <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" class="nav-link @(submenu.Controller == (string)controller && submenu.OpenFor.Split(',').Contains((string)action) ? "active" :"")">
+                            <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" asp-area="@submenu.Area" class="nav-link @(submenu.Controller == (string)controller && submenu.OpenFor.Split(',').Contains((string)action) ? "active" :"")">
                                 <i class="@submenu.Icon nav-icon"></i>
                                 <p>@submenu.Title</p>
                             </a>

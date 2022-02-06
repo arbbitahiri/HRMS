@@ -34,10 +34,10 @@ public class BaseController : Controller
 {
     protected readonly SignInManager<ApplicationUser> signInManager;
     protected readonly UserManager<ApplicationUser> userManager;
-    protected HRMS_WorkContext db;
+    protected HRMSContext db;
     protected ApplicationUser user;
 
-    public BaseController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public BaseController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
     {
         this.db = db;
         this.signInManager = signInManager;

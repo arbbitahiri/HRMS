@@ -26,7 +26,7 @@ public class EvaluationManagerController : BaseController
     private readonly IWebHostEnvironment environment;
 
     public EvaluationManagerController(IConfiguration configuration, IWebHostEnvironment environment,
-        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.configuration = configuration;
@@ -118,7 +118,7 @@ public class EvaluationManagerController : BaseController
     #region => List
 
     [HttpGet, Authorize(Policy = "71q:r")]
-    [Description("Arb Tahiri", "Form to display evaluation types. Second step of registering/editing questionnaire.")]
+    [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
     public async Task<IActionResult> Questions(string ide, MethodType method)
     {
         var details = await db.EvaluationManager
@@ -621,7 +621,7 @@ public class EvaluationManagerController : BaseController
             DocumentTypeId = create.DocumentTypeId,
             Title = create.Title,
             Path = path,
-            //Description = create.Description,
+            Description = create.Description,
             Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -645,7 +645,7 @@ public class EvaluationManagerController : BaseController
                 EvaluationDocumentIde = ide,
                 DocumentTypeId = a.DocumentTypeId,
                 Title = a.Title,
-                //Description = a.Description,
+                Description = a.Description,
                 Active = a.Active
             }).FirstOrDefaultAsync();
         return PartialView(question);
@@ -663,7 +663,7 @@ public class EvaluationManagerController : BaseController
         var document = await db.EvaluationDocument.FirstOrDefaultAsync(a => a.EvaluationDocumentId == CryptoSecurity.Decrypt<int>(edit.EvaluationDocumentIde));
         document.DocumentTypeId = edit.DocumentTypeId;
         document.Title = edit.Title;
-        //document.Description = edit.Description;
+        document.Description = edit.Description;
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;

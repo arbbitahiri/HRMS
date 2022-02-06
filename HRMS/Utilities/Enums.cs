@@ -83,8 +83,9 @@ public enum HolidayTypeEnum
 public enum EvaluationTypeEnum
 {
     Manager = 1,
-    Student = 2,
-    Self = 3
+    StudentStaff = 2,
+    StudentCollege = 3,
+    Self = 4
 }
 
 public enum QuestionType

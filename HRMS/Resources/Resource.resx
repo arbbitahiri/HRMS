@@ -1056,8 +1056,8 @@
   <data name="SelfEvaluation" xml:space="preserve">
     <value>Vetëvlerësimi</value>
   </data>
-  <data name="StudentsEvaluation" xml:space="preserve">
-    <value>Vlerësimi nga studentët</value>
+  <data name="StudentsStaffEvaluation" xml:space="preserve">
+    <value>Vlerësimi nga studentët për stafin</value>
   </data>
   <data name="Evaluation" xml:space="preserve">
     <value>Vlerësimi</value>
@@ -1241,5 +1241,8 @@
   </data>
   <data name="TitleSQ" xml:space="preserve">
     <value>Titulli shqip</value>
+  </data>
+  <data name="StudentsCollegeEvaluation" xml:space="preserve">
+    <value>Vlerësimi nga studentët për kolegjin</value>
   </data>
 </root>

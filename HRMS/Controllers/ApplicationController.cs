@@ -23,7 +23,7 @@ public class ApplicationController : BaseController
     private readonly IFunctionRepository function;
 
     public ApplicationController(IFunctionRepository function,
-        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.function = function;

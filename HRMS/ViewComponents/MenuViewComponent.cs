@@ -42,6 +42,7 @@ public class MenuViewComponent : ViewComponent
                 a.MenuTitle,
                 a.HasSubMenu,
                 a.MenuIcon,
+                a.MenuArea,
                 a.MenuController,
                 a.MenuAction,
                 a.MenuOpenFor
@@ -51,6 +52,7 @@ public class MenuViewComponent : ViewComponent
                 Title = a.MenuTitle,
                 HasSubmenu = a.HasSubMenu,
                 Icon = a.MenuIcon,
+                Area = a.MenuArea,
                 Controller = a.MenuController,
                 Action = a.MenuAction,
                 OpenFor = a.MenuOpenFor ?? "",
@@ -60,6 +62,7 @@ public class MenuViewComponent : ViewComponent
                         SubmenuId = b.SubMenuId,
                         Title = b.SubMenuTitle,
                         Icon = b.SubMenuIcon,
+                        Area = b.SubMenuArea,
                         Controller = b.SubMenuController,
                         Action = b.SubMenuAction,
                         OpenFor = b.SubMenuOpenFor

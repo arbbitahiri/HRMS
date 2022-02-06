@@ -2851,11 +2851,20 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vlerësimi nga studentët.
+        ///   Looks up a localized string similar to Vlerësimi nga studentët për kolegjin.
         /// </summary>
-        public static string StudentsEvaluation {
+        public static string StudentsCollegeEvaluation {
             get {
-                return ResourceManager.GetString("StudentsEvaluation", resourceCulture);
+                return ResourceManager.GetString("StudentsCollegeEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vlerësimi nga studentët për stafin.
+        /// </summary>
+        public static string StudentsStaffEvaluation {
+            get {
+                return ResourceManager.GetString("StudentsStaffEvaluation", resourceCulture);
             }
         }
         

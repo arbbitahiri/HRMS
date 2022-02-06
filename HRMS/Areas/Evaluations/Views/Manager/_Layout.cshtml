@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/assets/plugins/bootstrap-slider/css/bootstrap-slider.min.css" asp-append-version="true"></script>
+
+<div class="card">
+    <div class="card-body">
+        <div class="bs-stepper">
+            <partial name="_Navigation" />
+            <div class="bs-stepper-content pt-4">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/plugins/bootstrap-slider/bootstrap-slider.min.js" asp-append-version="true"></script>
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

@@ -30,7 +30,7 @@ public class AuthorizationController : BaseController
     private readonly IFunctionRepository function;
 
     public AuthorizationController(RoleManager<ApplicationRole> roleManager, IFunctionRepository function,
-        HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.roleManager = roleManager;

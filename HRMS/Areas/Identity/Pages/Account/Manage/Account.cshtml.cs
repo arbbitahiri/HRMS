@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace HRMS.Areas.Identity.Pages.Account.Manage;
 public class AccountModel : BaseIModel
 {
-    public AccountModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
+    public AccountModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
         : base(signInManager, userManager, db)
     {
     }

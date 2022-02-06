@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HRMS.Data.Migrations
 {
-    [DbContext(typeof(HRMS_WorkContext))]
-    [Migration("20220110081626_HRMS-Work")]
+    [DbContext(typeof(HRMSContext))]
+    [Migration("20220110081626_HRMS")]
     partial class HRMSWork
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

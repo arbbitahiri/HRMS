@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public Staff()
         {
             EvaluationManager = new HashSet<EvaluationManager>();
+            EvaluationSelf = new HashSet<EvaluationSelf>();
             Holiday = new HashSet<Holiday>();
             StaffDepartment = new HashSet<StaffDepartment>();
             StaffDocument = new HashSet<StaffDocument>();
@@ -37,6 +38,7 @@ namespace HRMS.Data.General
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual AspNetUsers User { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManager { get; set; }
+        public virtual ICollection<EvaluationSelf> EvaluationSelf { get; set; }
         public virtual ICollection<Holiday> Holiday { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
         public virtual ICollection<StaffDocument> StaffDocument { get; set; }

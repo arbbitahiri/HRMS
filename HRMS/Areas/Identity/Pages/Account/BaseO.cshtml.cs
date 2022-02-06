@@ -25,10 +25,10 @@ using System.Threading.Tasks;
 namespace HRMS.Areas.Identity.Pages.Account;
 public class BaseOModel : PageModel
 {
-    protected HRMS_WorkContext db;
+    protected HRMSContext db;
     protected ApplicationUser user;
 
-    public BaseOModel(HRMS_WorkContext db)
+    public BaseOModel(HRMSContext db)
     {
         this.db = db;
     }

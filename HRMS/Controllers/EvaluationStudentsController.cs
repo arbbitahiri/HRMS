@@ -7,7 +7,7 @@ namespace HRMS.Controllers;
 
 public class EvaluationStudentsController : BaseController
 {
-    public EvaluationStudentsController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public EvaluationStudentsController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
     }

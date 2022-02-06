@@ -1,0 +1,122 @@
+﻿@using HRMS.Areas.Evaluations.Models.Manager
+@model Register
+@inject IDDLRepository repo
+@{
+    ViewData["Title"] = Resource.FirstStepEvaluation;
+    Layout = "~/Views/EvaluationManager/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="EvaluationManager" id="frm_register_evaluation" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="EvaluationIde" type="hidden"/>
+    <input asp-for="MethodType" type="hidden"/>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="StaffId" class="required"></label>
+            <select asp-for="StaffId" class="form-control"></select>
+            <span asp-validation-for="StaffId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Title" class="required"></label>
+            <input asp-for="Title" type="text" class="form-control" autocapitalize="on" autocomplete="off"/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-12 form-group">
+            <label asp-for="Description" class="required"></label>
+            <textarea asp-for="Description" class="form-control" rows="2" autocomplete="off"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end border-top mt-5">
+        <input type="submit" value="@Resource.Continue" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@((int)Model.MethodType) == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: 'cursor: default' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_questions_form').attr({ disabled: true });
+                $('#trigger_documents_form').attr({ disabled: true });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+            }
+
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_register_evaluation');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            if (culture == 'sq-AL') {
+                $('textarea').prop('spellcheck', false);
+            } else {
+                $('textarea').prop('spellcheck', true);
+            }
+
+            change_staff();
+        });
+
+        function change_staff() {
+            $('#StaffId').select2({
+                width: "100%",
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                    searching: function() {
+                        return '@Html.Raw(Resource.Searching)';
+                    },
+                },
+                ajax: {
+                    url: '@Url.Action("GetStaff")',
+                    type: 'post',
+                    datatype: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        };
+                    },
+                    processResults: function (response) {
+                        console.log(response);
+                        return {
+                            results: response
+                        };
+                    },
+                    catch: true
+                },
+                placeholder: '@Resource.Choose',
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
+            });
+        }
+
+        function formatRepo (repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var $container = $(
+                '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+            );
+            return $container;
+        }
+
+        function formatRepoSelection (repo) {
+            return repo.text;
+        }
+    </script>
+}

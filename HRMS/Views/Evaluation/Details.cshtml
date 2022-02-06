@@ -22,7 +22,11 @@
                             {
                                 <p class="text-sm">@Resource.Manager<b class="d-block">@Model.EvaluationDetails.Manager</b></p>
                             }
-                            @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.Student)
+                            @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.StudentStaff)
+                            {
+                                <p class="text-sm">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
+                            }
+                            @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.StudentCollege)
                             {
                                 <p class="text-sm">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
                             }

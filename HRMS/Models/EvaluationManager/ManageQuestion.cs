@@ -14,7 +14,8 @@ public class ManageQuestion
     public string EvaluationIde { get; set; }
 
     [Display(Name = "QuestionType", ResourceType = typeof(Resource))]
-    [RequiredIf(nameof(MethodTypeEnum), "Post", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    //[RequiredIf(nameof(MethodTypeEnum), "Post", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public int QuestionTypeId { get; set; }
 
     [Display(Name = "QuestionSQ", ResourceType = typeof(Resource))]
@@ -32,7 +33,6 @@ public class ManageQuestion
 
     public int MaxQuestionOptions { get; set; }
     public QuestionType QuestionTypeEnum { get; set; }
-    public MethodType MethodTypeEnum { get; set; }
 }
 
 public class Option

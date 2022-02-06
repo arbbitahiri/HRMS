@@ -1041,8 +1041,11 @@
   <data name="StatusType" xml:space="preserve">
     <value>Status type</value>
   </data>
-  <data name="StudentsEvaluation" xml:space="preserve">
-    <value>Students evaluation</value>
+  <data name="StudentsCollegeEvaluation" xml:space="preserve">
+    <value>Students evaluation for college</value>
+  </data>
+  <data name="StudentsStaffEvaluation" xml:space="preserve">
+    <value>Students evaluation for staff</value>
   </data>
   <data name="Subject" xml:space="preserve">
     <value>Subject</value>

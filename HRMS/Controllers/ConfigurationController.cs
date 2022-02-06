@@ -26,7 +26,7 @@ public class ConfigurationController : BaseController
     private readonly RoleManager<ApplicationRole> roleManager;
     private readonly IFunctionRepository func;
 
-    public ConfigurationController(HRMS_WorkContext db,
+    public ConfigurationController(HRMSContext db,
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,

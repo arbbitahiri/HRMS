@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace HRMS.Repository;
 public class DDLRepository : IDDLRepository
 {
-    private readonly HRMS_WorkContext db;
+    private readonly HRMSContext db;
 
-    public DDLRepository(HRMS_WorkContext db)
+    public DDLRepository(HRMSContext db)
     {
         this.db = db;
     }

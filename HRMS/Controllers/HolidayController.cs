@@ -18,7 +18,7 @@ namespace HRMS.Controllers;
 [Authorize]
 public class HolidayController : BaseController
 {
-    public HolidayController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public HolidayController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
     }

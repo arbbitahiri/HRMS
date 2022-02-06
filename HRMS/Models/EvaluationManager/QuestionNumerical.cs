@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRMS.Models.EvaluationManager;
+﻿namespace HRMS.Models.EvaluationManager;
 
 public class QuestionNumerical
 {

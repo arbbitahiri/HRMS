@@ -22,7 +22,7 @@ namespace HRMS.Controllers;
 [Authorize]
 public class EvaluationController : BaseController
 {
-    public EvaluationController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public EvaluationController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
     }
@@ -93,7 +93,7 @@ public class EvaluationController : BaseController
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
-                && a.StaffDepartment.StaffId == (search.StaffId ?? a.StaffDepartment.StaffId))
+                && a.StaffId == (search.StaffId ?? a.StaffId))
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
@@ -159,7 +159,7 @@ public class EvaluationController : BaseController
                     Description = a.Description
                 }).FirstOrDefaultAsync();
         }
-        else if (evaluationType == EvaluationTypeEnum.Student)
+        else if (evaluationType == EvaluationTypeEnum.StudentCollege)
         {
             evaluationDetails = await db.EvaluationStudents.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
                 .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
@@ -178,7 +178,7 @@ public class EvaluationController : BaseController
                     Students = a.StudentsNo
                 }).FirstOrDefaultAsync();
         }
-        else if (evaluationType == EvaluationTypeEnum.Self)
+        else if (evaluationType == EvaluationTypeEnum.StudentStaff)
         {
             evaluationDetails = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
                 .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
@@ -190,7 +190,24 @@ public class EvaluationController : BaseController
                     InsertedDate = a.InsertedDate,
                     MethodType = MethodType.Get,
                     EvaluationTypeEnum = evaluationType,
-                    Staff = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName}",
+                    Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                    Title = a.Title,
+                    Description = a.Description
+                }).FirstOrDefaultAsync();
+        }
+        else
+        {
+            evaluationDetails = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new EvaluationDetails
+                {
+                    EvaluationIde = ide,
+                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                    InsertedDate = a.InsertedDate,
+                    MethodType = MethodType.Get,
+                    EvaluationTypeEnum = evaluationType,
+                    Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
                     Title = a.Title,
                     Description = a.Description
                 }).FirstOrDefaultAsync();

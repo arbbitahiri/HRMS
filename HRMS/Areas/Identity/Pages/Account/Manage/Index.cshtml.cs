@@ -20,7 +20,7 @@ public partial class IndexModel : BaseIModel
     private readonly IConfiguration configuration;
 
     public IndexModel(IWebHostEnvironment hostEnvironment, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMS_WorkContext db)
+        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HRMSContext db)
         : base(signInManager, userManager, db)
     {
         this.hostEnvironment = hostEnvironment;

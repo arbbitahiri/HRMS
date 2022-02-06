@@ -7,7 +7,7 @@ namespace HRMS.Data.General
     {
         public int EvaluationSelfId { get; set; }
         public int EvaluationId { get; set; }
-        public int StaffDepartmentId { get; set; }
+        public int StaffId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string InsertedFrom { get; set; }
@@ -18,7 +18,7 @@ namespace HRMS.Data.General
 
         public virtual Evaluation Evaluation { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
-        public virtual StaffDepartment StaffDepartment { get; set; }
+        public virtual Staff Staff { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }
 }

@@ -4,5 +4,6 @@ For setup and configuration information, see https://go.microsoft.com/fwlink/?li
 
 Scaffold-DbContext "Server=ARBTAHIRI;Database=HRMS_Work;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir .\Data\General -Force -NoPluralize
 
+Scaffold-DbContext "Server=DESKTOP-C9V24QP;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir .\Data\General -Force -NoPluralize
 
 Connection Timeout=300

@@ -35,8 +35,9 @@ const StatusType = {
 
 const EvaluationType = {
     MANAGER: 1,
-    STUDENT: 2,
-    SELF: 3
+    STUDENTSTAFF: 2,
+    STUDENTCOLLEGE: 3,
+    SELF: 4
 }
 
 const QuestionType = {

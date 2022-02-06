@@ -25,10 +25,10 @@ public class BaseIModel : PageModel
 {
     protected readonly SignInManager<ApplicationUser> signInManager;
     protected readonly UserManager<ApplicationUser> userManager;
-    protected HRMS_WorkContext db;
+    protected HRMSContext db;
     protected ApplicationUser user;
 
-    public BaseIModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMS_WorkContext db)
+    public BaseIModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, HRMSContext db)
     {
         this.signInManager = signInManager;
         this.userManager = userManager;

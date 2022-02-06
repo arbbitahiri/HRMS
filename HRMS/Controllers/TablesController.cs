@@ -19,7 +19,7 @@ namespace HRMS.Controllers;
 [Authorize(Policy = "16:r")]
 public class TablesController : BaseController
 {
-    public TablesController(HRMS_WorkContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public TablesController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
     }
