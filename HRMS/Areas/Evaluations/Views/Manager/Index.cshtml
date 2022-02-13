@@ -1,14 +1,11 @@
 ﻿@using HRMS.Areas.Evaluations.Models.Manager
 @model Register
-@inject IDDLRepository repo
 @{
     ViewData["Title"] = Resource.FirstStepEvaluation;
-    Layout = "~/Views/EvaluationManager/_Layout.cshtml";
-
-    UserModel user = (UserModel)ViewData["User"];
+    Layout = "~/Areas/Evaluations/Views/Manager/_Layout.cshtml";
 }
 
-<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="EvaluationManager" id="frm_register_evaluation" method="post">
+<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="Manager" asp-area="Evaluations" id="frm_register_evaluation" method="post">
     @Html.AntiForgeryToken()
     <input asp-for="EvaluationIde" type="hidden"/>
     <input asp-for="MethodType" type="hidden"/>
@@ -47,9 +44,9 @@
                 $('#trigger_questions_form').attr({ disabled: true });
                 $('#trigger_documents_form').attr({ disabled: true });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });

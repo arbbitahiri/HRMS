@@ -14,7 +14,8 @@ namespace HRMS.Data.General
             EvaluationQuestionnaireTopic = new HashSet<EvaluationQuestionnaireTopic>();
             EvaluationSelf = new HashSet<EvaluationSelf>();
             EvaluationStatus = new HashSet<EvaluationStatus>();
-            EvaluationStudents = new HashSet<EvaluationStudents>();
+            EvaluationStudentsCollege = new HashSet<EvaluationStudentsCollege>();
+            EvaluationStudentsStaff = new HashSet<EvaluationStudentsStaff>();
         }
 
         public int EvaluationId { get; set; }
@@ -35,6 +36,7 @@ namespace HRMS.Data.General
         public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopic { get; set; }
         public virtual ICollection<EvaluationSelf> EvaluationSelf { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatus { get; set; }
-        public virtual ICollection<EvaluationStudents> EvaluationStudents { get; set; }
+        public virtual ICollection<EvaluationStudentsCollege> EvaluationStudentsCollege { get; set; }
+        public virtual ICollection<EvaluationStudentsStaff> EvaluationStudentsStaff { get; set; }
     }
 }

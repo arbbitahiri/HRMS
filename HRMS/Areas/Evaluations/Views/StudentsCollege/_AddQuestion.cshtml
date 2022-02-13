@@ -1,0 +1,75 @@
+@using HRMS.Areas.Evaluations.Models.StudentsCollege
+@model ManageQuestion
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddQuestion</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="AddQuestion" asp-controller="StudentsCollege" asp-area="Evaluations" id="frm_add_question" method="post" data-ajax="true" data-ajax-success="success_create">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="EvaluationIde" type="hidden"/>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionTypeId" class="required"></label>
+                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
+                <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionSQ" class="required"></label>
+                <input asp-for="QuestionSQ" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionEN" class="required"></label>
+                <input asp-for="QuestionEN" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionEN" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        var form = $('#frm_add_question');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            placeholder: '@Resource.Choose',
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $('#QuestionTypeId').on('change', function() {
+            if ($(this).val() == QuestionType.OPTIONAL) {
+                $('#rpt_options').removeClass('d-none');
+            } else if ($(this).val() == QuestionType.TOPIC) {
+                $('#rpt_options').addClass('d-none');
+            } else {
+                $('#rpt_options').addClass('d-none');
+            }
+        });
+    });
+
+    function success_create(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

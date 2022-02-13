@@ -33,6 +33,8 @@ public class EvaluationController : BaseController
     [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
     public IActionResult Search() => View();
 
+    #region Search for evaluations
+
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to search for manager evaluations.")]
     public async Task<IActionResult> _SearchManager(Search search)
@@ -60,11 +62,39 @@ public class EvaluationController : BaseController
 
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to search for students evaluation.")]
-    public async Task<IActionResult> _SearchStudent(Search search)
+    public async Task<IActionResult> _SearchStudentCollege(Search search)
     {
-        var list = await db.EvaluationStudents
+        var list = await db.EvaluationStudentsCollege
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+            .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId)))
+            .AsSplitQuery()
+            .Select(a => new EvaluationList
+            {
+                EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
+                EvaluationStudentsCollegeIde = CryptoSecurity.Encrypt(a.EvaluationStudentsCollegeId),
+                NumberOfStudents = a.StudentsNo,
+                Title = a.Title,
+                Description = a.Description,
+                StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
+                Students = a.StudentsNo,
+                InsertedDate = a.InsertedDate
+            }).ToListAsync();
+        return PartialView(list);
+    }
+
+    [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to search for students evaluation.")]
+    public async Task<IActionResult> _SearchStudentStaff(Search search)
+    {
+        var list = await db.EvaluationStudentsStaff
+            .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
+            .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+            .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.StaffDepartment).ThenInclude(a => a.Staff)
+            .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
                 && a.StaffDepartmentSubject.StaffDepartment.StaffId == (search.StaffId ?? a.StaffDepartmentSubject.StaffDepartment.StaffId))
@@ -72,7 +102,10 @@ public class EvaluationController : BaseController
             .Select(a => new EvaluationList
             {
                 EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
-                EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationStudentsId),
+                EvaluationStudentsStaffIde = CryptoSecurity.Encrypt(a.EvaluationStudentsStaffId),
+                StaffName = $"{a.StaffDepartmentSubject.StaffDepartment.Staff.FirstName} {a.StaffDepartmentSubject.StaffDepartment.Staff.LastName}",
+                Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
+                NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
                 Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
@@ -129,6 +162,8 @@ public class EvaluationController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
+    #endregion
+
     #region Details
 
     [HttpGet, Authorize(Policy = "71de:r"), Description("Arb Tahiri", "Form to display questionnaire details")]
@@ -161,7 +196,28 @@ public class EvaluationController : BaseController
         }
         else if (evaluationType == EvaluationTypeEnum.StudentCollege)
         {
-            evaluationDetails = await db.EvaluationStudents.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+            evaluationDetails = await db.EvaluationStudentsCollege
+                .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                .Select(a => new EvaluationDetails
+                {
+                    EvaluationIde = ide,
+                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                    InsertedDate = a.InsertedDate,
+                    MethodType = MethodType.Get,
+                    EvaluationTypeEnum = evaluationType,
+                    Students = a.StudentsNo,
+                    Title = a.Title,
+                    Description = a.Description
+                }).FirstOrDefaultAsync();
+        }
+        else if (evaluationType == EvaluationTypeEnum.StudentStaff)
+        {
+            evaluationDetails = await db.EvaluationStudentsStaff
+                .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+                .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.StaffDepartment).ThenInclude(a => a.Staff)
+                .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
                 .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
                     && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new EvaluationDetails
@@ -173,24 +229,7 @@ public class EvaluationController : BaseController
                     EvaluationTypeEnum = evaluationType,
                     Staff = $"{a.StaffDepartmentSubject.StaffDepartment.Staff.FirstName} {a.StaffDepartmentSubject.StaffDepartment.Staff.LastName}",
                     Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
-                    Title = a.Title,
-                    Description = a.Description,
-                    Students = a.StudentsNo
-                }).FirstOrDefaultAsync();
-        }
-        else if (evaluationType == EvaluationTypeEnum.StudentStaff)
-        {
-            evaluationDetails = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
-                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
-                .Select(a => new EvaluationDetails
-                {
-                    EvaluationIde = ide,
-                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
-                    InsertedDate = a.InsertedDate,
-                    MethodType = MethodType.Get,
-                    EvaluationTypeEnum = evaluationType,
-                    Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                    Students = a.StudentsNo,
                     Title = a.Title,
                     Description = a.Description
                 }).FirstOrDefaultAsync();

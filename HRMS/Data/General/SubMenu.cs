@@ -13,6 +13,7 @@ namespace HRMS.Data.General
         public string Icon { get; set; }
         public string Claim { get; set; }
         public string ClaimType { get; set; }
+        public string Area { get; set; }
         public string Controller { get; set; }
         public string Action { get; set; }
         public int OrdinalNumber { get; set; }

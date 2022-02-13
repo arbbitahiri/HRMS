@@ -1,11 +1,8 @@
 ﻿@using HRMS.Areas.Evaluations.Models.Manager
 @model ManageQuestion
 @inject IDDLRepository repo
-
 @{
     UserModel user = (UserModel)ViewData["User"];
-    @* @inject IHttpContextAccessor HttpContextAccessor *@
-    @* string ide = HttpContextAccessor.HttpContext.Session.GetString($"20-ide"); *@
 }
 
 <div class="modal-header">
@@ -15,7 +12,7 @@
     </button>
 </div>
 
-<form asp-action="AddQuestion" asp-controller="EvaluationManager" id="frm_add_question" method="post" data-ajax="true" data-ajax-success="success_create">
+<form asp-action="AddQuestion" asp-controller="Manager" asp-area="Evaluations" id="frm_add_question" method="post" data-ajax="true" data-ajax-success="success_create">
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="EvaluationIde" type="hidden"/>
@@ -146,7 +143,7 @@
                 $('#rpt_option').removeClass('d-none');
             } else {
                 $('#rpt_option').addClass('d-none');
-                $.post('@Url.Action("AddQuestion", "EvaluationManager")', {
+                $.post('@Url.Action("AddQuestion", "Manager")', {
                     create: data,
                     __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                 }, function (data) {

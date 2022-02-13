@@ -12,7 +12,7 @@
     </button>
 </div>
 
-<form asp-action="AddDocument" asp-controller="EvaluationManager" id="frm_create_document" method="post" enctype="multipart/form-data" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_document" role="form">
+<form asp-action="AddDocument" asp-controller="Manager" asp-area="Evaluations" id="frm_create_document" method="post" enctype="multipart/form-data" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_document" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="EvaluationIde" type="hidden"/>

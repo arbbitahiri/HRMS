@@ -2,7 +2,7 @@
 @model DocumentVM
 @{
     ViewData["Title"] = Resource.ThirdStepStaffRegistration;
-    Layout = "~/Views/Staff/_Layout.cshtml";
+    Layout = "~/Areas/Evaluations/Views/Manager/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
     var documents = Model.DocumentCount == 1 ? Resource.DocumentsLower.Substring(0, Resource.DocumentsLower.Length - 1) : (Model.DocumentCount == 0 ? Resource.NoDocuments : Resource.DocumentsLower);
@@ -62,9 +62,9 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
@@ -74,11 +74,11 @@
         });
 
         function go_back_questions(ide) {
-            window.location.href = '@Url.Action("Questions", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Questions", "Manager")?ide=' + ide + '&method=@((int)Model.Method)';
         }
 
         function submit_form(ide) {
-            $.post('@Url.Action("Finish", "EvaluationManager")', {
+            $.post('@Url.Action("Finish", "Manager")', {
                 ide: ide,
                 method: '@Model.Method'
                 "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
@@ -166,20 +166,20 @@
         }
 
         function add_document(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDocument", "EvaluationManager")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDocument", "Manager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
         function edit_document(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDocument", "EvaluationManager")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDocument", "Manager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
         function download_doc(ide, file_type) {
             if (file_type.contains(".pdf")) {
-                window.open('@Url.Action("OpenDocument", "EvaluationManager")?ide=' + ide, '_blank');
+                window.open('@Url.Action("OpenDocument", "Manager")?ide=' + ide, '_blank');
             }
         }
 
@@ -195,7 +195,7 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteDocument", "EvaluationManager")', {
+                    $.post('@Url.Action("DeleteDocument", "Manager")', {
                         ide: ide,
                         "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
                         }, function (data) {

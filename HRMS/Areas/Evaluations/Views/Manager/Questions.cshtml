@@ -2,7 +2,7 @@
 @model QuestionVM
 @{
     ViewData["Title"] = Resource.SecondStepEvaluation;
-    Layout = "~/Views/EvaluationManager/_Layout.cshtml";
+    Layout = "~/Areas/Evaluations/Views/Manager/_Layout.cshtml";
 
     UserModel user = (UserModel)ViewData["User"];
     var questions = Model.TotalQuestions == 0 ? Resource.NoQuestions + ". " : Resource.QuestionsLower + ". ";
@@ -154,9 +154,9 @@
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "EvaluationManager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
@@ -314,7 +314,7 @@
         }
 
         function change_grade(ide, num) {
-            $.post('@Url.Action("NumericalAnswer", "EvaluationManager")', {
+            $.post('@Url.Action("NumericalAnswer", "Manager")', {
                 ide: ide,
                 num: num,
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
@@ -327,7 +327,7 @@
             if (other) {
                 $('#' + optionalId).removeClass('d-none');
             } else {
-                $.post('@Url.Action("OptionalAnswer", "EvaluationManager")', {
+                $.post('@Url.Action("OptionalAnswer", "Manager")', {
                     ide: ide,
                     __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                 }, function(data) {
@@ -337,7 +337,7 @@
         }
 
         function add_other_option(ide) {
-            $.post('@Url.Action("OptionalAnswer", "EvaluationManager")', {
+            $.post('@Url.Action("OptionalAnswer", "Manager")', {
                 ide: ide,
                 txt: $('#txt_other').val(),
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
@@ -347,13 +347,13 @@
         }
 
         function add_question(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddQuestion", "EvaluationManager")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddQuestion", "Manager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
 
         function edit_question(ide, question_type) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditQuestion", "EvaluationManager")', {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditQuestion", "Manager")', {
                 ide: ide,
                 questionType: question_type
             }, function () {
@@ -362,7 +362,7 @@
         }
 
         function answer_question(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_TopicAnswer", "EvaluationManager")?ide=' + ide, function () {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_TopicAnswer", "Manager")?ide=' + ide, function () {
                 $('#modal-lg').modal('toggle');
             });
         }
@@ -383,7 +383,7 @@
                 cancelButtonText: "@Resource.No"
             }).then((result) => {
                 if (result.value) {
-                    $.post('@Url.Action("DeleteQuestion", "EvaluationManager")', {
+                    $.post('@Url.Action("DeleteQuestion", "Manager")', {
                         ide: ide,
                         questionType: question_type,
                         __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
@@ -395,11 +395,11 @@
         }
 
         function back_to_register(ide) {
-            window.location.href = '@Url.Action("Index", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Index", "Manager")?ide=' + ide + '&method=@((int)Model.Method)';
         }
 
         function continue_to_document(ide) {
-            window.location.href = '@Url.Action("Documents", "EvaluationManager")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Documents", "Manager")?ide=' + ide + '&method=@((int)Model.Method)';
         }
     </script>
 }

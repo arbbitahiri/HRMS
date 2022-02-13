@@ -1,0 +1,64 @@
+﻿@using HRMS.Areas.Evaluations.Models.Self
+@model Register
+@{
+    ViewData["Title"] = Resource.FirstStepEvaluation;
+    Layout = "~/Areas/Evaluations/Views/Self/_Layout.cshtml";
+}
+
+<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="Self" asp-area="Evaluations" id="frm_register_evaluation" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="EvaluationIde" type="hidden"/>
+    <input asp-for="MethodType" type="hidden"/>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="StaffName" class="required"></label>
+            <input asp-for="StaffName" type="text" readonly class="form-control"/>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Title" class="required"></label>
+            <input asp-for="Title" type="text" class="form-control" autocapitalize="on" autocomplete="off"/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-12 form-group">
+            <label asp-for="Description" class="required"></label>
+            <textarea asp-for="Description" class="form-control" rows="2" autocomplete="off"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end border-top mt-5">
+        <input type="submit" value="@Resource.Continue" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@((int)Model.MethodType) == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: 'cursor: default' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_questions_form').attr({ disabled: true });
+                $('#trigger_documents_form').attr({ disabled: true });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Index", "Self")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Self")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Self")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+            }
+
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_register_evaluation');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            if (culture == 'sq-AL') {
+                $('textarea').prop('spellcheck', false);
+            } else {
+                $('textarea').prop('spellcheck', true);
+            }
+        });
+    </script>
+}

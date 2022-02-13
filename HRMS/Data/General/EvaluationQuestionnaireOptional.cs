@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public EvaluationQuestionnaireOptional()
         {
             EvaluationQuestionnaireOptionalOption = new HashSet<EvaluationQuestionnaireOptionalOption>();
+            EvaluationQuestionnaireOptionalTopic = new HashSet<EvaluationQuestionnaireOptionalTopic>();
         }
 
         public int EvaluationQuestionnaireOptionalId { get; set; }
@@ -26,5 +27,6 @@ namespace HRMS.Data.General
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOption { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptionalTopic> EvaluationQuestionnaireOptionalTopic { get; set; }
     }
 }

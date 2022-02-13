@@ -1,0 +1,118 @@
+@using HRMS.Areas.Evaluations.Models.StudentsStaff
+@model Register
+@inject IDDLRepository repo
+@{
+    ViewData["Title"] = Resource.FirstStepEvaluation;
+    Layout = "~/Areas/Evaluations/Views/StudentsStaff/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="StudentsStaff" asp-area="Evaluations" id="frm_register_evaluation" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="EvaluationIde" type="hidden"/>
+    <input asp-for="MethodType" type="hidden"/>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="SubjectId" class="required"></label>
+            <select asp-for="SubjectId" asp-items="await repo.Subjects(user.Language)" class="form-control select2">
+                <option value="">@Resource.Choose</option>
+            </select>
+            <span asp-validation-for="SubjectId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="StaffDepartmentSubjectId" class="required"></label>
+            <select asp-for="StaffDepartmentSubjectId" class="from-control select2">
+                <option value="">@Resource.Choose</option>
+            </select>
+            <span asp-validation-for="StaffDepartmentSubjectId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="NumberOfStudents" class="required"></label>
+            <input asp-for="NumberOfStudents" type="number" class="form-control"/>
+            <span asp-validation-for="NumberOfStudents" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Title" class="required"></label>
+            <input asp-for="Title" type="text" class="form-control" autocapitalize="on" autocomplete="off"/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-12 form-group">
+            <label asp-for="Description" class="required"></label>
+            <textarea asp-for="Description" class="form-control" rows="2" autocomplete="off"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end border-top mt-5">
+        <input type="submit" value="@Resource.Continue" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@((int)Model.MethodType) == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: 'cursor: default' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_questions_form').attr({ disabled: true });
+                $('#trigger_documents_form').attr({ disabled: true });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+            }
+
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_register_evaluation');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            if (culture == 'sq-AL') {
+                $('textarea').prop('spellcheck', false);
+            } else {
+                $('textarea').prop('spellcheck', true);
+            }
+
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $('#SubjectId').on('change', function() {
+                $.get('@Url.Action("StaffSubjects", "StudentsStaff")', {
+                    subjectId: $(this).val()
+                }, function (data) {
+                    $('#StaffDepartmentSubjectId').empty().trigger("change");
+                    $('#StaffDepartmentSubjectId').select2({
+                        width: '100%',
+                        data: [{ id: '', text: '@Resource.Choose' }],
+                        language: {
+                            noResults: function () {
+                                return '@Html.Raw(Resource.NoResultsFound)';
+                            },
+                        }
+                    });
+
+                    $('#StaffDepartmentSubjectId').select2({
+                        width: '100%',
+                        data: data,
+                        language: {
+                            noResults: function () {
+                                return '@Html.Raw(Resource.NoResultsFound)';
+                            },
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

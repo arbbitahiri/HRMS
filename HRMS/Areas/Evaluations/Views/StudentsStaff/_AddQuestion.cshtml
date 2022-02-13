@@ -1,0 +1,155 @@
+@using HRMS.Areas.Evaluations.Models.StudentsStaff
+@model ManageQuestion
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddQuestion</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="AddQuestion" asp-controller="StudentsStaff" asp-area="Evaluations" id="frm_add_question" method="post" data-ajax="true" data-ajax-success="success_create">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="EvaluationIde" type="hidden"/>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionTypeId" class="required"></label>
+                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
+                <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionSQ" class="required"></label>
+                <input asp-for="QuestionSQ" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="QuestionEN" class="required"></label>
+                <input asp-for="QuestionEN" type="text" class="form-control"/>
+                <span asp-validation-for="QuestionEN" class="text-danger"></span>
+            </div>
+            <div id="rpt_options" class="col-md-12 d-none">
+                <div data-repeater-list="" data-limit="@Model.MaxQuestionOptions" class="row repeater">
+                    <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
+                        <div class="col-md-4">
+                            <label name="OptionTitleSq" class="required">@Resource.Option</label>
+                            <input type="text" name="OptionTitleSq" class="form-control"/>
+                            <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label name="OptionTitleEn" class="required">@Resource.Option</label>
+                            <input type="text" name="OptionTitleEn" class="form-control"/>
+                            <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
+                        </div>
+                        <div class="col-md-2">
+                            <label name="OptionTitleEn" style="visibility: hidden;"></label><br />
+                            <div class="mt-2">
+                                <a data-repeater-delete class="btn btn-sm btn-danger"><i class="fas fa-trash"> @Resource.Delete</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <a data-repeater-create class="btn btn-sm btn-primary"><i class="fas fa-plus"> @Resource.Add</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        var form = $('#frm_add_question');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            placeholder: '@Resource.Choose',
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $('#QuestionTypeId').on('change', function() {
+            if ($(this).val() == QuestionType.OPTIONAL) {
+                $('#rpt_options').removeClass('d-none');
+            } else if ($(this).val() == QuestionType.TOPIC) {
+                $('#rpt_options').addClass('d-none');
+            } else {
+                $('#rpt_options').addClass('d-none');
+            }
+        });
+
+        $('#rpt_options').repeater({
+            initEmpty: false,
+            isFirstItemUndeletable: true,
+            show: function() {
+                var limitCount = $(this).parents(".repeater").data("limit");
+                var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
+                if (limitCount) {
+                    if (itemCount <= limitCount) {
+                        $(this).slideDown();
+                    } else {
+                        $(this).remove();
+                    }
+                } else {
+                    $(this).slideDown();
+                }
+
+                if (itemCount >= limitCount) {
+                    $(".repeater input[data-repeater-create]").hide("slow");
+                }
+            },
+            hide: function(deleteElement) {
+                var limitCount = $(this).parents(".repeater").data("limit");
+                var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
+
+                $(this).slideUp(deleteElement);
+
+                if (itemCount <= limitCount) {
+                    $(".repeater input[data-repeater-create]").show("slow");
+                }
+            }
+        });
+    });
+
+    function add_questions() {
+        var data = {
+            EvaluationIde : $('#EvaluationIde').val(),
+            QuestionTypeId: $('#QuestionTypeId').val(),
+            QuestionSQ: $('#QuestionSQ').val(),
+            QuestionEN: $('#QuestionEN').val(),
+            Options: $('#rpt_options').repeaterVal()[""]
+        };
+
+        if ($('#frm_add_question').valid()) {
+            if ($('#rpt_options').repeaterVal()[""] == null) {
+                $('#rpt_option').removeClass('d-none');
+            } else {
+                $('#rpt_option').addClass('d-none');
+                $.post('@Url.Action("AddQuestion", "StudentsCollege")', {
+                    create: data,
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                }, function (data) {
+                    handle_success(data, SubmitPathType.RELOAD, "");
+                });
+            }
+        }
+    }
+</script>

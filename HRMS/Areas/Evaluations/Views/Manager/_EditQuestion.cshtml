@@ -8,7 +8,7 @@
     </button>
 </div>
 
-<form asp-action="TopicAnswer" asp-controller="EvaluationManager" id="frm_edit_question" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_edit_question">
+<form asp-action="EditQuestion" asp-controller="Manager" asp-area="Evaluations" id="frm_edit_question" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_edit_question">
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="EvaluationQuestionnaireNumericalIde" type="hidden"/>
@@ -153,11 +153,11 @@
             QuestionTypeEnum: $('#QuestionTypeEnum').val(),
             QuestionSQ: $('#QuestionSQ').val(),
             QuestionEN: $('#QuestionEN').val(),
-            Options: '@((int)Model.QuestionTypeEnum)' == QuestionType.OPTIONAL ? $('#rpt_options').repeaterVal()["System.Collections.Generic.List`1"]["HRMS.Models.EvaluationManager.Option"] : null
+            Options: '@((int)Model.QuestionTypeEnum)' == QuestionType.OPTIONAL ? $('#rpt_options').repeaterVal()["System.Collections.Generic.List`1"]["HRMS.Areas.Evaluations.Models.Manager.Option"] : null
         };
 
         if ($('#frm_edit_question').valid()) {
-            $.post('@Url.Action("EditQuestion", "EvaluationManager")', {
+            $.post('@Url.Action("EditQuestion", "Manager")', {
                 edit: data,
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function (data) {

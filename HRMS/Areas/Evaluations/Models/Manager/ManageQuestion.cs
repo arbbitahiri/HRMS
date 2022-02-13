@@ -7,10 +7,10 @@ namespace HRMS.Areas.Evaluations.Models.Manager;
 
 public class ManageQuestion
 {
+    public string EvaluationIde { get; set; }
     public string EvaluationQuestionnaireNumericalIde { get; set; }
     public string EvaluationQuestionnaireOptionalIde { get; set; }
     public string EvaluationQuestionnaireTopicIde { get; set; }
-    public string EvaluationIde { get; set; }
 
     [Display(Name = "QuestionType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

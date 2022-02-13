@@ -50,23 +50,21 @@ public class SelfController : BaseController
 
             return View(new Register { MethodType = MethodType.Post, StaffName = $"{user.FirstName} {user.LastName}" });
         }
-        else
-        {
-            var data = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
-                    && a.EvaluationSelfId == CryptoSecurity.Decrypt<int>(ide))
-                .Select(a => new Register
-                {
-                    EvaluationIde = ide,
-                    EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
-                    InsertedDate = a.InsertedDate,
-                    MethodType = MethodType.Put,
-                    StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
-                    Title = a.Title,
-                    Description = a.Description
-                }).FirstOrDefaultAsync();
-            return View(data);
-        }
+
+        var data = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.EvaluationSelfId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new Register
+            {
+                EvaluationIde = ide,
+                EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
+                InsertedDate = a.InsertedDate,
+                MethodType = MethodType.Put,
+                StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                Title = a.Title,
+                Description = a.Description
+            }).FirstOrDefaultAsync();
+        return View(data);
     }
 
     [HttpPost, Authorize(Policy = "72:c"), ValidateAntiForgeryToken]

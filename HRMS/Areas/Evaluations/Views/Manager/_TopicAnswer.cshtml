@@ -8,7 +8,7 @@
     </button>
 </div>
 
-<form asp-action="TopicAnswer" asp-controller="EvaluationManager" id="frm_topic_answer" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_topic_answer">
+<form asp-action="TopicAnswer" asp-controller="Manager" asp-area="Evaluations" id="frm_topic_answer" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_topic_answer">
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="EvaluationQuestionnaireTopicIde" type="hidden"/>

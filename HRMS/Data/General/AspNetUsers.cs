@@ -29,6 +29,8 @@ namespace HRMS.Data.General
             EvaluationQuestionnaireOptionalInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptional>();
             EvaluationQuestionnaireOptionalOptionInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalOption>();
             EvaluationQuestionnaireOptionalOptionUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalOption>();
+            EvaluationQuestionnaireOptionalTopicInsertedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalTopic>();
+            EvaluationQuestionnaireOptionalTopicUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireOptionalTopic>();
             EvaluationQuestionnaireOptionalUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireOptional>();
             EvaluationQuestionnaireTopicInsertedFromNavigation = new HashSet<EvaluationQuestionnaireTopic>();
             EvaluationQuestionnaireTopicUpdatedFromNavigation = new HashSet<EvaluationQuestionnaireTopic>();
@@ -36,8 +38,10 @@ namespace HRMS.Data.General
             EvaluationSelfUpdatedFromNavigation = new HashSet<EvaluationSelf>();
             EvaluationStatusInsertedFromNavigation = new HashSet<EvaluationStatus>();
             EvaluationStatusUpdatedFromNavigation = new HashSet<EvaluationStatus>();
-            EvaluationStudentsInsertedFromNavigation = new HashSet<EvaluationStudents>();
-            EvaluationStudentsUpdatedFromNavigation = new HashSet<EvaluationStudents>();
+            EvaluationStudentsCollegeInsertedFromNavigation = new HashSet<EvaluationStudentsCollege>();
+            EvaluationStudentsCollegeUpdatedFromNavigation = new HashSet<EvaluationStudentsCollege>();
+            EvaluationStudentsStaffInsertedFromNavigation = new HashSet<EvaluationStudentsStaff>();
+            EvaluationStudentsStaffUpdatedFromNavigation = new HashSet<EvaluationStudentsStaff>();
             EvaluationTypeInsertedFromNavigation = new HashSet<EvaluationType>();
             EvaluationTypeUpdatedFromNavigation = new HashSet<EvaluationType>();
             EvaluationUpdatedFromNavigation = new HashSet<Evaluation>();
@@ -128,6 +132,8 @@ namespace HRMS.Data.General
         public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptionalInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOptionInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireOptionalOption> EvaluationQuestionnaireOptionalOptionUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptionalTopic> EvaluationQuestionnaireOptionalTopicInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationQuestionnaireOptionalTopic> EvaluationQuestionnaireOptionalTopicUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireOptional> EvaluationQuestionnaireOptionalUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopicInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationQuestionnaireTopic> EvaluationQuestionnaireTopicUpdatedFromNavigation { get; set; }
@@ -135,8 +141,10 @@ namespace HRMS.Data.General
         public virtual ICollection<EvaluationSelf> EvaluationSelfUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatusInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationStatus> EvaluationStatusUpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudents> EvaluationStudentsInsertedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStudents> EvaluationStudentsUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationStudentsCollege> EvaluationStudentsCollegeInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationStudentsCollege> EvaluationStudentsCollegeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationStudentsStaff> EvaluationStudentsStaffInsertedFromNavigation { get; set; }
+        public virtual ICollection<EvaluationStudentsStaff> EvaluationStudentsStaffUpdatedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<Evaluation> EvaluationUpdatedFromNavigation { get; set; }

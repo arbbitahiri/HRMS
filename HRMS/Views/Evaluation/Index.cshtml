@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
         <ul class="nav nav-pills nav-success row">
-            @foreach(var evaluation in Enum.GetValues(typeof(EvaluationTypeEnum)).Cast<EvaluationTypeEnum>().Take(2))
+            @foreach(var evaluation in Enum.GetValues(typeof(EvaluationTypeEnum)).Cast<EvaluationTypeEnum>())
             {
                 <div class="nav-item d-flex flex-grow-1 flex-shrink-0 col-md-6 col-12" style="cursor: pointer;">
                     <a onclick="redirect_to(@((int)evaluation), this)"
@@ -27,13 +27,13 @@
     <script>
         function redirect_to(et, event) {
             if (EvaluationType.MANAGER == et) {
-                window.location.href = '@Url.Action("Index", "EvaluationManager")';
+                window.location.href = '@Url.Action("Index", "Manager", new { area = "Evaluations" })';
             } else if (EvaluationType.STUDENTSTAFF == et) {
-                window.location.href = '@Url.Action("Index", "EvaluationStudents")';
+                window.location.href = '@Url.Action("Index", "StudentsCollege", new { area = "Evaluations" })';
             } else if (EvaluationType.STUDENTCOLLEGE == et) {
-                window.location.href = '@Url.Action("Index", "EvaluationStudents")';
+                window.location.href = '@Url.Action("Index", "StudentsStaff", new { area = "Evaluations" })';
             } else {
-                window.location.reload();
+                window.location.href = '@Url.Action("Index", "Self", new { area = "Evaluations" })';
             }
         }
     </script>

@@ -50,81 +50,81 @@ public class DDLRepository : IDDLRepository
 
     public async Task<List<SelectListItem>> Departments(LanguageEnum lang) =>
         await db.Department.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.DepartmentId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
-        }).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.DepartmentId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+            }).ToListAsync();
 
     public async Task<List<SelectListItem>> StaffTypes(LanguageEnum lang) =>
         await db.StaffType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.StaffTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.StaffTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> ProfessionTypes(LanguageEnum lang) =>
         await db.ProfessionType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.ProfessionTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
-        }).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.ProfessionTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+            }).ToListAsync();
 
     public async Task<List<SelectListItem>> EducationLevelTypes(LanguageEnum lang) =>
         await db.EducationLevelType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.EducationLevelTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.EducationLevelTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> DocumentTypes(LanguageEnum lang) =>
         await db.DocumentType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.DocumentTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.DocumentTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> Subjects(LanguageEnum lang) =>
         await db.Subject.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.SubjectId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
-        }).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.SubjectId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
+            }).ToListAsync();
 
     public async Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang) =>
         await db.HolidayType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.HolidayTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.HolidayTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> StatusTypes(LanguageEnum lang) =>
         await db.StatusType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.StatusTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.StatusTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> EvaluationTypes(LanguageEnum lang) =>
         await db.EvaluationType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.EvaluationTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.EvaluationTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 
     public async Task<List<SelectListItem>> EvaluationQuestionTypes(LanguageEnum lang) =>
         await db.EvaluationQuestionType.Where(a => a.Active)
-        .Select(a => new SelectListItem
-        {
-            Value = a.EvaluationQuestionTypeId.ToString(),
-            Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
-        }).OrderBy(a => a.Text).ToListAsync();
+            .Select(a => new SelectListItem
+            {
+                Value = a.EvaluationQuestionTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 }

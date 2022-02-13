@@ -1,0 +1,207 @@
+@using HRMS.Areas.Evaluations.Models.StudentsCollege
+@model DocumentVM
+@{
+    ViewData["Title"] = Resource.ThirdStepStaffRegistration;
+    Layout = "~/Areas/Evaluations/Views/StudentsCollege/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+    var documents = Model.DocumentCount == 1 ? Resource.DocumentsLower.Substring(0, Resource.DocumentsLower.Length - 1) : (Model.DocumentCount == 0 ? Resource.NoDocuments : Resource.DocumentsLower);
+}
+
+<div class="flex-row-fluid">
+    <div class="card" style="box-shadow: none !important;">
+        <div class="card-header border-0">
+            <h1 class="card-title align-items-start flex-column">
+                <span class="text-muted mt-1 font-weight-bold font-size-sm">
+                    @if (Model.DocumentCount >= 1)
+                    {
+                        @Resource.Has <b class="text-primary">@Model.DocumentCount </b>
+                    }
+                    @documents
+                </span>
+            </h1>
+            <div class="card-tools">
+                <a onclick="add_document('@Model.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tbl_documents" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="15%">@Resource.Title</th>
+                        <th width="15%">@Resource.DocumentType</th>
+                        <th width="15%">@Resource.Download</th>
+                        <th width="40%">@Resource.Description</th>
+                        <th width="40%">@Resource.State</th>
+                        <th width="10%" data-orderable="false">@Resource.Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between border-top mt-5">
+        <input type="button" value="@Resource.Back" onclick="go_back_questions('@Model.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.Continue" onclick="submit_form('@Model.EvaluationIde')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@((int)Model.Method) == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab2').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab3').attr({ href: '', style: '' });
+
+                $('#trigger_documents_form').attr({ disabled: true });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsCollege")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsCollege")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsCollege")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
+            }
+
+            render_tbl_documents(@Json.Serialize(Model.Documents));
+        });
+
+        function go_back_questions(ide) {
+            window.location.href = '@Url.Action("Questions", "StudentsCollege")?ide=' + ide + '&method=@((int)Model.Method)';
+        }
+
+        function submit_form(ide) {
+            $.post('@Url.Action("Finish", "StudentsCollege")', {
+                ide: ide,
+                method: '@Model.Method'
+                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+            }, function() {
+                window.location.href = '@Url.Action("Index", "Evalaution")';
+            });
+        }
+
+        function render_tbl_documents(data) {
+            var rowCount = 1;
+            $('#tbl_documents').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0, 5, 6] },
+                    { className: "w15 vertikal", targets: [1, 2, 3] },
+                    { className: "w30 vertikal", targets: [4] }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            rowCount++;
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { data: "title" },
+                    { data: "documentType" },
+                    {
+                        data: function(row, type, set) {
+                            return '<a onclick="download_doc(\'' + row.staffDocumentIde + '\', \'' + row.pathExtension + '\')" href="' + row.path + '" download="' + row.title + '" target="_blank" class="btn btn-primary">@Resource.Download</button>'
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            var desc = '///';
+                            if (row.description != null) {
+                                if (row.description.length > 80) {
+                                    desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    desc = row.description ?? "///";
+                                }
+                            }
+                            return desc;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return row.active ? '<small class="badge badge-success">@Html.Raw(Resource.Active)</small>' : '<small class="badge badge-danger">@Html.Raw(Resource.Passive)</small>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var dnone = row.active ? "" : "d-none";
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item ' + dnone + '" onclick="delete_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                                '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function add_document(ide) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDocument", "StudentsCollege")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function edit_document(ide) {
+            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDocument", "StudentsCollege")?ide=' + ide, function () {
+                $('#modal-lg').modal('toggle');
+            });
+        }
+
+        function download_doc(ide, file_type) {
+            if (file_type.contains(".pdf")) {
+                window.open('@Url.Action("OpenDocument", "StudentsCollege")?ide=' + ide, '_blank');
+            }
+        }
+
+        function delete_document(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteDocument)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("DeleteDocument", "StudentsCollege")', {
+                        ide: ide,
+                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
+                    });
+                }
+            });
+        }
+    </script>
+}
