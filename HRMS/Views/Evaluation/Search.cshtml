@@ -11,9 +11,6 @@
 <div class="card">
     <div class="card-header">
         <h5 class="card-title">@Resource.SearchParameters</h5>
-        <div class="card-tools">
-            <a asp-action="Index" asp-controller="Evaluation" class="btn btn-primary">@Resource.Add</a>
-        </div>
     </div>
     <form asp-action="_SearchManager" asp-controller="Evaluation" id="frm_search_evaluation" method="post" data-ajax="true" data-ajax-method="POST" data-ajax-update="#kt_manager">
         <div class="card-body">
@@ -48,7 +45,8 @@
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="manager_tab()" id="tab_manager" href="#kt_manager" data-toggle="tab">@Resource.ListOfEvaluationManager</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_tab()" id="tab_student" href="#kt_student" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_college_tab()" id="tab_student_college" href="#kt_student_college" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_staff_tab()" id="tab_student_staff" href="#kt_student_staff" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="self_tab()" id="tab_self" href="#kt_self" data-toggle="tab">@Resource.ListOfEvaluationSelf</a></li>
         </ul>
     </div>
@@ -56,7 +54,9 @@
         <div class="tab-content">
             <div class="tab-pane" id="kt_manager">
             </div>
-            <div class="tab-pane" id="kt_student">
+            <div class="tab-pane" id="kt_student_college">
+            </div>
+            <div class="tab-pane" id="kt_student_staff">
             </div>
             <div class="tab-pane" id="kt_self">
             </div>
@@ -108,10 +108,19 @@
             $('#frm_search_evaluation').removeClass('noLoading');
         }
 
-        function student_tab() {
-            sessionStorage.setItem("tab_eva", "tab_student");
-            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchStudent")');
-            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_student');
+        function student_college_tab() {
+            sessionStorage.setItem("tab_eva", "tab_student_college");
+            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchStudentCollege")');
+            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_student_college');
+            $('#frm_search_evaluation').addClass('noLoading');
+            $('#frm_search_evaluation').submit();
+            $('#frm_search_evaluation').removeClass('noLoading');
+        }
+
+        function student_staff_tab() {
+            sessionStorage.setItem("tab_eva", "tab_student_staff");
+            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchStudentStaff")');
+            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_student_staff');
             $('#frm_search_evaluation').addClass('noLoading');
             $('#frm_search_evaluation').submit();
             $('#frm_search_evaluation').removeClass('noLoading');

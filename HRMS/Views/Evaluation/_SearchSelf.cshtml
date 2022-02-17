@@ -12,11 +12,10 @@
         <tr>
             <th>#</th>
             <th>@Resource.Title</th>
-            <th>@Resource.Description</th>
-            <th>@Resource.StatusType</th>
             <th>@Resource.NumberOfQuestions</th>
             <th>@Resource.NumberOfAnswers</th>
             <th>@Resource.InsertedDate</th>
+            <th>@Resource.StatusType</th>
             <th data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
@@ -41,10 +40,10 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w5 vertikal", targets: [0, 7] },
-                { className: "w10 vertikal", targets: [4, 5] },
-                { className: "w15 vertikal", targets: [3, 6] },
-                { className: "w20 vertikal", targets: [1, 2] }
+                { className: "w5 vertikal", targets: [0, 6] },
+                { className: "w10 vertikal", targets: [2, 3] },
+                { className: "w15 vertikal", targets: [4, 5] },
+                { className: "w20 vertikal", targets: [1] }
             ],
             order: [[0, "asc"]],
             columns: [
@@ -56,24 +55,6 @@
                 {
                     data: function (row, type, set) {
                         return row.title ?? "///";
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        var desc = '///';
-                        if (row.description != null) {
-                            if (row.description.length > 80) {
-                                desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
-                            } else {
-                                desc = row.description ?? "///";
-                            }
-                        }
-                        return desc;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.statusType ?? "///";
                     }
                 },
                 {
@@ -90,6 +71,11 @@
                     data: function (row, type, set) {
                         var date = new Date(Date.parse(row.insertedDate));
                         return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.statusType ?? "///";
                     }
                 },
                 {

@@ -28,10 +28,6 @@ public class ManageQuestion
     //required if per null list
     public List<Option> Options { get; set; }
 
-    [Display(Name = "Topics", ResourceType = typeof(Resource))]
-    //required if per null list
-    public List<Topic> Topics { get; set; }
-
     public string Answer { get; set; }
 
     public int MaxQuestionOptions { get; set; }
@@ -49,13 +45,4 @@ public class Option
     [Display(Name = "TitleEN", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string TitleEN { get; set; }
-}
-
-public class Topic
-{
-    public string TopicIde { get; set; }
-
-    [Display(Name = "Title", ResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string Title { get; set; }
 }

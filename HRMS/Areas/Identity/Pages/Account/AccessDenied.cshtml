@@ -38,12 +38,12 @@
         <div class="error-page container">
             <div class="col-md-8 col-12 offset-md-2">
                 <div class="d-flex justify-content-center mb-5">
-                    <img class="img-error img" src="~/images/error/error-403.png" asp-append-version="true" alt="Not Found" class="center">
+                    <img class="img-error img" style="width: 75% !important;" src="~/images/error/error-403.png" asp-append-version="true" width="75%" alt="Not Found" class="center">
                 </div>
                 <div class="text-center">
                     <h1 class="error-title">@Resource.AccessDenied</h1>
-                    <p class="fs-5 text-gray-600">You have no access here!</p>
-                    <a href="/Home/Index" class="btn btn-lg btn-outline-primary mt-3">Go back</a>
+                    <p class="fs-5 text-gray-600">@Resource.YouHaveNoAccessHere</p>
+                    <a href="/Home/Index" class="btn btn-lg btn-outline-primary mt-3">@Resource.GoHome</a>
                 </div>
             </div>
         </div>

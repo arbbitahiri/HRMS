@@ -1245,4 +1245,25 @@
   <data name="StudentsCollegeEvaluation" xml:space="preserve">
     <value>Vlerësimi nga studentët për kolegjin</value>
   </data>
+  <data name="GoHome" xml:space="preserve">
+    <value>Shko në ballinë</value>
+  </data>
+  <data name="GreaterThanOne" xml:space="preserve">
+    <value>Numri duhet të jetë më i madh se 0!</value>
+  </data>
+  <data name="PleaseTryAgainLater" xml:space="preserve">
+    <value>Ju lutem provoni përsëri më vonë!</value>
+  </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>Gabim në sistem!</value>
+  </data>
+  <data name="ThereHasBeenSystemError" xml:space="preserve">
+    <value>Ka ndodhur një gabim në sistem.</value>
+  </data>
+  <data name="Topics" xml:space="preserve">
+    <value>Temat e lira</value>
+  </data>
+  <data name="YouHaveNoAccessHere" xml:space="preserve">
+    <value>Nuk keni qasje në këtë pjesë të sistemit!</value>
+  </data>
 </root>

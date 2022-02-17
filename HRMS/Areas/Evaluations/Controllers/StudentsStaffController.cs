@@ -39,7 +39,7 @@ public class StudentsStaffController : BaseController
 
     #region 1. Evaluation data
 
-    [HttpGet, Authorize(Policy = "72:c")]
+    [HttpGet, Authorize(Policy = "74:c")]
     [Description("Arb Tahiri", "Form to register/edit self evaluation. First step of registering/editing questionnaire.")]
     public async Task<IActionResult> Index(string ide)
     {
@@ -71,7 +71,7 @@ public class StudentsStaffController : BaseController
         return View(data);
     }
 
-    [HttpPost, Authorize(Policy = "72:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74:c"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to register new manager evaluation.")]
     public async Task<IActionResult> Register(Register create)
     {
@@ -118,7 +118,7 @@ public class StudentsStaffController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "71q:r")]
+    [HttpGet, Authorize(Policy = "74q:r")]
     [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
     public async Task<IActionResult> Questions(string ide, MethodType method)
     {
@@ -182,10 +182,10 @@ public class StudentsStaffController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "71q:c"), Description("Arb Tahiri", "Form to add a question.")]
+    [Authorize(Policy = "74q:c"), Description("Arb Tahiri", "Form to add a question.")]
     public IActionResult _AddQuestion(string ide) => PartialView(new ManageQuestion { EvaluationIde = ide, MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]) });
 
-    [HttpPost, Authorize(Policy = "71q:c"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:c"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to add a question.")]
     public async Task<IActionResult> AddQuestion(ManageQuestion create)
     {
@@ -241,7 +241,7 @@ public class StudentsStaffController : BaseController
 
     #region => Edit
 
-    [Authorize(Policy = "71q:e"), Description("Arb Tahiri", "Form to edit a question.")]
+    [Authorize(Policy = "74q:e"), Description("Arb Tahiri", "Form to edit a question.")]
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
         var question = new ManageQuestion();
@@ -280,7 +280,7 @@ public class StudentsStaffController : BaseController
         return PartialView(question);
     }
 
-    [HttpPost, Authorize(Policy = "71q:e"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:e"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to edit a question.")]
     public async Task<IActionResult> EditQuestion(ManageQuestion edit)
     {
@@ -351,7 +351,7 @@ public class StudentsStaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, Authorize(Policy = "71q:d"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:d"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
@@ -376,7 +376,7 @@ public class StudentsStaffController : BaseController
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
 
-    [HttpPost, Authorize(Policy = "71q:d"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:d"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
     {
@@ -405,7 +405,7 @@ public class StudentsStaffController : BaseController
 
     #region => Answers
 
-    [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> NumericalAnswer(string ide, int num)
     {
@@ -435,7 +435,7 @@ public class StudentsStaffController : BaseController
         return Json(error);
     }
 
-    [HttpPost, Authorize(Policy = "71q:a"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
     public async Task<IActionResult> OptionalAnswer(string ide, string txt)
     {
@@ -482,7 +482,7 @@ public class StudentsStaffController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "71d:r")]
+    [HttpGet, Authorize(Policy = "74d:r")]
     [Description("Arb Tahiri", "Form to display list of documents. Third step of registering/editing questionnaire.")]
     public async Task<IActionResult> Documents(string ide, MethodType method)
     {
@@ -514,10 +514,10 @@ public class StudentsStaffController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "71d:c"), Description("Arb Tahiri", "Form to add a document.")]
+    [Authorize(Policy = "74d:c"), Description("Arb Tahiri", "Form to add a document.")]
     public IActionResult _AddDocument(string ide) => PartialView(new ManageDocument { EvaluationIde = ide, FileSize = $"{Convert.ToDecimal(configuration["AppSettings:FileMaxKB"]) / 1024:N1}MB" });
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "71d:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "74d:c")]
     [Description("Arb Tahiri", "Action to add documents.")]
     public async Task<IActionResult> AddDocument(ManageDocument create)
     {
@@ -548,7 +548,7 @@ public class StudentsStaffController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "71d:e"), Description("Arb Tahiri", "Form to edit a document.")]
+    [HttpGet, Authorize(Policy = "74d:e"), Description("Arb Tahiri", "Form to edit a document.")]
     public async Task<IActionResult> _EditDocument(string ide)
     {
         var question = await db.EvaluationDocument
@@ -564,7 +564,7 @@ public class StudentsStaffController : BaseController
         return PartialView(question);
     }
 
-    [HttpPost, Authorize(Policy = "71d:e"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74d:e"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to edit a document.")]
     public async Task<IActionResult> EditDocument(ManageDocument edit)
     {
@@ -590,7 +590,7 @@ public class StudentsStaffController : BaseController
 
     #region => Delete
 
-    [HttpPost, Authorize(Policy = "71d:d"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "74d:d"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to delete a document.")]
     public async Task<IActionResult> DeleteDocument(string ide)
     {
@@ -610,7 +610,7 @@ public class StudentsStaffController : BaseController
 
     #region Finish
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "71f:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "74f:c")]
     [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
     public async Task<IActionResult> Finish(string ide, MethodType method)
     {

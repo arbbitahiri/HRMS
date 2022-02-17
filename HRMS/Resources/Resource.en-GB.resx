@@ -543,6 +543,12 @@
   <data name="Gender" xml:space="preserve">
     <value>Gender</value>
   </data>
+  <data name="GoHome" xml:space="preserve">
+    <value>Go home</value>
+  </data>
+  <data name="GreaterThanOne" xml:space="preserve">
+    <value>Number must be greater than 0!</value>
+  </data>
   <data name="Has" xml:space="preserve">
     <value>Has</value>
   </data>
@@ -867,6 +873,9 @@
   <data name="PhoneNumber" xml:space="preserve">
     <value>Phone number</value>
   </data>
+  <data name="PleaseTryAgainLater" xml:space="preserve">
+    <value>Please try again later!</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Please wait...</value>
   </data>
@@ -894,6 +903,9 @@
   <data name="Question" xml:space="preserve">
     <value>Question</value>
   </data>
+  <data name="QuestionEN" xml:space="preserve">
+    <value>Question english</value>
+  </data>
   <data name="QuestionnaireData" xml:space="preserve">
     <value>Questionnaire data</value>
   </data>
@@ -905,6 +917,9 @@
   </data>
   <data name="QuestionsLower" xml:space="preserve">
     <value>questions</value>
+  </data>
+  <data name="QuestionSQ" xml:space="preserve">
+    <value>Question albanian</value>
   </data>
   <data name="QuestionType" xml:space="preserve">
     <value>Question type</value>
@@ -1107,11 +1122,17 @@
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>Are you sure you want to unlock user?</value>
   </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>System error!</value>
+  </data>
   <data name="Tables" xml:space="preserve">
     <value>Tables</value>
   </data>
   <data name="TemplateMode" xml:space="preserve">
     <value>Application mode</value>
+  </data>
+  <data name="ThereHasBeenSystemError" xml:space="preserve">
+    <value>There has been an error in system.</value>
   </data>
   <data name="ThereWasAnError" xml:space="preserve">
     <value>There was an error. Try again later!</value>
@@ -1140,11 +1161,20 @@
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="TitleEN" xml:space="preserve">
+    <value>Title english</value>
+  </data>
+  <data name="TitleSQ" xml:space="preserve">
+    <value>Title albanian</value>
+  </data>
   <data name="To" xml:space="preserve">
     <value>To</value>
   </data>
   <data name="Today" xml:space="preserve">
     <value>Today</value>
+  </data>
+  <data name="Topics" xml:space="preserve">
+    <value>Free topic</value>
   </data>
   <data name="TotalDays" xml:space="preserve">
     <value>Total days</value>
@@ -1229,6 +1259,9 @@
   </data>
   <data name="YouHaveHolidayPending" xml:space="preserve">
     <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
+  </data>
+  <data name="YouHaveNoAccessHere" xml:space="preserve">
+    <value>You have no access here!</value>
   </data>
   <data name="YouMustConfirmEmail" xml:space="preserve">
     <value>You must confirm your email!</value>

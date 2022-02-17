@@ -1339,6 +1339,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shko në ballinë.
+        /// </summary>
+        public static string GoHome {
+            get {
+                return ResourceManager.GetString("GoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri duhet të jetë më i madh se 0!.
+        /// </summary>
+        public static string GreaterThanOne {
+            get {
+                return ResourceManager.GetString("GreaterThanOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ka.
         /// </summary>
         public static string Has {
@@ -2311,6 +2329,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ju lutem provoni përsëri më vonë!.
+        /// </summary>
+        public static string PleaseTryAgainLater {
+            get {
+                return ResourceManager.GetString("PleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ju lutem prisni....
         /// </summary>
         public static string PleaseWait {
@@ -3049,6 +3076,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gabim në sistem!.
+        /// </summary>
+        public static string SystemError {
+            get {
+                return ResourceManager.GetString("SystemError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tabelat.
         /// </summary>
         public static string Tables {
@@ -3063,6 +3099,15 @@ namespace HRMS.Resources {
         public static string TemplateMode {
             get {
                 return ResourceManager.GetString("TemplateMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ka ndodhur një gabim në sistem..
+        /// </summary>
+        public static string ThereHasBeenSystemError {
+            get {
+                return ResourceManager.GetString("ThereHasBeenSystemError", resourceCulture);
             }
         }
         
@@ -3180,6 +3225,15 @@ namespace HRMS.Resources {
         public static string Today {
             get {
                 return ResourceManager.GetString("Today", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temat e lira.
+        /// </summary>
+        public static string Topics {
+            get {
+                return ResourceManager.GetString("Topics", resourceCulture);
             }
         }
         
@@ -3432,6 +3486,15 @@ namespace HRMS.Resources {
         public static string YouHaveHolidayPending {
             get {
                 return ResourceManager.GetString("YouHaveHolidayPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk keni qasje në këtë pjesë të sistemit!.
+        /// </summary>
+        public static string YouHaveNoAccessHere {
+            get {
+                return ResourceManager.GetString("YouHaveNoAccessHere", resourceCulture);
             }
         }
         

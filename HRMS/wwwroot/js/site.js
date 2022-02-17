@@ -50,6 +50,18 @@ $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
     resources = $.getJSON(`/Culture/General/${culture}.json`);
+
+    if (culture == 'sq-AL') {
+        $("input[type='text']").prop('spellcheck', false);
+    } else {
+        $("input[type='text']").prop('spellcheck', true);
+    }
+
+    if (culture == 'sq-AL') {
+        $('textarea').prop('spellcheck', false);
+    } else {
+        $('textarea').prop('spellcheck', true);
+    }
 });
 
 function show_loading() {
@@ -142,18 +154,22 @@ $(document).ajaxStart(function () {
 });
 
 function change_role(ide) {
+    show_loading();
     $.post('/Home/ChangeRole', {
         ide: ide
     }, function (data) {
+        hide_loading();
         window.location.href = '/Home/Index';
         handle_success(data, SubmitPathType.RELOAD, "");
     });
 }
 
 function change_mode(e) {
+    show_loading();
     $.post('/Home/ChangeMode', {
         mode: $(e).is(':checked')
     }, function (data) {
+        hide_loading();
         handle_success(data, SubmitPathType.RELOAD, "");
         $('[aria-labelledby="swal2-title"]').css('width', '12em');
     });

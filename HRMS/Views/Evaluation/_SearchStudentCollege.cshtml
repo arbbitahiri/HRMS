@@ -7,11 +7,12 @@
     </div>
 </div>
 
-<table id="tbl_manager_evaluation" class="table table-striped w-100 table-hover table-bordered">
+<table id="tbl_students_evaluation" class="table table-striped w-100 table-hover table-bordered">
     <thead>
         <tr>
             <th>#</th>
             <th>@Resource.Title</th>
+            <th>@Resource.NumberOfStudents</th>
             <th>@Resource.NumberOfQuestions</th>
             <th>@Resource.NumberOfAnswers</th>
             <th>@Resource.InsertedDate</th>
@@ -24,12 +25,12 @@
 
 <script>
     $(document).ready(function() {
-        render_manager_tbl(@Json.Serialize(Model));
+        render_students_tbl(@Json.Serialize(Model));
     });
 
-    function render_manager_tbl(data) {
+    function render_students_tbl(data) {
         var rowCount = 1;
-        $('#tbl_manager_evaluation').DataTable({
+        $('#tbl_students_evaluation').DataTable({
             destroy: true,
             language: {
                 url: `/Culture/DataTable/${culture}.json`
@@ -40,9 +41,9 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w5 vertikal", targets: [0, 6] },
-                { className: "w10 vertikal", targets: [2, 3] },
-                { className: "w15 vertikal", targets: [4, 5] },
+                { className: "w5 vertikal", targets: [0, 7] },
+                { className: "w10 vertikal", targets: [2, 3, 4] },
+                { className: "w15 vertikal", targets: [5, 6] },
                 { className: "w20 vertikal", targets: [1] }
             ],
             order: [[0, "asc"]],
@@ -55,6 +56,16 @@
                 {
                     data: function (row, type, set) {
                         return row.title ?? "///";
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.numberOfStudents === 0 ? "///" : row.numberOfStudents
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return row.statusType ?? "///";
                     }
                 },
                 {
@@ -74,21 +85,16 @@
                     }
                 },
                 {
-                    data: function(row, type, set) {
-                        return row.statusType ?? "///";
-                    }
-                },
-                {
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">';
-                        if (user_role === 'Manager') {
-                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationManagerIde + '\', Manager)"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
-                                        '<button type="button" class="dropdown-item" onclick="delete_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
-                        }
-                        dropdown += '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
-                                    '</div></div>';
+                            if (user_role === 'Manager') {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                                            '<button type="button" class="dropdown-item" onclick="delete_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                                        '</div></div>';
                         return dropdown;
                     }
                 }

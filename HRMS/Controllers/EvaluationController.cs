@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +26,7 @@ public class EvaluationController : BaseController
     {
     }
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
+    [Authorize(Policy = "71:c"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
     public IActionResult Index() => View();
 
     [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
@@ -76,11 +75,9 @@ public class EvaluationController : BaseController
                 EvaluationStudentsCollegeIde = CryptoSecurity.Encrypt(a.EvaluationStudentsCollegeId),
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
-                Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
-                Students = a.StudentsNo,
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
@@ -107,11 +104,9 @@ public class EvaluationController : BaseController
                 Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
-                Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
-                Students = a.StudentsNo,
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
