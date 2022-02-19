@@ -1,4 +1,4 @@
-﻿@using HRMS.Models.Holiday
+﻿@using HRMS.Models.Leave
 @model Details
 
 <div class="modal-header">
@@ -17,8 +17,8 @@
             <input asp-for="StaffReviewer" type="text" disabled class="form-control" value='@(Model.StaffReviewer ?? "///")'/>
         </div>
         <div class="col-md-4">
-            <label asp-for="HolidayType">@Resource.HolidayType</label>
-            <input asp-for="HolidayType" type="text" disabled class="form-control"/>
+            <label asp-for="LeaveType">@Resource.LeaveType</label>
+            <input asp-for="LeaveType" type="text" disabled class="form-control"/>
         </div>
         <div class="col-md-4">
             <label asp-for="StatusType">@Resource.RemainingDays</label>
@@ -27,11 +27,11 @@
     </div>
     <div class="row form-group">
         <div class="col-md-4">
-            <label asp-for="StartDate">@Resource.HolidayType</label>
+            <label asp-for="StartDate">@Resource.StartDate</label>
             <input asp-for="StartDate" type="text" disabled class="form-control"/>
         </div>
         <div class="col-md-4">
-            <label asp-for="EndDate">@Resource.HolidayType</label>
+            <label asp-for="EndDate">@Resource.ReturnDate</label>
             <input asp-for="EndDate" type="text" disabled class="form-control"/>
         </div>
         <div class="col-md-4">

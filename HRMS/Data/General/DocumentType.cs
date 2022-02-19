@@ -12,6 +12,7 @@ namespace HRMS.Data.General
         }
 
         public int DocumentTypeId { get; set; }
+        public string TypeFor { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
         public bool Active { get; set; }

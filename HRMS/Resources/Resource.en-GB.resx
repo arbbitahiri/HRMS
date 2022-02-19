@@ -165,8 +165,8 @@
   <data name="AddDocument" xml:space="preserve">
     <value>Add document</value>
   </data>
-  <data name="AddHoliday" xml:space="preserve">
-    <value>Add holiday</value>
+  <data name="AddLeave" xml:space="preserve">
+    <value>Add leave</value>
   </data>
   <data name="AddMenu" xml:space="preserve">
     <value>Add menu</value>
@@ -285,8 +285,8 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="CannotRequestHoliday" xml:space="preserve">
-    <value>You cannot make a request for holiday until you finish current holiday!</value>
+  <data name="CannotRequestLeave" xml:space="preserve">
+    <value>You cannot make a request for leave until you finish current leave!</value>
   </data>
   <data name="ChangeRole" xml:space="preserve">
     <value>Ndrysho grupin</value>
@@ -561,12 +561,6 @@
   <data name="HelpingTables" xml:space="preserve">
     <value>Helping tables</value>
   </data>
-  <data name="HolidayReviewedSuccessfully" xml:space="preserve">
-    <value>Holiday reviewed successfully!</value>
-  </data>
-  <data name="HolidayType" xml:space="preserve">
-    <value>Holiday type</value>
-  </data>
   <data name="HttpMethod" xml:space="preserve">
     <value>HTTP Method</value>
   </data>
@@ -623,6 +617,12 @@
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Lastname</value>
+  </data>
+  <data name="LeaveReviewedSuccessfully" xml:space="preserve">
+    <value>Leave reviewed successfully!</value>
+  </data>
+  <data name="LeaveType" xml:space="preserve">
+    <value>Leave type</value>
   </data>
   <data name="Light" xml:space="preserve">
     <value>Light</value>
@@ -772,7 +772,7 @@
     <value>No</value>
   </data>
   <data name="NoAvailableDaysHoliday" xml:space="preserve">
-    <value>You do not have enough days for holiday. Remaining days: {0}.</value>
+    <value>You do not have enough days for leave. Remaining days: {0}.</value>
   </data>
   <data name="NoDocuments" xml:space="preserve">
     <value>No documents</value>
@@ -951,6 +951,9 @@
   <data name="ResetPassword" xml:space="preserve">
     <value>Reset password</value>
   </data>
+  <data name="ReturnDate" xml:space="preserve">
+    <value>Return date</value>
+  </data>
   <data name="Review" xml:space="preserve">
     <value>Review</value>
   </data>
@@ -1092,8 +1095,8 @@
   <data name="SureYouWantToDeleteDocument" xml:space="preserve">
     <value>Are you sure you want to delete document?</value>
   </data>
-  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
-    <value>Are you sure you want to delete holiday?</value>
+  <data name="SureYouWantToDeleteLeave" xml:space="preserve">
+    <value>Are you sure you want to delete leave?</value>
   </data>
   <data name="SureYouWantToDeleteMenu" xml:space="preserve">
     <value>Are you sure you want to delete menu?</value>
@@ -1257,8 +1260,8 @@
   <data name="YouHaveEvaluationProcessing" xml:space="preserve">
     <value>You cannot add a new evaluation while having a evaluation in process!</value>
   </data>
-  <data name="YouHaveHolidayPending" xml:space="preserve">
-    <value>You cannot make a request for holiday while having a holiday request pending for review!</value>
+  <data name="YouHaveLeavePending" xml:space="preserve">
+    <value>You cannot make a request for leave while having a leave request pending for review!</value>
   </data>
   <data name="YouHaveNoAccessHere" xml:space="preserve">
     <value>You have no access here!</value>

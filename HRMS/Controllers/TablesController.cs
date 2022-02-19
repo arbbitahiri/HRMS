@@ -85,9 +85,9 @@ public class TablesController : BaseController
                 }).ToListAsync();
                 return PartialView(new TableData() { DataList = dataEvaluationType, Table = table, Title = title });
             case LookUpTable.Holiday:
-                var dataHolidayType = await db.HolidayType.Select(a => new DataList
+                var dataHolidayType = await db.LeaveType.Select(a => new DataList
                 {
-                    Ide = CryptoSecurity.Encrypt(a.HolidayTypeId),
+                    Ide = CryptoSecurity.Encrypt(a.LeaveTypeId),
                     NameSQ = a.NameSq,
                     NameEN = a.NameEn,
                     Active = true
@@ -206,7 +206,7 @@ public class TablesController : BaseController
                 await db.SaveChangesAsync();
                 return Json(error);
             case LookUpTable.Holiday:
-                db.HolidayType.Add(new HolidayType
+                db.LeaveType.Add(new LeaveType
                 {
                     NameSq = create.NameSQ,
                     NameEn = create.NameEN,
@@ -322,11 +322,11 @@ public class TablesController : BaseController
                     }).FirstOrDefaultAsync();
                 return PartialView(dataEvaluationType);
             case LookUpTable.Holiday:
-                var dataHolidayType = await db.HolidayType
-                    .Where(a => a.HolidayTypeId == id)
+                var dataHolidayType = await db.LeaveType
+                    .Where(a => a.LeaveTypeId == id)
                     .Select(a => new CreateData
                     {
-                        Ide = CryptoSecurity.Encrypt(a.HolidayTypeId),
+                        Ide = CryptoSecurity.Encrypt(a.LeaveTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
                         Title = title
@@ -436,7 +436,7 @@ public class TablesController : BaseController
                 await db.SaveChangesAsync();
                 return Json(error);
             case LookUpTable.Holiday:
-                var holidayType = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
+                var holidayType = await db.LeaveType.FirstOrDefaultAsync(a => a.LeaveTypeId == id);
                 holidayType.NameSq = edit.NameSQ;
                 holidayType.NameEn = edit.NameEN;
                 holidayType.UpdatedDate = DateTime.Now;
@@ -535,7 +535,7 @@ public class TablesController : BaseController
                 await db.SaveChangesAsync();
                 return Json(error);
             case LookUpTable.Holiday:
-                var holidayType = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
+                var holidayType = await db.LeaveType.FirstOrDefaultAsync(a => a.LeaveTypeId == id);
                 holidayType.Active = active;
                 holidayType.UpdatedDate = DateTime.Now;
                 holidayType.UpdatedFrom = user.Id;

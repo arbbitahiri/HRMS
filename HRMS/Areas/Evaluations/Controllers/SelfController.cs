@@ -43,7 +43,7 @@ public class SelfController : BaseController
     {
         if (string.IsNullOrEmpty(ide))
         {
-            if (await db.EvaluationStatus.AnyAsync(a => a.Evaluation.EvaluationTypeId == (int)EvaluationTypeEnum.Self && a.StatusTypeId == (int)StatusTypeEnum.Processing))
+            if (await db.EvaluationStatus.AnyAsync(a => a.Evaluation.EvaluationTypeId == (int)EvaluationTypeEnum.Self && a.StatusTypeId == (int)Status.Processing))
             {
                 return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.YouHaveEvaluationProcessing });
             }
@@ -52,7 +52,7 @@ public class SelfController : BaseController
         }
 
         var data = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationSelfId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Register
             {
@@ -100,7 +100,7 @@ public class SelfController : BaseController
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = evaluation.EvaluationId,
-            StatusTypeId = (int)StatusTypeEnum.Unprocessed,
+            StatusTypeId = (int)Status.Unprocessed,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -120,7 +120,7 @@ public class SelfController : BaseController
     public async Task<IActionResult> Questions(string ide, MethodType method)
     {
         var details = await db.EvaluationSelf
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Details
             {
@@ -131,7 +131,7 @@ public class SelfController : BaseController
 
         var numericals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
@@ -144,7 +144,7 @@ public class SelfController : BaseController
 
         var optionals = await db.EvaluationQuestionnaireOptional
             .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionOptional
             {
@@ -164,7 +164,7 @@ public class SelfController : BaseController
 
         var topics = await db.EvaluationQuestionnaireTopic
             .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {
@@ -562,7 +562,7 @@ public class SelfController : BaseController
     public async Task<IActionResult> Documents(string ide, MethodType method)
     {
         var details = await db.EvaluationSelf
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Details
             {
@@ -713,7 +713,7 @@ public class SelfController : BaseController
             db.EvaluationStatus.Add(new EvaluationStatus
             {
                 EvaluationId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = checkIfAnswered ? (int)StatusTypeEnum.PendingForAnswers : (int)StatusTypeEnum.Finished,
+                StatusTypeId = checkIfAnswered ? (int)Status.PendingForAnswers : (int)Status.Finished,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });

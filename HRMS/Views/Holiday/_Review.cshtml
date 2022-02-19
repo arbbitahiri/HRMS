@@ -1,4 +1,4 @@
-﻿@using HRMS.Models.Holiday
+﻿@using HRMS.Models.Leave
 @model Review
 @inject IDDLRepository repo
 @{
@@ -12,16 +12,16 @@
     </button>
 </div>
 
-<form asp-action="Review" asp-controller="Holiday" id="frm_review_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_review" role="form">
+<form asp-action="Review" asp-controller="Leave" id="frm_review_leave" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_review" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="HolidayIde" type="hidden"/>
+        <input asp-for="LeaveIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-6">
-                <label asp-for="HolidayType">@Resource.HolidayType</label>
-                <input asp-for="HolidayType" type="text" disabled class="form-control"/>
-                <span asp-validation-for="HolidayType" class="text-danger"></span>
+                <label asp-for="LeaveType">@Resource.LeaveType</label>
+                <input asp-for="LeaveType" type="text" disabled class="form-control"/>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
             </div>
             <div class="col-md-6">
                 <label asp-for="StatusTypeId" class="required"></label>
@@ -47,16 +47,10 @@
 
 <script>
     $(document).ready(function () {
-        var form = $('#frm_review_holiday');
+        var form = $('#frm_review_leave');
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
-
-        if (culture == 'sq-AL') {
-            $('textarea').prop('spellcheck', false);
-        } else {
-            $('textarea').prop('spellcheck', true);
-        }
 
         $(".select2").select2({
             width: "100%",
@@ -73,8 +67,8 @@
     });
 
     function remaining_days() {
-        $.get('@Url.Action("RemainingDays", "Holiday")', {
-            htypeId: $('#AHolidayTypeId').val(),
+        $.get('@Url.Action("RemainingDays", "Leave")', {
+            ltypeId: $('#AHolidayTypeId').val(),
             userId: '@user.Id'
         }, function (data) {
             $('#days').val(data);

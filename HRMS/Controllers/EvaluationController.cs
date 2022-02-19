@@ -2,7 +2,6 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.Evaluation;
-using HRMS.Models.EvaluationManager;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
@@ -149,7 +148,7 @@ public class EvaluationController : BaseController
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = CryptoSecurity.Decrypt<int>(ide),
-            StatusTypeId = (int)StatusTypeEnum.Deleted,
+            StatusTypeId = (int)Status.Deleted,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -174,7 +173,7 @@ public class EvaluationController : BaseController
         if (evaluationType == EvaluationTypeEnum.Manager)
         {
             evaluationDetails = await db.EvaluationManager.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                     && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new EvaluationDetails
                 {
@@ -193,7 +192,7 @@ public class EvaluationController : BaseController
         {
             evaluationDetails = await db.EvaluationStudentsCollege
                 .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                     && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new EvaluationDetails
                 {
@@ -213,7 +212,7 @@ public class EvaluationController : BaseController
                 .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
                 .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.StaffDepartment).ThenInclude(a => a.Staff)
                 .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                     && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new EvaluationDetails
                 {
@@ -232,7 +231,7 @@ public class EvaluationController : BaseController
         else
         {
             evaluationDetails = await db.EvaluationSelf.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                     && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new EvaluationDetails
                 {
@@ -273,7 +272,7 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _NumericalQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireNumerical
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
@@ -287,7 +286,7 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionOptional
             {
@@ -305,7 +304,7 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _TopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireTopic
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {

@@ -207,9 +207,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Shto pushim.
         /// </summary>
-        public static string AddHoliday {
+        public static string AddLeave {
             get {
-                return ResourceManager.GetString("AddHoliday", resourceCulture);
+                return ResourceManager.GetString("AddLeave", resourceCulture);
             }
         }
         
@@ -567,9 +567,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nuk mund të bëni kërkesën për pushim deri sa të përfundoni pushimin aktual!.
         /// </summary>
-        public static string CannotRequestHoliday {
+        public static string CannotRequestLeave {
             get {
-                return ResourceManager.GetString("CannotRequestHoliday", resourceCulture);
+                return ResourceManager.GetString("CannotRequestLeave", resourceCulture);
             }
         }
         
@@ -1393,24 +1393,6 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pushimi u shqyrtua me sukses!.
-        /// </summary>
-        public static string HolidayReviewedSuccessfully {
-            get {
-                return ResourceManager.GetString("HolidayReviewedSuccessfully", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lloji pushimit.
-        /// </summary>
-        public static string HolidayType {
-            get {
-                return ResourceManager.GetString("HolidayType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Metoda HTTP.
         /// </summary>
         public static string HttpMethod {
@@ -1578,6 +1560,33 @@ namespace HRMS.Resources {
         public static string Lastname {
             get {
                 return ResourceManager.GetString("Lastname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vitin e kaluar.
+        /// </summary>
+        public static string LastYear {
+            get {
+                return ResourceManager.GetString("LastYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pushimi u shqyrtua me sukses!.
+        /// </summary>
+        public static string LeaveReviewedSuccessfully {
+            get {
+                return ResourceManager.GetString("LeaveReviewedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lloji pushimit.
+        /// </summary>
+        public static string LeaveType {
+            get {
+                return ResourceManager.GetString("LeaveType", resourceCulture);
             }
         }
         
@@ -2025,9 +2034,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nuk keni mjaftueshëm ditë për pushim. Ditët e mbetura: {0}..
         /// </summary>
-        public static string NoAvailableDaysHoliday {
+        public static string NoAvailableDaysLeave {
             get {
-                return ResourceManager.GetString("NoAvailableDaysHoliday", resourceCulture);
+                return ResourceManager.GetString("NoAvailableDaysLeave", resourceCulture);
             }
         }
         
@@ -2563,6 +2572,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data kthimit.
+        /// </summary>
+        public static string ReturnDate {
+            get {
+                return ResourceManager.GetString("ReturnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shqyrto.
         /// </summary>
         public static string Review {
@@ -2988,9 +3006,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e pushimit?.
         /// </summary>
-        public static string SureYouWantToDeleteHoliday {
+        public static string SureYouWantToDeleteLeave {
             get {
-                return ResourceManager.GetString("SureYouWantToDeleteHoliday", resourceCulture);
+                return ResourceManager.GetString("SureYouWantToDeleteLeave", resourceCulture);
             }
         }
         
@@ -3162,6 +3180,15 @@ namespace HRMS.Resources {
         public static string ThisMonth {
             get {
                 return ResourceManager.GetString("ThisMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Këtë vit.
+        /// </summary>
+        public static string ThisYear {
+            get {
+                return ResourceManager.GetString("ThisYear", resourceCulture);
             }
         }
         
@@ -3483,9 +3510,9 @@ namespace HRMS.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nuk mund të bëni kërkesën për pushim përderi sa keni një pushim në pritje për shqyrtim!.
         /// </summary>
-        public static string YouHaveHolidayPending {
+        public static string YouHaveLeavePending {
             get {
-                return ResourceManager.GetString("YouHaveHolidayPending", resourceCulture);
+                return ResourceManager.GetString("YouHaveLeavePending", resourceCulture);
             }
         }
         

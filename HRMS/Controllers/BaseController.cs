@@ -47,11 +47,6 @@ public class BaseController : Controller
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         user = await userManager.GetUserAsync(context.HttpContext.User);
-        // if (context.HttpContext.Request.RouteValues["action"].ToString() != "_SideProfile")
-        // {
-        //     TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Info, Description = "You must change the password!" });
-        //     context.HttpContext.Response.Redirect("/Identity/Account/Manage/ChangePassword?c=true");
-        // }
         await signInManager.RefreshSignInAsync(user);
 
         ViewData["InternalUser"] = user;
@@ -181,6 +176,15 @@ public class BaseController : Controller
             (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
             (int)StaffTypeEnum.Manager => "4d263424-bd57-4f70-9ecc-b95f287cc149",
             _ => ""
+        };
+
+    protected int DaysForLeave(LeaveTypeEnum holidayType) =>
+        holidayType switch
+        {
+            LeaveTypeEnum.Annual => 20,
+            LeaveTypeEnum.Sick => 20,
+            LeaveTypeEnum.Maternity => 550,
+            _ => 0
         };
 
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)

@@ -17,6 +17,7 @@ namespace HRMS.Data.General
         public int StaffTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int JobTypeId { get; set; }
         public decimal BruttoSalary { get; set; }
         public decimal? EmployeeContribution { get; set; }
         public decimal? EmployerContribution { get; set; }
@@ -29,6 +30,7 @@ namespace HRMS.Data.General
 
         public virtual Department Department { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
+        public virtual JobType JobType { get; set; }
         public virtual Staff Staff { get; set; }
         public virtual StaffType StaffType { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }

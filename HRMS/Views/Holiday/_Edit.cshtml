@@ -1,4 +1,4 @@
-﻿@using HRMS.Models.Holiday
+﻿@using HRMS.Models.Leave
 @model Create
 @inject IDDLRepository repo
 @{
@@ -12,16 +12,16 @@
     </button>
 </div>
 
-<form asp-action="Edit" asp-controller="Holiday" id="frm_edit_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_edit" role="form">
+<form asp-action="Edit" asp-controller="Leave" id="frm_edit_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_edit" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="HolidayIde" type="hidden"/>
+        <input asp-for="LeaveIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-6">
-                <label asp-for="AHolidayTypeId" class="required"></label>
-                <select asp-for="AHolidayTypeId" asp-items="await repo.HolidayTypes(user.Language)" disabled class="form-control select2"></select>
-                <span asp-validation-for="AHolidayTypeId" class="text-danger"></span>
+                <label asp-for="ALeaveTypeId" class="required"></label>
+                <select asp-for="ALeaveTypeId" asp-items="await repo.LeaveTypes(user.Language)" disabled class="form-control select2"></select>
+                <span asp-validation-for="ALeaveTypeId" class="text-danger"></span>
             </div>
             <div class="col-md-6">
                 <label asp-for="RemainingDays">@Resource.RemainingDays</label>

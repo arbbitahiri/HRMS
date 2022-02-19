@@ -96,11 +96,11 @@ public class DDLRepository : IDDLRepository
                 Text = lang == LanguageEnum.Albanian ? $"{a.Code} - {a.NameSq}" : $"{a.Code} - {a.NameEn}"
             }).ToListAsync();
 
-    public async Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang) =>
-        await db.HolidayType.Where(a => a.Active)
+    public async Task<List<SelectListItem>> LeaveTypes(LanguageEnum lang) =>
+        await db.LeaveType.Where(a => a.Active)
             .Select(a => new SelectListItem
             {
-                Value = a.HolidayTypeId.ToString(),
+                Value = a.LeaveTypeId.ToString(),
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).OrderBy(a => a.Text).ToListAsync();
 

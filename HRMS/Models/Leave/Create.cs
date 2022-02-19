@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace HRMS.Models.Holiday;
+namespace HRMS.Models.Leave;
 
 public class Create
 {
-    public string HolidayIde { get; set; }
+    public string LeaveIde { get; set; }
 
     [Display(Name = "HolidayType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public int AHolidayTypeId { get; set; }
+    public int ALeaveTypeId { get; set; }
 
     [Display(Name = "StartDate", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

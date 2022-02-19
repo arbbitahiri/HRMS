@@ -1,4 +1,4 @@
-﻿@using HRMS.Models.Holiday
+﻿@using HRMS.Models.Leave
 @model Create
 @inject IDDLRepository repo
 @{
@@ -6,23 +6,23 @@
 }
 
 <div class="modal-header">
-    <h5 class="modal-title">@Resource.AddHoliday</h5>
+    <h5 class="modal-title">@Resource.AddLeave</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="far fa-times-circle"></i>
     </button>
 </div>
 
-<form asp-action="Create" asp-controller="Holiday" id="frm_create_holiday" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
+<form asp-action="Create" asp-controller="Leave" id="frm_create_leave" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
 
         <div class="row form-group">
             <div class="col-md-6">
-                <label asp-for="AHolidayTypeId" class="required"></label>
-                <select asp-for="AHolidayTypeId" asp-items="await repo.HolidayTypes(user.Language)" onchange="remaining_days()" class="form-control select2">
+                <label asp-for="ALeaveTypeId" class="required"></label>
+                <select asp-for="ALeaveTypeId" asp-items="await repo.LeaveTypes(user.Language)" onchange="remaining_days()" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
-                <span asp-validation-for="AHolidayTypeId" class="text-danger"></span>
+                <span asp-validation-for="ALeaveTypeId" class="text-danger"></span>
             </div>
             <div class="col-md-6">
                 <label>@Resource.RemainingDays</label>
@@ -57,7 +57,7 @@
 
 <script>
     $(document).ready(function () {
-        var form = $('#frm_create_holiday');
+        var form = $('#frm_create_leave');
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
@@ -77,8 +77,8 @@
     });
 
     function remaining_days() {
-        $.get('@Url.Action("RemainingDays", "Holiday")', {
-            htypeId: $('#AHolidayTypeId').val(),
+        $.get('@Url.Action("RemainingDays", "Leave")', {
+            ltypeId: $('#AHolidayTypeId').val(),
             userId: '@user.Id'
         }, function (data) {
             $('#days').val(data);

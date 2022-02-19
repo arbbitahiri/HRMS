@@ -3,16 +3,15 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class StatusType
+    public partial class LeaveType
     {
-        public StatusType()
+        public LeaveType()
         {
-            EvaluationStatus = new HashSet<EvaluationStatus>();
-            LeaveStatus = new HashSet<LeaveStatus>();
-            StaffRegistrationStatus = new HashSet<StaffRegistrationStatus>();
+            Leave = new HashSet<Leave>();
+            LeaveStaffDays = new HashSet<LeaveStaffDays>();
         }
 
-        public int StatusTypeId { get; set; }
+        public int LeaveTypeId { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
         public bool Active { get; set; }
@@ -24,8 +23,7 @@ namespace HRMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationStatus> EvaluationStatus { get; set; }
-        public virtual ICollection<LeaveStatus> LeaveStatus { get; set; }
-        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
+        public virtual ICollection<Leave> Leave { get; set; }
+        public virtual ICollection<LeaveStaffDays> LeaveStaffDays { get; set; }
     }
 }

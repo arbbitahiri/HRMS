@@ -1,11 +1,11 @@
-﻿namespace HRMS.Models.Holiday;
+﻿namespace HRMS.Models.Leave;
 
 public class Details
 {
     public string StaffName { get; set; }
     public string StaffReviewer { get; set; }
 
-    public string HolidayType { get; set; }
+    public string LeaveType { get; set; }
     public string StatusType { get; set; }
     public string StartDate { get; set; }
     public string EndDate { get; set; }

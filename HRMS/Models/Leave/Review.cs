@@ -1,14 +1,21 @@
 ﻿using HRMS.Resources;
+using HRMS.Utilities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace HRMS.Models.Holiday;
+namespace HRMS.Models.Leave;
 
 public class Review
 {
-    public string StaffName { get; set; }
-    public string HolidayType { get; set; }
+    public string LeaveIde { get; set; }
+    public string StaffIde { get; set; }
 
-    public string HolidayIde { get; set; }
+    public string StaffName { get; set; }
+    public string LeaveType { get; set; }
+    public LeaveTypeEnum LeaveTypeEnum { get; set; }
+
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     [Display(Name = "StatusType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

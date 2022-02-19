@@ -43,7 +43,7 @@ public class StudentsCollegeController : BaseController
     {
         if (string.IsNullOrEmpty(ide))
         {
-            if (await db.EvaluationStatus.AnyAsync(a => a.Evaluation.EvaluationTypeId == (int)EvaluationTypeEnum.Self && a.StatusTypeId == (int)StatusTypeEnum.Processing))
+            if (await db.EvaluationStatus.AnyAsync(a => a.Evaluation.EvaluationTypeId == (int)EvaluationTypeEnum.Self && a.StatusTypeId == (int)Status.Processing))
             {
                 return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.YouHaveEvaluationProcessing });
             }
@@ -52,7 +52,7 @@ public class StudentsCollegeController : BaseController
         }
 
         var data = await db.EvaluationStudentsCollege.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationStudentsCollegeId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Register
             {
@@ -98,7 +98,7 @@ public class StudentsCollegeController : BaseController
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = evaluation.EvaluationId,
-            StatusTypeId = (int)StatusTypeEnum.Unprocessed,
+            StatusTypeId = (int)Status.Unprocessed,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -119,7 +119,7 @@ public class StudentsCollegeController : BaseController
     {
         var numericals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
@@ -132,7 +132,7 @@ public class StudentsCollegeController : BaseController
 
         var optionalTopics = await db.EvaluationQuestionnaireOptional
             .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)StatusTypeEnum.Deleted)
+                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {
@@ -550,7 +550,7 @@ public class StudentsCollegeController : BaseController
             db.EvaluationStatus.Add(new EvaluationStatus
             {
                 EvaluationId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = checkIfAnswered ? (int)StatusTypeEnum.PendingForAnswers : (int)StatusTypeEnum.Finished,
+                StatusTypeId = checkIfAnswered ? (int)Status.PendingForAnswers : (int)Status.Finished,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });

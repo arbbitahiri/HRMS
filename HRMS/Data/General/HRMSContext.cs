@@ -42,9 +42,11 @@ namespace HRMS.Data.General
         public virtual DbSet<EvaluationStudentsStaff> EvaluationStudentsStaff { get; set; }
         public virtual DbSet<EvaluationType> EvaluationType { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
-        public virtual DbSet<Holiday> Holiday { get; set; }
-        public virtual DbSet<HolidayStatus> HolidayStatus { get; set; }
-        public virtual DbSet<HolidayType> HolidayType { get; set; }
+        public virtual DbSet<JobType> JobType { get; set; }
+        public virtual DbSet<Leave> Leave { get; set; }
+        public virtual DbSet<LeaveStaffDays> LeaveStaffDays { get; set; }
+        public virtual DbSet<LeaveStatus> LeaveStatus { get; set; }
+        public virtual DbSet<LeaveType> LeaveType { get; set; }
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<ProfessionType> ProfessionType { get; set; }
@@ -368,6 +370,8 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("NameSQ");
+
+                entity.Property(e => e.TypeFor).HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -1048,9 +1052,24 @@ namespace HRMS.Data.General
                     .HasColumnName("NameSQ");
             });
 
-            modelBuilder.Entity<Holiday>(entity =>
+            modelBuilder.Entity<JobType>(entity =>
             {
-                entity.HasIndex(e => e.HolidayTypeId, "IX_HolidayRequest_HolidayTypeID");
+                entity.Property(e => e.JobTypeId).HasColumnName("JobTypeID");
+
+                entity.Property(e => e.NameEn)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameEN");
+
+                entity.Property(e => e.NameSq)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .HasColumnName("NameSQ");
+            });
+
+            modelBuilder.Entity<Leave>(entity =>
+            {
+                entity.HasIndex(e => e.LeaveTypeId, "IX_HolidayRequest_HolidayTypeID");
 
                 entity.HasIndex(e => e.InsertedFrom, "IX_HolidayRequest_InsertedFrom");
 
@@ -1058,15 +1077,15 @@ namespace HRMS.Data.General
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequest_UpdatedFrom");
 
-                entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
+                entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
-
-                entity.Property(e => e.HolidayTypeId).HasColumnName("HolidayTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom).IsRequired();
+
+                entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
@@ -1074,33 +1093,77 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.HolidayType)
-                    .WithMany(p => p.Holiday)
-                    .HasForeignKey(d => d.HolidayTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Holiday_HolidayType");
-
                 entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.HolidayInsertedFromNavigation)
+                    .WithMany(p => p.LeaveInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Holiday_AspNetUsers_Inserted");
+                    .HasConstraintName("FK_Leave_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.LeaveType)
+                    .WithMany(p => p.Leave)
+                    .HasForeignKey(d => d.LeaveTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Leave_LeaveType");
 
                 entity.HasOne(d => d.Staff)
-                    .WithMany(p => p.Holiday)
+                    .WithMany(p => p.Leave)
                     .HasForeignKey(d => d.StaffId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Holiday_Staff");
+                    .HasConstraintName("FK_Leave_Staff");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.HolidayUpdatedFromNavigation)
+                    .WithMany(p => p.LeaveUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_Holiday_AspNetUsers_Updated");
+                    .HasConstraintName("FK_Leave_AspNetUsers_Updated");
             });
 
-            modelBuilder.Entity<HolidayStatus>(entity =>
+            modelBuilder.Entity<LeaveStaffDays>(entity =>
             {
-                entity.HasIndex(e => e.HolidayId, "IX_HolidayRequestStatus_HolidayRequestID");
+                entity.HasKey(e => e.LeaveTypeRemainingDaysId);
+
+                entity.Property(e => e.LeaveTypeRemainingDaysId).HasColumnName("LeaveTypeRemainingDaysID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
+
+                entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.LeaveStaffDaysInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LeaveStaffDays_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.LeaveType)
+                    .WithMany(p => p.LeaveStaffDays)
+                    .HasForeignKey(d => d.LeaveTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LeaveStaffDays_LeaveType");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.LeaveStaffDays)
+                    .HasForeignKey(d => d.StaffId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LeaveStaffDays_Staff");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.LeaveStaffDaysUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_LeaveStaffDays_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<LeaveStatus>(entity =>
+            {
+                entity.HasIndex(e => e.LeaveId, "IX_HolidayRequestStatus_HolidayRequestID");
 
                 entity.HasIndex(e => e.InsertedFrom, "IX_HolidayRequestStatus_InsertedFrom");
 
@@ -1108,51 +1171,51 @@ namespace HRMS.Data.General
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequestStatus_UpdatedFrom");
 
-                entity.Property(e => e.HolidayStatusId).HasColumnName("HolidayStatusID");
+                entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
 
                 entity.Property(e => e.Description).HasMaxLength(1024);
-
-                entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom).IsRequired();
 
+                entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
+
                 entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Holiday)
-                    .WithMany(p => p.HolidayStatus)
-                    .HasForeignKey(d => d.HolidayId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayStatus_Holiday");
-
                 entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.HolidayStatusInsertedFromNavigation)
+                    .WithMany(p => p.LeaveStatusInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayStatus_AspNetUsers_Inserted");
+                    .HasConstraintName("FK_LeaveStatus_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.Leave)
+                    .WithMany(p => p.LeaveStatus)
+                    .HasForeignKey(d => d.LeaveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LeaveStatus_Leave");
 
                 entity.HasOne(d => d.StatusType)
-                    .WithMany(p => p.HolidayStatus)
+                    .WithMany(p => p.LeaveStatus)
                     .HasForeignKey(d => d.StatusTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayStatus_StatusType");
+                    .HasConstraintName("FK_LeaveStatus_StatusType");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.HolidayStatusUpdatedFromNavigation)
+                    .WithMany(p => p.LeaveStatusUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_HolidayStatus_AspNetUsers_Updated");
+                    .HasConstraintName("FK_LeaveStatus_AspNetUsers_Updated");
             });
 
-            modelBuilder.Entity<HolidayType>(entity =>
+            modelBuilder.Entity<LeaveType>(entity =>
             {
                 entity.HasIndex(e => e.InsertedFrom, "IX_HolidayType_InsertedFrom");
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayType_UpdatedFrom");
 
-                entity.Property(e => e.HolidayTypeId).HasColumnName("HolidayTypeID");
+                entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -1171,15 +1234,15 @@ namespace HRMS.Data.General
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.InsertedFromNavigation)
-                    .WithMany(p => p.HolidayTypeInsertedFromNavigation)
+                    .WithMany(p => p.LeaveTypeInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HolidayType_AspNetUsers_Inserted");
+                    .HasConstraintName("FK_LeaveType_AspNetUsers_Inserted");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
-                    .WithMany(p => p.HolidayTypeUpdatedFromNavigation)
+                    .WithMany(p => p.LeaveTypeUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
-                    .HasConstraintName("FK_HolidayType_AspNetUsers_Updated");
+                    .HasConstraintName("FK_LeaveType_AspNetUsers_Updated");
             });
 
             modelBuilder.Entity<Log>(entity =>
@@ -1489,6 +1552,8 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.InsertedFrom).IsRequired();
 
+                entity.Property(e => e.JobTypeId).HasColumnName("JobTypeID");
+
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.StaffTypeId).HasColumnName("StaffTypeID");
@@ -1508,6 +1573,12 @@ namespace HRMS.Data.General
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffDepartment_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.JobType)
+                    .WithMany(p => p.StaffDepartment)
+                    .HasForeignKey(d => d.JobTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffDepartment_JobType");
 
                 entity.HasOne(d => d.Staff)
                     .WithMany(p => p.StaffDepartment)

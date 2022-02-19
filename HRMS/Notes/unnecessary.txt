@@ -1,13 +1,262 @@
-//var checkOptions = await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.Checked);
-//var checkTopic = await db.EvaluationQuestionnaireTopic.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrEmpty(a.Answer));
+function render_pending_tbl(data) {
+    $('#tbl_holidays_pending').DataTable({
+        destroy: true,
+        language: {
+            url: `/Culture/DataTable/${culture}.json`
+        },
+        keys: true,
+        responsive: true,
+        pageLength: 15,
+        data: data,
+        deferRender: true,
+        columnDefs: [
+            { className: "w5 vertikal", targets: [0, 6] },
+            { className: "w10 vertikal", targets: [3, 4, 5] },
+            { className: "w15 vertikal", targets: [2] },
+            { className: "w20 vertikal", targets: [1] }
+        ],
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var name = '<div class="d-flex align-items-center">' +
+                        '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                    if (row.profileImage == null) {
+                        name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                    } else {
+                        name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                    }
+                    name += '</div><div class="ml-4">' +
+                        '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                        '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                        '</div></div>';
+                    return name;
+                }
+            },
+            { data: "holidayType" },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.startDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.endDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var date = new Date(Date.parse(row.insertedDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    let dateTimeNow = new Date();
+                    var lockoutDate = new Date(row.lockoutEnd);
 
-if ('@((int)Model.QuestionTypeEnum)' == QuestionType.OPTIONAL) {
-    if ($('#rpt_options').repeaterVal()["System.Collections.Generic.List`1"]["HRMS.Models.EvaluationManager.Options"] == null) {
-        $('#rpt_option').removeClass('d-none');
-        return;
-    } else {
-        $('#rpt_option').addClass('d-none');
-    }
+                    var dropdown = '<div class="input-group-prepend">' +
+                        '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                        '<div class="dropdown-menu" role="menu">';
+                    if (!row.finished) {
+                        if ('@role' === 'Manager') {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                        }
+                        dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                    '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                    }
+                    dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        '</div></div>';
+                    return dropdown;
+                }
+            }
+        ]
+    });
+}
+
+function render_approved_tbl(data) {
+    $('#tbl_holidays_approved').DataTable({
+        destroy: true,
+        language: {
+            url: `/Culture/DataTable/${culture}.json`
+        },
+        keys: true,
+        responsive: true,
+        pageLength: 15,
+        data: data,
+        deferRender: true,
+        columnDefs: [
+            { className: "w5 vertikal", targets: [0, 7] },
+            { className: "w10 vertikal", targets: [3, 4] },
+            { className: "w15 vertikal", targets: [2, 5, 6] },
+            { className: "w20 vertikal", targets: [1] }
+        ],
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var name = '<div class="d-flex align-items-center">' +
+                        '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                    if (row.profileImage == null) {
+                        name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                    } else {
+                        name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                    }
+                    name += '</div><div class="ml-4">' +
+                        '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                        '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                        '</div></div>';
+                    return name;
+                }
+            },
+            { data: "holidayType" },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.startDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.endDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var date = new Date(Date.parse(row.insertedDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var date = new Date(Date.parse(row.updatedDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    let dateTimeNow = new Date();
+                    var lockoutDate = new Date(row.lockoutEnd);
+
+                    var dropdown = '<div class="input-group-prepend">' +
+                        '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                        '<div class="dropdown-menu" role="menu">';
+                    if (!row.finished) {
+                        if ('@role' === 'Manager') {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                        }
+                        dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                    '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                    }
+                    dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        '</div></div>';
+                    return dropdown;
+                }
+            }
+        ]
+    });
+}
+
+function render_rejected_tbl(data) {
+    $('#tbl_holidays_rejected').DataTable({
+        destroy: true,
+        language: {
+            url: `/Culture/DataTable/${culture}.json`
+        },
+        keys: true,
+        responsive: true,
+        pageLength: 15,
+        data: data,
+        deferRender: true,
+        columnDefs: [
+            { className: "w5 vertikal", targets: [0, 7] },
+            { className: "w10 vertikal", targets: [3, 4] },
+            { className: "w15 vertikal", targets: [2, 5, 6] },
+            { className: "w20 vertikal", targets: [1] }
+        ],
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var name = '<div class="d-flex align-items-center">' +
+                        '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                    if (row.profileImage == null) {
+                        name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                    } else {
+                        name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                    }
+                    name += '</div><div class="ml-4">' +
+                        '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                        '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                        '</div></div>';
+                    return name;
+                }
+            },
+            { data: "holidayType" },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.startDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function(row, type, set) {
+                    var date = new Date(Date.parse(row.endDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var date = new Date(Date.parse(row.insertedDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    var date = new Date(Date.parse(row.updatedDate));
+                    return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            },
+            {
+                data: function (row, type, set) {
+                    let dateTimeNow = new Date();
+                    var lockoutDate = new Date(row.lockoutEnd);
+
+                    var dropdown = '<div class="input-group-prepend">' +
+                        '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                        '<div class="dropdown-menu" role="menu">';
+                    if (!row.finished) {
+                        if ('@role' === 'Manager') {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                        }
+                        dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                    '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                    }
+                    dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.holidayRequestIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        '</div></div>';
+                    return dropdown;
+                }
+            }
+        ]
+    });
 }
 
 <div class="card" style='box-shadow: none !important; @(user.Mode == TemplateMode.Dark ? "background-color: #343a40;" : "")'>

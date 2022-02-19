@@ -45,12 +45,14 @@ namespace HRMS.Data.General
             EvaluationTypeInsertedFromNavigation = new HashSet<EvaluationType>();
             EvaluationTypeUpdatedFromNavigation = new HashSet<EvaluationType>();
             EvaluationUpdatedFromNavigation = new HashSet<Evaluation>();
-            HolidayInsertedFromNavigation = new HashSet<Holiday>();
-            HolidayStatusInsertedFromNavigation = new HashSet<HolidayStatus>();
-            HolidayStatusUpdatedFromNavigation = new HashSet<HolidayStatus>();
-            HolidayTypeInsertedFromNavigation = new HashSet<HolidayType>();
-            HolidayTypeUpdatedFromNavigation = new HashSet<HolidayType>();
-            HolidayUpdatedFromNavigation = new HashSet<Holiday>();
+            LeaveInsertedFromNavigation = new HashSet<Leave>();
+            LeaveStaffDaysInsertedFromNavigation = new HashSet<LeaveStaffDays>();
+            LeaveStaffDaysUpdatedFromNavigation = new HashSet<LeaveStaffDays>();
+            LeaveStatusInsertedFromNavigation = new HashSet<LeaveStatus>();
+            LeaveStatusUpdatedFromNavigation = new HashSet<LeaveStatus>();
+            LeaveTypeInsertedFromNavigation = new HashSet<LeaveType>();
+            LeaveTypeUpdatedFromNavigation = new HashSet<LeaveType>();
+            LeaveUpdatedFromNavigation = new HashSet<Leave>();
             MenuInsertedFromNavigation = new HashSet<Menu>();
             MenuUpdatedFromNavigation = new HashSet<Menu>();
             ProfessionTypeInsertedFromNavigation = new HashSet<ProfessionType>();
@@ -148,12 +150,14 @@ namespace HRMS.Data.General
         public virtual ICollection<EvaluationType> EvaluationTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<Evaluation> EvaluationUpdatedFromNavigation { get; set; }
-        public virtual ICollection<Holiday> HolidayInsertedFromNavigation { get; set; }
-        public virtual ICollection<HolidayStatus> HolidayStatusInsertedFromNavigation { get; set; }
-        public virtual ICollection<HolidayStatus> HolidayStatusUpdatedFromNavigation { get; set; }
-        public virtual ICollection<HolidayType> HolidayTypeInsertedFromNavigation { get; set; }
-        public virtual ICollection<HolidayType> HolidayTypeUpdatedFromNavigation { get; set; }
-        public virtual ICollection<Holiday> HolidayUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Leave> LeaveInsertedFromNavigation { get; set; }
+        public virtual ICollection<LeaveStaffDays> LeaveStaffDaysInsertedFromNavigation { get; set; }
+        public virtual ICollection<LeaveStaffDays> LeaveStaffDaysUpdatedFromNavigation { get; set; }
+        public virtual ICollection<LeaveStatus> LeaveStatusInsertedFromNavigation { get; set; }
+        public virtual ICollection<LeaveStatus> LeaveStatusUpdatedFromNavigation { get; set; }
+        public virtual ICollection<LeaveType> LeaveTypeInsertedFromNavigation { get; set; }
+        public virtual ICollection<LeaveType> LeaveTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Leave> LeaveUpdatedFromNavigation { get; set; }
         public virtual ICollection<Menu> MenuInsertedFromNavigation { get; set; }
         public virtual ICollection<Menu> MenuUpdatedFromNavigation { get; set; }
         public virtual ICollection<ProfessionType> ProfessionTypeInsertedFromNavigation { get; set; }

@@ -1,7 +1,7 @@
 ﻿using HRMS.Utilities;
 using System;
 
-namespace HRMS.Models.Holiday;
+namespace HRMS.Areas.Leave.Models.Annual;
 
 public class List
 {
@@ -14,10 +14,7 @@ public class List
     public string HolidayType { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public double TotalDays { get; set; }
-    public string StatusType { get; set; }
-    public StatusTypeEnum StatusTypeEnum { get; set; }
-    public string Description { get; set; }
+    public Status StatusTypeEnum { get; set; }
     public DateTime InsertedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace HRMS.Utilities;
 
-public enum StatusTypeEnum
+public enum Status
 {
     Approved = 1,
     Rejected = 2,
@@ -72,7 +72,7 @@ public enum LookUpTable
     EvaluationQuestion = 10
 }
 
-public enum HolidayTypeEnum
+public enum LeaveTypeEnum
 {
     Annual = 1,
     Sick = 2,

@@ -115,7 +115,7 @@ public class StaffController : BaseController
                 db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
                 {
                     StaffId = newStaff.StaffId,
-                    StatusTypeId = (int)StatusTypeEnum.Processing,
+                    StatusTypeId = (int)Status.Processing,
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 });
@@ -186,7 +186,7 @@ public class StaffController : BaseController
                 db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
                 {
                     StaffId = newStaff.StaffId,
-                    StatusTypeId = (int)StatusTypeEnum.Processing,
+                    StatusTypeId = (int)Status.Processing,
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 });
@@ -953,7 +953,7 @@ public class StaffController : BaseController
             db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
             {
                 StaffId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = (int)StatusTypeEnum.Finished,
+                StatusTypeId = (int)Status.Finished,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
@@ -1009,7 +1009,7 @@ public class StaffController : BaseController
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => !a.StaffRegistrationStatus.Any(a => a.StatusTypeId == (int)StatusTypeEnum.Finished))
+            .Where(a => !a.StaffRegistrationStatus.Any(a => a.StatusTypeId == (int)Status.Finished))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
