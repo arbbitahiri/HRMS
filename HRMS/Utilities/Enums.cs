@@ -12,6 +12,19 @@ public enum Status
     PendingForAnswers = 8
 }
 
+public enum ReportType
+{
+    PDF = 1,
+    Excel = 2,
+    Word = 3
+}
+
+public enum ReportOrientation
+{
+    Portrait = 1,
+    Landscape = 2
+}
+
 public enum ErrorStatus
 {
     Success = 1,

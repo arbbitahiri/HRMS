@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Reporting.NETCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1014,9 +1016,9 @@ public class StaffController : BaseController
             .Select(a => new StaffDetails
             {
                 Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
+                PersonalNumber = a.PersonalNumber,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                PersonalNumber = a.PersonalNumber,
                 ProfileImage = a.User.ProfileImage,
                 Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
                 Email = a.User.Email,
@@ -1288,6 +1290,50 @@ public class StaffController : BaseController
         };
 
         return View(openDocument);
+    }
+
+    #endregion
+
+    #region Report
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Report for list of staff depending of the search.")]
+    public async Task<IActionResult> Report(Search search)
+    {
+        var staffList = await db.StaffDepartment
+            .Include(a => a.Staff).ThenInclude(a => a.User)
+            .Include(a => a.Department)
+            .Where(a => a.DepartmentId == (search.Department ?? a.DepartmentId)
+                && a.StaffTypeId == (search.Department ?? a.StaffTypeId)
+                && a.EndDate >= DateTime.Now
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber.Contains(search.PersonalNumber))
+                && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
+                && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
+            .AsSplitQuery()
+            .Select(a => new ReportVM
+            {
+                StaffId = a.StaffId,
+                DepartmentId = a.DepartmentId,
+                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
+                PersonalNumber = a.Staff.PersonalNumber,
+                FirstName = a.Staff.FirstName,
+                LastName = a.Staff.LastName,
+                BirthDate = a.Staff.Birthdate.ToString("dd/MM/yyyy"),
+                Gender = a.Staff.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Email = a.Staff.User.Email,
+                PhoneNumber = a.Staff.User.PhoneNumber
+            }).ToListAsync();
+
+        var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", staffList) };
+        var reportByte = RDLCReport.GenerateReport("StaffList.rdlc", search.ReportType, ReportOrientation.Portrait, dataSource);
+        string contentType = search.ReportType switch
+        {
+            ReportType.PDF => "application/pdf",
+            ReportType.Excel => "application/ms-excel",
+            ReportType.Word => "application/msword",
+            _ => "application/pdf"
+        };
+        return File(reportByte, contentType);
     }
 
     #endregion

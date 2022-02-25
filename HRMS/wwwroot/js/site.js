@@ -11,6 +11,12 @@ const ErrorStatus = {
     INFO: 4
 }
 
+const ReportType = {
+    PDF: 1,
+    EXCEL: 2,
+    WORD: 3
+}
+
 const MethodType = {
     GET: 1,
     POST: 2,
