@@ -978,30 +978,30 @@ public class StaffController : BaseController
     [Description("Arb Tahiri", "Form to list searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
-        var list = await db.Staff
-            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
-            .Include(a => a.User)
-            .Where(a => (a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.Department ?? b.StaffTypeId))
-                && a.StaffDepartment.Any(a => a.EndDate >= DateTime.Now))
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber.Contains(search.PersonalNumber))
-                && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.Contains(search.Lastname)))
+        var staffList = await db.StaffDepartment
+            .Include(a => a.Staff).ThenInclude(a => a.User)
+            .Include(a => a.Department)
+            .Where(a => a.DepartmentId == (search.Department ?? a.DepartmentId)
+                && a.StaffTypeId == (search.Department ?? a.StaffTypeId)
+                && a.EndDate >= DateTime.Now
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber.Contains(search.PersonalNumber))
+                && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
+                && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
-                Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
-                Firstname = a.FirstName,
-                Lastname = a.LastName,
-                PersonalNumber = a.PersonalNumber,
-                ProfileImage = a.User.ProfileImage,
-                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
-                Department = a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
-                Email = a.User.Email,
-                PhoneNumber = a.User.PhoneNumber,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
+                Ide = CryptoSecurity.Encrypt(a.Staff.PersonalNumber),
+                Firstname = a.Staff.FirstName,
+                Lastname = a.Staff.LastName,
+                PersonalNumber = a.Staff.PersonalNumber,
+                ProfileImage = a.Staff.User.ProfileImage,
+                Gender = a.Staff.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
+                Email = a.Staff.User.Email,
+                PhoneNumber = a.Staff.User.PhoneNumber,
+                StaffType = string.Join(", ", user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn)
             }).ToListAsync();
-        return Json(list);
+        return Json(staffList);
     }
 
     [HttpGet, Authorize(Policy = "21s:r")]
@@ -1321,7 +1321,8 @@ public class StaffController : BaseController
                 BirthDate = a.Staff.Birthdate.ToString("dd/MM/yyyy"),
                 Gender = a.Staff.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
                 Email = a.Staff.User.Email,
-                PhoneNumber = a.Staff.User.PhoneNumber
+                PhoneNumber = a.Staff.User.PhoneNumber,
+                User = $"{user.FirstName} {user.LastName}"
             }).ToListAsync();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", staffList) };

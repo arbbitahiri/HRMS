@@ -98,7 +98,7 @@
                         @foreach (var option in optional.Answers)
                         {
                             <ul class="icheck-primary p-2" style="font-size: 14px;">
-                                <input id="@option.TopicId" onchange="submit_optional_topic('@option.TopicIde')" type="text" style="form-control custom-txt"/>
+                                <input asp-for="@option.Answer" id="@option.TopicId" onchange="submit_optional_topic('@option.TopicIde')" type="text" style="form-control custom-txt"/>
                             </ul>
                         }
                     </fieldset>
@@ -165,12 +165,12 @@
                     {
                         data: function(row, type, set) {
                             var desc = '///';
-                            if (row.title != null) {
-                                row.title = row.title.slice(-1) != "?" ? row.title + "?" : row.title;
-                                if (row.title.length > 80) {
-                                    desc = row.title.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.title.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            if (row.question != null) {
+                                row.question = row.question.slice(-1) != "?" ? row.question + "?" : row.question;
+                                if (row.question.length > 80) {
+                                    desc = row.question.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.question.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
                                 } else {
-                                    desc = row.title ?? "///";
+                                    desc = row.question ?? "///";
                                 }
                             }
                             return desc;
@@ -274,11 +274,11 @@
         }
 
         function back_to_register(ide) {
-            window.location.href = '@Url.Action("Index", "Self")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Index", "StudentsCollege")?ide=' + ide + '&method=@((int)Model.Method)';
         }
 
         function continue_to_document(ide) {
-            window.location.href = '@Url.Action("Documents", "Self")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Documents", "StudentsCollege")?ide=' + ide + '&method=@((int)Model.Method)';
         }
     </script>
 }

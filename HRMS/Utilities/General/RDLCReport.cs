@@ -10,8 +10,9 @@ public class RDLCReport
     {
         var localReport = new LocalReport();
 
-        dataSources.ForEach(a => { localReport.DataSources.Add(a); });
-        localReport.LoadReportDefinition(Assembly.GetExecutingAssembly().GetManifestResourceStream($"HRMS.Reports.{name}"));
+        dataSources.ForEach(a => localReport.DataSources.Add(a) );
+        var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"HRMS.Reports.{name}");
+        localReport.LoadReportDefinition(resourceStream);
 
         string renderType = type switch
         {

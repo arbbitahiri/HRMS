@@ -80,8 +80,8 @@
         function submit_form(ide) {
             $.post('@Url.Action("Finish", "Self")', {
                 ide: ide,
-                method: '@Model.Method'
-                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                method: '@Model.Method',
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function() {
                 window.location.href = '@Url.Action("Index", "Evalaution")';
             });

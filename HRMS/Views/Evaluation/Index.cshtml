@@ -31,9 +31,9 @@
             if (EvaluationType.MANAGER == et) {
                 window.location.href = '@Url.Action("Index", "Manager", new { area = "Evaluations" })';
             } else if (EvaluationType.STUDENTSTAFF == et) {
-                window.location.href = '@Url.Action("Index", "StudentsCollege", new { area = "Evaluations" })';
-            } else if (EvaluationType.STUDENTCOLLEGE == et) {
                 window.location.href = '@Url.Action("Index", "StudentsStaff", new { area = "Evaluations" })';
+            } else if (EvaluationType.STUDENTCOLLEGE == et) {
+                window.location.href = '@Url.Action("Index", "StudentsCollege", new { area = "Evaluations" })';
             } else {
                 window.location.href = '@Url.Action("Index", "Self", new { area = "Evaluations" })';
             }

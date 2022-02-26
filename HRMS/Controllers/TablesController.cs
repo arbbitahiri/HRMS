@@ -37,7 +37,7 @@ public class TablesController : BaseController
             new TableName() { Table = LookUpTable.Document, Title = Resource.DocumentType },
             new TableName() { Table = LookUpTable.EducationLevel, Title = Resource.EducationLevelType },
             new TableName() { Table = LookUpTable.Evaluation, Title = Resource.EvaluationType },
-            new TableName() { Table = LookUpTable.Holiday, Title = Resource.HolidayType },
+            new TableName() { Table = LookUpTable.Holiday, Title = Resource.LeaveType },
             new TableName() { Table = LookUpTable.Profession, Title = Resource.ProfessionType },
             new TableName() { Table = LookUpTable.Staff, Title = Resource.StaffType },
             new TableName() { Table = LookUpTable.Status, Title = Resource.StatusType },
