@@ -207,7 +207,7 @@ public class ManagerController : BaseController
 
         if (create.QuestionTypeId == (int)QuestionType.Optional)
         {
-            if (create.Options == null)
+            if (create.Options == null || !create.Options.Any())
             {
                 return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
             }
@@ -217,15 +217,16 @@ public class ManagerController : BaseController
                 EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
                 QuestionSq = create.QuestionSQ,
                 QuestionEn = create.QuestionEN,
-                EvaluationQuestionnaireOptionalOption = create.Options.Select(a => new EvaluationQuestionnaireOptionalOption
-                {
-                    OptionTitleSq = a.TitleSQ,
-                    OptionTitleEn = a.TitleEN,
-                    Checked = false,
-                    Active = true,
-                    InsertedDate = DateTime.Now,
-                    InsertedFrom = user.Id
-                }).ToList(),
+                EvaluationQuestionnaireOptionalOption = create.Options
+                    .Select(a => new EvaluationQuestionnaireOptionalOption
+                    {
+                        OptionTitleSq = a.TitleSQ,
+                        OptionTitleEn = a.TitleEN,
+                        Checked = false,
+                        Active = true,
+                        InsertedDate = DateTime.Now,
+                        InsertedFrom = user.Id
+                    }).ToList(),
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id

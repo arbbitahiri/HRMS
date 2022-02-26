@@ -1334,7 +1334,16 @@ public class StaffController : BaseController
             ReportType.Word => "application/msword",
             _ => "application/pdf"
         };
-        return File(reportByte, contentType);
+        string fileName = search.ReportType switch
+        {
+            ReportType.PDF => Resource.StaffList,
+            ReportType.Excel => $"{Resource.StaffList}.xlsx",
+            ReportType.Word => $"{Resource.StaffList}.docx",
+            _ => Resource.StaffList
+        };
+        return search.ReportType == ReportType.PDF ?
+            File(reportByte, contentType) :
+            File(reportByte, contentType, fileName);
     }
 
     #endregion

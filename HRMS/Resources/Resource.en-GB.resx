@@ -837,8 +837,14 @@
   <data name="Option" xml:space="preserve">
     <value>Option</value>
   </data>
+  <data name="OptionEN" xml:space="preserve">
+    <value>Option english</value>
+  </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
+  </data>
+  <data name="OptionSQ" xml:space="preserve">
+    <value>Option albanian</value>
   </data>
   <data name="OrdinalNumber" xml:space="preserve">
     <value>Ordinal number</value>

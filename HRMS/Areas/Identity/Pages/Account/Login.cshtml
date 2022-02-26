@@ -52,7 +52,7 @@
         if ($('#frm_Login').valid()) {
             $('#frm_Login').submit();
             setTimeout(function() {
-                $('#btn_SubmitLogin').attr({ disabled: 'disabled' });
+                $('#btn_SubmitLogin').prop('disabled', true);
             }, 100);
         }
     }

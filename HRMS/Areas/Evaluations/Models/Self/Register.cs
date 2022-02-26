@@ -13,6 +13,7 @@ public class Register
     public string EvaluationType { get; set; }
     public DateTime InsertedDate { get; set; }
 
+    [Display(Name = "Staff", ResourceType = typeof(Resource))]
     public string StaffName { get; set; }
 
     [Display(Name = "Title", ResourceType = typeof(Resource))]

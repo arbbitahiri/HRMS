@@ -18,17 +18,17 @@
         <input asp-for="EvaluationIde" type="hidden"/>
 
         <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionTypeId" class="required"></label>
                 <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
                 <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionSQ" class="required"></label>
                 <input asp-for="QuestionSQ" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionSQ" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionEN" class="required"></label>
                 <input asp-for="QuestionEN" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionEN" class="text-danger"></span>
@@ -37,12 +37,12 @@
                 <div data-repeater-list="" data-limit="@Model.MaxQuestionOptions" class="row repeater">
                     <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
                         <div class="col-md-4">
-                            <label name="OptionTitleSq" class="required">@Resource.Option</label>
+                            <label name="OptionTitleSq" class="required">@Resource.OptionSQ</label>
                             <input type="text" name="OptionTitleSq" class="form-control"/>
                             <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
                         </div>
                         <div class="col-md-4">
-                            <label name="OptionTitleEn" class="required">@Resource.Option</label>
+                            <label name="OptionTitleEn" class="required">@Resource.OptionEN</label>
                             <input type="text" name="OptionTitleEn" class="form-control"/>
                             <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
                         </div>
@@ -130,6 +130,7 @@
     });
 
     function add_questions() {
+        console.log($('#rpt_options').repeaterVal()[""]);
         var data = {
             EvaluationIde : $('#EvaluationIde').val(),
             QuestionTypeId: $('#QuestionTypeId').val(),
@@ -142,7 +143,6 @@
             if ($('#rpt_options').repeaterVal()[""] == null) {
                 $('#rpt_option').removeClass('d-none');
             } else {
-                $('#rpt_option').addClass('d-none');
                 $.post('@Url.Action("AddQuestion", "Manager")', {
                     create: data,
                     __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()

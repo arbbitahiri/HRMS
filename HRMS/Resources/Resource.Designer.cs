@@ -2230,11 +2230,29 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opsioni anglisht.
+        /// </summary>
+        public static string OptionEN {
+            get {
+                return ResourceManager.GetString("OptionEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opsionet.
         /// </summary>
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opsioni shqip.
+        /// </summary>
+        public static string OptionSQ {
+            get {
+                return ResourceManager.GetString("OptionSQ", resourceCulture);
             }
         }
         

@@ -1275,4 +1275,10 @@
   <data name="ThisYear" xml:space="preserve">
     <value>Këtë vit</value>
   </data>
+  <data name="OptionEN" xml:space="preserve">
+    <value>Opsioni anglisht</value>
+  </data>
+  <data name="OptionSQ" xml:space="preserve">
+    <value>Opsioni shqip</value>
+  </data>
 </root>

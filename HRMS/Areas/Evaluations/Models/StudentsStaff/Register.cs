@@ -18,6 +18,7 @@ public class Register
     [Range(0, int.MaxValue, ErrorMessageResourceName = "GreaterThanOne", ErrorMessageResourceType = typeof(Resource))]
     public int NumberOfStudents { get; set; }
 
+    [Display(Name = "Subject", ResourceType = typeof(Resource))]
     public int SubjectId { get; set; }
 
     [Display(Name = "Staff", ResourceType = typeof(Resource))]

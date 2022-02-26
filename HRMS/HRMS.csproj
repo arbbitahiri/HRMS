@@ -40,13 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Leave\Models\Maternity\" />
-    <Folder Include="Areas\Leave\Models\Unpaid\" />
-    <Folder Include="Areas\Leave\Models\Sick\" />
-    <Folder Include="Areas\Leave\Views\Annual\" />
-    <Folder Include="Areas\Leave\Views\Maternity\" />
-    <Folder Include="Areas\Leave\Views\Sick\" />
-    <Folder Include="Areas\Leave\Views\Unpaid\" />
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 

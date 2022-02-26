@@ -73,7 +73,12 @@
                     <tr>
                         <th>#</th>
                         <th>@Resource.Question</th>
-                        <th>@Resource.Answer</th>
+                        <th data-orderable="false">0</th>
+                        <th data-orderable="false">1</th>
+                        <th data-orderable="false">2</th>
+                        <th data-orderable="false">3</th>
+                        <th data-orderable="false">4</th>
+                        <th data-orderable="false">5</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -178,9 +183,8 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { className: "w5 vertikal", targets: [0, 3] },
-                    { className: "w20 vertikal", targets: [1] },
-                    { className: "w20 vertikal", targets: [2] }
+                    { className: "w5 vertikal", targets: [0, 2, 3, 4, 5, 6, 7, 8] },
+                    { className: "w30 vertikal", targets: [1] },
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -193,12 +197,12 @@
                     {
                         data: function(row, type, set) {
                             var desc = '///';
-                            if (row.title != null) {
-                                row.title = row.title.slice(-1) != "?" ? row.title + "?" : row.title;
-                                if (row.title.length > 80) {
-                                    desc = row.title.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.title.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            if (row.question != null) {
+                                row.question = row.question.slice(-1) != "?" ? row.question + "?" : row.question;
+                                if (row.question.length > 80) {
+                                    desc = row.question.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.question.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
                                 } else {
-                                    desc = row.title ?? "///";
+                                    desc = row.question ?? "///";
                                 }
                             }
                             return desc;
@@ -207,12 +211,42 @@
                     {
                         data: function(row, type, set) {
                             return '<div class="clearfix" id="kt_checkbox">' +
-                                '<div class="icheck-secondary d-inline pr-5"><input id="0' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 0 ? "checked" : "") + '/><label for="0' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 0)">0</label></div>' +
-                                '<div class="icheck-danger d-inline pr-5"><input id="1' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 1 ? "checked" : "") + '/><label for="1' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 1)">1</label></div>' +
-                                '<div class="icheck-orange d-inline pr-5"><input id="2' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 2 ? "checked" : "") + '/><label for="2' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 2)">2</label></div>' +
-                                '<div class="icheck-warning d-inline pr-5"><input id="3' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 3 ? "checked" : "") + '/><label for="3' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 3)">3</label></div>' +
-                                '<div class="icheck-info d-inline pr-5"><input id="4' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 4 ? "checked" : "") + '/><label for="4' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 4)">4</label></div>' +
-                                '<div class="icheck-success d-inline pr-5"><input id="5' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 5 ? "checked" : "") + '/><label for="5' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 5)">5</label></div>' +
+                                '<div class="icheck-secondary d-inline"><input id="0' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 0 ? "checked" : "") + '/><label for="0' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 0)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-danger d-inline"><input id="1' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 1 ? "checked" : "") + '/><label for="1' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 1)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-orange d-inline"><input id="2' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 2 ? "checked" : "") + '/><label for="2' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 2)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-warning d-inline"><input id="3' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 3 ? "checked" : "") + '/><label for="3' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 3)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-info d-inline"><input id="4' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 4 ? "checked" : "") + '/><label for="4' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 4)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-success d-inline"><input id="5' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 5 ? "checked" : "") + '/><label for="5' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 5)"></label></div>' +
                                 '</div>';
                         }
                     },
@@ -347,17 +381,17 @@
         }
 
         function add_question(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddQuestion", "Manager")?ide=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddQuestion", "Manager")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 
         function edit_question(ide, question_type) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditQuestion", "Manager")', {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQuestion", "Manager")', {
                 ide: ide,
                 questionType: question_type
             }, function () {
-                $('#modal-lg').modal('toggle');
+                $('#modal-xl').modal('toggle');
             });
         }
 
