@@ -14,9 +14,9 @@
         <h3 class="card-title">@Resource.SearchParameters</h3>
     </div>
     <div class="card-body">
-        <form asp-action="Search" asp-controller="Staff" method="post" id="frm_search_staff" data-ajax="true" data-ajax-method="post" data-ajax-success="search_success">
+        <form asp-action="Search" asp-controller="Staff" method="post" id="frm_search_staff" data-ajax="true" data-ajax-success="search_staff">
             @Html.AntiForgeryToken()
-            <input asp-for="ReportType" type="hidden"/>
+            @Html.Hidden("reportType")
 
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
@@ -51,7 +51,7 @@
 
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
                     <label class="invisible">\\</label><br />
-                    <input type="submit" class="btn btn-primary" value="@Resource.Search" />
+                    <input type="button" class="btn btn-primary" onclick="$('#frm_search_staff').submit()" value="@Resource.Search" />
                 </div>
             </div>
         </form>
@@ -127,20 +127,14 @@
                 }
             });
 
-            $.validator.setDefaults({ ingore: '' });
-            var form = $('#frm_search_staff');
-            form.removeData('validator');
-            form.removeData('unobtrusiveValidation');
-            $.validator.unobtrusive.parse(form);
-
             $('#kt_in_process').on('expanded.lte.cardwidget', function() {
                 $('#kt_load_tbl').load('@Url.Action("InProcess", "Staff")');
             });
 
-            form.submit();
+            $('#frm_search_staff').submit();
         });
 
-        function search_success(data) {
+        function search_staff(data) {
             debugger
             $("#tbl_staff").DataTable({
                 destroy: true,
@@ -216,7 +210,7 @@
             $('#frm_search_staff').attr('action', '@Url.Action("Report", "Staff")');
             $('#frm_search_staff').attr('target', '_blank');
             $('#frm_search_staff').addClass('noLoading');
-            $('#ReportType').val(type);
+            $('#reportType').val(type);
             $('#frm_search_staff').submit();
             $('#frm_search_staff').attr('data-ajax', true);
             $('#frm_search_staff').attr('action', '@Url.Action("Search", "Staff")');

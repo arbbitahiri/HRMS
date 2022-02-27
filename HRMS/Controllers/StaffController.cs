@@ -1298,7 +1298,7 @@ public class StaffController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Report for list of staff depending of the search.")]
-    public async Task<IActionResult> Report(Search search)
+    public async Task<IActionResult> Report(Search search, ReportType reportType)
     {
         var staffList = await db.StaffDepartment
             .Include(a => a.Staff).ThenInclude(a => a.User)
@@ -1326,22 +1326,22 @@ public class StaffController : BaseController
             }).ToListAsync();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", staffList) };
-        var reportByte = RDLCReport.GenerateReport("StaffList.rdlc", search.ReportType, ReportOrientation.Portrait, dataSource);
-        string contentType = search.ReportType switch
+        var reportByte = RDLCReport.GenerateReport("StaffList.rdlc", reportType, ReportOrientation.Portrait, dataSource);
+        string contentType = reportType switch
         {
             ReportType.PDF => "application/pdf",
             ReportType.Excel => "application/ms-excel",
             ReportType.Word => "application/msword",
             _ => "application/pdf"
         };
-        string fileName = search.ReportType switch
+        string fileName = reportType switch
         {
             ReportType.PDF => Resource.StaffList,
             ReportType.Excel => $"{Resource.StaffList}.xlsx",
             ReportType.Word => $"{Resource.StaffList}.docx",
             _ => Resource.StaffList
         };
-        return search.ReportType == ReportType.PDF ?
+        return reportType == ReportType.PDF ?
             File(reportByte, contentType) :
             File(reportByte, contentType, fileName);
     }

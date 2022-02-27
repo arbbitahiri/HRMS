@@ -29,6 +29,7 @@
 
     function render_self_tbl(data) {
         var rowCount = 1;
+        var self = "Self";
         $('#tbl_self_evaluation').DataTable({
             destroy: true,
             language: {
@@ -83,9 +84,9 @@
                         return '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationIde + '\', \'' + self + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
                             '<button type="button" class="dropdown-item" onclick="delete_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
-                            '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationManagerIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
+                            '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
                             '</div></div>';
                     }
                 }

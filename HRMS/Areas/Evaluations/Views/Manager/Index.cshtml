@@ -5,7 +5,7 @@
     Layout = "~/Areas/Evaluations/Views/Manager/_Layout.cshtml";
 }
 
-<form asp-action='@(Model.MethodType == MethodType.Post ? "Register" : "Edit")' asp-controller="Manager" asp-area="Evaluations" id="frm_register_evaluation" method="post">
+<form asp-action='Register' asp-controller="Manager" asp-area="Evaluations" id="frm_register_evaluation" method="post">
     @Html.AntiForgeryToken()
     <input asp-for="EvaluationIde" type="hidden"/>
     <input asp-for="MethodType" type="hidden"/>
