@@ -56,7 +56,7 @@ public class SelfController : BaseController
                 && a.EvaluationSelfId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Register
             {
-                EvaluationIde = ide,
+                EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
                 EvaluationType = user.Language == LanguageEnum.Albanian ? a.Evaluation.EvaluationType.NameSq : a.Evaluation.EvaluationType.NameEn,
                 InsertedDate = a.InsertedDate,
                 MethodType = MethodType.Put,
@@ -76,37 +76,55 @@ public class SelfController : BaseController
             TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var evaluation = new Data.General.Evaluation
-        {
-            EvaluationTypeId = (int)EvaluationTypeEnum.Self,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        };
-        db.Evaluation.Add(evaluation);
-        await db.SaveChangesAsync();
+        var evaluationId = !string.IsNullOrEmpty(create.EvaluationIde) ? CryptoSecurity.Decrypt<int>(create.EvaluationIde) : 0;
+        string evaluationIde;
 
         var staffId = await db.Staff.Where(a => a.UserId == user.Id).Select(a => a.StaffId).FirstOrDefaultAsync();
-
-        db.EvaluationSelf.Add(new EvaluationSelf
+        var evaluationSelf = await db.EvaluationSelf.FirstOrDefaultAsync(a => a.EvaluationId == evaluationId);
+        if (evaluationSelf is null)
         {
-            EvaluationId = evaluation.EvaluationId,
-            StaffId = staffId,
-            Title = create.Title,
-            Description = create.Description,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        });
+            var evaluation = new Data.General.Evaluation
+            {
+                EvaluationTypeId = (int)EvaluationTypeEnum.Self,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            };
+            db.Evaluation.Add(evaluation);
+            await db.SaveChangesAsync();
 
-        db.EvaluationStatus.Add(new EvaluationStatus
+            db.EvaluationSelf.Add(new EvaluationSelf
+            {
+                EvaluationId = evaluation.EvaluationId,
+                StaffId = staffId,
+                Title = create.Title,
+                Description = create.Description,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+
+            db.EvaluationStatus.Add(new EvaluationStatus
+            {
+                EvaluationId = evaluation.EvaluationId,
+                StatusTypeId = (int)Status.Unprocessed,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+            evaluationIde = CryptoSecurity.Encrypt(evaluation.EvaluationId);
+        }
+        else
         {
-            EvaluationId = evaluation.EvaluationId,
-            StatusTypeId = (int)Status.Unprocessed,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        });
+            evaluationIde = CryptoSecurity.Encrypt(evaluationSelf.EvaluationId);
+
+            evaluationSelf.StaffId = staffId;
+            evaluationSelf.Title = create.Title;
+            evaluationSelf.Description = create.Description;
+            evaluationSelf.UpdatedDate = DateTime.Now;
+            evaluationSelf.UpdatedFrom = user.Id;
+            evaluationSelf.UpdatedNo = evaluationSelf.UpdatedNo.HasValue ? ++evaluationSelf.UpdatedNo : evaluationSelf.UpdatedNo = 1;
+        }
         await db.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Questions), new { ide = CryptoSecurity.Encrypt(evaluation.EvaluationId), method = MethodType.Post });
+        return RedirectToAction(nameof(Questions), new { ide = evaluationIde, method = MethodType.Post });
     }
 
     #endregion

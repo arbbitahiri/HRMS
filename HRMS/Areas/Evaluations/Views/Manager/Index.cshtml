@@ -2,6 +2,7 @@
 @model Register
 @{
     ViewData["Title"] = Resource.FirstStepEvaluation;
+    UserModel user = (UserModel)ViewData["User"];
     Layout = "~/Areas/Evaluations/Views/Manager/_Layout.cshtml";
 }
 
@@ -55,49 +56,48 @@
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
 
-            if (culture == 'sq-AL') {
-                $('textarea').prop('spellcheck', false);
-            } else {
-                $('textarea').prop('spellcheck', true);
-            }
-
             change_staff();
         });
 
         function change_staff() {
-            $('#StaffId').select2({
-                width: "100%",
-                allowClear: true,
-                language: {
-                    noResults: function () {
-                        return '@Html.Raw(Resource.NoResultsFound)';
+            $.get('@Url.Action("GetCurrentStaff")', {
+                staffId: $('#StaffId').val()
+            }, function (data) {
+                $('#StaffId').select2({
+                    width: "100%",
+                    allowClear: true,
+                    data: data,
+                    language: {
+                        noResults: function () {
+                            return '@Html.Raw(Resource.NoResultsFound)';
+                        },
+                        searching: function() {
+                            return '@Html.Raw(Resource.Searching)';
+                        },
                     },
-                    searching: function() {
-                        return '@Html.Raw(Resource.Searching)';
+                    ajax: {
+                        url: '@Url.Action("GetStaff")',
+                        type: 'post',
+                        datatype: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                name: params.term,
+                                userId: '@user.Id',
+                                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                            };
+                        },
+                        processResults: function (response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        catch: true
                     },
-                },
-                ajax: {
-                    url: '@Url.Action("GetStaff")',
-                    type: 'post',
-                    datatype: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            name: params.term,
-                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
-                        };
-                    },
-                    processResults: function (response) {
-                        console.log(response);
-                        return {
-                            results: response
-                        };
-                    },
-                    catch: true
-                },
-                placeholder: '@Resource.Choose',
-                templateResult: formatRepo,
-                templateSelection: formatRepoSelection
+                    placeholder: '@Resource.Choose',
+                    templateResult: formatRepo,
+                    templateSelection: formatRepoSelection
+                });
             });
         }
 

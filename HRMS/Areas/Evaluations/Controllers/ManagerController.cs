@@ -79,8 +79,11 @@ public class ManagerController : BaseController
             TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        var evaluationId = !string.IsNullOrEmpty(create.EvaluationIde) ? CryptoSecurity.Decrypt<int>(create.EvaluationIde) : 0;
         string evaluationIde;
-        var evaluationManager = await db.EvaluationManager.FirstOrDefaultAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(create.EvaluationIde));
+
+        var managerId = await db.StaffDepartment.Where(a => a.Staff.UserId == user.Id).Select(a => a.StaffDepartmentId).FirstOrDefaultAsync();
+        var evaluationManager = await db.EvaluationManager.FirstOrDefaultAsync(a => a.EvaluationId == evaluationId);
         if (evaluationManager is null)
         {
             var evaluation = new Data.General.Evaluation
@@ -91,8 +94,6 @@ public class ManagerController : BaseController
             };
             db.Evaluation.Add(evaluation);
             await db.SaveChangesAsync();
-
-            var managerId = await db.StaffDepartment.Where(a => a.Staff.UserId == user.Id).Select(a => a.StaffDepartmentId).FirstOrDefaultAsync();
 
             db.EvaluationManager.Add(new EvaluationManager
             {
@@ -112,13 +113,11 @@ public class ManagerController : BaseController
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
-
             evaluationIde = CryptoSecurity.Encrypt(evaluation.EvaluationId);
         }
         else
         {
-            var managerId = await db.StaffDepartment.Where(a => a.Staff.UserId == user.Id).Select(a => a.StaffDepartmentId).FirstOrDefaultAsync();
-            evaluationIde = create.EvaluationIde;
+            evaluationIde = CryptoSecurity.Encrypt(evaluationManager.EvaluationId);
 
             evaluationManager.ManagerId = managerId;
             evaluationManager.Title = create.Title;
@@ -130,7 +129,7 @@ public class ManagerController : BaseController
 
         await db.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Questions), new { ide = CryptoSecurity.Encrypt(evaluationIde), method = MethodType.Post });
+        return RedirectToAction(nameof(Questions), new { ide = evaluationIde, method = MethodType.Post });
     }
 
     #endregion

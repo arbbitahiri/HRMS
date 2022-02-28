@@ -43,9 +43,13 @@
                         @if (Model.Options.Count == 0)
                         {
                             <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
-                                <div class="col-md-10">
-                                    <label name="Title" class="required">@Resource.Option</label>
-                                    <input type="text" name="Title" class="form-control"/>
+                                <div class="col-md-4">
+                                    <label name="TitleSQ" class="required">@Resource.OptionSQ</label>
+                                    <input type="text" name="TitleSQ" class="form-control"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label name="TitleEn" class="required">@Resource.OptionEN</label>
+                                    <input type="text" name="TitleEn" class="form-control"/>
                                 </div>
                                 <div class="col-md-2">
                                     <label name="Title" style="visibility: hidden;"></label><br />
@@ -62,13 +66,13 @@
                                 <div data-repeater-item="@item" class="form-group row col-md-12 align-items-center">
                                     <input asp-for="@item.OptionIde" type="hidden" name="OptionIde"/>
                                     <div class="col-md-4">
-                                        <label name="Title" class="required">@Resource.Option</label>
-                                        <input asp-for="@item.TitleSQ" type="text" name="Title" class="form-control"/>
+                                        <label name="TitleSQ" class="required">@Resource.OptionSQ</label>
+                                        <input asp-for="@item.TitleSQ" type="text" name="TitleSQ" class="form-control"/>
                                         <span asp-validation-for="@item.TitleSQ" id="@item.TitleSQ" name="@item.TitleSQ" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-4">
-                                        <label name="Title" class="required">@Resource.Option</label>
-                                        <input asp-for="@item.TitleEN" type="text" name="Title" class="form-control"/>
+                                        <label name="TitleEn" class="required">@Resource.OptionEN</label>
+                                        <input asp-for="@item.TitleEN" type="text" name="TitleEn" class="form-control"/>
                                         <span asp-validation-for="@item.TitleEN" id="@item.TitleEN" name="@item.TitleEN" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-2">

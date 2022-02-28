@@ -80,36 +80,56 @@ public class StudentsStaffController : BaseController
             TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var evaluation = new Data.General.Evaluation
+        var evaluationId = !string.IsNullOrEmpty(create.EvaluationIde) ? CryptoSecurity.Decrypt<int>(create.EvaluationIde) : 0;
+        string evaluationIde;
+
+        var evaluationStudentsStaff = await db.EvaluationStudentsStaff.FirstOrDefaultAsync(a => a.EvaluationId == evaluationId);
+        if (evaluationStudentsStaff is null)
         {
-            EvaluationTypeId = (int)EvaluationTypeEnum.StudentStaff,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        };
-        db.Evaluation.Add(evaluation);
+            var evaluation = new Data.General.Evaluation
+            {
+                EvaluationTypeId = (int)EvaluationTypeEnum.StudentStaff,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            };
+            db.Evaluation.Add(evaluation);
+            await db.SaveChangesAsync();
+
+            db.EvaluationStudentsStaff.Add(new EvaluationStudentsStaff
+            {
+                EvaluationId = evaluation.EvaluationId,
+                StudentsNo = create.NumberOfStudents,
+                StaffDepartmentSubjectId = create.StaffDepartmentSubjectId,
+                Title = create.Title,
+                Description = create.Description,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+
+            db.EvaluationStatus.Add(new EvaluationStatus
+            {
+                EvaluationId = evaluation.EvaluationId,
+                StatusTypeId = (int)Status.Unprocessed,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+            evaluationIde = CryptoSecurity.Encrypt(evaluation.EvaluationId);
+        }
+        else
+        {
+            evaluationIde = CryptoSecurity.Encrypt(evaluationStudentsStaff.EvaluationId);
+
+            evaluationStudentsStaff.StudentsNo = create.NumberOfStudents;
+            evaluationStudentsStaff.StaffDepartmentSubjectId = create.StaffDepartmentSubjectId;
+            evaluationStudentsStaff.Title = create.Title;
+            evaluationStudentsStaff.Description = create.Description;
+            evaluationStudentsStaff.UpdatedDate = DateTime.Now;
+            evaluationStudentsStaff.UpdatedFrom = user.Id;
+            evaluationStudentsStaff.UpdatedNo = evaluationStudentsStaff.UpdatedNo.HasValue ? ++evaluationStudentsStaff.UpdatedNo : evaluationStudentsStaff.UpdatedNo = 1;
+        }
         await db.SaveChangesAsync();
 
-        db.EvaluationStudentsStaff.Add(new EvaluationStudentsStaff
-        {
-            EvaluationId = evaluation.EvaluationId,
-            StudentsNo = create.NumberOfStudents,
-            StaffDepartmentSubjectId = create.StaffDepartmentSubjectId,
-            Title = create.Title,
-            Description = create.Description,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        });
-
-        db.EvaluationStatus.Add(new EvaluationStatus
-        {
-            EvaluationId = evaluation.EvaluationId,
-            StatusTypeId = (int)Status.Unprocessed,
-            InsertedDate = DateTime.Now,
-            InsertedFrom = user.Id
-        });
-        await db.SaveChangesAsync();
-
-        return RedirectToAction(nameof(Questions), new { ide = CryptoSecurity.Encrypt(evaluation.EvaluationId), method = MethodType.Post });
+        return RedirectToAction(nameof(Questions), new { ide = evaluationIde, method = MethodType.Post });
     }
 
     #endregion

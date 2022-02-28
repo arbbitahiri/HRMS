@@ -327,8 +327,9 @@ public class BaseController : Controller
     [Description("Arb Tahiri", "List of users for select list")]
     public async Task<IActionResult> AspUsers(string name, string role = "")
     {
+        string search = string.IsNullOrEmpty(name) ? "" : name;
         var list = await db.AspNetUsers
-            .Where(a => (a.FirstName.Contains(name) || a.LastName.Contains(name) || a.Email.Contains(name) || a.UserName.Contains(name))
+            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower()) || a.Email.ToLower().Contains(search.ToLower()) || a.UserName.ToLower().Contains(search.ToLower() ))
                 && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role)))
             .Take(10)
             .Select(a => new Select2
@@ -348,11 +349,12 @@ public class BaseController : Controller
     /// <returns>First 10 staff with the specified condition</returns>
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "List of staff for select list")]
-    public async Task<IActionResult> GetStaff(string name)
+    public async Task<IActionResult> GetStaff(string name, string userId)
     {
+        string search = string.IsNullOrEmpty(name) ? "" : name;
         var list = await db.Staff
             .Include(a => a.User)
-            .Where(a => a.FirstName.Contains(name) || a.LastName.Contains(name))
+            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower())) && a.UserId != userId)
             .Take(10)
             .Select(a => new Select2
             {
@@ -363,6 +365,24 @@ public class BaseController : Controller
             }).ToListAsync();
         return Json(list);
     }
+
+    /// <summary>
+    /// Method to get staff
+    /// </summary>
+    /// <param staffId="staffId">Staff id from db</param>
+    /// <returns>The staff</returns>
+    [HttpGet, Description("Arb Tahiri", "List of staff for select list")]
+    public async Task<IActionResult> GetCurrentStaff(int staffId) =>
+        Json(await db.Staff
+            .Include(a => a.User)
+            .Where(a => a.StaffId == staffId)
+            .Select(a => new Select2
+            {
+                id = a.StaffId.ToString(),
+                text = $"{a.FirstName} {a.LastName}",
+                image = a.User.ProfileImage,
+                initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
+            }).ToListAsync());
 
     #endregion
 }

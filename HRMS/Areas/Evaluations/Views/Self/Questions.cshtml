@@ -106,8 +106,8 @@
                             <button type="button" class="btn btn-primary" onclick="edit_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">@Resource.Edit</button>
                         </legend>
                         <div class="m-2 d-none" id='@optional.OptionalId'>
-                            <textarea asp-for="@optional.OtherDescription" id="txt_other" rows="2" class="form-control"></textarea>
-                            <button type="button" onclick="add_other_option('@optional.EvaluationQuestionnaireOptionalIde')" class="btn btn-primary mt-2">@Resource.Save</button>
+                            <textarea asp-for="@optional.OtherDescription" onkeyup="show_button(this)" id="txt_other" rows="2" class="form-control"></textarea>
+                            <button id="btn_other" type="button" onclick="add_other_option('@optional.EvaluationQuestionnaireOptionalIde')" class="btn btn-primary mt-2" style="display: none;">@Resource.Save</button>
                         </div>
                     </fieldset>
                 }
@@ -336,12 +336,29 @@
             }
         }
 
+        function show_button(e) {
+            if ($(e).val() != '' && $(e).val() != null) {
+                $('#btn_other').show(100);
+            } else {
+                $('#btn_other').hide(100);
+            }
+        }
+
         function add_other_option(ide) {
+            if ($('#txt_other').val() == null || $('#txt_other').val() == '') {
+                $('#spn_other').removeClass('d-none');
+                return false;
+            }
+
+            show_loading();
+            $(this).attr("data-kt-indicator", "on");
             $.post('@Url.Action("OptionalAnswer", "Self")', {
                 ide: ide,
                 txt: $('#txt_other').val(),
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function(data) {
+                hide_loading();
+                $('#btn_other').hide();
                 handle_success(data, SubmitPathType.RELOAD, "");
             });
         }
