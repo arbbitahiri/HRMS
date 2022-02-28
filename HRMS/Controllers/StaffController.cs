@@ -53,12 +53,12 @@ public class StaffController : BaseController
         else
         {
             var staff = await db.Staff.Include(a => a.User)
-                .Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(ide))
+                .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new StaffPost
                 {
                     MethodType = MethodType.Put,
-                    StaffIde = CryptoSecurity.Encrypt(a.StaffId),
-                    PersonalNumber = CryptoSecurity.Decrypt<string>(ide),
+                    StaffIde = ide,
+                    PersonalNumber = a.PersonalNumber,
                     Firstname = a.FirstName,
                     Lastname = a.LastName,
                     BirthDate = a.Birthdate.ToString("dd/MM/yyyy"),
@@ -185,6 +185,8 @@ public class StaffController : BaseController
                 };
 
                 db.Staff.Add(newStaff);
+                await db.SaveChangesAsync();
+
                 db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
                 {
                     StaffId = newStaff.StaffId,
@@ -192,8 +194,8 @@ public class StaffController : BaseController
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 });
-
                 await db.SaveChangesAsync();
+
                 staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
             }
             catch (Exception ex)
@@ -613,9 +615,10 @@ public class StaffController : BaseController
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
                 Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
                 StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
+                JobType = user.Language == LanguageEnum.Albanian ? a.JobType.NameSq : a.JobType.NameEn,
+                BruttoSalary = $"{a.BruttoSalary:#.##} €",
                 StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                Description = a.Description
+                EndDate = a.EndDate
             }).ToListAsync();
 
         var subjects = await db.StaffDepartmentSubject
@@ -656,7 +659,7 @@ public class StaffController : BaseController
             .Select(a => new AddDepartment
             {
                 StaffIde = ide,
-                Outsider = a.Country.ToLower().Contains("kosov")
+                Outsider = !a.Country.ToLower().Contains("kosov")
             }).FirstOrDefaultAsync();
         return PartialView(staffDetails);
     }
@@ -694,6 +697,7 @@ public class StaffController : BaseController
             DepartmentId = add.DepartmentId,
             StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
             EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
+            JobTypeId = add.JobTypeId,
             BruttoSalary = add.Salary,
             EmployeeContribution = add.EmployeeContribution,
             EmployerContribution = add.EmployerContribution,
@@ -702,6 +706,7 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         };
 
+        // TODO: try catch, if error, delete roles
         if (!getRoles.Any())
         {
             var result = await userManager.AddToRolesAsync(newUser, db.AspNetRoles.Where(a => getRoles.Contains(a.Id)).Select(a => a.Name).ToList());
@@ -744,6 +749,7 @@ public class StaffController : BaseController
                 StaffTypeId = a.StaffTypeId,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
+                JobTypeId = a.JobTypeId,
                 Salary = a.BruttoSalary,
                 EmployeeContribution = a.EmployeeContribution,
                 EmployerContribution = a.EmployerContribution,
@@ -768,6 +774,7 @@ public class StaffController : BaseController
         department.StaffTypeId = edit.StaffTypeId;
         department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
         department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
+        department.JobTypeId = edit.JobTypeId;
         department.BruttoSalary = edit.Salary;
         department.EmployeeContribution = edit.EmployeeContribution;
         department.EmployerContribution = edit.EmployerContribution;
@@ -990,7 +997,7 @@ public class StaffController : BaseController
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
-                Ide = CryptoSecurity.Encrypt(a.Staff.PersonalNumber),
+                Ide = CryptoSecurity.Encrypt(a.StaffId),
                 Firstname = a.Staff.FirstName,
                 Lastname = a.Staff.LastName,
                 PersonalNumber = a.Staff.PersonalNumber,
@@ -1273,6 +1280,69 @@ public class StaffController : BaseController
         {
             return Json(false);
         }
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Method to get calculated salary")]
+    public IActionResult CalculateSalary(double salary, int jobType)
+    {
+        if (jobType == (int)JobTypeEnum.Secondary)
+        {
+            var secondarySalary = new
+            {
+                First = "0.00",
+                Second = "0.00",
+                Third = "0.00",
+                Fourth = salary,
+                TotalTax = salary * 0.1,
+                Netto = salary - (salary * 0.1)
+            };
+            return Json(secondarySalary);
+        }
+
+        double second = 0, third = 0, fourth = 0, totalTax = 0, netto = 0;
+        switch (salary)
+        {
+            case >= 450:
+                second = 170 * 0.04;
+                third = 200 * 0.08;
+                fourth = (salary - 450) * 0.1;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 250 and < 450:
+                second = 170 * 0.04;
+                third = (salary - 250) * 0.08;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 80 and < 250:
+                second = (salary - 80) * 0.04;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 0 and < 80:
+                second = 0;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+        }
+
+        var primarySalary = new
+        {
+            First = "0.00",
+            Second = second.ToString("#.##"),
+            Third = third.ToString("#.##"),
+            Fourth = fourth.ToString("#.##"),
+            TotalTax = totalTax.ToString("#.##"),
+            Netto = netto.ToString("#.##")
+        };
+        return Json(primarySalary);
     }
 
     #endregion

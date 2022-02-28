@@ -27,6 +27,10 @@ public class AddDepartment
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string EndDate { get; set; }
 
+    [Display(Name = "JobType", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public int JobTypeId { get; set; }
+
     [Display(Name = "BruttoSalary", ResourceType = typeof(Resource))]
     [Range(1, int.MaxValue, ErrorMessageResourceName = "SalaryRange", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

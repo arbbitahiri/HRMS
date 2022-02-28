@@ -556,6 +556,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Llogaritja nga BRUTTO në NETTO.
+        /// </summary>
+        public static string CalcuationFromNB {
+            get {
+                return ResourceManager.GetString("CalcuationFromNB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anulo.
         /// </summary>
         public static string Cancel {
@@ -1492,6 +1501,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Punëdhënësi.
+        /// </summary>
+        public static string JobType {
+            get {
+                return ResourceManager.GetString("JobType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Korrik.
         /// </summary>
         public static string July {
@@ -2014,6 +2032,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paga NETTO.
+        /// </summary>
+        public static string NettoSalary {
+            get {
+                return ResourceManager.GetString("NettoSalary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fjalëkalimi i ri.
         /// </summary>
         public static string NewPassword {
@@ -2325,6 +2352,15 @@ namespace HRMS.Resources {
         public static string Pending {
             get {
                 return ResourceManager.GetString("Pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kontributet personale.
+        /// </summary>
+        public static string PersonalContributions {
+            get {
+                return ResourceManager.GetString("PersonalContributions", resourceCulture);
             }
         }
         
@@ -2676,6 +2712,42 @@ namespace HRMS.Resources {
         public static string RolesAddThroughList {
             get {
                 return ResourceManager.GetString("RolesAddThroughList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paga prej 0-80 €.
+        /// </summary>
+        public static string Salary080 {
+            get {
+                return ResourceManager.GetString("Salary080", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paga prej 250-450 €.
+        /// </summary>
+        public static string Salary250450 {
+            get {
+                return ResourceManager.GetString("Salary250450", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paga mbi 450 €.
+        /// </summary>
+        public static string Salary450 {
+            get {
+                return ResourceManager.GetString("Salary450", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paga prej 80-250 €.
+        /// </summary>
+        public static string Salary80250 {
+            get {
+                return ResourceManager.GetString("Salary80250", resourceCulture);
             }
         }
         
@@ -3130,6 +3202,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paga që tatohet.
+        /// </summary>
+        public static string TaxedSalary {
+            get {
+                return ResourceManager.GetString("TaxedSalary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shkallët tatimore.
+        /// </summary>
+        public static string TaxRates {
+            get {
+                return ResourceManager.GetString("TaxRates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modaliteti aplikacionit.
         /// </summary>
         public static string TemplateMode {
@@ -3283,11 +3373,47 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjithsejt kontributet.
+        /// </summary>
+        public static string TotalContributions {
+            get {
+                return ResourceManager.GetString("TotalContributions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditët totale.
         /// </summary>
         public static string TotalDays {
             get {
                 return ResourceManager.GetString("TotalDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjithsejt kontributi punëtorit.
+        /// </summary>
+        public static string TotalEmployee {
+            get {
+                return ResourceManager.GetString("TotalEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjithsejt kontributi punëdhënësit.
+        /// </summary>
+        public static string TotalEmployer {
+            get {
+                return ResourceManager.GetString("TotalEmployer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjithsejt tatimi.
+        /// </summary>
+        public static string TotalTax {
+            get {
+                return ResourceManager.GetString("TotalTax", resourceCulture);
             }
         }
         

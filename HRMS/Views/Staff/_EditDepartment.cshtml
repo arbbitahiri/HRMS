@@ -18,35 +18,38 @@
         <input asp-for="StaffDepartmentIde" type="hidden"/>
 
         <div class="row pl-2 pr-2">
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="DepartmentId" class="required"></label>
                 <select asp-for="DepartmentId" asp-items="await repo.Departments(user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="StaffTypeId" class="required"></label>
                 <select asp-for="StaffTypeId" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="StaffTypeId" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group pl-2 pr-2">
-            <div class="col-md-6">
+            <div class="col-md-4 form-group">
                 <label asp-for="StartDate" class="required"></label>
                 <input asp-for="StartDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#StartDate"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4 form-group">
                 <label asp-for="EndDate" class="required"></label>
                 <input asp-for="EndDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#EndDate"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group pl-2 pr-2">
-            <div class='@(Model.Outsider ? "col-md-12" : "col-md-4")'>
+            <div class="col-md-4 form-group">
+                <label asp-for="JobTypeId" class="required"></label>
+                <select asp-for="JobTypeId" asp-items="await repo.JobTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="JobTypeId" class="text-danger"></span>
+            </div>
+            <div class='col-md-4 form-group'>
                 <label asp-for="Salary" class="required"></label>
                 <input asp-for="Salary" type="number" min="1" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="Salary" class="text-danger"></span>

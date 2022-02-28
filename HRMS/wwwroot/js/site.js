@@ -180,3 +180,7 @@ function change_mode(e) {
         $('[aria-labelledby="swal2-title"]').css('width', '12em');
     });
 }
+
+function format_currency(data) {
+    return parseFloat(data, 10).toFixed(2);
+}

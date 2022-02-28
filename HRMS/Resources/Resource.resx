@@ -1281,4 +1281,46 @@
   <data name="OptionSQ" xml:space="preserve">
     <value>Opsioni shqip</value>
   </data>
+  <data name="CalcuationFromNB" xml:space="preserve">
+    <value>Llogaritja nga BRUTTO në NETTO</value>
+  </data>
+  <data name="JobType" xml:space="preserve">
+    <value>Punëdhënësi</value>
+  </data>
+  <data name="NettoSalary" xml:space="preserve">
+    <value>Paga NETTO</value>
+  </data>
+  <data name="PersonalContributions" xml:space="preserve">
+    <value>Kontributet personale</value>
+  </data>
+  <data name="Salary080" xml:space="preserve">
+    <value>Paga prej 0-80 €</value>
+  </data>
+  <data name="Salary250450" xml:space="preserve">
+    <value>Paga prej 250-450 €</value>
+  </data>
+  <data name="Salary450" xml:space="preserve">
+    <value>Paga mbi 450 €</value>
+  </data>
+  <data name="Salary80250" xml:space="preserve">
+    <value>Paga prej 80-250 €</value>
+  </data>
+  <data name="TaxedSalary" xml:space="preserve">
+    <value>Paga që tatohet</value>
+  </data>
+  <data name="TaxRates" xml:space="preserve">
+    <value>Shkallët tatimore</value>
+  </data>
+  <data name="TotalContributions" xml:space="preserve">
+    <value>Gjithsejt kontributet</value>
+  </data>
+  <data name="TotalEmployee" xml:space="preserve">
+    <value>Gjithsejt kontributi punëtorit</value>
+  </data>
+  <data name="TotalEmployer" xml:space="preserve">
+    <value>Gjithsejt kontributi punëdhënësit</value>
+  </data>
+  <data name="TotalTax" xml:space="preserve">
+    <value>Gjithsejt tatimi</value>
+  </data>
 </root>

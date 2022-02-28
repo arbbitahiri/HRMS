@@ -107,3 +107,9 @@ public enum QuestionType
     Optional = 2,
     Topic = 3
 }
+
+public enum JobTypeEnum
+{
+    Primary = 1,
+    Secondary = 2
+}

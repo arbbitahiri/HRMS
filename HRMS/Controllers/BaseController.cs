@@ -107,7 +107,8 @@ public class BaseController : Controller
             Controller = HttpContext.Request.RouteValues["controller"].ToString(),
             Action = HttpContext.Request.RouteValues["action"].ToString(),
             HttpMethod = HttpContext.Request.Method,
-            Url = HttpContext.Request.GetDisplayUrl()
+            Url = HttpContext.Request.GetDisplayUrl(),
+            InsertedDate = DateTime.Now
         };
 
         if (HttpContext.Request.HasFormContentType)
@@ -313,6 +314,88 @@ public class BaseController : Controller
         }
         password += "#";
         return password;
+    }
+
+    protected decimal CalculateTotalTax(decimal salary, decimal? employeeContribution, int jobType)
+    {
+        salary = employeeContribution.HasValue ? salary * (employeeContribution.Value / 100) : salary;
+        if (jobType == (int)JobTypeEnum.Secondary)
+        {
+            return salary * (decimal)0.1;
+        }
+
+        decimal totalTax = 0, second, third, fourth;
+        switch (salary)
+        {
+            case >= 450:
+                second = 170 * (decimal)0.04;
+                third = 200 * (decimal)0.08;
+                fourth = (salary - 450) * (decimal)0.1;
+                totalTax = second + third + fourth;
+                break;
+            case >= 250 and < 450:
+                second = 170 * (decimal)0.04;
+                third = (salary - 250) * (decimal)0.08;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                break;
+            case >= 80 and < 250:
+                second = (salary - 80) * (decimal)0.04;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                break;
+            case >= 0 and < 80:
+                second = 0;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                break;
+        }
+        return totalTax;
+    }
+
+    protected decimal CalculateNettoSalary(decimal salary, decimal? employeeContribution, int jobType)
+    {
+        salary = employeeContribution.HasValue ? salary * (employeeContribution.Value / 100) : salary;
+        if (jobType == (int)JobTypeEnum.Secondary)
+        {
+            return salary - (salary * (decimal)0.1);
+        }
+
+        decimal second, third, fourth, totalTax, netto = 0;
+        switch (salary)
+        {
+            case >= 450:
+                second = 170 * (decimal)0.04;
+                third = 200 * (decimal)0.08;
+                fourth = (salary - 450) * (decimal)0.1;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 250 and < 450:
+                second = 170 * (decimal)0.04;
+                third = (salary - 250) * (decimal)0.08;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 80 and < 250:
+                second = (salary - 80) * (decimal)0.04;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+            case >= 0 and < 80:
+                second = 0;
+                third = 0;
+                fourth = 0;
+                totalTax = second + third + fourth;
+                netto = salary - totalTax;
+                break;
+        }
+        return netto;
     }
 
     #region Select list items

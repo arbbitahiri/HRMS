@@ -282,6 +282,9 @@
   <data name="BruttoSalary" xml:space="preserve">
     <value>Brutto(Gross) Salary</value>
   </data>
+  <data name="CalcuationFromNB" xml:space="preserve">
+    <value>Calculation from BRUTTO to NETTO</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -594,6 +597,9 @@
   <data name="January" xml:space="preserve">
     <value>January</value>
   </data>
+  <data name="JobType" xml:space="preserve">
+    <value>Employer</value>
+  </data>
   <data name="July" xml:space="preserve">
     <value>July</value>
   </data>
@@ -765,6 +771,9 @@
   <data name="Nationality" xml:space="preserve">
     <value>Nationality</value>
   </data>
+  <data name="NettoSalary" xml:space="preserve">
+    <value>NETTO Salary</value>
+  </data>
   <data name="NewPassword" xml:space="preserve">
     <value>New password</value>
   </data>
@@ -869,6 +878,9 @@
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Pending</value>
+  </data>
+  <data name="PersonalContributions" xml:space="preserve">
+    <value>Personal contributions</value>
   </data>
   <data name="PersonalData" xml:space="preserve">
     <value>Personal data</value>
@@ -986,6 +998,18 @@
   </data>
   <data name="RolesAddThroughList" xml:space="preserve">
     <value>Roles can also be added through the list of users!</value>
+  </data>
+  <data name="Salary080" xml:space="preserve">
+    <value>Salary from 0-80 €</value>
+  </data>
+  <data name="Salary250450" xml:space="preserve">
+    <value>Salary from 250-450 €</value>
+  </data>
+  <data name="Salary450" xml:space="preserve">
+    <value>Salary over 450 €</value>
+  </data>
+  <data name="Salary80250" xml:space="preserve">
+    <value>Salary from 80-250 €</value>
   </data>
   <data name="SalaryRange" xml:space="preserve">
     <value>Salary must be greater than 0!</value>
@@ -1137,6 +1161,12 @@
   <data name="Tables" xml:space="preserve">
     <value>Tables</value>
   </data>
+  <data name="TaxedSalary" xml:space="preserve">
+    <value>Salary that are taxed</value>
+  </data>
+  <data name="TaxRates" xml:space="preserve">
+    <value>Tax rates</value>
+  </data>
   <data name="TemplateMode" xml:space="preserve">
     <value>Application mode</value>
   </data>
@@ -1185,8 +1215,20 @@
   <data name="Topics" xml:space="preserve">
     <value>Free topic</value>
   </data>
+  <data name="TotalContributions" xml:space="preserve">
+    <value>Total contributions</value>
+  </data>
   <data name="TotalDays" xml:space="preserve">
     <value>Total days</value>
+  </data>
+  <data name="TotalEmployee" xml:space="preserve">
+    <value>Total employee contribution</value>
+  </data>
+  <data name="TotalEmployer" xml:space="preserve">
+    <value>Total employer contribution</value>
+  </data>
+  <data name="TotalTax" xml:space="preserve">
+    <value>Total tax</value>
   </data>
   <data name="Training" xml:space="preserve">
     <value>Is training</value>

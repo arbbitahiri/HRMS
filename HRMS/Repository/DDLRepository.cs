@@ -127,4 +127,12 @@ public class DDLRepository : IDDLRepository
                 Value = a.EvaluationQuestionTypeId.ToString(),
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> JobTypes(LanguageEnum lang) =>
+        await db.JobType
+            .Select(a => new SelectListItem
+            {
+                Value = a.JobTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
 }

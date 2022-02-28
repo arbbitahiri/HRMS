@@ -25,9 +25,10 @@
                         <th>#</th>
                         <th>@Resource.Department</th>
                         <th>@Resource.StaffType</th>
+                        <th>@Resource.JobType</th>
+                        <th>@Resource.BruttoSalary</th>
                         <th>@Resource.StartDate</th>
                         <th>@Resource.EndDate</th>
-                        <th>@Resource.Description</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -126,9 +127,8 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { className: "w5 vertikal", targets: [0, 6] },
-                    { className: "w15 vertikal", targets: [1, 2, 3, 4] },
-                    { className: "w30 vertikal", targets: [5] }
+                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w15 vertikal", targets: [1, 2, 3, 4, 5, 6] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -140,6 +140,8 @@
                     },
                     { data: "department" },
                     { data: "staffType" },
+                    { data: "jobType" },
+                    { data: "bruttoSalary" },
                     {
                         data: function(row, type, set) {
                             var date = new Date(Date.parse(row.startDate));
@@ -150,19 +152,6 @@
                         data: function(row, type, set) {
                             var date = new Date(Date.parse(row.endDate));
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                        }
-                    },
-                    {
-                        data: function(row, type, set) {
-                            var desc = '///';
-                            if (row.description != null) {
-                                if (row.description.length > 80) {
-                                    desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
-                                } else {
-                                    desc = row.description ?? "///";
-                                }
-                            }
-                            return desc;
                         }
                     },
                     {
@@ -244,21 +233,9 @@
             });
         }
 
-        function load_more(e) {
-            $(e).parent().find('.load-less-fst').removeClass('d-none');
-            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
-            $(e).addClass('d-none');
-        }
-
-        function load_less(e) {
-            $(e).addClass('d-none');
-            $(e).parent().addClass('d-none');
-            $(e).parent().parent().find('.load-more').removeClass('d-none');
-        }
-
         function add_department(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddDepartment", "Staff")?ide=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 
@@ -269,8 +246,8 @@
         }
 
         function edit_department(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditDepartment", "Staff")?ide=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 
@@ -294,7 +271,7 @@
                 if (result.value) {
                     $.post('@Url.Action("DeleteDepartment", "Staff")', {
                         ide: ide,
-                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                         }, function (data) {
                             handle_success(data, SubmitPathType.RELOAD, "");
                     });
@@ -316,7 +293,7 @@
                 if (result.value) {
                     $.post('@Url.Action("DeleteSubject", "Staff")', {
                         ide: ide,
-                        "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                         }, function (data) {
                             handle_success(data, SubmitPathType.RELOAD, "");
                     });

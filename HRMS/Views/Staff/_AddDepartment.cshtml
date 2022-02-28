@@ -18,47 +18,48 @@
         <input asp-for="StaffIde" type="hidden"/>
 
         <div class="row pl-2 pr-2">
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="DepartmentId" class="required"></label>
                 <select asp-for="DepartmentId" asp-items="await repo.Departments(user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="StaffTypeId" class="required"></label>
                 <select asp-for="StaffTypeId" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="StaffTypeId" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group pl-2 pr-2">
-            <div class="col-md-6">
+            <div class="col-md-4 form-group">
                 <label asp-for="StartDate" class="required"></label>
                 <input asp-for="StartDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#StartDate"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4 form-group">
                 <label asp-for="EndDate" class="required"></label>
                 <input asp-for="EndDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#EndDate"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group pl-2 pr-2">
-            <div class='@(Model.Outsider ? "col-md-12" : "col-md-4")'>
+            <div class="col-md-4 form-group">
+                <label asp-for="JobTypeId" class="required"></label>
+                <select asp-for="JobTypeId" asp-items="await repo.JobTypes(user.Language)" class="form-control select2"></select>
+                <span asp-validation-for="JobTypeId" class="text-danger"></span>
+            </div>
+            <div class='col-md-4 form-group'>
                 <label asp-for="Salary" class="required"></label>
                 <input asp-for="Salary" type="number" min="1" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="Salary" class="text-danger"></span>
             </div>
-            @if (Model.Outsider)
+            @if (!Model.Outsider)
             {
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     <label asp-for="EmployeeContribution" class="required"></label>
                     <input asp-for="EmployeeContribution" type="number" min="5" max="15" class="form-control" autocomplete="off"/>
                     <span asp-validation-for="EmployeeContribution" class="text-danger"></span>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     <label asp-for="EmployerContribution" class="required"></label>
                     <input asp-for="EmployerContribution" type="number" min="5" max="15" class="form-control" autocomplete="off"/>
                     <span asp-validation-for="EmployerContribution" class="text-danger"></span>
@@ -70,6 +71,65 @@
                 <label asp-for="Description"></label>
                 <textarea asp-for="Description" type="text" rows="2" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="card collapsed-card" id="kt_detailed_salary">
+            <div class="card-header">
+                <h3 class="card-title">@Resource.CalcuationFromNB</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="card-body" id="kt_load_data">
+                <div class="row">
+                    <div class="col-6">
+                        <h5>@Resource.PersonalContributions</h5>
+                        <div class="pt-2">
+                            <label>@Resource.TotalEmployee</label>
+                            <input id="kt_employee" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="pt-2">
+                            <label>@Resource.TotalEmployer</label>
+                            <input id="kt_employer" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="pt-2">
+                            <label>@Resource.TotalContributions</label>
+                            <input id="kt_total_contributions" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="pt-2">
+                            <label>@Resource.TaxedSalary</label>
+                            <input id="kt_taxed_salary" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                    </div>
+                    <div class="col-6 row">
+                        <h5>@Resource.TaxRates</h5>
+                        <div class="col-12 pt-2">
+                            <label>@Resource.Salary080</label>
+                            <input id="kt_first" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label>@Resource.Salary80250</label>
+                            <input id="kt_second" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label>@Resource.Salary250450</label>
+                            <input id="kt_third" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label>@Resource.Salary450</label>
+                            <input id="kt_fourth" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label>@Resource.TotalTax</label>
+                            <input id="kt_total_tax" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                        </div>
+                    </div>
+                    <div class="col-12 pt-2">
+                            <label>@Resource.NettoSalary</label>
+                        <input id="kt_netto" type="number" disabled class="form-control" autocomplete="off" value="0.00"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -100,8 +160,68 @@
         $(".datetimepicker-input").datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+        $('#Salary').on('keyup', function() {
+            $('#kt_taxed_salary').val(format_currency($(this).val()));
+
+            calculate_netto($('#kt_taxed_salary').val(), $('#JobTypeId').val());
+        });
+
+        $('#EmployeeContribution').on('keyup', function() {
+            var employee_contribution = $('#Salary').val() * ($(this).val() / 100);
+            $('#kt_employee').val(format_currency(employee_contribution));
+            $('#kt_taxed_salary').val(format_currency($('#Salary').val() - employee_contribution));
+
+            var employer_contribution;
+            if ($('#EmployeeContribution').val() != null && $('#EmployerContribution').val() != '') {
+                employer_contribution = $('#Salary').val() * ($('#EmployerContribution').val() / 100);
+            } else {
+                employer_contribution = 0;
+            }
+            $('#kt_total_contributions').val(format_currency(employer_contribution + employee_contribution));
+
+            calculate_netto($('#kt_taxed_salary').val(), $('#JobTypeId').val());
+        });
+
+        $('#EmployerContribution').on('keyup', function() {
+            var employer_contribution = $('#Salary').val() * ($(this).val() / 100);
+            $('#kt_employer').val(format_currency(employer_contribution));
+
+            var employee_contribution;
+            if ($('#EmployeeContribution').val() != null && $('#EmployeeContribution').val() != '') {
+                employee_contribution = $('#Salary').val() * ($('#EmployeeContribution').val() / 100);
+            } else {
+                employee_contribution = 0;
+            }
+            $('#kt_total_contributions').val(format_currency(employer_contribution + employee_contribution));
+
+            calculate_netto($('#kt_taxed_salary').val(), $('#JobTypeId').val());
+        });
+
+        $('#JobTypeId').on('change', function() {
+            calculate_netto($('#kt_taxed_salary').val(), $(this).val());
+        });
     });
 
+    function calculate_netto(salary, job_type) {
+        if (salary < 0) {
+            return false;
+        }
+
+        $.post('@Url.Action("CalculateSalary", "Staff")', {
+            salary: salary,
+            jobType: job_type,
+            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+        }, function (data) {
+            console.log(data);
+            $('#kt_first').val(format_currency(data.first));
+            $('#kt_second').val(format_currency(data.second));
+            $('#kt_third').val(format_currency(data.third));
+            $('#kt_fourth').val(format_currency(data.fourth));
+            $('#kt_total_tax').val(format_currency(data.totalTax));
+            $('#kt_netto').val(format_currency(data.netto));
+        });
+    }
     function success_create_department(data) {
         handle_success(data, SubmitPathType.RELOAD, "");
     }
