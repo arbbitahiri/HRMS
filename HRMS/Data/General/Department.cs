@@ -9,6 +9,7 @@ namespace HRMS.Data.General
         {
             AspNetUsers = new HashSet<AspNetUsers>();
             StaffDepartment = new HashSet<StaffDepartment>();
+            StaffPayroll = new HashSet<StaffPayroll>();
         }
 
         public int DepartmentId { get; set; }
@@ -26,5 +27,6 @@ namespace HRMS.Data.General
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
+        public virtual ICollection<StaffPayroll> StaffPayroll { get; set; }
     }
 }

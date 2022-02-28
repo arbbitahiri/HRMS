@@ -2347,6 +2347,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista pagave.
+        /// </summary>
+        public static string PayrollList {
+            get {
+                return ResourceManager.GetString("PayrollList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Në pritje.
         /// </summary>
         public static string Pending {

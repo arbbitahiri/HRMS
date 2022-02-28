@@ -1,0 +1,253 @@
+﻿@using HRMS.Models.StaffPayroll
+@model Search
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="StaffPayroll" id="frm_search_payroll" method="post" data-ajax="true" data-ajax-success="success_payroll_search">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("reportType")
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                    <label asp-for="StaffId" class="required">@Resource.Staff</label>
+                    <select asp-for="StaffId" class="form-control"></select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                    <label asp-for="DepartmentId">@Resource.Department</label>
+                    <select asp-for="DepartmentId" asp-items="await repo.Departments(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                    <label asp-for="JobTypeId">@Resource.JobType</label>
+                    <select asp-for="JobTypeId" asp-items="await repo.JobTypes(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                    <label asp-for="Month">@Resource.Firstname</label>
+                    <select asp-for="Month" asp-items="repo.Months()" class="form-control select2"></select>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
+                    <label class="invisible">\\</label><br />
+                    <input type="button" class="btn btn-primary" onclick="$('#frm_search_staff').submit()" value="@Resource.Search" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title mt-1">@Resource.SearchResult</h3>
+        <div class="card-tools mr-2">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
+                <div class="dropdown-menu dropdown-menu-sm" role="menu">
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_report(ReportType.PDF)">
+                            <span style="margin: auto;"><i class="fa fa-file-pdf fa-2x"></i></span>
+                            <span class="title text-center w-100">PDF</span>
+                        </button>
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_report(ReportType.EXCEL)">
+                            <span style="margin: auto;"><i class="fa fa-file-excel fa-2x"></i></span>
+                            <span class="title text-center w-100">Excel</span>
+                        </button>
+                    </div>
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_report(ReportType.WORD)">
+                            <span style="margin: auto;"><i class="fa fa-file-word fa-2x"></i></span>
+                            <span class="title text-center w-100">Word</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tbl_payroll" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Resource.Name</th>
+                    <th>@Resource.Department</th>
+                    <th>@Resource.BruttoSalary</th>
+                    <th>@Resource.EmployeeContribution</th>
+                    <th>@Resource.EmployerContribution</th>
+                    <th>@Resource.TaxedSalary</th>
+                    <th>@Resource.NettoSalary</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".select2").select2({
+                width: "100%",
+                placeholder: '@Resource.Choose',
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $('#frm_search_payroll').submit();
+
+            change_staff();
+        });
+
+        funciton success_payroll_search(data) {
+            $("#tbl_staff_processing").DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 20,
+            data: data,
+            columnDefs: [
+                { className: "w10 vertikal", targets: [0, 3, 4, 5, 6, 7] },
+                { className: "w20 vertikal", targets: [1, 2] },
+            ],
+            order: [[ 0, 'asc' ]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var name = '<div class="d-flex align-items-center">' +
+                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                        if (row.profileImage == null) {
+                            name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                        } else {
+                            name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                        }
+                        name += '</div><div class="ml-4">' +
+                            '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                            '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                            '</div></div>';
+                        return name;
+                    }
+                },
+                { data: "department" },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.bruttoSalary);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.employeeContribution);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.employerContribution);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.taxableSalary);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.tax);
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return format_currency(row.netSalary);
+                    }
+                }
+            ]
+        });
+        }
+
+        function get_report(type) {
+            $('#frm_search_payroll').attr('data-ajax', false);
+            $('#frm_search_payroll').attr('action', '@Url.Action("Report", "StaffPayroll")');
+            $('#frm_search_payroll').attr('target', '_blank');
+            $('#frm_search_payroll').addClass('noLoading');
+            $('#reportType').val(type);
+            $('#frm_search_payroll').submit();
+            $('#frm_search_payroll').attr('data-ajax', true);
+            $('#frm_search_payroll').attr('action', '@Url.Action("Search", "StaffPayroll")');
+            $('#frm_search_payroll').removeAttr('target');
+            $('#frm_search_payroll').removeClass('noLoading');
+        }
+
+        function change_staff() {
+            $.get('@Url.Action("GetCurrentStaff")', {
+                staffId: $('#StaffId').val()
+            }, function (data) {
+                $('#StaffId').select2({
+                    width: "100%",
+                    allowClear: true,
+                    data: data,
+                    language: {
+                        noResults: function () {
+                            return '@Html.Raw(Resource.NoResultsFound)';
+                        },
+                        searching: function() {
+                            return '@Html.Raw(Resource.Searching)';
+                        },
+                    },
+                    ajax: {
+                        url: '@Url.Action("GetStaff")',
+                        type: 'post',
+                        datatype: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                name: params.term,
+                                userId: '@user.Id',
+                                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                            };
+                        },
+                        processResults: function (response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        catch: true
+                    },
+                    placeholder: '@Resource.Choose',
+                    templateResult: formatRepo,
+                    templateSelection: formatRepoSelection
+                });
+            });
+        }
+
+        function formatRepo (repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var $container = $(
+                '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+            );
+            return $container;
+        }
+
+        function formatRepoSelection (repo) {
+            return repo.text;
+        }
+    </script>
+}

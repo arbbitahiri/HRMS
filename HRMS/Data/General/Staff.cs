@@ -13,6 +13,7 @@ namespace HRMS.Data.General
             LeaveStaffDays = new HashSet<LeaveStaffDays>();
             StaffDepartment = new HashSet<StaffDepartment>();
             StaffDocument = new HashSet<StaffDocument>();
+            StaffPayroll = new HashSet<StaffPayroll>();
             StaffQualification = new HashSet<StaffQualification>();
             StaffRegistrationStatus = new HashSet<StaffRegistrationStatus>();
         }
@@ -44,6 +45,7 @@ namespace HRMS.Data.General
         public virtual ICollection<LeaveStaffDays> LeaveStaffDays { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
         public virtual ICollection<StaffDocument> StaffDocument { get; set; }
+        public virtual ICollection<StaffPayroll> StaffPayroll { get; set; }
         public virtual ICollection<StaffQualification> StaffQualification { get; set; }
         public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
     }

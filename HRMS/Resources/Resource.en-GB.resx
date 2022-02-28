@@ -876,6 +876,9 @@
   <data name="PasswordUpdatedSuccess" xml:space="preserve">
     <value>Password updated successfully!</value>
   </data>
+  <data name="PayrollList" xml:space="preserve">
+    <value>Payroll list</value>
+  </data>
   <data name="Pending" xml:space="preserve">
     <value>Pending</value>
   </data>

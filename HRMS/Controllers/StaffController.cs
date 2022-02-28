@@ -699,8 +699,8 @@ public class StaffController : BaseController
             EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
             JobTypeId = add.JobTypeId,
             BruttoSalary = add.Salary,
-            EmployeeContribution = add.EmployeeContribution,
-            EmployerContribution = add.EmployerContribution,
+            EmployeeContribution = add.EmployeeContribution ?? 0,
+            EmployerContribution = add.EmployerContribution ?? 0,
             Description = add.Description,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -776,8 +776,8 @@ public class StaffController : BaseController
         department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
         department.JobTypeId = edit.JobTypeId;
         department.BruttoSalary = edit.Salary;
-        department.EmployeeContribution = edit.EmployeeContribution;
-        department.EmployerContribution = edit.EmployerContribution;
+        department.EmployeeContribution = edit.EmployeeContribution ?? 0;
+        department.EmployerContribution = edit.EmployerContribution ?? 0;
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
         department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;

@@ -5,4 +5,5 @@ public class Search
     public int? StaffId { get; set; }
     public int? DepartmentId { get; set; }
     public int? JobTypeId { get; set; }
+    public int? Month { get; set; }
 }

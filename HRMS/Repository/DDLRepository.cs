@@ -31,6 +31,22 @@ public class DDLRepository : IDDLRepository
         new SelectListItem { Value = ((int)GenderEnum.Female).ToString(), Text = Resource.Female },
     };
 
+    public List<SelectListItem> Months() => new()
+    {
+        new SelectListItem { Value = 1.ToString(), Text = Resource.January },
+        new SelectListItem { Value = 2.ToString(), Text = Resource.February },
+        new SelectListItem { Value = 3.ToString(), Text = Resource.March },
+        new SelectListItem { Value = 4.ToString(), Text = Resource.April },
+        new SelectListItem { Value = 5.ToString(), Text = Resource.May },
+        new SelectListItem { Value = 6.ToString(), Text = Resource.June },
+        new SelectListItem { Value = 7.ToString(), Text = Resource.July },
+        new SelectListItem { Value = 8.ToString(), Text = Resource.August },
+        new SelectListItem { Value = 9.ToString(), Text = Resource.September },
+        new SelectListItem { Value = 10.ToString(), Text = Resource.October },
+        new SelectListItem { Value = 11.ToString(), Text = Resource.November },
+        new SelectListItem { Value = 12.ToString(), Text = Resource.December }
+    };
+
     [SupportedOSPlatform("windows")]
     public List<SelectListItem> EventLogEntryTypes() => new()
     {

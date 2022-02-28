@@ -1323,4 +1323,7 @@
   <data name="TotalTax" xml:space="preserve">
     <value>Gjithsejt tatimi</value>
   </data>
+  <data name="PayrollList" xml:space="preserve">
+    <value>Lista pagave</value>
+  </data>
 </root>

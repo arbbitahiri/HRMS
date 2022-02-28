@@ -56,6 +56,7 @@ namespace HRMS.Data.General
         public virtual DbSet<StaffDepartment> StaffDepartment { get; set; }
         public virtual DbSet<StaffDepartmentSubject> StaffDepartmentSubject { get; set; }
         public virtual DbSet<StaffDocument> StaffDocument { get; set; }
+        public virtual DbSet<StaffPayroll> StaffPayroll { get; set; }
         public virtual DbSet<StaffQualification> StaffQualification { get; set; }
         public virtual DbSet<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
         public virtual DbSet<StaffType> StaffType { get; set; }
@@ -67,6 +68,7 @@ namespace HRMS.Data.General
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=DESKTOP-C9V24QP;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
@@ -1697,6 +1699,51 @@ namespace HRMS.Data.General
                     .WithMany(p => p.StaffDocumentUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
                     .HasConstraintName("FK_StaffDocument_AspNetUsers_Updated");
+            });
+
+            modelBuilder.Entity<StaffPayroll>(entity =>
+            {
+                entity.Property(e => e.StaffPayrollId).HasColumnName("StaffPayrollID");
+
+                entity.Property(e => e.BruttoSalary).HasColumnType("money");
+
+                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+
+                entity.Property(e => e.EmployeeContribution).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.EmployerContribution).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.JobTypeId).HasColumnName("JobTypeID");
+
+                entity.Property(e => e.NettoSalary).HasColumnType("money");
+
+                entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+                entity.Property(e => e.TotalTax).HasColumnType("money");
+
+                entity.HasOne(d => d.Department)
+                    .WithMany(p => p.StaffPayroll)
+                    .HasForeignKey(d => d.DepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffPayroll_Department");
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.StaffPayroll)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffPayroll_AspNetUsers");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.StaffPayroll)
+                    .HasForeignKey(d => d.StaffId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffPayroll_Staff");
             });
 
             modelBuilder.Entity<StaffQualification>(entity =>

@@ -10,6 +10,8 @@ public interface IDDLRepository
 
     List<SelectListItem> Genders();
 
+    List<SelectListItem> Months();
+
     List<SelectListItem> EventLogEntryTypes();
 
     Task<List<SelectListItem>> Roles(LanguageEnum lang);
