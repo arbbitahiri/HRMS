@@ -1539,7 +1539,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
-                entity.Property(e => e.BruttoSalary).HasColumnType("money");
+                entity.Property(e => e.GrossSalary).HasColumnType("money");
 
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
@@ -1705,7 +1705,7 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.StaffPayrollId).HasColumnName("StaffPayrollID");
 
-                entity.Property(e => e.BruttoSalary).HasColumnType("money");
+                entity.Property(e => e.GrossSalary).HasColumnType("money");
 
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
@@ -1721,7 +1721,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.JobTypeId).HasColumnName("JobTypeID");
 
-                entity.Property(e => e.NettoSalary).HasColumnType("money");
+                entity.Property(e => e.NetSalary).HasColumnType("money");
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 

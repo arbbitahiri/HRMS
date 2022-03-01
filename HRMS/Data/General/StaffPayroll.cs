@@ -10,11 +10,11 @@ namespace HRMS.Data.General
         public int DepartmentId { get; set; }
         public int JobTypeId { get; set; }
         public int Month { get; set; }
-        public decimal BruttoSalary { get; set; }
+        public decimal GrossSalary { get; set; }
         public decimal EmployeeContribution { get; set; }
         public decimal EmployerContribution { get; set; }
         public decimal TotalTax { get; set; }
-        public decimal NettoSalary { get; set; }
+        public decimal NetSalary { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime? InsertedDate { get; set; }
 

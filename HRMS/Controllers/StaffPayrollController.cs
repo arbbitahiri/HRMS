@@ -1,18 +1,18 @@
-﻿using HRMS.Models.StaffPayroll;
-using HRMS.Data.Core;
+﻿using HRMS.Data.Core;
 using HRMS.Data.General;
+using HRMS.Models.StaffPayroll;
+using HRMS.Resources;
+using HRMS.Utilities;
 using HRMS.Utilities.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Linq;
-using System;
 using Microsoft.EntityFrameworkCore;
-using HRMS.Utilities;
-using System.Collections.Generic;
 using Microsoft.Reporting.NETCore;
-using HRMS.Resources;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
 
@@ -45,12 +45,12 @@ public class StaffPayrollController : BaseController
                 PersonalNumber = a.Staff.PersonalNumber,
                 ProfileImage = a.Staff.User.ProfileImage,
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                BruttoSalary = a.BruttoSalary,
+                Gross = a.GrossSalary,
                 EmployeeContribution = a.EmployeeContribution,
                 EmployerContribution = a.EmployerContribution,
-                TaxableSalary = a.BruttoSalary - (a.BruttoSalary - a.EmployeeContribution / 100),
-                Tax = CalculateTotalTax(a.BruttoSalary, a.EmployeeContribution, a.JobTypeId),
-                NetSalary = CalculateNettoSalary(a.BruttoSalary, a.EmployeeContribution, a.JobTypeId)
+                TaxableSalary = a.GrossSalary - (a.GrossSalary * a.EmployeeContribution / 100),
+                Tax = a.TotalTax,
+                Net = a.NetSalary
             }).ToListAsync();
         return Json(list);
     }
@@ -67,14 +67,17 @@ public class StaffPayrollController : BaseController
                 && a.Month == (search.Month ?? a.Month))
             .Select(a => new PayrollList
             {
-                FullName = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                BruttoSalary = a.BruttoSalary,
+                Gross = a.GrossSalary,
                 EmployeeContribution = a.EmployeeContribution,
                 EmployerContribution = a.EmployerContribution,
-                TaxableSalary = a.BruttoSalary - (a.BruttoSalary - a.EmployeeContribution / 100),
-                Tax = CalculateTotalTax(a.BruttoSalary, a.EmployeeContribution, a.JobTypeId),
-                NetSalary = CalculateNettoSalary(a.BruttoSalary, a.EmployeeContribution, a.JobTypeId)
+                TaxableSalary = a.GrossSalary - (a.GrossSalary * a.EmployeeContribution / 100),
+                Tax = a.TotalTax,
+                Net = a.NetSalary,
+                Date = DateTime.Now.ToString("dd/MM/yyyy"),
+                MonthYear = $"{Month(a.Month)} {a.InsertedDate.Value.Year}",
+                User = $"{user.FirstName} {user.LastName}"
             }).ToListAsync();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffPayroll", list) };
@@ -97,4 +100,22 @@ public class StaffPayrollController : BaseController
             File(reportByte, contentType) :
             File(reportByte, contentType, fileName);
     }
+
+    private static string Month(int month) =>
+        month switch
+        {
+            1 => "Janar",
+            2 => "Shkurt",
+            3 => "Mars",
+            4 => "Prill",
+            5 => "Maj",
+            6 => "Qershor",
+            7 => "Korrik",
+            8 => "Gusht",
+            9 => "Shtator",
+            10 => "Tetor",
+            11 => "Nëntor",
+            12 => "Dhjetor",
+            _ => Month(DateTime.Now.Month)
+        };
 }

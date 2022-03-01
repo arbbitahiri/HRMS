@@ -2,12 +2,11 @@
 @model Search
 @inject IDDLRepository repo
 @{
+    ViewData["Title"] = Resource.PayrollList;
     UserModel user = (UserModel)ViewData["User"];
 }
 
 <div class="card">
-    <div class="card-header">
-    </div>
     <div class="card-body">
         <form asp-action="Search" asp-controller="StaffPayroll" id="frm_search_payroll" method="post" data-ajax="true" data-ajax-success="success_payroll_search">
             @Html.AntiForgeryToken()
@@ -15,7 +14,7 @@
 
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
-                    <label asp-for="StaffId" class="required">@Resource.Staff</label>
+                    <label asp-for="StaffId">@Resource.Staff</label>
                     <select asp-for="StaffId" class="form-control"></select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
@@ -36,8 +35,7 @@
                 </div>
 
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3 form-group">
-                    <label class="invisible">\\</label><br />
-                    <input type="button" class="btn btn-primary" onclick="$('#frm_search_staff').submit()" value="@Resource.Search" />
+                    <input type="submit" class="btn btn-primary form-control" value="@Resource.Search" />
                 </div>
             </div>
         </form>
@@ -82,6 +80,7 @@
                     <th>@Resource.EmployeeContribution</th>
                     <th>@Resource.EmployerContribution</th>
                     <th>@Resource.TaxedSalary</th>
+                    <th>@Resource.Tax</th>
                     <th>@Resource.NettoSalary</th>
                 </tr>
             </thead>
@@ -108,76 +107,78 @@
             change_staff();
         });
 
-        funciton success_payroll_search(data) {
-            $("#tbl_staff_processing").DataTable({
-            destroy: true,
-            language: {
-                url: `/Culture/DataTable/${culture}.json`
-            },
-            keys: true,
-            responsive: true,
-            pageLength: 20,
-            data: data,
-            columnDefs: [
-                { className: "w10 vertikal", targets: [0, 3, 4, 5, 6, 7] },
-                { className: "w20 vertikal", targets: [1, 2] },
-            ],
-            order: [[ 0, 'asc' ]],
-            columns: [
-                {
-                    data: function (data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
+        function success_payroll_search(data) {
+            console.log("🚀 ~ file: Index.cshtml ~ line 113 ~ success_payroll_search ~ data", data)
+            $("#tbl_payroll").DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
                 },
-                {
-                    data: function (row, type, set) {
-                        var name = '<div class="d-flex align-items-center">' +
-                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
-                        if (row.profileImage == null) {
-                            name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
-                        } else {
-                            name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                keys: true,
+                responsive: true,
+                pageLength: 20,
+                data: data,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0] },
+                    { className: "w10 vertikal", targets: [3, 4, 5, 6, 7, 8] },
+                    { className: "w15 vertikal", targets: [1, 2] }
+                ],
+                order: [[ 0, 'asc' ]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                        name += '</div><div class="ml-4">' +
-                            '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
-                            '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
-                            '</div></div>';
-                        return name;
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var name = '<div class="d-flex align-items-center">' +
+                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
+                            if (row.profileImage == null) {
+                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
+                            } else {
+                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
+                            }
+                            name += '</div><div class="ml-4">' +
+                                '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
+                                '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                                '</div></div>';
+                            return name;
+                        }
+                    },
+                    { data: "department" },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.gross) + " €";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.employeeContribution) + " %";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.employerContribution) + " %";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.taxableSalary) + " €";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.tax) + " €";
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return format_currency(row.net) + " €";
+                        }
                     }
-                },
-                { data: "department" },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.bruttoSalary);
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.employeeContribution);
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.employerContribution);
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.taxableSalary);
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.tax);
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        return format_currency(row.netSalary);
-                    }
-                }
-            ]
-        });
+                ]
+            });
         }
 
         function get_report(type) {

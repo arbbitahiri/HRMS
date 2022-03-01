@@ -18,7 +18,7 @@ namespace HRMS.Data.General
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int JobTypeId { get; set; }
-        public decimal BruttoSalary { get; set; }
+        public decimal GrossSalary { get; set; }
         public decimal? EmployeeContribution { get; set; }
         public decimal? EmployerContribution { get; set; }
         public string Description { get; set; }

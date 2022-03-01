@@ -616,7 +616,7 @@ public class StaffController : BaseController
                 Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
                 StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 JobType = user.Language == LanguageEnum.Albanian ? a.JobType.NameSq : a.JobType.NameEn,
-                BruttoSalary = $"{a.BruttoSalary:#.##} €",
+                BruttoSalary = $"{a.GrossSalary:#.##} €",
                 StartDate = a.StartDate,
                 EndDate = a.EndDate
             }).ToListAsync();
@@ -698,7 +698,7 @@ public class StaffController : BaseController
             StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
             EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
             JobTypeId = add.JobTypeId,
-            BruttoSalary = add.Salary,
+            GrossSalary = add.Salary,
             EmployeeContribution = add.EmployeeContribution ?? 0,
             EmployerContribution = add.EmployerContribution ?? 0,
             Description = add.Description,
@@ -750,7 +750,7 @@ public class StaffController : BaseController
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
                 JobTypeId = a.JobTypeId,
-                Salary = a.BruttoSalary,
+                Salary = a.GrossSalary,
                 EmployeeContribution = a.EmployeeContribution,
                 EmployerContribution = a.EmployerContribution,
                 Description = a.Description,
@@ -775,7 +775,7 @@ public class StaffController : BaseController
         department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
         department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
         department.JobTypeId = edit.JobTypeId;
-        department.BruttoSalary = edit.Salary;
+        department.GrossSalary = edit.Salary;
         department.EmployeeContribution = edit.EmployeeContribution ?? 0;
         department.EmployerContribution = edit.EmployerContribution ?? 0;
         department.UpdatedDate = DateTime.Now;

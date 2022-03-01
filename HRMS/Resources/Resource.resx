@@ -1326,4 +1326,7 @@
   <data name="PayrollList" xml:space="preserve">
     <value>Lista pagave</value>
   </data>
+  <data name="Tax" xml:space="preserve">
+    <value>Tatimi</value>
+  </data>
 </root>

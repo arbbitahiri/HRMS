@@ -1164,6 +1164,9 @@
   <data name="Tables" xml:space="preserve">
     <value>Tables</value>
   </data>
+  <data name="Tax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
   <data name="TaxedSalary" xml:space="preserve">
     <value>Salary that are taxed</value>
   </data>
