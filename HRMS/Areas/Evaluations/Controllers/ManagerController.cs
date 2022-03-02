@@ -54,7 +54,7 @@ public class ManagerController : BaseController
         {
             var data = await db.EvaluationManager.Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
                 .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                    && a.EvaluationManagerId == CryptoSecurity.Decrypt<int>(ide))
+                    && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new Register
                 {
                     EvaluationIde = CryptoSecurity.Encrypt(a.EvaluationId),
@@ -110,6 +110,7 @@ public class ManagerController : BaseController
             {
                 EvaluationId = evaluation.EvaluationId,
                 StatusTypeId = (int)Status.Unprocessed,
+                Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
@@ -728,24 +729,28 @@ public class ManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var checkIfAnswered = await db.EvaluationQuestionnaireNumerical.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && !a.Grade.HasValue)
-            && !await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.Checked)
-            && await db.EvaluationQuestionnaireTopic.AnyAsync(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrEmpty(a.Answer));
+        var checkIfAnswered = await db.EvaluationQuestionnaireNumerical.AnyAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && !a.Grade.HasValue)
+            && !await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.Active && a.EvaluationQuestionnaireOptional.Active && a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.Checked)
+            && await db.EvaluationQuestionnaireTopic.AnyAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrEmpty(a.Answer));
 
-        if (method == MethodType.Post)
+        var evaluationStatus = await db.EvaluationStatus.FirstOrDefaultAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));
+        evaluationStatus.Active = false;
+        evaluationStatus.UpdatedDate = DateTime.Now;
+        evaluationStatus.UpdatedFrom = user.Id;
+        evaluationStatus.UpdatedNo = evaluationStatus.UpdatedNo.HasValue ? ++evaluationStatus.UpdatedNo : evaluationStatus.UpdatedNo = 1;
+
+        db.EvaluationStatus.Add(new EvaluationStatus
         {
-            db.EvaluationStatus.Add(new EvaluationStatus
-            {
-                EvaluationId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = checkIfAnswered ? (int)Status.PendingForAnswers : (int)Status.Finished,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = user.Id
-            });
-            await db.SaveChangesAsync();
-        }
+            EvaluationId = CryptoSecurity.Decrypt<int>(ide),
+            StatusTypeId = checkIfAnswered ? (int)Status.Finished : (int)Status.PendingForAnswers,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
 
         TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Index", "Evaluation");
     }
 
     #endregion

@@ -1329,4 +1329,25 @@
   <data name="Tax" xml:space="preserve">
     <value>Tatimi</value>
   </data>
+  <data name="For" xml:space="preserve">
+    <value>Për</value>
+  </data>
+  <data name="ActualYear" xml:space="preserve">
+    <value>VitiAktual</value>
+  </data>
+  <data name="AllTime" xml:space="preserve">
+    <value>Gjithë kohën</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Muaji</value>
+  </data>
+  <data name="Leaves" xml:space="preserve">
+    <value>Pushimet</value>
+  </data>
+  <data name="ListOfEvaluationStudentsCollege" xml:space="preserve">
+    <value>Lista e vlerësimeve nga studentët për kolegjin</value>
+  </data>
+  <data name="ListOfEvaluationStudentsStaff" xml:space="preserve">
+    <value>Lista e vlerësimeve nga studentët për stafin</value>
+  </data>
 </root>

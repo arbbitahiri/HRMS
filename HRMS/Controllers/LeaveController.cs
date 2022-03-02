@@ -53,8 +53,7 @@ public class LeaveController : BaseController
                 ReviewedDate = a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Approved) ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
                 Finished = a.LeaveStatus.Any(b => b.StatusTypeId != (int)Status.Pending)
             }).ToListAsync();
-
-        return Json(holidays);
+        return PartialView(holidays);
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize("31:r")]
@@ -82,8 +81,7 @@ public class LeaveController : BaseController
                 ReviewedDate = a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Rejected) ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
                 Finished = a.LeaveStatus.Any(a => a.StatusTypeId != (int)Status.Pending)
             }).ToListAsync();
-
-        return Json(holidays);
+        return PartialView(holidays);
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize("31:r")]
@@ -110,8 +108,7 @@ public class LeaveController : BaseController
                 InsertedDate = a.InsertedDate,
                 Finished = a.LeaveStatus.Any(a => a.StatusTypeId != (int)Status.Pending)
             }).ToListAsync();
-
-        return Json(holidays);
+        return PartialView(holidays);
     }
 
     #endregion
@@ -152,7 +149,7 @@ public class LeaveController : BaseController
 
         var leaveDays = await db.LeaveStaffDays
             .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == create.ALeaveTypeId && a.InsertedDate.Year == DateTime.Now.Year)
-            .OrderByDescending(a => a.LeaveTypeRemainingDaysId).FirstOrDefaultAsync();
+            .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)create.ALeaveTypeId);
         var days = WorkingDays(startDate, endDate);
@@ -235,7 +232,7 @@ public class LeaveController : BaseController
         {
             var leaveDays = await db.LeaveStaffDays
                 .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == (int)review.LeaveTypeEnum && a.InsertedDate.Year == DateTime.Now.Year)
-                .OrderByDescending(a => a.LeaveTypeRemainingDaysId).FirstOrDefaultAsync();
+                .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
             int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave(review.LeaveTypeEnum);
             var days = WorkingDays(review.StartDate, review.EndDate);
@@ -286,7 +283,7 @@ public class LeaveController : BaseController
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
                 Description = a.Description,
-                RemainingDays = a.RemainingDays.Value,
+                RemainingDays = a.RemainingDays,
             }).FirstOrDefaultAsync();
         return PartialView(holiday);
     }
@@ -313,20 +310,23 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StartDateVSEndDate });
         }
 
-        var days = WorkingDays(startDate, endDate);
-        int remainingDays;
-        var lastLeave = await db.Leave.Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == edit.ALeaveTypeId && a.StartDate.Year == DateTime.Now.Year && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId != (int)Status.Rejected)).OrderBy(a => a.LeaveId).LastOrDefaultAsync();
-        remainingDays = lastLeave != null ? lastLeave.RemainingDays.Value : 20;
+        var leaveDays = await db.LeaveStaffDays
+            .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == edit.ALeaveTypeId && a.InsertedDate.Year == DateTime.Now.Year)
+            .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
-        if (remainingDays - days < 0)
+        int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)edit.ALeaveTypeId);
+        var days = WorkingDays(startDate, endDate);
+        int actualDays = (int)(leaveDays.RemainingDays - days);
+
+        if (remainingLeaveDays - days < 0)
         {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingDays) });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
         }
 
         var holiday = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(edit.LeaveIde));
         holiday.StartDate = startDate;
         holiday.EndDate = endDate;
-        holiday.RemainingDays = (int)(remainingDays - days);
+        holiday.RemainingDays = (int)(leaveDays.RemainingDays - days);
         holiday.Description = edit.Description;
         holiday.UpdatedDate = DateTime.Now;
         holiday.UpdatedFrom = user.Id;
@@ -412,7 +412,7 @@ public class LeaveController : BaseController
         var days = WorkingDays(startDate, endDate);
         int remainingDays;
         var lastLeave = await db.Leave.Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == LeaveTypeId && a.StartDate.Year == DateTime.Now.Year && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId != (int)Status.Rejected)).OrderBy(a => a.LeaveId).LastOrDefaultAsync();
-        remainingDays = lastLeave != null ? lastLeave.RemainingDays.Value : 20;
+        remainingDays = lastLeave != null ? lastLeave.RemainingDays : 20;
 
         if (remainingDays - days >= 0)
         {
@@ -438,7 +438,7 @@ public class LeaveController : BaseController
 
         var leave = await db.LeaveStaffDays
             .Where(a => a.Active && a.Staff.UserId == userId && a.LeaveTypeId == ltypeId && a.InsertedDate.Year == DateTime.Now.Year)
-            .OrderByDescending(a => a.LeaveTypeRemainingDaysId).FirstOrDefaultAsync();
+            .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
         int remainingDays = leave != null ? leave.RemainingDays : DaysForLeave((LeaveTypeEnum)ltypeId);
 

@@ -5,7 +5,7 @@ namespace HRMS.Data.General
 {
     public partial class LeaveStaffDays
     {
-        public int LeaveTypeRemainingDaysId { get; set; }
+        public int LeaveStaffDaysId { get; set; }
         public int LeaveTypeId { get; set; }
         public int StaffId { get; set; }
         public int RemainingDays { get; set; }

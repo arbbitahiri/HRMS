@@ -15,9 +15,9 @@ namespace HRMS.Data.General
         public int DepartmentId { get; set; }
         public int StaffId { get; set; }
         public int StaffTypeId { get; set; }
+        public int JobTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int JobTypeId { get; set; }
         public decimal GrossSalary { get; set; }
         public decimal? EmployeeContribution { get; set; }
         public decimal? EmployerContribution { get; set; }

@@ -69,7 +69,7 @@ namespace HRMS.Data.General
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-C9V24QP;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -371,8 +371,6 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("NameSQ");
-
-                entity.Property(e => e.TypeFor).HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -742,6 +740,10 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.EvaluationQuestionnaireOptionalTopicId).HasColumnName("EvaluationQuestionnaireOptionalTopicID");
 
+                entity.Property(e => e.Answer)
+                    .IsRequired()
+                    .HasMaxLength(1024);
+
                 entity.Property(e => e.EvaluationQuestionnaireOptionalId).HasColumnName("EvaluationQuestionnaireOptionalID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
@@ -749,10 +751,6 @@ namespace HRMS.Data.General
                 entity.Property(e => e.InsertedFrom)
                     .IsRequired()
                     .HasMaxLength(450);
-
-                entity.Property(e => e.TopicTitle)
-                    .IsRequired()
-                    .HasMaxLength(1024);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -916,9 +914,7 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.EvaluationStudentsCollegeId).HasColumnName("EvaluationStudentsCollegeID");
 
-                entity.Property(e => e.Description).HasMaxLength(2048);
-
-                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+                entity.Property(e => e.Description).HasMaxLength(1024);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -928,7 +924,7 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(256);
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -944,7 +940,7 @@ namespace HRMS.Data.General
                     .WithMany(p => p.EvaluationStudentsCollegeInsertedFromNavigation)
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EvaluationStudentsCollege_AspNetUsers_Inserted");
+                    .HasConstraintName("FK_EvaluationStudentsCollege_EvaluationStudentsCollege_Inserted");
 
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.EvaluationStudentsCollegeUpdatedFromNavigation)
@@ -956,9 +952,7 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.EvaluationStudentsStaffId).HasColumnName("EvaluationStudentsStaffID");
 
-                entity.Property(e => e.Description).HasMaxLength(2048);
-
-                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+                entity.Property(e => e.Description).HasMaxLength(1024);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -966,11 +960,9 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(450);
 
-                entity.Property(e => e.StaffDepartmentSubjectId).HasColumnName("StaffDepartmentSubjectID");
-
                 entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(256);
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -1059,12 +1051,12 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.NameEn)
                     .IsRequired()
-                    .HasMaxLength(128)
+                    .HasMaxLength(50)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
                     .IsRequired()
-                    .HasMaxLength(128)
+                    .HasMaxLength(50)
                     .HasColumnName("NameSQ");
             });
 
@@ -1078,15 +1070,11 @@ namespace HRMS.Data.General
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequest_UpdatedFrom");
 
-                entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
-
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom).IsRequired();
-
-                entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
@@ -1120,19 +1108,13 @@ namespace HRMS.Data.General
 
             modelBuilder.Entity<LeaveStaffDays>(entity =>
             {
-                entity.HasKey(e => e.LeaveTypeRemainingDaysId);
-
-                entity.Property(e => e.LeaveTypeRemainingDaysId).HasColumnName("LeaveTypeRemainingDaysID");
+                entity.Property(e => e.LeaveStaffDaysId).HasColumnName("LeaveStaffDaysID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom)
                     .IsRequired()
                     .HasMaxLength(450);
-
-                entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
-
-                entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -1172,15 +1154,11 @@ namespace HRMS.Data.General
 
                 entity.HasIndex(e => e.UpdatedFrom, "IX_HolidayRequestStatus_UpdatedFrom");
 
-                entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
-
                 entity.Property(e => e.Description).HasMaxLength(1024);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.InsertedFrom).IsRequired();
-
-                entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
 
                 entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
@@ -1539,8 +1517,6 @@ namespace HRMS.Data.General
 
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
-                entity.Property(e => e.GrossSalary).HasColumnType("money");
-
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.EmployeeContribution).HasColumnType("decimal(5, 2)");
@@ -1548,6 +1524,8 @@ namespace HRMS.Data.General
                 entity.Property(e => e.EmployerContribution).HasColumnType("decimal(5, 2)");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.GrossSalary).HasColumnType("money");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -1705,13 +1683,13 @@ namespace HRMS.Data.General
             {
                 entity.Property(e => e.StaffPayrollId).HasColumnName("StaffPayrollID");
 
-                entity.Property(e => e.GrossSalary).HasColumnType("money");
-
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.EmployeeContribution).HasColumnType("decimal(5, 2)");
 
                 entity.Property(e => e.EmployerContribution).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.GrossSalary).HasColumnType("money");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
@@ -1738,6 +1716,12 @@ namespace HRMS.Data.General
                     .HasForeignKey(d => d.InsertedFrom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffPayroll_AspNetUsers");
+
+                entity.HasOne(d => d.JobType)
+                    .WithMany(p => p.StaffPayroll)
+                    .HasForeignKey(d => d.JobTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffPayroll_JobType");
 
                 entity.HasOne(d => d.Staff)
                     .WithMany(p => p.StaffPayroll)

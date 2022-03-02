@@ -852,7 +852,18 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "21ssb:c")]
     [Description("Arb Tahiri", "Form to add subject.")]
-    public async Task<IActionResult> _AddSubject(string ide) => PartialView(new AddSubject { StaffDepartmentIde = ide, DepartmentEndDate = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.EndDate).FirstOrDefaultAsync() });
+    public async Task<IActionResult> _AddSubject(string ide)
+    {
+        var staffDepartment = await db.StaffDepartment
+            .Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new AddSubject
+            {
+                StaffDepartmentIde = ide,
+                StaffName = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                DepartmentEndDate = a.EndDate
+            }).FirstOrDefaultAsync();
+        return PartialView(staffDepartment);
+    }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21ssb:c")]
     [Description("Arb Tahiri", "Action to add subject.")]
@@ -891,6 +902,7 @@ public class StaffController : BaseController
             .Select(a => new AddSubject
             {
                 StaffDepartmentSubjectIde = ide,
+                StaffName = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName}",
                 SubjectId = a.SubjectId,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
@@ -1236,13 +1248,18 @@ public class StaffController : BaseController
     }
 
     [Description("Arb Tahiri", "Method to check end date of subject.")]
-    public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate)
+    public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate, string StartDate)
     {
+        var startDate = DateTime.ParseExact(StartDate ?? DateTime.Now.ToString(), "dd/MM/yyyy", null);
         var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
 
         if (endDate <= DepartmentEndDate)
         {
             return Json(true);
+        }
+        else if (startDate >= endDate)
+        {
+            return Json(Resource.StartDateVSEndDate);
         }
         else
         {

@@ -2,6 +2,7 @@
 @model Search
 @inject IDDLRepository repo
 @{
+    ViewData["Title"] = Resource.Leaves;
     UserModel user = (UserModel)ViewData["User"];
     var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
 }
@@ -20,32 +21,39 @@
             @Html.AntiForgeryToken()
 
             <div class="row">
-                <div class="col-3 form-group">
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="StaffId">@Resource.Staff</label>
                     <select asp-for="StaffId" class="form-control"></select>
                 </div>
-                <div class="col-3 form-group">
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="LeaveTypeId">@Resource.LeaveType</label>
-                    <select asp-for="LeaveTypeId" class="form-control"></select>
+                    <select asp-for="LeaveTypeId" asp-items="await repo.LeaveTypes(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
                 </div>
-                <div class="col-3 form-group">
-                    <label asp-for="Date">@Resource.Date</label>
-                    <input asp-for="Date" type="text" class="form-control" />
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
+                    <label asp-for="Date"></label>
+                    <div class='input-group' id="kt_date">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input asp-for="Date" type="text" name="Date" class="form-control" hidden readonly />
+                        <input type="text" id="kt_search_range" class="form-control" style="cursor: default;" readonly />
+                    </div>
                 </div>
-                <div class="col-3 form-group">
-                    <label style="visibility:hidden"></label><br />
-                    <button id="btn_search" type="button" class="btn btn-primary">@Resource.Search</button>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <label class="invisible">//</label>
+                    <button type="button" id="btn_search" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-
-<div class="card card-primary card-outline card-outline-tabs">
+<div class="card card-primary card-outline card-outline-tabs" id="kt_leave">
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="pending_tab()" id="tab_pending" href="#kt_pending" data-toggle="tab">@Resource.Pending</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="pending_tab()"  id="tab_pending"  href="#kt_pending"  data-toggle="tab">@Resource.Pending</a></li>
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="approved_tab()" id="tab_approved" href="#kt_approved" data-toggle="tab">@Resource.Approved</a></li>
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="rejected_tab()" id="tab_rejected" href="#kt_rejected" data-toggle="tab">@Resource.Rejected</a></li>
         </ul>
@@ -71,9 +79,11 @@
                 }
             });
 
-            $('#Date').daterangepicker({
+            var start = moment('2020-01-01');
+            var end = moment();
+            $('#kt_date').daterangepicker({
                 locale: {
-                    format: "DD/MM/YYYY H:mm",
+                    format: "DD/MM/YYYY",
                     seperator: " - ",
                     applyLabel: "@Resource.Continue",
                     cancelLabel: "@Resource.Cancel",
@@ -112,23 +122,35 @@
                 buttonClasses: 'btn',
                 applyClass: 'btn-primary',
                 cancelClass: 'btn-secondary',
+                startDate: start,
+                endDate: end,
                 ranges: {
-                    '@Html.Raw(Resource.Last7Days)': [moment().subtract(6, 'days'), moment()],
+                    '@Html.Raw(Resource.Today)': [moment(), moment()],
+                    '@Html.Raw(Resource.Yesterday)': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     '@Html.Raw(Resource.Last30Days)': [moment().subtract(29, 'days'), moment()],
                     '@Html.Raw(Resource.ThisMonth)': [moment().startOf('month'), moment().endOf('month')],
-                    '@Html.Raw(Resource.LastMonth)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    '@Html.Raw(Resource.ThisYear)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    '@Html.Raw(Resource.LastYear)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    '@Html.Raw(Resource.LastMonth)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    '@Html.Raw(Resource.ActualYear)': [moment().startOf('year'), moment()],
+                    '@Html.Raw(Resource.LastYear)': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                    '@Html.Raw(Resource.AllTime)': [moment('2000-01-01'), moment()]
                 }, function (start, end, label) {
-                    $('#Date .form-control').val(start.format("DD/MM/YYYY H:mm") + ' / ' + end.format('DD/MM/YYYY H:mm'))
-                    $('#Date').val(start.format('DD/MM/YYYY H:mm') + ' / ' + end.format('DD/MM/YYYY H:mm'));
+                    $('#kt_date .form-control').val(start.format("DD/MM/YYYY") + ' / ' + end.format('DD/MM/YYYY'))
+                    $('#Date').val(start.format('DD/MM/YYYY') + ' / ' + end.format('DD/MM/YYYY'));
+
+                    if (label == '@Html.Raw(Resource.OtherDate)') {
+                        $('#kt_search_range').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+                    } else {
+                        $('#kt_search_range').val(label);
+                    }
                 }
             });
+            $('#kt_date .form-control').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            $('#kt_search_range').val('@Html.Raw(Resource.AllTime)');
 
             change_staff();
 
             $('#btn_search').on('click', function() {
-                $('#kt_evaluation').removeClass('d-none');
+                $('#kt_leave').removeClass('d-none');
                 if (sessionStorage.getItem("tab_leave") == null) {
                     $('#tab_pending').click();
                 } else {
@@ -141,29 +163,29 @@
 
         function pending_tab() {
             sessionStorage.setItem("tab_leave", "tab_pending");
-            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchPending")');
-            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_pending');
-            $('#frm_search_evaluation').addClass('noLoading');
-            $('#frm_search_evaluation').submit();
-            $('#frm_search_evaluation').removeClass('noLoading');
+            $('#frm_search_leave').attr('action', '@Url.Action("_SearchPending")');
+            $('#frm_search_leave').attr('data-ajax-update', '#kt_pending');
+            $('#frm_search_leave').addClass('noLoading');
+            $('#frm_search_leave').submit();
+            $('#frm_search_leave').removeClass('noLoading');
         }
 
-        function approved_tab(ide) {
+        function approved_tab() {
             sessionStorage.setItem("tab_leave", "tab_approved");
-            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchApproved")');
-            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_approved');
-            $('#frm_search_evaluation').addClass('noLoading');
-            $('#frm_search_evaluation').submit();
-            $('#frm_search_evaluation').removeClass('noLoading');
+            $('#frm_search_leave').attr('action', '@Url.Action("_SearchApproved")');
+            $('#frm_search_leave').attr('data-ajax-update', '#kt_approved');
+            $('#frm_search_leave').addClass('noLoading');
+            $('#frm_search_leave').submit();
+            $('#frm_search_leave').removeClass('noLoading');
         }
 
-        function rejected_tab(ide) {
+        function rejected_tab() {
             sessionStorage.setItem("tab_leave", "tab_rejected");
-            $('#frm_search_evaluation').attr('action', '@Url.Action("_SearchRejected")');
-            $('#frm_search_evaluation').attr('data-ajax-update', '#kt_rejected');
-            $('#frm_search_evaluation').addClass('noLoading');
-            $('#frm_search_evaluation').submit();
-            $('#frm_search_evaluation').removeClass('noLoading');
+            $('#frm_search_leave').attr('action', '@Url.Action("_SearchRejected")');
+            $('#frm_search_leave').attr('data-ajax-update', '#kt_rejected');
+            $('#frm_search_leave').addClass('noLoading');
+            $('#frm_search_leave').submit();
+            $('#frm_search_leave').removeClass('noLoading');
         }
 
         function change_staff() {

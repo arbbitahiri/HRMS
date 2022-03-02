@@ -8,8 +8,8 @@ namespace HRMS.Data.General
         public int StaffPayrollId { get; set; }
         public int StaffId { get; set; }
         public int DepartmentId { get; set; }
-        public int JobTypeId { get; set; }
         public int Month { get; set; }
+        public int JobTypeId { get; set; }
         public decimal GrossSalary { get; set; }
         public decimal EmployeeContribution { get; set; }
         public decimal EmployerContribution { get; set; }
@@ -20,6 +20,7 @@ namespace HRMS.Data.General
 
         public virtual Department Department { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
+        public virtual JobType JobType { get; set; }
         public virtual Staff Staff { get; set; }
     }
 }

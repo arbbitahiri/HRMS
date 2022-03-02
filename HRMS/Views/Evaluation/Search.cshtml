@@ -17,24 +17,25 @@
             @Html.AntiForgeryToken()
 
             <div class="row">
-                <div class="col-md-4 form-group">
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="EvaluationTypeId"></label>
                     <select asp-for="EvaluationTypeId" asp-items="await repo.EvaluationTypes(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="StatusTypeId"></label>
                     <select asp-for="StatusTypeId" asp-items="await repo.StatusTypes(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="StaffId"></label>
                     <select asp-for="StaffId" class="form-control"></select>
                 </div>
-                <div class="col-md-4 form-group">
-                    <button id="btn_search" type="button" class="btn btn-primary">@Resource.Search</button>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <label class="invisible">//</label>
+                    <button type="button" id="btn_search" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
             </div>
         </div>
@@ -44,22 +45,18 @@
 <div class="card card-primary card-outline card-outline-tabs d-none" id="kt_evaluation">
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="manager_tab()" id="tab_manager" href="#kt_manager" data-toggle="tab">@Resource.ListOfEvaluationManager</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_college_tab()" id="tab_student_college" href="#kt_student_college" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_staff_tab()" id="tab_student_staff" href="#kt_student_staff" data-toggle="tab">@Resource.ListOfEvaluationStudents</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="self_tab()" id="tab_self" href="#kt_self" data-toggle="tab">@Resource.ListOfEvaluationSelf</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="manager_tab()"          id="tab_manager"         href="#kt_manager" data-toggle="tab">@Resource.ListOfEvaluationManager</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_college_tab()"  id="tab_student_college" href="#kt_student_college" data-toggle="tab">@Resource.ListOfEvaluationStudentsCollege</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_staff_tab()"    id="tab_student_staff"   href="#kt_student_staff" data-toggle="tab">@Resource.ListOfEvaluationStudentsStaff</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="self_tab()"             id="tab_self"            href="#kt_self" data-toggle="tab">@Resource.ListOfEvaluationSelf</a></li>
         </ul>
     </div>
     <div class="card-body">
         <div class="tab-content">
-            <div class="tab-pane" id="kt_manager">
-            </div>
-            <div class="tab-pane" id="kt_student_college">
-            </div>
-            <div class="tab-pane" id="kt_student_staff">
-            </div>
-            <div class="tab-pane" id="kt_self">
-            </div>
+            <div class="tab-pane" id="kt_manager"></div>
+            <div class="tab-pane" id="kt_student_college"></div>
+            <div class="tab-pane" id="kt_student_staff"></div>
+            <div class="tab-pane" id="kt_self"></div>
         </div>
     </div>
 </div>

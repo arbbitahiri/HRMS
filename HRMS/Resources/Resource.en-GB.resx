@@ -156,6 +156,9 @@
   <data name="Active" xml:space="preserve">
     <value>Active</value>
   </data>
+  <data name="ActualYear" xml:space="preserve">
+    <value>Actual year</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -221,6 +224,9 @@
   </data>
   <data name="AllowNotification" xml:space="preserve">
     <value>Allow notification</value>
+  </data>
+  <data name="AllTime" xml:space="preserve">
+    <value>All time</value>
   </data>
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
@@ -528,6 +534,9 @@
   <data name="FirstStepStaffRegistration" xml:space="preserve">
     <value>1. Personal data</value>
   </data>
+  <data name="For" xml:space="preserve">
+    <value>For</value>
+  </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Forgot your password?</value>
   </data>
@@ -627,6 +636,9 @@
   <data name="LeaveReviewedSuccessfully" xml:space="preserve">
     <value>Leave reviewed successfully!</value>
   </data>
+  <data name="Leaves" xml:space="preserve">
+    <value>Leave</value>
+  </data>
   <data name="LeaveType" xml:space="preserve">
     <value>Leave type</value>
   </data>
@@ -653,6 +665,12 @@
   </data>
   <data name="ListOfEvaluationStudents" xml:space="preserve">
     <value>List of students evaluations</value>
+  </data>
+  <data name="ListOfEvaluationStudentsCollege" xml:space="preserve">
+    <value>List of students evaluations for college</value>
+  </data>
+  <data name="ListOfEvaluationStudentsStaff" xml:space="preserve">
+    <value>List of students evaluations for staff</value>
   </data>
   <data name="ListOfNumericalQuestions" xml:space="preserve">
     <value>List of numerical questions</value>
@@ -755,6 +773,9 @@
   </data>
   <data name="MondayLetter" xml:space="preserve">
     <value>Mo</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
   </data>
   <data name="MustBe18YearsOld" xml:space="preserve">
     <value>Staff employee must be 18 years or older.</value>

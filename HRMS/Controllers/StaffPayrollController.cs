@@ -41,7 +41,7 @@ public class StaffPayrollController : BaseController
             .Select(a => new PayrollList
             {
                 Firstname = a.Staff.FirstName,
-                Lastname = a.Staff.FirstName,
+                Lastname = a.Staff.LastName,
                 PersonalNumber = a.Staff.PersonalNumber,
                 ProfileImage = a.Staff.User.ProfileImage,
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,

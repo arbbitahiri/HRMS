@@ -8,6 +8,7 @@ namespace HRMS.Data.General
         public JobType()
         {
             StaffDepartment = new HashSet<StaffDepartment>();
+            StaffPayroll = new HashSet<StaffPayroll>();
         }
 
         public int JobTypeId { get; set; }
@@ -15,5 +16,6 @@ namespace HRMS.Data.General
         public string NameEn { get; set; }
 
         public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
+        public virtual ICollection<StaffPayroll> StaffPayroll { get; set; }
     }
 }

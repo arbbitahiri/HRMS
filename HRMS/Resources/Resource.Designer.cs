@@ -178,6 +178,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to VitiAktual.
+        /// </summary>
+        public static string ActualYear {
+            get {
+                return ResourceManager.GetString("ActualYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto.
         /// </summary>
         public static string Add {
@@ -372,6 +381,15 @@ namespace HRMS.Resources {
         public static string AllowNotification {
             get {
                 return ResourceManager.GetString("AllowNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjithë kohën.
+        /// </summary>
+        public static string AllTime {
+            get {
+                return ResourceManager.GetString("AllTime", resourceCulture);
             }
         }
         
@@ -1294,6 +1312,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Për.
+        /// </summary>
+        public static string For {
+            get {
+                return ResourceManager.GetString("For", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keni harruar fjalëkalimin?.
         /// </summary>
         public static string ForgotPassword {
@@ -1600,6 +1627,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pushimet.
+        /// </summary>
+        public static string Leaves {
+            get {
+                return ResourceManager.GetString("Leaves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji pushimit.
         /// </summary>
         public static string LeaveType {
@@ -1677,6 +1713,24 @@ namespace HRMS.Resources {
         public static string ListOfEvaluationStudents {
             get {
                 return ResourceManager.GetString("ListOfEvaluationStudents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e vlerësimeve nga studentët për kolegjin.
+        /// </summary>
+        public static string ListOfEvaluationStudentsCollege {
+            get {
+                return ResourceManager.GetString("ListOfEvaluationStudentsCollege", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e vlerësimeve nga studentët për stafin.
+        /// </summary>
+        public static string ListOfEvaluationStudentsStaff {
+            get {
+                return ResourceManager.GetString("ListOfEvaluationStudentsStaff", resourceCulture);
             }
         }
         
@@ -1983,6 +2037,15 @@ namespace HRMS.Resources {
         public static string MondayLetter {
             get {
                 return ResourceManager.GetString("MondayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Muaji.
+        /// </summary>
+        public static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
             }
         }
         

@@ -41,7 +41,7 @@ public class EvaluationController : BaseController
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
+                && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
                 && a.StaffId == (search.StaffId ?? a.StaffId))
             .AsSplitQuery()
             .Select(a => new EvaluationList
@@ -50,7 +50,7 @@ public class EvaluationController : BaseController
                 EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationManagerId),
                 Title = a.Title,
                 Description = a.Description,
-                StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
@@ -66,7 +66,7 @@ public class EvaluationController : BaseController
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId)))
+                && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId)))
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
@@ -74,7 +74,7 @@ public class EvaluationController : BaseController
                 EvaluationStudentsCollegeIde = CryptoSecurity.Encrypt(a.EvaluationStudentsCollegeId),
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
-                StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
@@ -92,7 +92,7 @@ public class EvaluationController : BaseController
             .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.StaffDepartment).ThenInclude(a => a.Staff)
             .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
+                && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
                 && a.StaffDepartmentSubject.StaffDepartment.StaffId == (search.StaffId ?? a.StaffDepartmentSubject.StaffDepartment.StaffId))
             .AsSplitQuery()
             .Select(a => new EvaluationList
@@ -103,7 +103,7 @@ public class EvaluationController : BaseController
                 Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
-                StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
@@ -119,7 +119,7 @@ public class EvaluationController : BaseController
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
+                && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
                 && a.StaffId == (search.StaffId ?? a.StaffId))
             .AsSplitQuery()
             .Select(a => new EvaluationList
@@ -128,7 +128,7 @@ public class EvaluationController : BaseController
                 EvaluationManagerIde = CryptoSecurity.Encrypt(a.EvaluationSelfId),
                 Title = a.Title,
                 Description = a.Description,
-                StatusType = a.Evaluation.EvaluationStatus.OrderByDescending(a => a.EvaluationStatusId).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
+                StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
                 Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
                 InsertedDate = a.InsertedDate
@@ -145,10 +145,17 @@ public class EvaluationController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        var evaluationStatus = await db.EvaluationStatus.FirstOrDefaultAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));
+        evaluationStatus.Active = false;
+        evaluationStatus.UpdatedDate = DateTime.Now;
+        evaluationStatus.UpdatedFrom = user.Id;
+        evaluationStatus.UpdatedNo = evaluationStatus.UpdatedNo.HasValue ? ++evaluationStatus.UpdatedNo : evaluationStatus.UpdatedNo = 1;
+
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = CryptoSecurity.Decrypt<int>(ide),
             StatusTypeId = (int)Status.Deleted,
+            Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });

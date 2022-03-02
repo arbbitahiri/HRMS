@@ -165,8 +165,10 @@ function change_role(ide) {
         ide: ide
     }, function (data) {
         hide_loading();
-        window.location.href = '/Home/Index';
         handle_success(data, SubmitPathType.RELOAD, "");
+        setTimeout(function () {
+            window.location.href = '/Home/Index';
+        }, 2000);
     });
 }
 

@@ -78,7 +78,12 @@
                     <tr>
                         <th>#</th>
                         <th>@Resource.Question</th>
-                        <th>@Resource.Answer</th>
+                        <th data-orderable="false">0</th>
+                        <th data-orderable="false">1</th>
+                        <th data-orderable="false">2</th>
+                        <th data-orderable="false">3</th>
+                        <th data-orderable="false">4</th>
+                        <th data-orderable="false">5</th>
                         <th data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -179,12 +184,42 @@
                     {
                         data: function(row, type, set) {
                             return '<div class="clearfix" id="kt_checkbox">' +
-                                '<div class="icheck-secondary d-inline pr-5"><input id="0' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 0 ? "checked" : "") + '/><label for="0' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 0)">0</label></div>' +
-                                '<div class="icheck-danger d-inline pr-5"><input id="1' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 1 ? "checked" : "") + '/><label for="1' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 1)">1</label></div>' +
-                                '<div class="icheck-orange d-inline pr-5"><input id="2' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 2 ? "checked" : "") + '/><label for="2' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 2)">2</label></div>' +
-                                '<div class="icheck-warning d-inline pr-5"><input id="3' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 3 ? "checked" : "") + '/><label for="3' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 3)">3</label></div>' +
-                                '<div class="icheck-info d-inline pr-5"><input id="4' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 4 ? "checked" : "") + '/><label for="4' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 4)">4</label></div>' +
-                                '<div class="icheck-success d-inline pr-5"><input id="5' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 5 ? "checked" : "") + '/><label for="5' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 5)">5</label></div>' +
+                                '<div class="icheck-secondary d-inline"><input id="0' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 0 ? "checked" : "") + '/><label for="0' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 0)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-danger d-inline"><input id="1' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 1 ? "checked" : "") + '/><label for="1' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 1)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-orange d-inline"><input id="2' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 2 ? "checked" : "") + '/><label for="2' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 2)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-warning d-inline"><input id="3' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 3 ? "checked" : "") + '/><label for="3' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 3)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-info d-inline"><input id="4' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 4 ? "checked" : "") + '/><label for="4' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 4)"></label></div>' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function(row, type, set) {
+                            return '<div class="clearfix" id="kt_checkbox">' +
+                                '<div class="icheck-success d-inline"><input id="5' + row.numericalId + '" style="cursor: pointer;" type="radio" ' + (row.grade == 5 ? "checked" : "") + '/><label for="5' + row.numericalId + '" onclick="change_grade(\'' + row.evaluationQuestionnaireNumericalIde + '\', 5)"></label></div>' +
                                 '</div>';
                         }
                     },
@@ -201,18 +236,6 @@
                     }
                 ]
             });
-        }
-
-        function load_more(e) {
-            $(e).parent().find('.load-less-fst').removeClass('d-none');
-            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
-            $(e).addClass('d-none');
-        }
-
-        function load_less(e) {
-            $(e).addClass('d-none');
-            $(e).parent().addClass('d-none');
-            $(e).parent().parent().find('.load-more').removeClass('d-none');
         }
 
         function change_grade(ide, num) {

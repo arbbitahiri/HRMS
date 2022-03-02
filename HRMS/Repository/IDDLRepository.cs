@@ -37,4 +37,6 @@ public interface IDDLRepository
     Task<List<SelectListItem>> EvaluationQuestionTypes(LanguageEnum lang);
 
     Task<List<SelectListItem>> JobTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> Staff();
 }

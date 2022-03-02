@@ -53,12 +53,6 @@
             form.removeData('validator');
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
-
-            if (culture == 'sq-AL') {
-                $('textarea').prop('spellcheck', false);
-            } else {
-                $('textarea').prop('spellcheck', true);
-            }
         });
     </script>
 }

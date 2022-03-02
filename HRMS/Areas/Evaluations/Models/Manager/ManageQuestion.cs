@@ -25,7 +25,6 @@ public class ManageQuestion
     public string QuestionEN { get; set; }
 
     [Display(Name = "Options", ResourceType = typeof(Resource))]
-    //required if per null list
     public List<Option> Options { get; set; }
 
     public string Answer { get; set; }
@@ -39,10 +38,8 @@ public class Option
     public string OptionIde { get; set; }
 
     [Display(Name = "TitleSQ", ResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string TitleSQ { get; set; }
 
     [Display(Name = "TitleEN", ResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string TitleEN { get; set; }
 }
