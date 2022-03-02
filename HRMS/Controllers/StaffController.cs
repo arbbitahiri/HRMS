@@ -969,6 +969,8 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        // TODO: njejt si te vleresimi
+
         if (method == MethodType.Post)
         {
             db.StaffRegistrationStatus.Add(new StaffRegistrationStatus

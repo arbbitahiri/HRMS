@@ -412,7 +412,6 @@ public class StudentsCollegeController : BaseController
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
-
         await db.SaveChangesAsync();
         return Json(error);
     }
@@ -562,8 +561,13 @@ public class StudentsCollegeController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var checkIfAnswered = await db.EvaluationQuestionnaireNumerical.AnyAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && !a.Grade.HasValue)
-            && await db.EvaluationQuestionnaireOptionalTopic.AnyAsync(a => a.Active && a.EvaluationQuestionnaireOptional.Active && a.EvaluationQuestionnaireOptional.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && string.IsNullOrWhiteSpace(a.Answer));
+        var noQuestions = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            + await db.EvaluationQuestionnaireOptional.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active));
+
+        var noAnswers = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.Grade.HasValue && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            + await db.EvaluationQuestionnaireOptional.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active && !string.IsNullOrEmpty(b.Answer)));
+
+        var finished = noQuestions == noAnswers;
 
         var evaluationStatus = await db.EvaluationStatus.FirstOrDefaultAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));
         evaluationStatus.Active = false;
@@ -574,7 +578,7 @@ public class StudentsCollegeController : BaseController
         db.EvaluationStatus.Add(new EvaluationStatus
         {
             EvaluationId = CryptoSecurity.Decrypt<int>(ide),
-            StatusTypeId = checkIfAnswered ? (int)Status.PendingForAnswers : (int)Status.Finished,
+            StatusTypeId = finished ? (int)Status.Finished : (int)Status.PendingForAnswers,
             Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id

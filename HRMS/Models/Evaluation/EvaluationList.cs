@@ -21,4 +21,7 @@ public class EvaluationList
     public DateTime InsertedDate { get; set; }
 
     public int Students { get; set; }
+
+    public bool Finished { get; set; }
+    public bool Deleted { get; set; }
 }

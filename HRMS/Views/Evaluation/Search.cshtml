@@ -196,13 +196,11 @@
         }
 
         function edit_evaluation(ide, controller) {
-            console.log(controller);
             window.open('/Evaluations/' + controller + '/Index?ide=' + ide, '_blank');
-            //window.location.href = '/Evaluations/' + controller + '/Index?ide=' + ide;
         }
 
         function details_evaluation(ide) {
-            window.location.href = '/Evaluation/Index?ide=' + ide;
+            window.location.href = '/Details/Index?ide=' + ide;
         }
 
         function delete_evaluation(ide) {
