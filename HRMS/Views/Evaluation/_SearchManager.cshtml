@@ -84,12 +84,14 @@
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">';
-                        if (user_role === 'Manager') {
+                        if (user_role === 'Manager' && !row.finished && !row.deleted) {
                             dropdown += '<button type="button" class="dropdown-item" onclick="edit_evaluation(\'' + row.evaluationIde + '\', \'' + manager + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.FillIn</span></button>' +
                                         '<button type="button" class="dropdown-item" onclick="delete_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                         }
-                        dropdown += '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        if (!row.deleted) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="details_evaluation(\'' + row.evaluationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
                                     '</div></div>';
+                        }
                         return dropdown;
                     }
                 }

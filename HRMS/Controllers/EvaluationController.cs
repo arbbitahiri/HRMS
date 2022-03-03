@@ -51,8 +51,10 @@ public class EvaluationController : BaseController
                 Title = a.Title,
                 Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
-                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
-                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
+                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
+                Finished = (int)Status.Finished == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
+                Deleted = (int)Status.Deleted == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
@@ -75,8 +77,10 @@ public class EvaluationController : BaseController
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
                 StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
-                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
-                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
+                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalTopic.Any(a => a.Active && !string.IsNullOrEmpty(a.Answer))) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
+                Finished = (int)Status.Finished == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
+                Deleted = (int)Status.Deleted == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
@@ -104,8 +108,10 @@ public class EvaluationController : BaseController
                 NumberOfStudents = a.StudentsNo,
                 Title = a.Title,
                 StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
-                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
-                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
+                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)),
+                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)),
+                Finished = (int)Status.Finished == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
+                Deleted = (int)Status.Deleted == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
@@ -129,8 +135,10 @@ public class EvaluationController : BaseController
                 Title = a.Title,
                 Description = a.Description,
                 StatusType = a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
-                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
-                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && string.IsNullOrEmpty(a.Answer)),
+                Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
+                Finished = (int)Status.Finished == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
+                Deleted = (int)Status.Deleted == a.Evaluation.EvaluationStatus.Where(a => a.Active).Select(a => a.StatusTypeId).FirstOrDefault(),
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
