@@ -31,9 +31,45 @@ public class HomeController : BaseController
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index()
     {
-        ViewData["Title"] = "Home";
+        ViewData["Title"] = Resource.HomePage;
+
+        var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+
+        return getRole.Value switch
+        {
+            "Administrator" => RedirectToAction(nameof(Administrator)),
+            "Lecturer" => RedirectToAction(nameof(Lecturer)),
+            "Manager" => RedirectToAction(nameof(Manager)),
+            _ => View()
+        };
+    }
+
+    #region Dashboards
+
+    [HttpGet, Authorize("1ha:r"), Description("Arb Tahiri", "Home page for administrator.")]
+    public async Task<IActionResult> Administrator()
+    {
+        ViewData["Title"] = Resource.HomePage;
         return View();
     }
+
+    [HttpGet, Authorize("1hl:r"), Description("Arb Tahiri", "Home page for lecturer.")]
+    public async Task<IActionResult> Lecturer()
+    {
+        ViewData["Title"] = Resource.HomePage;
+        return View();
+    }
+
+    [HttpGet, Authorize("1hm:r"), Description("Arb Tahiri", "Home page for manager.")]
+    public async Task<IActionResult> Manager()
+    {
+        ViewData["Title"] = Resource.HomePage;
+        return View();
+    }
+
+    #endregion
+
+    #region General methods
 
     [HttpPost, Description("Arb Tahiri", "Action to change actual role.")]
     public async Task<IActionResult> ChangeRole(string ide)
@@ -89,8 +125,7 @@ public class HomeController : BaseController
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [Description("Arb Tahiri", "Error view")]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+    #endregion
 }

@@ -1353,4 +1353,7 @@
   <data name="StaffNotCompleted" xml:space="preserve">
     <value>Nuk mund të përfundoni regjistrimin e stafit pa regjistruar në departament!</value>
   </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Ballina</value>
+  </data>
 </root>

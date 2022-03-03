@@ -573,6 +573,9 @@
   <data name="HelpingTables" xml:space="preserve">
     <value>Helping tables</value>
   </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="HttpMethod" xml:space="preserve">
     <value>HTTP Method</value>
   </data>
