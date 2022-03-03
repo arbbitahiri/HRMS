@@ -42,7 +42,7 @@ public class StaffController : BaseController
 
     #region 1. Register and edit
 
-    [HttpGet, Authorize(Policy = "21s:c")]
+    [HttpGet, Authorize(Policy = "20:m")]
     [Description("Arb Tahiri", "Form to register or update staff. First step of registration/edition of staff.")]
     public async Task<IActionResult> Register(string ide)
     {
@@ -191,6 +191,7 @@ public class StaffController : BaseController
                 {
                     StaffId = newStaff.StaffId,
                     StatusTypeId = (int)Status.Processing,
+                    Active = true,
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 });
@@ -969,19 +970,30 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (method == MethodType.Post)
+        var registeredInDepartment = await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == CryptoSecurity.Decrypt<int>(ide));
+        if (!registeredInDepartment)
         {
-            db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
-            {
-                StaffId = CryptoSecurity.Decrypt<int>(ide),
-                StatusTypeId = (int)Status.Finished,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = user.Id
-            });
-            await db.SaveChangesAsync();
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffNotCompleted });
+            return RedirectToAction(nameof(Departments), new { ide, method });
         }
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
+        var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == CryptoSecurity.Decrypt<int>(ide));
+        staffRegistrationStatus.Active = false;
+        staffRegistrationStatus.UpdatedDate = DateTime.Now;
+        staffRegistrationStatus.UpdatedFrom = user.Id;
+        staffRegistrationStatus.UpdatedNo = staffRegistrationStatus.UpdatedNo.HasValue ? ++staffRegistrationStatus.UpdatedNo : staffRegistrationStatus.UpdatedNo = 1;
+
+        db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+        {
+            StaffId = CryptoSecurity.Decrypt<int>(ide),
+            StatusTypeId = (int)Status.Finished,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
+
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
         return RedirectToAction(nameof(Index));
     }
 
@@ -989,7 +1001,7 @@ public class StaffController : BaseController
 
     #region List
 
-    [HttpGet, Authorize(Policy = "21s:r")]
+    [HttpGet, Authorize(Policy = "21:m")]
     [Description("Arb Tahiri", "Entry home. Search for staff.")]
     public IActionResult Index() => View();
 
@@ -1000,10 +1012,11 @@ public class StaffController : BaseController
         var staffList = await db.StaffDepartment
             .Include(a => a.Staff).ThenInclude(a => a.User)
             .Include(a => a.Department)
-            .Where(a => a.DepartmentId == (search.Department ?? a.DepartmentId)
-                && a.StaffTypeId == (search.Department ?? a.StaffTypeId)
+            .Where(a => a.Staff.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished)
+                && a.DepartmentId == (search.Department ?? a.DepartmentId)
+                && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
                 && a.EndDate >= DateTime.Now
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber.Contains(search.PersonalNumber))
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
                 && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
                 && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
             .AsSplitQuery()
@@ -1030,7 +1043,7 @@ public class StaffController : BaseController
         var list = await db.Staff
             .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
             .Include(a => a.User)
-            .Where(a => !a.StaffRegistrationStatus.Any(a => a.StatusTypeId == (int)Status.Finished))
+            .Where(a => !a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -1053,7 +1066,7 @@ public class StaffController : BaseController
 
     #region Main form
 
-    [HttpGet, Authorize(Policy = "22p:r")]
+    [HttpGet, Authorize(Policy = "25:m")]
     [Description("Arb Tahiri", "Form to view the profile of staff.")]
     public async Task<IActionResult> Profile(string ide)
     {

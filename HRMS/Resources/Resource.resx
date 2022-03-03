@@ -1350,4 +1350,7 @@
   <data name="ListOfEvaluationStudentsStaff" xml:space="preserve">
     <value>Lista e vlerësimeve nga studentët për stafin</value>
   </data>
+  <data name="StaffNotCompleted" xml:space="preserve">
+    <value>Nuk mund të përfundoni regjistrimin e stafit pa regjistruar në departament!</value>
+  </data>
 </root>

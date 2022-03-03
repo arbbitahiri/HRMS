@@ -37,12 +37,9 @@ public class AuthorizationController : BaseController
         this.function = function;
     }
 
-    [Authorize("50:r"), Description("Arb Tahiri", "Entry form for authorizations.")]
-    public IActionResult Index() => View();
-
     #region Authorization
 
-    [Description("Arb Tahiri", "Authorization configuration.")]
+    [Authorize(Policy = "51:m"), Description("Arb Tahiri", "Authorization configuration.")]
     public IActionResult Authorization() => View();
 
     [HttpPost, Authorize(Policy = "51:c"), ValidateAntiForgeryToken]
@@ -170,6 +167,8 @@ public class AuthorizationController : BaseController
         roleClaims = roleClaims.Where(a => !(menuPolicies.Any(b => b.Split(":")[0] == a.ClaimType) && menuPolicies.Any(b => b.Split(":")[1] == a.ClaimValue))).ToList();
         roleClaims = roleClaims.Where(a => !(submenuPolicies.Any(b => b.Split(":")[0] == a.ClaimType) && submenuPolicies.Any(b => b.Split(":")[1] == a.ClaimValue))).ToList();
 
+        //rules = rules.Where(a => a.Policy.Split(":")[1] != "m").ToList();
+
         rules.ForEach(rule => rule.HasAccess = roleClaims.Any(a => a.ClaimType == rule.Policy.Split(":")[0] && a.ClaimValue == rule.Policy.Split(":")[1]));
         return PartialView(rules);
     }
@@ -198,7 +197,7 @@ public class AuthorizationController : BaseController
 
     #endregion
 
-    [Description("Arb Tahiri", "Form to display tabs for Menu and Submenu.")]
+    [Authorize(Policy = "52:m"), Description("Arb Tahiri", "Form to display tabs for Menu and Submenu.")]
     public IActionResult MenuIndex() => View();
 
     #region Menu

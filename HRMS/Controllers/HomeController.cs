@@ -28,7 +28,7 @@ public class HomeController : BaseController
     {
     }
 
-    [Description("Arb Tahiri", "Entry home.")]
+    [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index()
     {
         ViewData["Title"] = "Home";

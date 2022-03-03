@@ -1828,6 +1828,10 @@ namespace HRMS.Data.General
                     .IsRequired()
                     .HasMaxLength(450);
 
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
                 entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
@@ -1849,6 +1853,11 @@ namespace HRMS.Data.General
                     .HasForeignKey(d => d.StatusTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffRegistrationStatus_StatusType");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.StaffRegistrationStatus)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_StaffRegistrationStatus_AspNetUsers_Updated");
             });
 
             modelBuilder.Entity<StaffType>(entity =>

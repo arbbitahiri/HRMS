@@ -37,12 +37,12 @@ public class ConfigurationController : BaseController
         this.func = func;
     }
 
-    [Description("Arb Tahiri", "Entry home.")]
+    [Authorize(Policy = "1c:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index() => View();
 
     #region Application settings
 
-    [HttpGet, Authorize(Policy = "15:r")]
+    [HttpGet, Authorize(Policy = "15:m")]
     [Description("Arb Tahiri", "Form to display list of application settings.")]
     public IActionResult AppSettings()
     {
@@ -115,7 +115,7 @@ public class ConfigurationController : BaseController
 
     #region => List
 
-    [Authorize(Policy = "33:r"), Description("Arb Tahiri", "Entry form, list of subjects.")]
+    [Authorize(Policy = "33:m"), Description("Arb Tahiri", "Entry form, list of subjects.")]
     public async Task<IActionResult> SubjectIndex()
     {
         var subjects = await db.Subject

@@ -3004,6 +3004,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nuk mund të përfundoni regjistrimin e stafit pa regjistruar në departament!.
+        /// </summary>
+        public static string StaffNotCompleted {
+            get {
+                return ResourceManager.GetString("StaffNotCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji stafit.
         /// </summary>
         public static string StaffType {

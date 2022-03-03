@@ -23,7 +23,7 @@ public class LeaveController : BaseController
     {
     }
 
-    [Authorize("31:r"), Description("Arb Tahiri", "Entry form. List of holidays.")]
+    [Authorize("31:m"), Description("Arb Tahiri", "Entry form. List of holidays.")]
     public IActionResult Index() => View();
 
     #region List
@@ -35,10 +35,10 @@ public class LeaveController : BaseController
         var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.Manager && a.Staff.UserId == user.Id);
 
         var holidays = await db.Leave
-            .Where(a => a.Active && a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Pending)
+            .Where(a => a.Active && (manager || a.Staff.UserId == user.Id)
                 && a.LeaveTypeId == (search.LeaveTypeId ?? a.LeaveTypeId)
                 && a.StaffId == (search.StaffId ?? a.StaffId)
-                && (manager || a.Staff.UserId == user.Id))
+                && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Pending))
             .Select(a => new List
             {
                 LeaveIde = CryptoSecurity.Encrypt(a.LeaveId),
@@ -63,7 +63,7 @@ public class LeaveController : BaseController
         var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.Manager && a.Staff.UserId == user.Id);
 
         var holidays = await db.Leave
-            .Where(a => a.Active && a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Approved)
+            .Where(a => a.Active && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Approved)
                 && a.LeaveTypeId == (search.LeaveTypeId ?? a.LeaveTypeId)
                 && a.StaffId == (search.StaffId ?? a.StaffId)
                 && (manager || a.Staff.UserId == user.Id))
@@ -91,7 +91,7 @@ public class LeaveController : BaseController
         var manager = await db.StaffDepartment.AnyAsync(a => a.StaffTypeId == (int)StaffTypeEnum.Manager && a.Staff.UserId == user.Id);
 
         var holidays = await db.Leave
-            .Where(a => a.Active && a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Rejected)
+            .Where(a => a.Active && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Rejected)
                 && a.LeaveTypeId == (search.LeaveTypeId ?? a.LeaveTypeId)
                 && a.StaffId == (search.StaffId ?? a.StaffId)
                 && (manager || a.Staff.UserId == user.Id))
@@ -160,7 +160,7 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
         }
 
-        var holiday = new Leave
+        var leave = new Leave
         {
             LeaveTypeId = create.ALeaveTypeId,
             StaffId = staffId,
@@ -172,12 +172,12 @@ public class LeaveController : BaseController
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         };
-        db.Leave.Add(holiday);
+        db.Leave.Add(leave);
         await db.SaveChangesAsync();
 
         db.LeaveStatus.Add(new LeaveStatus
         {
-            LeaveId = holiday.LeaveId,
+            LeaveId = leave.LeaveId,
             StatusTypeId = (int)Status.Pending,
             Active = true,
             InsertedDate = DateTime.Now,
@@ -228,6 +228,8 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        int leaveId = CryptoSecurity.Decrypt<int>(review.LeaveIde);
+
         if (review.StatusTypeId == (int)Status.Approved && review.LeaveTypeEnum != LeaveTypeEnum.Unpaid)
         {
             var leaveDays = await db.LeaveStaffDays
@@ -242,25 +244,40 @@ public class LeaveController : BaseController
                 return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
             }
 
+            int actualRemainingDays = (int)(leaveDays.RemainingDays - days);
+
             db.LeaveStaffDays.Add(new LeaveStaffDays
             {
                 LeaveTypeId = (int)review.LeaveTypeEnum,
                 StaffId = CryptoSecurity.Decrypt<int>(review.StaffIde),
-                RemainingDays = (int)(leaveDays.RemainingDays - days),
+                RemainingDays = actualRemainingDays,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
+
+            var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+            leave.RemainingDays = actualRemainingDays;
+            leave.UpdatedDate = DateTime.Now;
+            leave.UpdatedFrom = user.Id;
+            leave.UpdatedNo = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
         }
 
-        var holidayStatus = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(review.LeaveIde));
-        holidayStatus.StatusTypeId = review.StatusTypeId;
-        holidayStatus.Description = review.Description;
-        holidayStatus.Active = true;
-        holidayStatus.UpdatedDate = DateTime.Now;
-        holidayStatus.UpdatedFrom = user.Id;
-        holidayStatus.UpdatedNo = holidayStatus.UpdatedNo.HasValue ? ++holidayStatus.UpdatedNo : holidayStatus.UpdatedNo = 1;
+        var leaveStatus = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+        leaveStatus.Active = false;
+        leaveStatus.UpdatedDate = DateTime.Now;
+        leaveStatus.UpdatedFrom = user.Id;
+        leaveStatus.UpdatedNo = leaveStatus.UpdatedNo.HasValue ? ++leaveStatus.UpdatedNo : leaveStatus.UpdatedNo = 1;
 
+        db.LeaveStatus.Add(new LeaveStatus
+        {
+            LeaveId = leaveId,
+            StatusTypeId = review.StatusTypeId,
+            Description = review.Description,
+            Active = false,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
         await db.SaveChangesAsync();
         // TODO: send email to inform staff for the holiday request. Remind of remaining days.
 
@@ -274,7 +291,7 @@ public class LeaveController : BaseController
     [Authorize(Policy = "31:e"), Description("Arb Tahiri", "Form to edit a holiday.")]
     public async Task<IActionResult> _Edit(string ide)
     {
-        var holiday = await db.Leave
+        var leave = await db.Leave
             .Where(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new Create
             {
@@ -285,7 +302,7 @@ public class LeaveController : BaseController
                 Description = a.Description,
                 RemainingDays = a.RemainingDays,
             }).FirstOrDefaultAsync();
-        return PartialView(holiday);
+        return PartialView(leave);
     }
 
     [HttpPost, Authorize(Policy = "31:e"), ValidateAntiForgeryToken]
@@ -323,14 +340,14 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
         }
 
-        var holiday = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(edit.LeaveIde));
-        holiday.StartDate = startDate;
-        holiday.EndDate = endDate;
-        holiday.RemainingDays = (int)(leaveDays.RemainingDays - days);
-        holiday.Description = edit.Description;
-        holiday.UpdatedDate = DateTime.Now;
-        holiday.UpdatedFrom = user.Id;
-        holiday.UpdatedNo = holiday.UpdatedNo.HasValue ? ++holiday.UpdatedNo : holiday.UpdatedNo = 1;
+        var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(edit.LeaveIde));
+        leave.StartDate = startDate;
+        leave.EndDate = endDate;
+        leave.RemainingDays = (int)(leaveDays.RemainingDays - days);
+        leave.Description = edit.Description;
+        leave.UpdatedDate = DateTime.Now;
+        leave.UpdatedFrom = user.Id;
+        leave.UpdatedNo = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
 
         await db.SaveChangesAsync();
 
@@ -378,18 +395,29 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var holiday = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(ide));
-        holiday.Active = false;
-        holiday.UpdatedDate = DateTime.Now;
-        holiday.UpdatedFrom = user.Id;
-        holiday.UpdatedNo  = holiday.UpdatedNo.HasValue ? ++holiday.UpdatedNo : holiday.UpdatedNo = 1;
+        int leaveId = CryptoSecurity.Decrypt<int>(ide);
 
-        var holidayStatus = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(ide));
-        holidayStatus.StatusTypeId = (int)Status.Rejected;
-        holidayStatus.Active = false;
-        holidayStatus.UpdatedDate = DateTime.Now;
-        holidayStatus.UpdatedFrom = user.Id;
-        holidayStatus.UpdatedNo = holidayStatus.UpdatedNo.HasValue ? ++holidayStatus.UpdatedNo : holidayStatus.UpdatedNo = 1;
+        var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+        leave.Active = false;
+        leave.UpdatedDate = DateTime.Now;
+        leave.UpdatedFrom = user.Id;
+        leave.UpdatedNo  = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
+
+        var leaveStatis = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+        leaveStatis.Active = false;
+        leaveStatis.UpdatedDate = DateTime.Now;
+        leaveStatis.UpdatedFrom = user.Id;
+        leaveStatis.UpdatedNo = leaveStatis.UpdatedNo.HasValue ? ++leaveStatis.UpdatedNo : leaveStatis.UpdatedNo = 1;
+
+        db.LeaveStatus.Add(new LeaveStatus
+        {
+            LeaveId = leaveId,
+            StatusTypeId = (int)Status.Rejected,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }

@@ -1095,6 +1095,9 @@
   <data name="StaffList" xml:space="preserve">
     <value>Staff list</value>
   </data>
+  <data name="StaffNotCompleted" xml:space="preserve">
+    <value>You can not complete staff registration without registering with the department!</value>
+  </data>
   <data name="StaffType" xml:space="preserve">
     <value>Staff type</value>
   </data>

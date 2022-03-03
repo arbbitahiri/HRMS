@@ -25,10 +25,10 @@ public class EvaluationController : BaseController
     {
     }
 
-    [Authorize(Policy = "71:c"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
+    [Authorize(Policy = "71:m"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
     public IActionResult Index() => View();
 
-    [Authorize(Policy = "70:r"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
+    [Authorize(Policy = "70:m"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
     public IActionResult Search() => View();
 
     #region Search for evaluations

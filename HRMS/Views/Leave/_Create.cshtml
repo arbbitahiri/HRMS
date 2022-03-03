@@ -32,12 +32,22 @@
         <div class="row form-group">
             <div class="col-md-6">
                 <label asp-for="StartDate" class="required"></label>
-                <input asp-for="StartDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate"/>
+                <div class="input-group date">
+                    <input asp-for="StartDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate" style="cursor: default;"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="col-md-6">
                 <label asp-for="EndDate" class="required"></label>
-                <input asp-for="EndDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate"/>
+                <div class="input-group date">
+                    <input asp-for="EndDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate" style="cursor: default;"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
         </div>

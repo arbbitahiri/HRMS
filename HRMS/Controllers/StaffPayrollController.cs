@@ -24,7 +24,7 @@ public class StaffPayrollController : BaseController
     {
     }
 
-    [Authorize(Policy = "80:r"), Description("Arb Tahiri", "Entry form to display list of staff payroll.")]
+    [Authorize(Policy = "80:m"), Description("Arb Tahiri", "Entry form to display list of staff payroll.")]
     public IActionResult Index() => View();
 
     [HttpPost, Authorize(Policy = "81:r"), ValidateAntiForgeryToken]

@@ -29,12 +29,12 @@ public class ApplicationController : BaseController
         this.function = function;
     }
 
-    [Authorize(Policy = "60:r"), Description("Arb Tahiri", "Entry form.")]
+    [Authorize(Policy = "60:m"), Description("Arb Tahiri", "Entry form.")]
     public IActionResult Index() => View();
 
     #region Application logs
 
-    [HttpGet, Authorize(Policy = "61:r"), Description("Arb Tahiri", "Entry form for application logs.")]
+    [HttpGet, Authorize(Policy = "61:m"), Description("Arb Tahiri", "Entry form for application logs.")]
     public IActionResult Logs() => View();
 
     [HttpPost, Authorize(Policy = "61:r"), ValidateAntiForgeryToken]
@@ -66,7 +66,7 @@ public class ApplicationController : BaseController
 
     #region Security logs
 
-    [Authorize(Policy = "62:r"), Description("Arb Tahiri", "Entry form for security logs.")]
+    [Authorize(Policy = "62:m"), Description("Arb Tahiri", "Entry form for security logs.")]
     public IActionResult Security() => View();
 
     [SupportedOSPlatform("windows")]

@@ -26,7 +26,7 @@ public class TablesController : BaseController
 
     #region Table list
 
-    [Authorize(Policy = "16:r"), Description("Arb Tahiri", "Entry form.")]
+    [Authorize(Policy = "16:m"), Description("Arb Tahiri", "Entry form.")]
     public IActionResult Index() => View();
 
     [Authorize(Policy = "16:r"), Description("Arb Tahiri", "List of lookup tables.")]

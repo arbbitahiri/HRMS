@@ -43,7 +43,7 @@ public class AdministrationController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "41:r"), Description("Arb Tahiri", "Entry home.")]
+    [HttpGet, Authorize(Policy = "41:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index() => View();
 
     [HttpPost, Authorize(Policy = "41:r"), ValidateAntiForgeryToken]
@@ -375,7 +375,7 @@ public class AdministrationController : BaseController
 
     #region => List
 
-    [HttpGet, Authorize(Policy = "42:r")]
+    [HttpGet, Authorize(Policy = "42:m")]
     [Description("Arb Tahiri", "Entry form for list of roles.")]
     public async Task<IActionResult> Roles()
     {
