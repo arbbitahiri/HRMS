@@ -1096,7 +1096,6 @@ public class StaffController : BaseController
 
         var profile = new ProfileVM
         {
-            PersonalNumber = ide,
             StaffDetails = staffDetails,
             QualificationsCount = await db.StaffQualification.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
             DocumentsCount = await db.StaffDocument.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
@@ -1218,14 +1217,14 @@ public class StaffController : BaseController
 
     [HttpPost, Authorize(Policy = "22p:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to change profile photo.")]
-    public async Task<IActionResult> ChangeImage(IFormFile Image, string PersonalNumber)
+    public async Task<IActionResult> ChangeImage(IFormFile Image, string ide)
     {
-        if (string.IsNullOrEmpty(PersonalNumber))
+        if (string.IsNullOrEmpty(ide))
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        string userId = await db.Staff.Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(PersonalNumber)).Select(a => a.UserId).FirstOrDefaultAsync();
+        string userId = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.UserId).FirstOrDefaultAsync();
         var aspUser = await db.AspNetUsers.FirstOrDefaultAsync(a => a.Id == userId);
 
         string filePath = Image != null ? await SaveImage(environment, Image, "Users") : null;

@@ -12,7 +12,7 @@
             <div class="card-body box-profile">
                 <div class="text-center">
                     <form asp-action="ChangeImage" asp-controller="Staff" id="frm_change_image" enctype="multipart/form-data" data-ajax="true" data-ajax-method="post" data-ajax-success="success_change_image">
-                        <input asp-for="PersonalNumber" type="hidden" />
+                        <input asp-for="StaffDetails.Ide" type="hidden" />
                         <label>
                             <img id="img_upload" loading="lazy"
                                 class="profile-user-img img-fluid img-circle"
