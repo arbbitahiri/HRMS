@@ -31,17 +31,18 @@ public class HomeController : BaseController
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index()
     {
-        ViewData["Title"] = Resource.HomePage;
+        //ViewData["Title"] = Resource.HomePage;
 
-        var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+        //var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
 
-        return getRole.Value switch
-        {
-            "Administrator" => RedirectToAction(nameof(Administrator)),
-            "Lecturer" => RedirectToAction(nameof(Lecturer)),
-            "Manager" => RedirectToAction(nameof(Manager)),
-            _ => View()
-        };
+        //return getRole.Value switch
+        //{
+        //    "Administrator" => RedirectToAction(nameof(Administrator)),
+        //    "Lecturer" => RedirectToAction(nameof(Lecturer)),
+        //    "Manager" => RedirectToAction(nameof(Manager)),
+        //    _ => View()
+        //};
+        return View();
     }
 
     #region Dashboards

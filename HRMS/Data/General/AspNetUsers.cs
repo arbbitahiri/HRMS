@@ -71,7 +71,8 @@ namespace HRMS.Data.General
             StaffPayroll = new HashSet<StaffPayroll>();
             StaffQualificationInsertedFromNavigation = new HashSet<StaffQualification>();
             StaffQualificationUpdatedFromNavigation = new HashSet<StaffQualification>();
-            StaffRegistrationStatus = new HashSet<StaffRegistrationStatus>();
+            StaffRegistrationStatusInsertedFromNavigation = new HashSet<StaffRegistrationStatus>();
+            StaffRegistrationStatusUpdatedFromNavigation = new HashSet<StaffRegistrationStatus>();
             StaffTypeInsertedFromNavigation = new HashSet<StaffType>();
             StaffTypeUpdatedFromNavigation = new HashSet<StaffType>();
             StaffUpdatedFromNavigation = new HashSet<Staff>();
@@ -177,7 +178,8 @@ namespace HRMS.Data.General
         public virtual ICollection<StaffPayroll> StaffPayroll { get; set; }
         public virtual ICollection<StaffQualification> StaffQualificationInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffQualification> StaffQualificationUpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
+        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatusInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatusUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffType> StaffTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffType> StaffTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<Staff> StaffUpdatedFromNavigation { get; set; }
