@@ -1,6 +1,7 @@
 ﻿using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Models.Home;
 using HRMS.Models.Home.SideProfile;
 using HRMS.Resources;
 using HRMS.Utilities;
@@ -31,41 +32,122 @@ public class HomeController : BaseController
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
     public IActionResult Index()
     {
-        //ViewData["Title"] = Resource.HomePage;
+        ViewData["Title"] = Resource.HomePage;
 
-        //var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+        var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
 
-        //return getRole.Value switch
-        //{
-        //    "Administrator" => RedirectToAction(nameof(Administrator)),
-        //    "Lecturer" => RedirectToAction(nameof(Lecturer)),
-        //    "Manager" => RedirectToAction(nameof(Manager)),
-        //    _ => View()
-        //};
-        return View();
+        return getRole.Value switch
+        {
+            "Administrator" => RedirectToAction(nameof(Administrator)),
+            "Lecturer" => RedirectToAction(nameof(Lecturer)),
+            "Manager" => RedirectToAction(nameof(Manager)),
+            _ => View()
+        };
     }
 
     #region Dashboards
 
-    [HttpGet, Authorize("1ha:r"), Description("Arb Tahiri", "Home page for administrator.")]
+    [HttpGet, Description("Arb Tahiri", "Home page for administrator.")]
     public async Task<IActionResult> Administrator()
     {
         ViewData["Title"] = Resource.HomePage;
-        return View();
+
+        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+
+        var dashboard = new AdministratorVM
+        {
+            NumberOfUsers = await db.AspNetUsers.CountAsync(),
+            NumberOfStaff = await db.Staff.CountAsync(),
+            //NumberOfDocuments = await db.StaffDocument.CountAsync(a => a.Active),
+            NumberOfStaffSubjects = await db.StaffDepartmentSubject.CountAsync(a => a.EndDate >= DateTime.Now),
+            NumberOfAvailableLeave = leaveCount,
+            UserRoles = await db.AspNetRoles
+                .Select(a => new User
+                {
+                    Role = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
+                    UserCount = a.User.Count
+                }).ToListAsync(),
+            Logs = await db.Log
+                .Where(a => a.UserId == user.Id)
+                .OrderByDescending(a => a.LogId)
+                .Take(100).AsSplitQuery()
+                .Select(a => new LogData
+                {
+                    Action = a.Action,
+                    Description = a.Description,
+                    InsertDate = a.InsertedDate.ToString("dd/MM/yyyy HH:mm")
+                }).ToListAsync()
+        };
+        return View(dashboard);
     }
 
-    [HttpGet, Authorize("1hl:r"), Description("Arb Tahiri", "Home page for lecturer.")]
+    [HttpGet, Description("Arb Tahiri", "Home page for lecturer.")]
     public async Task<IActionResult> Lecturer()
     {
         ViewData["Title"] = Resource.HomePage;
-        return View();
+
+        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+
+        var dashboard = new LecturerVM
+        {
+            NumberOfStaffSubjects = await db.StaffDepartmentSubject.CountAsync(a => a.StaffDepartment.Staff.UserId == user.Id && a.EndDate >= DateTime.Now && a.StaffDepartment.EndDate >= DateTime.Now),
+            NumberOfQualifications = await db.StaffQualification.CountAsync(a => a.Staff.UserId == user.Id),
+            NumberOfDocuments = await db.StaffDocument.CountAsync(a => a.Active && a.Staff.UserId == user.Id),
+            NumberOfAvailableLeave = leaveCount,
+            StaffDocuments = await db.StaffDocument
+                .Where(a => a.Staff.UserId == user.Id)
+                .GroupBy(a => a.DocumentTypeId)
+                .Select(a => new Document
+                {
+                    DocumentType = a.Select(a => user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn).FirstOrDefault(),
+                    DocumentCount = a.Count()
+                }).ToListAsync(),
+            Logs = await db.Log
+                .Where(a => a.UserId == user.Id)
+                .OrderByDescending(a => a.LogId)
+                .Take(100).AsSplitQuery()
+                .Select(a => new LogData
+                {
+                    Action = a.Action,
+                    Description = a.Description,
+                    InsertDate = a.InsertedDate.ToString("dd/MM/yyyy HH:mm")
+                }).ToListAsync()
+        };
+        return View(dashboard);
     }
 
-    [HttpGet, Authorize("1hm:r"), Description("Arb Tahiri", "Home page for manager.")]
+    [HttpGet, Description("Arb Tahiri", "Home page for manager.")]
     public async Task<IActionResult> Manager()
     {
         ViewData["Title"] = Resource.HomePage;
-        return View();
+
+        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+
+        var dashboard = new ManagerVM
+        {
+            NumberOfStaff = await db.Staff.CountAsync(),
+            NumberOfStaffSubjects = await db.StaffDepartmentSubject.CountAsync(a => a.EndDate >= DateTime.Now),
+            NumberOfDocuments = await db.StaffDocument.CountAsync(a => a.Active),
+            NumberOfAvailableLeave = leaveCount,
+            StaffDepartments = await db.StaffDepartment
+                .GroupBy(a => a.DepartmentId)
+                .Select(a => new DepartmentStaff
+                {
+                    Department = a.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).FirstOrDefault(),
+                    StaffCount = a.Count()
+                }).ToListAsync(),
+            Logs = await db.Log
+                .Where(a => a.UserId == user.Id)
+                .OrderByDescending(a => a.LogId)
+                .Take(100).AsSplitQuery()
+                .Select(a => new LogData
+                {
+                    Action = a.Action,
+                    Description = a.Description,
+                    InsertDate = a.InsertedDate.ToString("dd/MM/yyyy HH:mm")
+                }).ToListAsync()
+        };
+        return View(dashboard);
     }
 
     #endregion

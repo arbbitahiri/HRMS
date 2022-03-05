@@ -448,6 +448,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Veprimet në sistem.
+        /// </summary>
+        public static string AppActions {
+            get {
+                return ResourceManager.GetString("AppActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gjurmët e sistemit.
         /// </summary>
         public static string ApplicationLogs {
@@ -2230,6 +2239,42 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numri ditëve të për të pushimit vjetor.
+        /// </summary>
+        public static string NumberOfAvailableLeave {
+            get {
+                return ResourceManager.GetString("NumberOfAvailableLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri dokumenteve.
+        /// </summary>
+        public static string NumberOfDocuments {
+            get {
+                return ResourceManager.GetString("NumberOfDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri dokumenteve sipas llojit.
+        /// </summary>
+        public static string NumberOfDocumentsByType {
+            get {
+                return ResourceManager.GetString("NumberOfDocumentsByType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri kualifikimeve.
+        /// </summary>
+        public static string NumberOfQualifications {
+            get {
+                return ResourceManager.GetString("NumberOfQualifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numri pyetjeve.
         /// </summary>
         public static string NumberOfQuestions {
@@ -2239,11 +2284,56 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numri stafit.
+        /// </summary>
+        public static string NumberOfStaff {
+            get {
+                return ResourceManager.GetString("NumberOfStaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri stafit sipas departamentit.
+        /// </summary>
+        public static string NumberOfStaffByDepartment {
+            get {
+                return ResourceManager.GetString("NumberOfStaffByDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri ligjëruesve.
+        /// </summary>
+        public static string NumberOfStaffSubjects {
+            get {
+                return ResourceManager.GetString("NumberOfStaffSubjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numri studentëve.
         /// </summary>
         public static string NumberOfStudents {
             get {
                 return ResourceManager.GetString("NumberOfStudents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përdoruesve.
+        /// </summary>
+        public static string NumberOfUsers {
+            get {
+                return ResourceManager.GetString("NumberOfUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përdoruesve sipas grupeve.
+        /// </summary>
+        public static string NumberOfUsersByGroups {
+            get {
+                return ResourceManager.GetString("NumberOfUsersByGroups", resourceCulture);
             }
         }
         

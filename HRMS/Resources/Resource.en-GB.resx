@@ -246,6 +246,9 @@
   <data name="Answers" xml:space="preserve">
     <value>Answers</value>
   </data>
+  <data name="AppActions" xml:space="preserve">
+    <value>Application actions</value>
+  </data>
   <data name="ApplicationLogs" xml:space="preserve">
     <value>Application logs</value>
   </data>
@@ -837,11 +840,38 @@
   <data name="NumberOfAnswers" xml:space="preserve">
     <value>Number of answers</value>
   </data>
+  <data name="NumberOfAvailableLeave" xml:space="preserve">
+    <value>Number of days for annual leave</value>
+  </data>
+  <data name="NumberOfDocuments" xml:space="preserve">
+    <value>Number of documents</value>
+  </data>
+  <data name="NumberOfDocumentsByType" xml:space="preserve">
+    <value>Number of documents by type</value>
+  </data>
+  <data name="NumberOfQualifications" xml:space="preserve">
+    <value>Number of qualifications</value>
+  </data>
   <data name="NumberOfQuestions" xml:space="preserve">
     <value>Number of questions</value>
   </data>
+  <data name="NumberOfStaff" xml:space="preserve">
+    <value>Number of staff</value>
+  </data>
+  <data name="NumberOfStaffByDepartment" xml:space="preserve">
+    <value>Number of staff by department</value>
+  </data>
+  <data name="NumberOfStaffSubjects" xml:space="preserve">
+    <value>Number of lecturers</value>
+  </data>
   <data name="NumberOfStudents" xml:space="preserve">
     <value>Number of students</value>
+  </data>
+  <data name="NumberOfUsers" xml:space="preserve">
+    <value>Number of users</value>
+  </data>
+  <data name="NumberOfUsersByGroups" xml:space="preserve">
+    <value>Number of users by groups</value>
   </data>
   <data name="NumericalQuestionsINFO" xml:space="preserve">
     <value>Please describe how much you agree or disagree with the statements below. Mark as checked 0- do not know / have no answer, 1- Disagree at all, 2- Disagree, 3- Neither agree/disagree, 4- Agree, 5- Strongly agree</value>

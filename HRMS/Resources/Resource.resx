@@ -1356,4 +1356,34 @@
   <data name="HomePage" xml:space="preserve">
     <value>Ballina</value>
   </data>
+  <data name="AppActions" xml:space="preserve">
+    <value>Veprimet në sistem</value>
+  </data>
+  <data name="NumberOfAvailableLeave" xml:space="preserve">
+    <value>Numri ditëve të për të pushimit vjetor</value>
+  </data>
+  <data name="NumberOfDocuments" xml:space="preserve">
+    <value>Numri dokumenteve</value>
+  </data>
+  <data name="NumberOfDocumentsByType" xml:space="preserve">
+    <value>Numri dokumenteve sipas llojit</value>
+  </data>
+  <data name="NumberOfQualifications" xml:space="preserve">
+    <value>Numri kualifikimeve</value>
+  </data>
+  <data name="NumberOfStaff" xml:space="preserve">
+    <value>Numri stafit</value>
+  </data>
+  <data name="NumberOfStaffByDepartment" xml:space="preserve">
+    <value>Numri stafit sipas departamentit</value>
+  </data>
+  <data name="NumberOfStaffSubjects" xml:space="preserve">
+    <value>Numri ligjëruesve</value>
+  </data>
+  <data name="NumberOfUsers" xml:space="preserve">
+    <value>Numri përdoruesve</value>
+  </data>
+  <data name="NumberOfUsersByGroups" xml:space="preserve">
+    <value>Numri përdoruesve sipas grupeve</value>
+  </data>
 </root>
