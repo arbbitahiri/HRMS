@@ -160,4 +160,12 @@ public class DDLRepository : IDDLRepository
                 Value = a.StaffId.ToString(),
                 Text = a.FirstName + " " + a.LastName
             }).ToListAsync();
+
+    public async Task<List<SelectListItem>> GetDocumentFor(LanguageEnum lang) =>
+        await db.DocumentFor
+            .Select(a => new SelectListItem
+            {
+                Value = a.DocumentForId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
 }

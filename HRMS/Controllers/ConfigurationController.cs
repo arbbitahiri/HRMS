@@ -205,7 +205,7 @@ public class ConfigurationController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
+        subject.UpdatedNo = UpdateNo(subject.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -228,7 +228,7 @@ public class ConfigurationController : BaseController
         subject.Active = false;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
+        subject.UpdatedNo = UpdateNo(subject.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataDeletedSuccessfully });

@@ -7,12 +7,15 @@ namespace HRMS.Data.General
     {
         public AspNetUsers()
         {
-            AppSettings = new HashSet<AppSettings>();
+            AppSettingsInsertedFromNavigation = new HashSet<AppSettings>();
+            AppSettingsUpdatedFromNavigation = new HashSet<AppSettings>();
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
             DepartmentInsertedFromNavigation = new HashSet<Department>();
             DepartmentUpdatedFromNavigation = new HashSet<Department>();
+            DocumentForInsertedFromNavigation = new HashSet<DocumentFor>();
+            DocumentForUpdatedFromNavigation = new HashSet<DocumentFor>();
             DocumentTypeInsertedFromNavigation = new HashSet<DocumentType>();
             DocumentTypeUpdatedFromNavigation = new HashSet<DocumentType>();
             EducationLevelTypeInsertedFromNavigation = new HashSet<EducationLevelType>();
@@ -114,12 +117,15 @@ namespace HRMS.Data.General
         public string InsertedFrom { get; set; }
 
         public virtual Department Department { get; set; }
-        public virtual ICollection<AppSettings> AppSettings { get; set; }
+        public virtual ICollection<AppSettings> AppSettingsInsertedFromNavigation { get; set; }
+        public virtual ICollection<AppSettings> AppSettingsUpdatedFromNavigation { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual ICollection<Department> DepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<Department> DepartmentUpdatedFromNavigation { get; set; }
+        public virtual ICollection<DocumentFor> DocumentForInsertedFromNavigation { get; set; }
+        public virtual ICollection<DocumentFor> DocumentForUpdatedFromNavigation { get; set; }
         public virtual ICollection<DocumentType> DocumentTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<DocumentType> DocumentTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<EducationLevelType> EducationLevelTypeInsertedFromNavigation { get; set; }

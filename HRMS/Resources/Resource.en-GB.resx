@@ -420,6 +420,9 @@
   <data name="DocumentType" xml:space="preserve">
     <value>Document type</value>
   </data>
+  <data name="DocumentTypeFor" xml:space="preserve">
+    <value>Document type for action</value>
+  </data>
   <data name="DontAgree" xml:space="preserve">
     <value>Do not agree</value>
   </data>

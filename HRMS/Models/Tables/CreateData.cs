@@ -18,6 +18,5 @@ public class CreateData
     public string NameEN { get; set; }
 
     public string OtherData { get; set; }
-
-    public bool Active { get; set; }
+    public int OtherDataId { get; set; }
 }

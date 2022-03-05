@@ -59,13 +59,9 @@ $(document).ready(function () {
 
     if (culture == 'sq-AL') {
         $("input[type='text']").prop('spellcheck', false);
-    } else {
-        $("input[type='text']").prop('spellcheck', true);
-    }
-
-    if (culture == 'sq-AL') {
         $('textarea').prop('spellcheck', false);
     } else {
+        $("input[type='text']").prop('spellcheck', true);
         $('textarea').prop('spellcheck', true);
     }
 });
@@ -138,7 +134,7 @@ $(document).ajaxError(function (error) {
             confirmButtonText: resources.responseJSON["Okay"]
         });
     } else if (error.handleObj.handler.arguments[1].status == 0) {
-        //It is not an error. It's just abortion of an ajax call from another ajax call.
+        //window.location.href = '/Home/Index';
     } else if (error.handleObj.handler.arguments[1].status == 307) {
         window.location.href = '/Home/Index';
     } else {

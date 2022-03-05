@@ -39,4 +39,6 @@ public interface IDDLRepository
     Task<List<SelectListItem>> JobTypes(LanguageEnum lang);
 
     Task<List<SelectListItem>> Staff();
+
+    Task<List<SelectListItem>> GetDocumentFor();
 }

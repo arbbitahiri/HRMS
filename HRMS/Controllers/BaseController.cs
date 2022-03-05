@@ -67,7 +67,8 @@ public class BaseController : Controller
         };
 
         var con = context.ActionDescriptor as ControllerActionDescriptor;
-        DescriptionAttribute description = ((DescriptionAttribute[])con.MethodInfo.GetCustomAttributes(typeof(DescriptionAttribute), true)).FirstOrDefault();
+        DescriptionAttribute description = ((DescriptionAttribute[])con.MethodInfo.GetCustomAttributes(typeof(DescriptionAttribute), true))
+            .FirstOrDefault();
 
         var log = new Log
         {
@@ -187,6 +188,9 @@ public class BaseController : Controller
             LeaveTypeEnum.Maternity => 550,
             _ => 0
         };
+
+    protected int? UpdateNo(int? updateNo) =>
+        updateNo.HasValue ? ++updateNo : 1;
 
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {

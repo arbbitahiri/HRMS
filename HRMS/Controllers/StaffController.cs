@@ -236,7 +236,7 @@ public class StaffController : BaseController
         userStaff.PhoneNumber = edit.PhoneNumber;
         staff.UpdatedDate = DateTime.Now;
         staff.UpdatedFrom = user.Id;
-        staff.UpdatedNo = staff.UpdatedNo.HasValue ? ++staff.UpdatedNo : staff.UpdatedNo = 1;
+        staff.UpdatedNo = UpdateNo(staff.UpdatedNo);
 
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
@@ -391,7 +391,7 @@ public class StaffController : BaseController
         qualification.Validity = !string.IsNullOrEmpty(edit.To) ? DateTime.ParseExact(edit.Validity, "dd/MM/yyyy", null) : null;
         qualification.UpdatedDate = DateTime.Now;
         qualification.UpdatedFrom = user.Id;
-        qualification.UpdatedNo = qualification.UpdatedNo.HasValue ? ++qualification.UpdatedNo : qualification.UpdatedNo = 1;
+        qualification.UpdatedNo = UpdateNo(qualification.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -441,6 +441,11 @@ public class StaffController : BaseController
     {
         var qualification = await db.StaffQualification.Where(a => a.StaffQualificationId == CryptoSecurity.Decrypt<int>(ide)).FirstOrDefaultAsync();
         db.Remove(qualification);
+        //qualification.Active = false;
+        //qualification.UpdatedFrom = user.Id;
+        //qualification.UpdatedDate = DateTime.Now;
+        //qualification.UpdatedNo = UpdateNo(qualification.UpdatedNo);
+
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }
@@ -562,7 +567,7 @@ public class StaffController : BaseController
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -580,7 +585,7 @@ public class StaffController : BaseController
         document.Active = false;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -781,7 +786,7 @@ public class StaffController : BaseController
         department.EmployerContribution = edit.EmployerContribution ?? 0;
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
+        department.UpdatedNo = UpdateNo(department.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -799,7 +804,7 @@ public class StaffController : BaseController
         department.EndDate = DateTime.Now.AddDays(-1);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
-        department.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
+        department.UpdatedNo = UpdateNo(department.UpdatedNo);
 
         var subjects = await db.StaffDepartmentSubject.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now).ToListAsync();
         foreach (var subject in subjects)
@@ -808,7 +813,7 @@ public class StaffController : BaseController
             subject.Active = false;
             subject.UpdatedDate = DateTime.Now;
             subject.UpdatedFrom = user.Id;
-            subject.UpdatedNo = department.UpdatedNo.HasValue ? ++department.UpdatedNo : department.UpdatedNo = 1;
+            subject.UpdatedNo = UpdateNo(subject.UpdatedNo);
         }
 
         var userToRemove = await userManager.FindByIdAsync(department.Staff.UserId);
@@ -929,7 +934,7 @@ public class StaffController : BaseController
         subject.Active = edit.Active;
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
+        subject.UpdatedNo = UpdateNo(subject.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -947,7 +952,7 @@ public class StaffController : BaseController
         subject.EndDate = DateTime.Now.AddDays(-1);
         subject.UpdatedDate = DateTime.Now;
         subject.UpdatedFrom = user.Id;
-        subject.UpdatedNo = subject.UpdatedNo.HasValue ? ++subject.UpdatedNo : subject.UpdatedNo = 1;
+        subject.UpdatedNo = UpdateNo(subject.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -981,7 +986,7 @@ public class StaffController : BaseController
         staffRegistrationStatus.Active = false;
         staffRegistrationStatus.UpdatedDate = DateTime.Now;
         staffRegistrationStatus.UpdatedFrom = user.Id;
-        staffRegistrationStatus.UpdatedNo = staffRegistrationStatus.UpdatedNo.HasValue ? ++staffRegistrationStatus.UpdatedNo : staffRegistrationStatus.UpdatedNo = 1;
+        staffRegistrationStatus.UpdatedNo = UpdateNo(staffRegistrationStatus.UpdatedNo);
 
         db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
         {

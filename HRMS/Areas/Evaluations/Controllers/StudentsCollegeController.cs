@@ -120,7 +120,7 @@ public class StudentsCollegeController : BaseController
             evaluationStudentsCollege.Description = create.Description;
             evaluationStudentsCollege.UpdatedDate = DateTime.Now;
             evaluationStudentsCollege.UpdatedFrom = user.Id;
-            evaluationStudentsCollege.UpdatedNo = evaluationStudentsCollege.UpdatedNo.HasValue ? ++evaluationStudentsCollege.UpdatedNo : evaluationStudentsCollege.UpdatedNo = 1;
+            evaluationStudentsCollege.UpdatedNo = UpdateNo(evaluationStudentsCollege.UpdatedNo);
         }
         await db.SaveChangesAsync();
 
@@ -274,7 +274,7 @@ public class StudentsCollegeController : BaseController
             question.QuestionEn = edit.QuestionEN;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else
         {
@@ -283,7 +283,7 @@ public class StudentsCollegeController : BaseController
             question.QuestionEn = edit.QuestionEN;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
 
         await db.SaveChangesAsync();
@@ -304,7 +304,7 @@ public class StudentsCollegeController : BaseController
             question.Active = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else
         {
@@ -312,7 +312,7 @@ public class StudentsCollegeController : BaseController
             question.Active = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
 
         await db.SaveChangesAsync();
@@ -329,7 +329,7 @@ public class StudentsCollegeController : BaseController
             question.Grade = null;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else
         {
@@ -337,7 +337,7 @@ public class StudentsCollegeController : BaseController
             question.Checked = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
 
         await db.SaveChangesAsync();
@@ -359,7 +359,7 @@ public class StudentsCollegeController : BaseController
             question.Grade = null;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
@@ -369,7 +369,7 @@ public class StudentsCollegeController : BaseController
             question.Grade = num;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -389,7 +389,7 @@ public class StudentsCollegeController : BaseController
             question.Checked = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
@@ -404,11 +404,11 @@ public class StudentsCollegeController : BaseController
                 question.EvaluationQuestionnaireOptional.Description = txt;
                 question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
                 question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
-                question.EvaluationQuestionnaireOptional.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+                question.EvaluationQuestionnaireOptional.UpdatedNo = UpdateNo(question.EvaluationQuestionnaireOptional.UpdatedNo);
             }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -522,7 +522,7 @@ public class StudentsCollegeController : BaseController
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -540,7 +540,7 @@ public class StudentsCollegeController : BaseController
         document.Active = false;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -573,7 +573,7 @@ public class StudentsCollegeController : BaseController
         evaluationStatus.Active = false;
         evaluationStatus.UpdatedDate = DateTime.Now;
         evaluationStatus.UpdatedFrom = user.Id;
-        evaluationStatus.UpdatedNo = evaluationStatus.UpdatedNo.HasValue ? ++evaluationStatus.UpdatedNo : evaluationStatus.UpdatedNo = 1;
+        evaluationStatus.UpdatedNo = UpdateNo(evaluationStatus.UpdatedNo);
 
         db.EvaluationStatus.Add(new EvaluationStatus
         {

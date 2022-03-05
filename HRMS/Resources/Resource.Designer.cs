@@ -970,6 +970,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lloji i dokumentit për veprim.
+        /// </summary>
+        public static string DocumentTypeFor {
+            get {
+                return ResourceManager.GetString("DocumentTypeFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nuk pajtohem.
         /// </summary>
         public static string DontAgree {

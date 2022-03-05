@@ -121,7 +121,7 @@ public class SelfController : BaseController
             evaluationSelf.Description = create.Description;
             evaluationSelf.UpdatedDate = DateTime.Now;
             evaluationSelf.UpdatedFrom = user.Id;
-            evaluationSelf.UpdatedNo = evaluationSelf.UpdatedNo.HasValue ? ++evaluationSelf.UpdatedNo : evaluationSelf.UpdatedNo = 1;
+            evaluationSelf.UpdatedNo = UpdateNo(evaluationSelf.UpdatedNo);
         }
         await db.SaveChangesAsync();
 
@@ -347,7 +347,7 @@ public class SelfController : BaseController
             question.QuestionEn = edit.QuestionEN;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else if (edit.QuestionTypeEnum == QuestionType.Optional)
         {
@@ -384,14 +384,14 @@ public class SelfController : BaseController
                         item.OptionTitleEn = option.TitleEN;
                         item.UpdatedDate = DateTime.Now;
                         item.UpdatedFrom = user.Id;
-                        item.UpdatedNo = item.UpdatedNo.HasValue ? ++item.UpdatedNo : item.UpdatedNo = 1;
+                        item.UpdatedNo = UpdateNo(item.UpdatedNo);
                     }
                 }
 
             }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else
         {
@@ -401,7 +401,7 @@ public class SelfController : BaseController
             question.Answer = edit.Answer;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
 
         await db.SaveChangesAsync();
@@ -422,7 +422,7 @@ public class SelfController : BaseController
             question.Active = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else if (questionType == QuestionType.Optional)
         {
@@ -430,7 +430,7 @@ public class SelfController : BaseController
             question.Active = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
         else
         {
@@ -438,7 +438,7 @@ public class SelfController : BaseController
             question.Active = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
         }
 
         await db.SaveChangesAsync();
@@ -485,7 +485,7 @@ public class SelfController : BaseController
             question.Grade = null;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
@@ -495,7 +495,7 @@ public class SelfController : BaseController
             question.Grade = num;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -515,7 +515,7 @@ public class SelfController : BaseController
             question.Checked = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
@@ -530,11 +530,11 @@ public class SelfController : BaseController
                 question.EvaluationQuestionnaireOptional.Description = txt;
                 question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
                 question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
-                question.EvaluationQuestionnaireOptional.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+                question.EvaluationQuestionnaireOptional.UpdatedNo = UpdateNo(question.EvaluationQuestionnaireOptional.UpdatedNo);
             }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -562,7 +562,7 @@ public class SelfController : BaseController
         question.Answer = topicAnswer.Answer;
         question.UpdatedDate = DateTime.Now;
         question.UpdatedFrom = user.Id;
-        question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+        question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated });
@@ -684,7 +684,7 @@ public class SelfController : BaseController
         document.Active = edit.Active;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -702,7 +702,7 @@ public class SelfController : BaseController
         document.Active = false;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
-        document.UpdatedNo = document.UpdatedNo.HasValue ? ++document.UpdatedNo : document.UpdatedNo = 1;
+        document.UpdatedNo = UpdateNo(document.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -737,6 +737,7 @@ public class SelfController : BaseController
         evaluationStatus.Active = false;
         evaluationStatus.UpdatedDate = DateTime.Now;
         evaluationStatus.UpdatedFrom = user.Id;
+        evaluationStatus.UpdatedNo = UpdateNo(evaluationStatus.UpdatedNo);
         evaluationStatus.UpdatedNo = evaluationStatus.UpdatedNo.HasValue ? ++evaluationStatus.UpdatedNo : evaluationStatus.UpdatedNo = 1;
 
         db.EvaluationStatus.Add(new EvaluationStatus

@@ -1386,4 +1386,7 @@
   <data name="NumberOfUsersByGroups" xml:space="preserve">
     <value>Numri përdoruesve sipas grupeve</value>
   </data>
+  <data name="DocumentTypeFor" xml:space="preserve">
+    <value>Lloji i dokumentit për veprim</value>
+  </data>
 </root>

@@ -82,7 +82,8 @@ public enum LookUpTable
     Staff = 7,
     Status = 8,
     Department = 9,
-    EvaluationQuestion = 10
+    EvaluationQuestion = 10,
+    DocumentFor = 11
 }
 
 public enum LeaveTypeEnum

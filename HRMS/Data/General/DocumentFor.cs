@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class DocumentType
+    public partial class DocumentFor
     {
-        public DocumentType()
+        public DocumentFor()
         {
-            EvaluationDocument = new HashSet<EvaluationDocument>();
-            StaffDocument = new HashSet<StaffDocument>();
+            DocumentType = new HashSet<DocumentType>();
         }
 
-        public int DocumentTypeId { get; set; }
         public int DocumentForId { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
@@ -22,10 +20,8 @@ namespace HRMS.Data.General
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedNo { get; set; }
 
-        public virtual DocumentFor DocumentFor { get; set; }
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<EvaluationDocument> EvaluationDocument { get; set; }
-        public virtual ICollection<StaffDocument> StaffDocument { get; set; }
+        public virtual ICollection<DocumentType> DocumentType { get; set; }
     }
 }

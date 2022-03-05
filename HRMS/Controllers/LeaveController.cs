@@ -260,14 +260,14 @@ public class LeaveController : BaseController
             leave.RemainingDays = actualRemainingDays;
             leave.UpdatedDate = DateTime.Now;
             leave.UpdatedFrom = user.Id;
-            leave.UpdatedNo = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
+            leave.UpdatedNo = UpdateNo(leave.UpdatedNo);
         }
 
         var leaveStatus = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
         leaveStatus.Active = false;
         leaveStatus.UpdatedDate = DateTime.Now;
         leaveStatus.UpdatedFrom = user.Id;
-        leaveStatus.UpdatedNo = leaveStatus.UpdatedNo.HasValue ? ++leaveStatus.UpdatedNo : leaveStatus.UpdatedNo = 1;
+        leaveStatus.UpdatedNo = UpdateNo(leaveStatus.UpdatedNo);
 
         db.LeaveStatus.Add(new LeaveStatus
         {
@@ -347,7 +347,7 @@ public class LeaveController : BaseController
         leave.Description = edit.Description;
         leave.UpdatedDate = DateTime.Now;
         leave.UpdatedFrom = user.Id;
-        leave.UpdatedNo = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
+        leave.UpdatedNo = UpdateNo(leave.UpdatedNo);
 
         await db.SaveChangesAsync();
 
@@ -401,13 +401,13 @@ public class LeaveController : BaseController
         leave.Active = false;
         leave.UpdatedDate = DateTime.Now;
         leave.UpdatedFrom = user.Id;
-        leave.UpdatedNo  = leave.UpdatedNo.HasValue ? ++leave.UpdatedNo : leave.UpdatedNo = 1;
+        leave.UpdatedNo = UpdateNo(leave.UpdatedNo);
 
-        var leaveStatis = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
-        leaveStatis.Active = false;
-        leaveStatis.UpdatedDate = DateTime.Now;
-        leaveStatis.UpdatedFrom = user.Id;
-        leaveStatis.UpdatedNo = leaveStatis.UpdatedNo.HasValue ? ++leaveStatis.UpdatedNo : leaveStatis.UpdatedNo = 1;
+        var leaveStatus = await db.LeaveStatus.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+        leaveStatus.Active = false;
+        leaveStatus.UpdatedDate = DateTime.Now;
+        leaveStatus.UpdatedFrom = user.Id;
+        leaveStatus.UpdatedNo = UpdateNo(leaveStatus.UpdatedNo);
 
         db.LeaveStatus.Add(new LeaveStatus
         {

@@ -167,7 +167,7 @@ public class AuthorizationController : BaseController
         roleClaims = roleClaims.Where(a => !(menuPolicies.Any(b => b.Split(":")[0] == a.ClaimType) && menuPolicies.Any(b => b.Split(":")[1] == a.ClaimValue))).ToList();
         roleClaims = roleClaims.Where(a => !(submenuPolicies.Any(b => b.Split(":")[0] == a.ClaimType) && submenuPolicies.Any(b => b.Split(":")[1] == a.ClaimValue))).ToList();
 
-        //rules = rules.Where(a => a.Policy.Split(":")[1] != "m").ToList();
+        rules = rules.Where(a => a.Policy.Split(":")[1] != "m").ToList();
 
         rules.ForEach(rule => rule.HasAccess = roleClaims.Any(a => a.ClaimType == rule.Policy.Split(":")[0] && a.ClaimValue == rule.Policy.Split(":")[1]));
         return PartialView(rules);
@@ -303,7 +303,7 @@ public class AuthorizationController : BaseController
         menu.OpenFor = edit.OpenFor;
         menu.UpdatedFrom = user.Id;
         menu.UpdatedDate = DateTime.Now;
-        menu.UpdatedNo = menu.UpdatedNo.HasValue ? ++menu.UpdatedNo : menu.UpdatedNo = 1;
+        menu.UpdatedNo = UpdateNo(menu.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
@@ -439,7 +439,7 @@ public class AuthorizationController : BaseController
         submenu.OpenFor = edit.OpenFor;
         submenu.UpdatedFrom = user.Id;
         submenu.UpdatedDate = DateTime.Now;
-        submenu.UpdatedNo = submenu.UpdatedNo.HasValue ? ++submenu.UpdatedNo : submenu.UpdatedNo = 1;
+        submenu.UpdatedNo = UpdateNo(submenu.UpdatedNo);
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
