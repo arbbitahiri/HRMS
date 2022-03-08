@@ -457,34 +457,31 @@ public class LeaveController : BaseController
     #region Methods
 
     [HttpGet, Description("Arb Tahiri", "Method to get remaining days depending on selected holiday type.")]
-    public async Task<IActionResult> RemainingDays(int ltypeId, string userId)
+    public async Task<IActionResult> RemainingDays(int ltypeId, string startDate, string endDate)
     {
-        if (ltypeId == 0 || string.IsNullOrEmpty(userId))
+        if (ltypeId == 0 || ltypeId == (int)LeaveTypeEnum.Unpaid)
         {
-            return Json(false);
+            return Json("");
+        }
+
+        DateTime? start = null, end = null;
+        if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+        {
+            start = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
+            end = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
         }
 
         var leave = await db.LeaveStaffDays
-            .Where(a => a.Active && a.Staff.UserId == userId && a.LeaveTypeId == ltypeId && a.InsertedDate.Year == DateTime.Now.Year)
+            .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == ltypeId && a.InsertedDate.Year == DateTime.Now.Year)
             .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
         int remainingDays = leave != null ? leave.RemainingDays : DaysForLeave((LeaveTypeEnum)ltypeId);
-
+        if (start.HasValue && end.HasValue)
+        {
+            var difference = (int)WorkingDays(start.Value, end.Value);
+            remainingDays -= difference;
+        }
         return Json(remainingDays);
-    }
-
-    public static double WorkingDays(DateTime startDate, DateTime endDate)
-    {
-        double workingDays = 1 + ((endDate - startDate).TotalDays * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
-        if (endDate.DayOfWeek == DayOfWeek.Saturday)
-        {
-            workingDays--;
-        }
-        if (startDate.DayOfWeek == DayOfWeek.Sunday)
-        {
-            workingDays--;
-        }
-        return workingDays;
     }
 
     #endregion

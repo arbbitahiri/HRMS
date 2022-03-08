@@ -29,10 +29,13 @@
                         <option value="">@Resource.Choose</option>
                     </select>
                 </div>
-                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
-                    <label asp-for="StaffId"></label>
-                    <select asp-for="StaffId" class="form-control"></select>
-                </div>
+                @if (User.IsInRole("Manager"))
+                {
+                    <div class="col-md-3 col-lg-3 col-sm-3 form-group">
+                        <label asp-for="StaffId"></label>
+                        <select asp-for="StaffId" class="form-control"></select>
+                    </div>
+                }
                 <div class="col-md-3 col-lg-3 col-sm-3">
                     <label class="invisible">//</label>
                     <button type="button" id="btn_search" class="btn btn-primary btn-block">@Resource.Search</button>
@@ -46,7 +49,10 @@
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="manager_tab()"          id="tab_manager"         href="#kt_manager" data-toggle="tab">@Resource.ListOfEvaluationManager</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_college_tab()"  id="tab_student_college" href="#kt_student_college" data-toggle="tab">@Resource.ListOfEvaluationStudentsCollege</a></li>
+            @if (User.IsInRole("Manager"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_college_tab()"  id="tab_student_college" href="#kt_student_college" data-toggle="tab">@Resource.ListOfEvaluationStudentsCollege</a></li>
+            }
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="student_staff_tab()"    id="tab_student_staff"   href="#kt_student_staff" data-toggle="tab">@Resource.ListOfEvaluationStudentsStaff</a></li>
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="self_tab()"             id="tab_self"            href="#kt_self" data-toggle="tab">@Resource.ListOfEvaluationSelf</a></li>
         </ul>
@@ -54,7 +60,10 @@
     <div class="card-body">
         <div class="tab-content">
             <div class="tab-pane" id="kt_manager"></div>
-            <div class="tab-pane" id="kt_student_college"></div>
+            @if (User.IsInRole("Manager"))
+            {
+                <div class="tab-pane" id="kt_student_college"></div>
+            }
             <div class="tab-pane" id="kt_student_staff"></div>
             <div class="tab-pane" id="kt_self"></div>
         </div>
@@ -88,7 +97,13 @@
                 if (sessionStorage.getItem("tab_eva") == null) {
                     $('#tab_manager').click();
                 } else {
-                    $('#' + sessionStorage.getItem("tab_eva")).click();
+                    if ('@role' === 'Manager') {
+                        $('#' + sessionStorage.getItem("tab_eva")).click();
+                    } else if (sessionStorage.getItem("tab_eva") === "tab_student_college") {
+                        $('#tab_manager').click();
+                    } else {
+                        $('#' + sessionStorage.getItem("tab_eva")).click();
+                    }
                 }
             });
             $('#btn_search').click();

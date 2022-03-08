@@ -25,10 +25,10 @@
 
 <script>
     $(document).ready(function() {
-        render_students_tbl(@Json.Serialize(Model));
+        render_students_college_tbl(@Json.Serialize(Model));
     });
 
-    function render_students_tbl(data) {
+    function render_students_college_tbl(data) {
         var rowCount = 1;
         var studentsCollege = "StudentsCollege";
         $('#tbl_students_evaluation').DataTable({
@@ -42,6 +42,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { defaultContent: "///", targets: "_all" },
                 { className: "w5 vertikal", targets: [0, 7] },
                 { className: "w10 vertikal", targets: [2, 3, 4] },
                 { className: "w15 vertikal", targets: [5, 6] },
@@ -54,31 +55,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {
-                    data: function (row, type, set) {
-                        return row.title ?? "///";
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.numberOfStudents === 0 ? "///" : row.numberOfStudents
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.statusType ?? "///";
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.questions == 0 ? "///" : row.questions;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.answers == 0 ? "///" : row.answers;
-                    }
-                },
+                { data: "title" },
+                { data: "numberOfStudents" },
+                { data: "statusType" },
+                { data: "questions" },
+                { data: "answers" },
                 {
                     data: function (row, type, set) {
                         var date = new Date(Date.parse(row.insertedDate));

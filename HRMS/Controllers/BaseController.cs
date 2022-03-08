@@ -171,6 +171,9 @@ public class BaseController : Controller
             _ => LanguageEnum.Albanian,
         };
 
+    protected int? UpdateNo(int? updateNo) =>
+        updateNo.HasValue ? ++updateNo : 1;
+
     protected string GetRoleFromStaffType(int staffType) =>
         staffType switch
         {
@@ -185,12 +188,23 @@ public class BaseController : Controller
         {
             LeaveTypeEnum.Annual => 20,
             LeaveTypeEnum.Sick => 20,
-            LeaveTypeEnum.Maternity => 550,
+            LeaveTypeEnum.Maternity => 365,
             _ => 0
         };
 
-    protected int? UpdateNo(int? updateNo) =>
-        updateNo.HasValue ? ++updateNo : 1;
+    protected double WorkingDays(DateTime startDate, DateTime endDate)
+    {
+        double workingDays = 1 + ((endDate - startDate).TotalDays * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
+        if (endDate.DayOfWeek == DayOfWeek.Saturday)
+        {
+            workingDays--;
+        }
+        if (startDate.DayOfWeek == DayOfWeek.Sunday)
+        {
+            workingDays--;
+        }
+        return workingDays;
+    }
 
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {

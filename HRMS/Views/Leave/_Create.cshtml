@@ -16,43 +16,39 @@
     <div class="modal-body">
         @Html.AntiForgeryToken()
 
-        <div class="row form-group">
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6 form-group">
                 <label asp-for="ALeaveTypeId" class="required"></label>
                 <select asp-for="ALeaveTypeId" asp-items="await repo.LeaveTypes(user.Language)" onchange="remaining_days()" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="ALeaveTypeId" class="text-danger"></span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 form-group" style="display: none;" id="kt_remaining_days">
                 <label>@Resource.RemainingDays</label>
                 <input id="days" type="text" disabled class="form-control"/>
             </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-6">
+            <div class="col-md-6 form-group">
                 <label asp-for="StartDate" class="required"></label>
-                <div class="input-group date">
-                    <input asp-for="StartDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate" style="cursor: default;"/>
+                <div class="input-group date" id="kt_start_date">
+                    <input asp-for="StartDate" type="text" onchange="remaining_day_start(this)" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate" style="cursor: default;"/>
                     <div class="input-group-append">
-                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                     </div>
                 </div>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 form-group">
                 <label asp-for="EndDate" class="required"></label>
-                <div class="input-group date">
-                    <input asp-for="EndDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate" style="cursor: default;"/>
+                <div class="input-group date" id="kt_end_date">
+                    <input asp-for="EndDate" type="text" onchange="remaining_day_end(this)" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate" style="cursor: default;"/>
                     <div class="input-group-append">
-                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                     </div>
                 </div>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-12">
+            <div class="col-md-12 form-group">
                 <label asp-for="Description"></label>
                 <textarea asp-for="Description" rows="2" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
@@ -84,13 +80,51 @@
         $(".datetimepicker-input").datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+        $("#ALeaveTypeId").on("change", function() {
+            if ($(this).val() == LeaveType.UNPAID || $(this).val() == null ||  $(this).val() == "") {
+                $('#kt_remaining_days').hide(250);
+            } else {
+                $('#kt_remaining_days').show(250);
+            }
+        });
     });
+
+    function remaining_day_start(e) {
+        $.get('@Url.Action("RemainingDays", "Leave")', {
+            ltypeId: $('#ALeaveTypeId').val(),
+            startDate: $(e).val(),
+            endDate: $('#EndDate').val()
+        }, function (data) {
+            if (data < 0) {
+                $('#days').css("color", "red");
+            }
+            $('#days').val(data);
+        });
+    }
+
+    function remaining_day_end(e) {
+        $.get('@Url.Action("RemainingDays", "Leave")', {
+            ltypeId: $('#ALeaveTypeId').val(),
+            startDate: $('#StartDate').val(),
+            endDate: $(e).val()
+        }, function (data) {
+            if (data < 0) {
+                $('#days').css("color", "red");
+            }
+            $('#days').val(data);
+        });
+    }
 
     function remaining_days() {
         $.get('@Url.Action("RemainingDays", "Leave")', {
-            ltypeId: $('#AHolidayTypeId').val(),
-            userId: '@user.Id'
+            ltypeId: $('#ALeaveTypeId').val(),
+            startDate: $('#StartDate').val(),
+            endDate: $('#EndDate').val()
         }, function (data) {
+            if (data < 0) {
+                $('#days').css("color", "red");
+            }
             $('#days').val(data);
         });
     }

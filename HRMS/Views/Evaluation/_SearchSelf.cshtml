@@ -41,6 +41,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { defaultContent: "///", targets: "_all" },
                 { className: "w5 vertikal", targets: [0, 6] },
                 { className: "w10 vertikal", targets: [2, 3] },
                 { className: "w15 vertikal", targets: [4, 5] },
@@ -53,30 +54,14 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {
-                    data: function (row, type, set) {
-                        return row.title ?? "///";
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.questions == 0 ? "///" : row.questions;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.answers == 0 ? "///" : row.answers;
-                    }
-                },
+                { data: "title" },
+                { data: "questions" },
+                { data: "answers" },
+                { data: "statusType" },
                 {
                     data: function (row, type, set) {
                         var date = new Date(Date.parse(row.insertedDate));
                         return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.statusType ?? "///";
                     }
                 },
                 {

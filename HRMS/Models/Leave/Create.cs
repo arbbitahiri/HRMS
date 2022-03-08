@@ -8,7 +8,7 @@ public class Create
 {
     public string LeaveIde { get; set; }
 
-    [Display(Name = "HolidayType", ResourceType = typeof(Resource))]
+    [Display(Name = "LeaveType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public int ALeaveTypeId { get; set; }
 

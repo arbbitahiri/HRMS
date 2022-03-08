@@ -52,6 +52,13 @@ const QuestionType = {
     TOPIC: 3
 }
 
+const LeaveType = {
+    ANNUAL: 1,
+    SICK: 2,
+    MATERNITY: 3,
+    UNPAID: 4
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 

@@ -37,12 +37,14 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to search for manager evaluations.")]
     public async Task<IActionResult> _SearchManager(Search search)
     {
+        var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
+
         var list = await db.EvaluationManager
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
                 && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
-                && a.StaffId == (search.StaffId ?? a.StaffId))
+                && (role == "Manager" ? (a.StaffId == (search.StaffId ?? a.StaffId)) : (a.Staff.UserId == user.Id)))
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
@@ -90,6 +92,8 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to search for students evaluation.")]
     public async Task<IActionResult> _SearchStudentStaff(Search search)
     {
+        var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
+
         var list = await db.EvaluationStudentsStaff
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
@@ -97,7 +101,7 @@ public class EvaluationController : BaseController
             .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
                 && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
-                && a.StaffDepartmentSubject.StaffDepartment.StaffId == (search.StaffId ?? a.StaffDepartmentSubject.StaffDepartment.StaffId))
+                && (role == "Manager" ? (a.StaffDepartmentSubject.StaffDepartment.StaffId == (search.StaffId ?? a.StaffDepartmentSubject.StaffDepartment.StaffId)) : (a.StaffDepartmentSubject.StaffDepartment.Staff.UserId == user.Id)))
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
@@ -121,12 +125,14 @@ public class EvaluationController : BaseController
     [Description("Arb Tahiri", "Form to search for self evaluations.")]
     public async Task<IActionResult> _SearchSelf(Search search)
     {
+        var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
+
         var list = await db.EvaluationSelf
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationStatus).ThenInclude(a => a.StatusType)
             .Include(a => a.Evaluation).ThenInclude(a => a.EvaluationType)
             .Where(a => a.Evaluation.EvaluationTypeId == (search.EvaluationTypeId ?? a.Evaluation.EvaluationTypeId)
                 && a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (search.StatusTypeId ?? a.StatusTypeId))
-                && a.StaffId == (search.StaffId ?? a.StaffId))
+                && (role == "Manager" ? (a.StaffId == (search.StaffId ?? a.StaffId)) : (a.Staff.UserId == user.Id)))
             .AsSplitQuery()
             .Select(a => new EvaluationList
             {
@@ -299,7 +305,24 @@ public class EvaluationController : BaseController
 
     [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Form to view list of numerical questions.")]
-    public async Task<IActionResult> _OptionQuestions(string ide) =>
+    public async Task<IActionResult> _OptionalOptionQuestions(string ide) =>
+        PartialView(await db.EvaluationQuestionnaireOptional
+            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
+                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new QuestionOptional
+            {
+                EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
+                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
+                Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
+                {
+                    EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
+                    Option = user.Language == LanguageEnum.Albanian ? a.OptionTitleSq : a.OptionTitleEn,
+                    Checked = a.Checked
+                }).ToList()
+            }).ToListAsync());
+    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    public async Task<IActionResult> _OptionalTopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))

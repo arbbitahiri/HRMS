@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form asp-action="_SearchPending" asp-controller="Leave" id="frm_search_leave" method="post" data-ajax="true" data-ajax-method="post" data-ajax-update="#kt_pending">
+        <form asp-action="_SearchPending" asp-controller="Leave" id="frm_search_leave" method="post" data-ajax="true" data-ajax-method="POST" data-ajax-update="#kt_pending">
             @Html.AntiForgeryToken()
 
             <div class="row">
@@ -132,11 +132,9 @@
                     '@Html.Raw(Resource.LastMonth)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                     '@Html.Raw(Resource.ActualYear)': [moment().startOf('year'), moment()],
                     '@Html.Raw(Resource.LastYear)': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                    '@Html.Raw(Resource.AllTime)': [moment('2000-01-01'), moment()]
+                    '@Html.Raw(Resource.AllTime)': [moment('2020-01-01'), moment()]
                 }, function (start, end, label) {
-                    $('#kt_date .form-control').val(start.format("DD/MM/YYYY") + ' / ' + end.format('DD/MM/YYYY'))
-                    $('#Date').val(start.format('DD/MM/YYYY') + ' / ' + end.format('DD/MM/YYYY'));
-
+                    $('#kt_date .form-control').val(start.format("DD/MM/YYYY") + ' - ' + end.format('DD/MM/YYYY'))
                     if (label == '@Html.Raw(Resource.OtherDate)') {
                         $('#kt_search_range').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
                     } else {
@@ -159,6 +157,7 @@
             });
             $('#btn_search').click();
         });
+
         var user_role = '@role';
 
         function pending_tab() {
