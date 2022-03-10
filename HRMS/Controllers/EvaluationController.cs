@@ -25,16 +25,16 @@ public class EvaluationController : BaseController
     {
     }
 
-    [Authorize(Policy = "71:m"), Description("Arb Tahiri", "Form to display list of evaluation types.")]
+    [Authorize(Policy = "71:m"), Description("Korab Mustafa", "Form to display list of evaluation types.")]
     public IActionResult Index() => View();
 
-    [Authorize(Policy = "70:m"), Description("Arb Tahiri", "Form to display list of evaluation data.")]
+    [Authorize(Policy = "70:m"), Description("Korab Mustafa", "Form to display list of evaluation data.")]
     public IActionResult Search() => View();
 
     #region Search for evaluations
 
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to search for manager evaluations.")]
+    [Description("Korab Mustafa", "Form to search for manager evaluations.")]
     public async Task<IActionResult> _SearchManager(Search search)
     {
         var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
@@ -63,7 +63,7 @@ public class EvaluationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to search for students evaluation.")]
+    [Description("Korab Mustafa", "Form to search for students evaluation.")]
     public async Task<IActionResult> _SearchStudentCollege(Search search)
     {
         var list = await db.EvaluationStudentsCollege
@@ -89,7 +89,7 @@ public class EvaluationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to search for students evaluation.")]
+    [Description("Korab Mustafa", "Form to search for students evaluation.")]
     public async Task<IActionResult> _SearchStudentStaff(Search search)
     {
         var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
@@ -122,7 +122,7 @@ public class EvaluationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "70:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to search for self evaluations.")]
+    [Description("Korab Mustafa", "Form to search for self evaluations.")]
     public async Task<IActionResult> _SearchSelf(Search search)
     {
         var role = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(a => a.Value).FirstOrDefault();
@@ -151,7 +151,7 @@ public class EvaluationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "70:d"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to search for self evaluations.")]
+    [Description("Korab Mustafa", "Form to search for self evaluations.")]
     public async Task<IActionResult> Delete(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -181,7 +181,7 @@ public class EvaluationController : BaseController
 
     #region Details
 
-    [HttpGet, Authorize(Policy = "71de:r"), Description("Arb Tahiri", "Form to display questionnaire details")]
+    [HttpGet, Authorize(Policy = "71de:r"), Description("Korab Mustafa", "Form to display questionnaire details")]
     public async Task<ActionResult> Details(string ide)
     {
         if (string.IsNullOrEmpty(ide))
@@ -290,7 +290,7 @@ public class EvaluationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _NumericalQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
@@ -304,7 +304,7 @@ public class EvaluationController : BaseController
             }).ToListAsync());
 
     [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionalOptionQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
@@ -321,7 +321,7 @@ public class EvaluationController : BaseController
                 }).ToList()
             }).ToListAsync());
     [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionalTopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
@@ -339,7 +339,7 @@ public class EvaluationController : BaseController
             }).ToListAsync());
 
     [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Form to view list of numerical questions.")]
+    [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _TopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireTopic
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)

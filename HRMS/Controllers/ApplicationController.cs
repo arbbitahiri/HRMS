@@ -29,16 +29,16 @@ public class ApplicationController : BaseController
         this.function = function;
     }
 
-    [Authorize(Policy = "60:m"), Description("Arb Tahiri", "Entry form.")]
+    [Authorize(Policy = "60:m"), Description("Korab Mustafa", "Entry form.")]
     public IActionResult Index() => View();
 
     #region Application logs
 
-    [HttpGet, Authorize(Policy = "61:m"), Description("Arb Tahiri", "Entry form for application logs.")]
+    [HttpGet, Authorize(Policy = "61:m"), Description("Korab Mustafa", "Entry form for application logs.")]
     public IActionResult Logs() => View();
 
     [HttpPost, Authorize(Policy = "61:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to search for logs.")]
+    [Description("Korab Mustafa", "Action to search for logs.")]
     public async Task<IActionResult> SearchLogs(LogSearch search)
     {
         string[] dates = search.Date.Split(" - ");
@@ -66,12 +66,12 @@ public class ApplicationController : BaseController
 
     #region Security logs
 
-    [Authorize(Policy = "62:m"), Description("Arb Tahiri", "Entry form for security logs.")]
+    [Authorize(Policy = "62:m"), Description("Korab Mustafa", "Entry form for security logs.")]
     public IActionResult Security() => View();
 
     [SupportedOSPlatform("windows")]
     [HttpPost, Authorize(Policy = "62:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to search for security logs.")]
+    [Description("Korab Mustafa", "Action to search for security logs.")]
     public IActionResult SearchSecurity(ServerSearch search)
     {
         string[] dates = search.LogTime.Split(" - ");

@@ -82,30 +82,32 @@
             });
 
             $('#SubjectId').on('change', function() {
-                $.get('@Url.Action("StaffSubjects", "StudentsStaff")', {
-                    subjectId: $(this).val()
-                }, function (data) {
-                    $('#StaffDepartmentSubjectId').empty().trigger("change");
-                    $('#StaffDepartmentSubjectId').select2({
-                        width: '100%',
-                        data: [{ id: '', text: '@Resource.Choose' }],
-                        language: {
-                            noResults: function () {
-                                return '@Html.Raw(Resource.NoResultsFound)';
-                            },
-                        }
-                    });
+                if ($(this).val() != '' && $(this).val() != null) {
+                    $.get('@Url.Action("StaffSubjects", "StudentsStaff")', {
+                        subjectId: $(this).val()
+                    }, function (data) {
+                        $('#StaffDepartmentSubjectId').empty().trigger("change");
+                        $('#StaffDepartmentSubjectId').select2({
+                            width: '100%',
+                            data: [{ id: '', text: '@Resource.Choose' }],
+                            language: {
+                                noResults: function () {
+                                    return '@Html.Raw(Resource.NoResultsFound)';
+                                },
+                            }
+                        });
 
-                    $('#StaffDepartmentSubjectId').select2({
-                        width: '100%',
-                        data: data,
-                        language: {
-                            noResults: function () {
-                                return '@Html.Raw(Resource.NoResultsFound)';
-                            },
-                        }
+                        $('#StaffDepartmentSubjectId').select2({
+                            width: '100%',
+                            data: data,
+                            language: {
+                                noResults: function () {
+                                    return '@Html.Raw(Resource.NoResultsFound)';
+                                },
+                            }
+                        });
                     });
-                });
+                }
             });
         });
     </script>

@@ -24,12 +24,12 @@ public class TablesController : BaseController
     {
     }
 
-    [Authorize(Policy = "16:m"), Description("Arb Tahiri", "Entry form.")]
+    [Authorize(Policy = "16:m"), Description("Korab Mustafa", "Entry form.")]
     public IActionResult Index() => View();
 
     #region Table list
 
-    [Authorize(Policy = "16:r"), Description("Arb Tahiri", "List of lookup tables.")]
+    [Authorize(Policy = "16:r"), Description("Korab Mustafa", "List of lookup tables.")]
     public IActionResult _LookUpTables()
     {
         var tables = new List<TableName>()
@@ -53,7 +53,7 @@ public class TablesController : BaseController
 
     #region Table data
 
-    [Authorize(Policy = "16:r"), Description("Arb Tahiri", "List of data of look up tables")]
+    [Authorize(Policy = "16:r"), Description("Korab Mustafa", "List of data of look up tables")]
     public async Task<IActionResult> _LookUpData(LookUpTable table, string title)
     {
         var dataList = new List<DataList>();
@@ -148,11 +148,11 @@ public class TablesController : BaseController
 
     #region Create
 
-    [Authorize(Policy = "16:c"), Description("Arb Tahiri", "Form to create data for a look up table.")]
+    [Authorize(Policy = "16:c"), Description("Korab Mustafa", "Form to create data for a look up table.")]
     public IActionResult _Create(LookUpTable table, string title) => PartialView(new CreateData { Table = table, Title = title });
 
     [HttpPost, Authorize(Policy = "16:c"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to create data for a look up table.")]
+    [Description("Korab Mustafa", "Action to create data for a look up table.")]
     public async Task<IActionResult> Create(CreateData create)
     {
         if (!ModelState.IsValid)
@@ -278,7 +278,7 @@ public class TablesController : BaseController
 
     #region Edit
 
-    [Authorize(Policy = "16:e"), Description("Arb Tahiri", "Form to edit data from look up tables.")]
+    [Authorize(Policy = "16:e"), Description("Korab Mustafa", "Form to edit data from look up tables.")]
     public async Task<IActionResult> _Edit(LookUpTable table, string title, string ide)
     {
         var id = CryptoSecurity.Decrypt<int>(ide);
@@ -395,7 +395,7 @@ public class TablesController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "16:e"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to edit data from a look up table.")]
+    [Description("Korab Mustafa", "Action to edit data from a look up table.")]
     public async Task<IActionResult> Edit(CreateData edit)
     {
         if (!ModelState.IsValid)
@@ -503,7 +503,7 @@ public class TablesController : BaseController
     #region Delete
 
     [HttpPost, Authorize(Policy = "16:d"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to delete data from a lookup table.")]
+    [Description("Korab Mustafa", "Action to delete data from a lookup table.")]
     public async Task<IActionResult> Delete(LookUpTable table, string ide, bool active)
     {
         var error = new ErrorVM() { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully };

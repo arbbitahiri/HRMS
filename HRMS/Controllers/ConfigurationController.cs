@@ -37,13 +37,13 @@ public class ConfigurationController : BaseController
         this.func = func;
     }
 
-    [Authorize(Policy = "1c:m"), Description("Arb Tahiri", "Entry home.")]
+    [Authorize(Policy = "1c:m"), Description("Korab Mustafa", "Entry home.")]
     public IActionResult Index() => View();
 
     #region Application settings
 
     [HttpGet, Authorize(Policy = "15:m")]
-    [Description("Arb Tahiri", "Form to display list of application settings.")]
+    [Description("Korab Mustafa", "Form to display list of application settings.")]
     public IActionResult AppSettings()
     {
         ViewData["Title"] = "Parametrat e aplikacionit";
@@ -78,7 +78,7 @@ public class ConfigurationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "15:r")]
-    [Description("Arb Tahiri", "Form to edit application settings.")]
+    [Description("Korab Mustafa", "Form to edit application settings.")]
     public async Task<IActionResult> _EditAppSetings(ApplicationSettings edit)
     {
         if (!ModelState.IsValid)
@@ -115,7 +115,7 @@ public class ConfigurationController : BaseController
 
     #region => List
 
-    [Authorize(Policy = "33:m"), Description("Arb Tahiri", "Entry form, list of subjects.")]
+    [Authorize(Policy = "33:m"), Description("Korab Mustafa", "Entry form, list of subjects.")]
     public async Task<IActionResult> SubjectIndex()
     {
         var subjects = await db.Subject
@@ -134,11 +134,11 @@ public class ConfigurationController : BaseController
 
     #region => Create
 
-    [Authorize(Policy = "33:c"), Description("Arb Tahiri", "Form to add a subject.")]
+    [Authorize(Policy = "33:c"), Description("Korab Mustafa", "Form to add a subject.")]
     public IActionResult _CreateSubject() => PartialView();
 
     [HttpPost, Authorize(Policy = "33:c"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to add a subject.")]
+    [Description("Korab Mustafa", "Action to add a subject.")]
     public async Task<IActionResult> CreateSubject(CreateSubject create)
     {
         if (!ModelState.IsValid)
@@ -168,7 +168,7 @@ public class ConfigurationController : BaseController
 
     #region => Edit
 
-    [HttpGet, Authorize(Policy = "33:e"), Description("Arb Tahiri", "Form to edit a subject.")]
+    [HttpGet, Authorize(Policy = "33:e"), Description("Korab Mustafa", "Form to edit a subject.")]
     public async Task<IActionResult> _EditSubject(string ide)
     {
         var subject = await db.Subject
@@ -185,7 +185,7 @@ public class ConfigurationController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "33:e"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to edit a subject.")]
+    [Description("Korab Mustafa", "Action to edit a subject.")]
     public async Task<IActionResult> EditSubject(CreateSubject edit)
     {
         if (!ModelState.IsValid)
@@ -216,7 +216,7 @@ public class ConfigurationController : BaseController
     #region => Delete
 
     [HttpPost, Authorize(Policy = "33:d"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to delete a subject.")]
+    [Description("Korab Mustafa", "Action to delete a subject.")]
     public async Task<IActionResult> DeleteSubject(string ide)
     {
         if (!ModelState.IsValid)
