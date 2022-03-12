@@ -1152,6 +1152,9 @@
   <data name="StaffList" xml:space="preserve">
     <value>Staff list</value>
   </data>
+  <data name="StaffNotComplete" xml:space="preserve">
+    <value>The staff is not registered in a department and no salary has been set. Do you still want to continue?</value>
+  </data>
   <data name="StaffNotCompleted" xml:space="preserve">
     <value>You can not complete staff registration without registering with the department!</value>
   </data>

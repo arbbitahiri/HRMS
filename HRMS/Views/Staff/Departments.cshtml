@@ -110,8 +110,25 @@
                 ide: ide,
                 method: '@Model.MethodType',
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
-            }, function() {
-                window.location.href = '@Url.Action("Index", "Staff")';
+            }, function(data) {
+                if (data.status == ErrorStatus.SUCCESS) {
+                    window.location.href = '@Url.Action("Index", "Staff")';
+                } else {
+                    Swal.fire({
+                        title: "@Html.Raw(Resource.AreYouSure)",
+                        text: "@Html.Raw(Resource.StaffNotComplete)",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: "@Resource.Yes",
+                        cancelButtonText: "@Resource.No"
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = '@Url.Action("Index", "Staff")';
+                        }
+                    });
+                }
             });
         }
 

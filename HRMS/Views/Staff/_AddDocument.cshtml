@@ -20,7 +20,7 @@
         <div class="row pl-2 pr-2">
             <div class="col-md-6 form-group">
                 <label asp-for="DocumentTypeId" class="required"></label>
-                <select asp-for="DocumentTypeId" asp-items="await repo.DocumentTypes(user.Language)" class="form-control select2">
+                <select asp-for="DocumentTypeId" asp-items="await repo.DocumentTypesFor(DocumentForEnum.Staff, user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="DocumentTypeId" class="text-danger"></span>

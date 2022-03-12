@@ -119,7 +119,7 @@ public class StaffController : BaseController
                 .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new StaffPost
                 {
-                    MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post,
+                    MethodType = MethodType.Put,
                     StaffIde = ide,
                     PersonalNumber = a.PersonalNumber,
                     Firstname = a.FirstName,
@@ -1042,8 +1042,7 @@ public class StaffController : BaseController
         var registeredInDepartment = await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == CryptoSecurity.Decrypt<int>(ide));
         if (!registeredInDepartment)
         {
-            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffNotCompleted });
-            return RedirectToAction(nameof(Departments), new { ide, method });
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StaffNotComplete });
         }
 
         var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == CryptoSecurity.Decrypt<int>(ide));

@@ -43,4 +43,8 @@ public interface IDDLRepository
     Task<List<SelectListItem>> GetDocumentFor(LanguageEnum lang);
 
     Task<List<SelectListItem>> Countries(LanguageEnum lang);
+
+    Task<List<SelectListItem>> StatusTypesForLeave(LanguageEnum lang);
+
+    Task<List<SelectListItem>> DocumentTypesFor(DocumentForEnum documentFor, LanguageEnum lang);
 }

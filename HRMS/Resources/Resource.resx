@@ -1410,4 +1410,7 @@
   <data name="RequestForLeave" xml:space="preserve">
     <value>Kërkesë për pushim</value>
   </data>
+  <data name="StaffNotComplete" xml:space="preserve">
+    <value>Stafi nuk është regjistruar në një departament dhe nuk është përcaktuar paga. Dëshironi të vazhdoni?</value>
+  </data>
 </root>

@@ -119,3 +119,9 @@ public enum CountryEnum
 {
     Kosova = 1
 }
+
+public enum DocumentForEnum
+{
+    Staff = 1,
+    Evaluation = 2
+}

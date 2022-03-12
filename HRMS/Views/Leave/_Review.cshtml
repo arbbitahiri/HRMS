@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6">
                 <label asp-for="StatusTypeId" class="required"></label>
-                <select asp-for="StatusTypeId" asp-items="await repo.StatusTypes(user.Language)" type="text" class="form-control select2">
+                <select asp-for="StatusTypeId" asp-items="await repo.StatusTypesForLeave(user.Language)" type="text" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="StatusTypeId" class="text-danger"></span>

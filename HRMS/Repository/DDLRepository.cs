@@ -177,4 +177,26 @@ public class DDLRepository : IDDLRepository
                 Value = a.CountryId.ToString(),
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).ToListAsync();
+
+    public async Task<List<SelectListItem>> StatusTypesForLeave(LanguageEnum lang)
+    {
+        var statuses = new int[] { (int)Status.Approved, (int)Status.Rejected };
+        return await db.StatusType
+            .Where(a => a.Active && statuses.Contains(a.StatusTypeId))
+            .Select(a => new SelectListItem
+            {
+                Value = a.StatusTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
+    }
+
+    public async Task<List<SelectListItem>> DocumentTypesFor(DocumentForEnum documentFor, LanguageEnum lang) =>
+        await db.DocumentType
+            .OrderBy(a => lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
+            .Where(a => a.Active && a.DocumentForId == (int)documentFor)
+            .Select(a => new SelectListItem
+            {
+                Value = a.DocumentForId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
 }

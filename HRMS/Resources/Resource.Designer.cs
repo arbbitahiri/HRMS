@@ -3175,6 +3175,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stafi nuk është regjistruar në një departament dhe nuk është përcaktuar paga. Dëshironi të vazhdoni?.
+        /// </summary>
+        public static string StaffNotComplete {
+            get {
+                return ResourceManager.GetString("StaffNotComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nuk mund të përfundoni regjistrimin e stafit pa regjistruar në departament!.
         /// </summary>
         public static string StaffNotCompleted {
