@@ -85,12 +85,12 @@
                             '<div class="dropdown-menu" role="menu">';
                         if (!row.finished) {
                             if (user_role === 'Manager') {
-                                dropdown += '<button type="button" class="dropdown-item" onclick="review_holiday(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
+                                dropdown += '<button type="button" class="dropdown-item" onclick="review_leave(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-search"></i></span><span class="p-1">@Resource.Review</span></button>';
                             }
-                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_holiday(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                        '<button type="button" class="dropdown-item" onclick="delete_holiday(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_leave(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-pen"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                                        '<button type="button" class="dropdown-item" onclick="delete_leave(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                         }
-                        dropdown += '<button type="button" class="dropdown-item" onclick="details_holiday(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        dropdown += '<button type="button" class="dropdown-item" onclick="details_leave(\'' + row.leaveIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
                             '</div></div>';
                         return dropdown;
                     }

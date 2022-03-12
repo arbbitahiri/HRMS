@@ -1,5 +1,9 @@
 ﻿@using HRMS.Models.Staff
 @model IEnumerable<Subjects>
+@{
+    var canEdit = User.HasClaim("21ssb", "e");
+    var canDelete = User.HasClaim("21ssb", "d");
+}
 
 <div class="row mb-3">
     <div class="col-md-8">
@@ -14,8 +18,10 @@
             <th>@Resource.Subject</th>
             <th>@Resource.StartDate</th>
             <th>@Resource.EndDate</th>
-            <th>@Resource.InsertedDate</th>
-            <th data-orderable="false">@Resource.Actions</th>
+            @if (canEdit || canDelete)
+            {
+                <th width="10%" data-orderable="false">@Resource.Actions</th>
+            }
         </tr>
     </thead>
     <tbody></tbody>
@@ -25,6 +31,10 @@
     $(document).ready(function() {
         render_subject_tbl(@Json.Serialize(Model));
     });
+
+    var canEditS = '@canEdit' == 'True' ? true : false;
+    var canDeleteS = '@canDelete' == 'True' ? true : false;
+    var canSeeS = canEditS || canDeleteS;
 
     function render_subject_tbl(data) {
         var rowCount = 1;
@@ -39,8 +49,10 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w10 vertikal", targets: [0, 5] },
-                { className: "w20 vertikal", targets: [2, 3, 4] },
+                { visible: canSeeQ, targets: [4] },
+                { className: "w10 vertikal", targets: [0] },
+                { className: "w15 vertikal", targets: [4] },
+                { className: "w20 vertikal", targets: [2, 3] },
                 { className: "w30 vertikal", targets: [1] }
             ],
             order: [[0, "asc"]],
@@ -64,19 +76,18 @@
                     }
                 },
                 {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.insertDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
-                {
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                            '<button type="button" class="dropdown-item" onclick="delete_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
-                            '</div></div>';
+                            '<div class="dropdown-menu" role="menu">';
+                        if (canEditS) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                        }
+
+                        if (canDeleteS) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="delete_subject(\'' + row.staffDepartmentSubjectIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                        }
+                        dropdown += '</div></div>';
                         return dropdown;
                     }
                 }
@@ -104,7 +115,7 @@
             if (result.value) {
                 $.post('@Url.Action("DeleteSubject", "Staff")', {
                     ide: ide,
-                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                     }, function (data) {
                         handle_success(data, SubmitPathType.RELOAD, "");
                 });

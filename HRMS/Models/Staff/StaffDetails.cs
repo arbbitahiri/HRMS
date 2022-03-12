@@ -1,4 +1,5 @@
 ﻿using System;
+using HRMS.Utilities;
 
 namespace HRMS.Models.Staff;
 public class StaffDetails
@@ -13,10 +14,11 @@ public class StaffDetails
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string StaffType { get; set; }
-    public bool IsProfessor { get; set; }
     public string City { get; set; }
     public string Country { get; set; }
     public string ZIP { get; set; }
+    public MethodType MethodType { get; set; }
+    public bool IsLecturer { get; set; }
 
     public DateTime InsertedDate { get; set; }
 }

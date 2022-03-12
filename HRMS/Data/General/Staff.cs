@@ -25,9 +25,8 @@ namespace HRMS.Data.General
         public string LastName { get; set; }
         public DateTime Birthdate { get; set; }
         public int Gender { get; set; }
-        public string BirthPlace { get; set; }
         public string City { get; set; }
-        public string Country { get; set; }
+        public int CountryId { get; set; }
         public string Address { get; set; }
         public string PostalCode { get; set; }
         public string Nationality { get; set; }
@@ -37,6 +36,7 @@ namespace HRMS.Data.General
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedNo { get; set; }
 
+        public virtual Country Country { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual AspNetUsers User { get; set; }
         public virtual ICollection<EvaluationManager> EvaluationManager { get; set; }

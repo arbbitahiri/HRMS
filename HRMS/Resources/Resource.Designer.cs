@@ -556,6 +556,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjitha të mirat.
+        /// </summary>
+        public static string BestRegards {
+            get {
+                return ResourceManager.GetString("BestRegards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditëlindja.
         /// </summary>
         public static string Birthdate {
@@ -849,6 +858,15 @@ namespace HRMS.Resources {
         public static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I nderuar.
+        /// </summary>
+        public static string Dear {
+            get {
+                return ResourceManager.GetString("Dear", resourceCulture);
             }
         }
         
@@ -1641,6 +1659,33 @@ namespace HRMS.Resources {
         public static string LastYear {
             get {
                 return ResourceManager.GetString("LastYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Është bërë kërkesa për {0} për {1}, nga data {2} deri {3}. Kërkesën mund ta gjeni në listën e pushimeve..
+        /// </summary>
+        public static string LeaveRequest {
+            get {
+                return ResourceManager.GetString("LeaveRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Është ndryshuar data e kërkesa për {0} për {1}. Data e re është nga {2} deri {3}. Kërkesën mund ta gjeni në listën e pushimeve..
+        /// </summary>
+        public static string LeaveRequestChanged {
+            get {
+                return ResourceManager.GetString("LeaveRequestChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kërkesa për {0} është {1}. Kërkesën mund ta gjeni në listën e pushimeve..
+        /// </summary>
+        public static string LeaveRequestReview {
+            get {
+                return ResourceManager.GetString("LeaveRequestReview", resourceCulture);
             }
         }
         
@@ -2779,6 +2824,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kërkesë për pushim.
+        /// </summary>
+        public static string RequestForLeave {
+            get {
+                return ResourceManager.GetString("RequestForLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kjo fushë është obligative!.
         /// </summary>
         public static string RequiredField {
@@ -2838,6 +2892,15 @@ namespace HRMS.Resources {
         public static string ReviewedFrom {
             get {
                 return ResourceManager.GetString("ReviewedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kolegji Riinvest.
+        /// </summary>
+        public static string RiinvestCollege {
+            get {
+                return ResourceManager.GetString("RiinvestCollege", resourceCulture);
             }
         }
         

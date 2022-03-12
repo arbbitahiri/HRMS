@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\StaffProfileController.cs~RF3c910df2.TMP" />
     <None Remove="Reports\StaffList.rdlc" />
     <None Remove="Reports\StaffPayroll.rdlc" />
   </ItemGroup>

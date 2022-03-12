@@ -16,6 +16,7 @@
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="LeaveIde" type="hidden"/>
+        <input asp-for="StaffIde" type="hidden"/>
 
         <div class="row form-group">
             <div class="col-md-6">
@@ -60,20 +61,7 @@
                 },
             }
         });
-
-        $(".datetimepicker-input").datetimepicker({
-            format: 'DD/MM/YYYY'
-        });
     });
-
-    function remaining_days() {
-        $.get('@Url.Action("RemainingDays", "Leave")', {
-            ltypeId: $('#AHolidayTypeId').val(),
-            userId: '@user.Id'
-        }, function (data) {
-            $('#days').val(data);
-        });
-    }
 
     function success_review(data) {
         handle_success(data, SubmitPathType.RELOAD, "");

@@ -37,7 +37,7 @@ public class StaffPost
     public string City { get; set; }
 
     [Display(Name = "Country", ResourceType = typeof(Resource))]
-    public string Country { get; set; }
+    public int CountryId { get; set; }
 
     [Display(Name = "Address", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

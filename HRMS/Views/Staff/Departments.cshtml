@@ -4,7 +4,6 @@
     ViewData["Title"] = Resource.FourthStepStaffRegistration;
     Layout = "~/Views/Staff/_Layout.cshtml";
 
-    UserModel user = (UserModel)ViewData["User"];
     var subjects = Model.SubjectCount == 1 ? Resource.SubjectsLower.Substring(0, Resource.SubjectsLower.Length - 1) : (Model.SubjectCount == 0 ? Resource.NoQuestions : Resource.SubjectsLower);
 }
 
@@ -35,35 +34,37 @@
             </table>
         </div>
     </div>
-    <hr />
-    <div class="card" style="box-shadow: none !important;">
-        <div class="card-header border-0">
-            <h1 class="card-title align-items-start flex-column">
-                <span class="text-dark text-lg">@Resource.ListOfSubjects</span><br />
-                <span class="text-muted mt-1 font-weight-bold font-size-sm">
-                    @if (Model.SubjectCount >= 1)
-                    {
-                        @Resource.Has <b class="text-primary">@Model.SubjectCount </b>
-                    }
-                    @subjects
-                </span>
-            </h1>
+    @if (Model.StaffDetails.IsLecturer)
+    {
+        <hr />
+        <div class="card" style="box-shadow: none !important;">
+            <div class="card-header border-0">
+                <h1 class="card-title align-items-start flex-column">
+                    <span class="text-dark text-lg">@Resource.ListOfSubjects</span><br />
+                    <span class="text-muted mt-1 font-weight-bold font-size-sm">
+                        @if (Model.SubjectCount >= 1)
+                        {
+                            @Resource.Has <b class="text-primary">@Model.SubjectCount </b>
+                        }
+                        @subjects
+                    </span>
+                </h1>
+            </div>
+            <div class="card-body">
+                <table id="tbl_subjects" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>@Resource.Subject</th>
+                            <th>@Resource.StartDate</th>
+                            <th>@Resource.EndDate</th>
+                            <th data-orderable="false">@Resource.Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-        <div class="card-body">
-            <table id="tbl_subjects" class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>@Resource.Subject</th>
-                        <th>@Resource.StartDate</th>
-                        <th>@Resource.EndDate</th>
-                        <th>@Resource.InsertedDate</th>
-                        <th data-orderable="false">@Resource.Actions</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+    }
 
     <div class="d-flex justify-content-between border-top mt-5">
         <input type="button" value="@Resource.Back" onclick="go_back_documents('@Model.StaffDetails.Ide')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
@@ -86,10 +87,10 @@
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
                 $('#icon_document').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
@@ -101,7 +102,7 @@
         });
 
         function go_back_documents(ide) {
-            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
+            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide;
         }
 
         function submit_form(ide) {
@@ -128,7 +129,8 @@
                 deferRender: true,
                 columnDefs: [
                     { className: "w5 vertikal", targets: [0, 7] },
-                    { className: "w15 vertikal", targets: [1, 2, 3, 4, 5, 6] }
+                    { className: "w10 vertikal", targets: [2, 3, 4] },
+                    { className: "w15 vertikal", targets: [1, 5, 6] }
                 ],
                 order: [[0, "asc"]],
                 columns: [
@@ -162,9 +164,12 @@
 
                             var dropdown = '<div class="input-group-prepend">' +
                                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                                '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="add_subject(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Resource.AddSubject</span></button>';
+                                '<div class="dropdown-menu" role="menu">';
+                            if (row.isLecturer) {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="add_subject(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Resource.AddSubject</span></button>';
+                            }
+
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
                             if (active) {
                                 dropdown += '<button type="button" class="dropdown-item" onclick="delete_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                             }
@@ -188,8 +193,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { className: "w10 vertikal", targets: [0, 5] },
-                    { className: "w20 vertikal", targets: [2, 3, 4] },
+                    { className: "w10 vertikal", targets: [0] },
+                    { className: "w15 vertikal", targets: [4] },
+                    { className: "w20 vertikal", targets: [2, 3] },
                     { className: "w30 vertikal", targets: [1] }
                 ],
                 order: [[0, "asc"]],
@@ -209,12 +215,6 @@
                     {
                         data: function(row, type, set) {
                             var date = new Date(Date.parse(row.endDate));
-                            return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                        }
-                    },
-                    {
-                        data: function(row, type, set) {
-                            var date = new Date(Date.parse(row.insertDate));
                             return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                         }
                     },

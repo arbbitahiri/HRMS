@@ -1,5 +1,11 @@
 ﻿@using HRMS.Models.Staff.Department
 @model DepartmentVM
+@{
+    var canCreate = User.HasClaim("21sdp", "c");
+    var canAddSubject = User.HasClaim("21ssb", "c");
+    var canEdit = User.HasClaim("21sdp", "e");
+    var canDelete = User.HasClaim("21sdp", "d");
+}
 
 <div class="row mb-3">
     <div class="col-md-8">
@@ -7,7 +13,10 @@
     </div>
     <div class="col-md-4">
         <div class="justify-content-end">
-            <a onclick="add_department('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
+            @if (canCreate)
+            {
+                <a onclick="add_department('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
+            }
         </div>
     </div>
 </div>
@@ -18,10 +27,14 @@
             <th>#</th>
             <th>@Resource.Department</th>
             <th>@Resource.StaffType</th>
+            <th>@Resource.JobType</th>
+            <th>@Resource.BruttoSalary</th>
             <th>@Resource.StartDate</th>
             <th>@Resource.EndDate</th>
-            <th>@Resource.Description</th>
-            <th data-orderable="false">@Resource.Actions</th>
+            @if (canAddSubject || canEdit || canDelete)
+            {
+                <th data-orderable="false">@Resource.Actions</th>
+            }
         </tr>
     </thead>
     <tbody></tbody>
@@ -31,6 +44,11 @@
     $(document).ready(function() {
         render_department_tbl(@Json.Serialize(Model.Departments));
     });
+
+    var canAddSubjectDEP = '@canAddSubject' == 'True' ? true : false;
+    var canEditDEP = '@canEdit' == 'True' ? true : false;
+    var canDeleteDEP = '@canDelete' == 'True' ? true : false;
+    var canSeeDEP = canAddSubjectDEP || canEditDEP || canDeleteDEP;
 
     function render_department_tbl(data) {
         var rowCount = 1;
@@ -45,9 +63,10 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w5 vertikal", targets: [0, 6] },
-                { className: "w15 vertikal", targets: [1, 2, 3, 4] },
-                { className: "w30 vertikal", targets: [5] }
+                { visible: canSeeDEP, targets: [7] },
+                { className: "w5 vertikal", targets: [0, 7] },
+                { className: "w10 vertikal", targets: [2, 3, 4] },
+                { className: "w15 vertikal", targets: [1, 5, 6] }
             ],
             order: [[0, "asc"]],
             columns: [
@@ -58,6 +77,8 @@
                 },
                 { data: "department" },
                 { data: "staffType" },
+                { data: "jobType" },
+                { data: "bruttoSalary" },
                 {
                     data: function(row, type, set) {
                         var date = new Date(Date.parse(row.startDate));
@@ -71,19 +92,6 @@
                     }
                 },
                 {
-                    data: function(row, type, set) {
-                        var desc = '///';
-                        if (row.description != null) {
-                            if (row.description.length > 80) {
-                                desc = row.description.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.description.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
-                            } else {
-                                desc = row.description ?? "///";
-                            }
-                        }
-                        return desc;
-                    }
-                },
-                {
                     data: function (row, type, set) {
                         var date_time_now = new Date();
                         var end_date = new Date(Date.parse(row.endDate));
@@ -91,12 +99,18 @@
 
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
-                        if (active) {
+                            '<div class="dropdown-menu" role="menu">';
+                        if (row.isLecturer && canAddSubjectDEP) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="add_subject(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-plus"></i></span><span class="p-1">@Resource.AddSubject</span></button>';
+                        }
+
+                        if (canEditDEP) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                        }
+                        if (active && canDeleteDEP) {
                             dropdown += '<button type="button" class="dropdown-item" onclick="delete_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
                         }
-                            dropdown += '</div></div>';
+                        dropdown += '</div></div>';
                         return dropdown;
                     }
                 }
@@ -142,7 +156,7 @@
             if (result.value) {
                 $.post('@Url.Action("DeleteDepartment", "Staff")', {
                     ide: ide,
-                    "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                     }, function (data) {
                         handle_success(data, SubmitPathType.RELOAD, "");
                 });

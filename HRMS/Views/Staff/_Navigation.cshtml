@@ -4,7 +4,7 @@
 
 <div class="bs-stepper-header" role="tablist">
     <div class='step @(action == "Register" ? "active" : "")' data-target="#register_form">
-        <a id="tab1">
+        <a id="tab1" href="#">
             <button type="button" class="step-trigger" role="tab" aria-controls="register_form" id="trigger_register_form" aria-selected='@(action == "Register" ? true : false)'>
                 <span id="icon_register" class="bs-stepper-circle"><span class="fas fa-id-card-alt" aria-hidden="true"></span></span>
                 <span class="bs-stepper-label">1. @Resource.PersonalData</span>
@@ -13,7 +13,7 @@
     </div>
     <div class="bs-stepper-line"></div>
     <div class='step @(action == "Qualification" ? "active" : "")' data-target="#qualification_form">
-        <a id="tab2">
+        <a id="tab2" href="#">
             <button type="button" class="step-trigger" role="tab" aria-controls="qualification_form" id="trigger_qualification_form" aria-selected='@(action == "Qualification" ? true : false)'>
                 <span id="icon_qualification" class="bs-stepper-circle"><span class="fab fa-windows" aria-hidden="true"></span></span>
                 <span class="bs-stepper-label">2. @Resource.Qualifications</span>
@@ -22,7 +22,7 @@
     </div>
     <div class="bs-stepper-line"></div>
     <div class='step @(action == "Documents" ? "active" : "")' data-target="#document_form">
-        <a id="tab3">
+        <a id="tab3" href="#">
             <button type="button" class="step-trigger" role="tab" aria-controls="document_form" id="trigger_document_form" aria-selected='@(action == "Documents" ? true : false)'>
                 <span id="icon_document" class="bs-stepper-circle"><span class="fas fa-file-alt" aria-hidden="true"></span></span>
                 <span class="bs-stepper-label">3. @Resource.Documents</span>
@@ -31,7 +31,7 @@
     </div>
     <div class="bs-stepper-line"></div>
     <div class='step @(action == "Departments" ? "active" : "")' data-target="#staff_department">
-        <a id="tab4">
+        <a id="tab4" href="#">
             <button type="button" class="step-trigger" role="tab" aria-controls="staff_department" id="trigger_staff_department" aria-selected='@(action == "Departments" ? true : false)'>
                 <span id="icon_department" class="bs-stepper-circle"><span class="fas fa-bookmark" aria-hidden="true"></span></span>
                 <span class="bs-stepper-label">4. @Resource.Department</span>

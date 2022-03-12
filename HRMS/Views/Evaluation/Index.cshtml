@@ -1,4 +1,6 @@
-﻿@{
+﻿@using HRMS.Models.Evaluation
+@model IEnumerable<EvaluationTypes>
+@{
     ViewData["Title"] = @Resource.Evaluation;
     int i = 1;
 }
@@ -9,14 +11,14 @@
     </div>
     <div class="card-body">
         <ul class="nav nav-pills nav-success row">
-            @foreach(var evaluation in Enum.GetValues(typeof(EvaluationTypeEnum)).Cast<EvaluationTypeEnum>())
+            @foreach(var evaluation in Model)
             {
                 <div data-id="@i" class="nav-item d-flex flex-grow-1 flex-shrink-0 col-md-6 col-12 mb-3" style="cursor: pointer;">
-                    <a onclick="redirect_to(@((int)evaluation), this)"
+                    <a onclick="redirect_to(@((int)evaluation.EvaluationType), this)"
                         class="nav-link slide-fwd-center nav-link py-10 d-flex flex-grow-1 rounded flex-column align-items-center border"
                         data-toggle="pill">
-                        <span class="nav-icon py-2 w-auto"><i class="@GetIcon(evaluation) fa-4x"></i></span>
-                        <span class="nav-text font-weight-bolder text-center font-size-h7 py-1">@GetText(evaluation)</span>
+                        <span class="nav-icon py-2 w-auto"><i class="@GetIcon(evaluation.EvaluationType) fa-4x"></i></span>
+                        <span class="nav-text font-weight-bolder text-center font-size-h7 py-1">@evaluation.Title</span>
                     </a>
                 </div>
                 i++;
@@ -52,16 +54,6 @@
             EvaluationTypeEnum.StudentStaff => "fas fa-user-graduate",
             EvaluationTypeEnum.StudentCollege => "fas fa-university",
             EvaluationTypeEnum.Self => "fas fa-portrait",
-            _ => ""
-        };
-
-    private string GetText(EvaluationTypeEnum et) =>
-        et switch
-        {
-            EvaluationTypeEnum.Manager => Resource.ManagerEvaluation,
-            EvaluationTypeEnum.StudentStaff => Resource.StudentsStaffEvaluation,
-            EvaluationTypeEnum.StudentCollege => Resource.StudentsCollegeEvaluation,
-            EvaluationTypeEnum.Self => Resource.SelfEvaluation,
             _ => ""
         };
 }

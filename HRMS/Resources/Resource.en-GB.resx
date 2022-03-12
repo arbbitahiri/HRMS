@@ -282,6 +282,9 @@
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="BestRegards" xml:space="preserve">
+    <value>Best regards</value>
+  </data>
   <data name="Birthdate" xml:space="preserve">
     <value>Birthdate</value>
   </data>
@@ -380,6 +383,9 @@
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
+  </data>
+  <data name="Dear" xml:space="preserve">
+    <value>Dear</value>
   </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
@@ -641,6 +647,15 @@
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Lastname</value>
+  </data>
+  <data name="LeaveRequest" xml:space="preserve">
+    <value>A request has been made for {0} for {1}, from {2} to {3}. You can find the request in the leave list.</value>
+  </data>
+  <data name="LeaveRequestChanged" xml:space="preserve">
+    <value>Date of the request for {0} for {1}, has been changed. The new date is from {2} to {3}. You can find the application in the holiday list.</value>
+  </data>
+  <data name="LeaveRequestReview" xml:space="preserve">
+    <value>The request for {0} is {1}. You can find the request in the leave list.</value>
   </data>
   <data name="LeaveReviewedSuccessfully" xml:space="preserve">
     <value>Leave reviewed successfully!</value>
@@ -1020,6 +1035,9 @@
   <data name="RequestedDate" xml:space="preserve">
     <value>Requested date</value>
   </data>
+  <data name="RequestForLeave" xml:space="preserve">
+    <value>Request for leave</value>
+  </data>
   <data name="RequiredField" xml:space="preserve">
     <value>This field is required!</value>
   </data>
@@ -1040,6 +1058,9 @@
   </data>
   <data name="ReviewedFrom" xml:space="preserve">
     <value>Reviewed from</value>
+  </data>
+  <data name="RiinvestCollege" xml:space="preserve">
+    <value>Riinvest College</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Role</value>

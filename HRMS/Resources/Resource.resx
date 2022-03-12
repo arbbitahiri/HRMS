@@ -1389,4 +1389,25 @@
   <data name="DocumentTypeFor" xml:space="preserve">
     <value>Lloji i dokumentit për veprim</value>
   </data>
+  <data name="BestRegards" xml:space="preserve">
+    <value>Gjitha të mirat</value>
+  </data>
+  <data name="Dear" xml:space="preserve">
+    <value>I nderuar</value>
+  </data>
+  <data name="RiinvestCollege" xml:space="preserve">
+    <value>Kolegji Riinvest</value>
+  </data>
+  <data name="LeaveRequest" xml:space="preserve">
+    <value>Është bërë kërkesa për {0} për {1}, nga data {2} deri {3}. Kërkesën mund ta gjeni në listën e pushimeve.</value>
+  </data>
+  <data name="LeaveRequestChanged" xml:space="preserve">
+    <value>Është ndryshuar data e kërkesa për {0} për {1}. Data e re është nga {2} deri {3}. Kërkesën mund ta gjeni në listën e pushimeve.</value>
+  </data>
+  <data name="LeaveRequestReview" xml:space="preserve">
+    <value>Kërkesa për {0} është {1}. Kërkesën mund ta gjeni në listën e pushimeve.</value>
+  </data>
+  <data name="RequestForLeave" xml:space="preserve">
+    <value>Kërkesë për pushim</value>
+  </data>
 </root>

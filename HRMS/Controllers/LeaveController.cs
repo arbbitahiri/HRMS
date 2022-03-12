@@ -8,6 +8,7 @@ using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,9 +19,13 @@ namespace HRMS.Controllers;
 [Authorize]
 public class LeaveController : BaseController
 {
-    public LeaveController(HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    private readonly IEmailSender emailSender;
+
+    public LeaveController(IEmailSender emailSender,
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
+        this.emailSender = emailSender;
     }
 
     [Authorize("31:m"), Description("Arb Tahiri", "Entry form. List of holidays.")]
@@ -78,8 +83,7 @@ public class LeaveController : BaseController
                 StartDate = a.StartDate,
                 ReturnDate = a.EndDate,
                 InsertedDate = a.InsertedDate,
-                ReviewedDate = a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Rejected) ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
-                Finished = a.LeaveStatus.Any(a => a.StatusTypeId != (int)Status.Pending)
+                ReviewedDate = a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Approved) ? a.InsertedDate.ToString("dd/MM/yyyy") : "///"
             }).ToListAsync();
         return PartialView(holidays);
     }
@@ -106,7 +110,7 @@ public class LeaveController : BaseController
                 StartDate = a.StartDate,
                 ReturnDate = a.EndDate,
                 InsertedDate = a.InsertedDate,
-                Finished = a.LeaveStatus.Any(a => a.StatusTypeId != (int)Status.Pending)
+                ReviewedDate = a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Rejected) ? a.InsertedDate.ToString("dd/MM/yyyy") : "///"
             }).ToListAsync();
         return PartialView(holidays);
     }
@@ -137,7 +141,7 @@ public class LeaveController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.CannotRequestLeave });
         }
 
-        var staffId = await db.Staff.Where(a => a.UserId == user.Id).Select(a => a.StaffId).FirstOrDefaultAsync();
+        var staff = await db.Staff.Where(a => a.UserId == user.Id).FirstOrDefaultAsync();
 
         var startDate = DateTime.ParseExact(create.StartDate, "dd/MM/yyyy", null);
         var endDate = DateTime.ParseExact(create.EndDate, "dd/MM/yyyy", null);
@@ -153,7 +157,7 @@ public class LeaveController : BaseController
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)create.ALeaveTypeId);
         var days = WorkingDays(startDate, endDate);
-        int actualDays = (int)(leaveDays.RemainingDays - days);
+        int actualDays = (int)(remainingLeaveDays - days);
 
         if (remainingLeaveDays - days < 0)
         {
@@ -163,10 +167,10 @@ public class LeaveController : BaseController
         var leave = new Leave
         {
             LeaveTypeId = create.ALeaveTypeId,
-            StaffId = staffId,
+            StaffId = staff.StaffId,
             StartDate = startDate,
             EndDate = endDate,
-            RemainingDays = (int)(leaveDays.RemainingDays - days),
+            RemainingDays = (int)(remainingLeaveDays - days),
             Description = create.Description,
             Active = true,
             InsertedDate = DateTime.Now,
@@ -185,8 +189,10 @@ public class LeaveController : BaseController
         });
         await db.SaveChangesAsync();
 
-        // TODO: send email
-        // TODO: send email to staff for the holiday. Remind of remaining days.
+        //var managerEmail = await db.StaffDepartment.Where(a => a.EndDate >= DateTime.Now && a.StaffTypeId == (int)StaffTypeEnum.Manager).Select(a => a.Staff.User.Email).FirstOrDefaultAsync();
+        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == create.ALeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+
+        //await emailSender.SendEmailAsync(managerEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequest, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")));
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
@@ -229,35 +235,46 @@ public class LeaveController : BaseController
         }
 
         int leaveId = CryptoSecurity.Decrypt<int>(review.LeaveIde);
+        int staffId = CryptoSecurity.Decrypt<int>(review.StaffIde);
 
         if (review.StatusTypeId == (int)Status.Approved && review.LeaveTypeEnum != LeaveTypeEnum.Unpaid)
         {
+            var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
+
             var leaveDays = await db.LeaveStaffDays
-                .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == (int)review.LeaveTypeEnum && a.InsertedDate.Year == DateTime.Now.Year)
+                .Where(a => a.Active
+                    && a.StaffId == staffId
+                    && a.LeaveTypeId == leave.LeaveTypeId
+                    && a.InsertedDate.Year == DateTime.Now.Year)
                 .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
-            int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave(review.LeaveTypeEnum);
-            var days = WorkingDays(review.StartDate, review.EndDate);
+            int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)leave.LeaveTypeId);
+            var days = WorkingDays(leave.StartDate, leave.EndDate);
 
             if (remainingLeaveDays - days < 0)
             {
                 return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
             }
 
-            int actualRemainingDays = (int)(leaveDays.RemainingDays - days);
+            if (leaveDays != null)
+            {
+                leaveDays.Active = false;
+                leaveDays.UpdatedDate = DateTime.Now;
+                leaveDays.UpdatedFrom = user.Id;
+                leaveDays.UpdatedNo = UpdateNo(leaveDays.UpdatedNo);
+            }
 
             db.LeaveStaffDays.Add(new LeaveStaffDays
             {
-                LeaveTypeId = (int)review.LeaveTypeEnum,
-                StaffId = CryptoSecurity.Decrypt<int>(review.StaffIde),
-                RemainingDays = actualRemainingDays,
+                LeaveTypeId = leave.LeaveTypeId,
+                StaffId = staffId,
+                RemainingDays = leave.RemainingDays,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
 
-            var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
-            leave.RemainingDays = actualRemainingDays;
+            leave.RemainingDays = leave.RemainingDays;
             leave.UpdatedDate = DateTime.Now;
             leave.UpdatedFrom = user.Id;
             leave.UpdatedNo = UpdateNo(leave.UpdatedNo);
@@ -274,12 +291,17 @@ public class LeaveController : BaseController
             LeaveId = leaveId,
             StatusTypeId = review.StatusTypeId,
             Description = review.Description,
-            Active = false,
+            Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
-        // TODO: send email to inform staff for the holiday request. Remind of remaining days.
+
+        //var staffEmail = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.User.Email).FirstOrDefaultAsync();
+        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == leaveId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+        //var statusType = await db.StatusType.Where(a => a.StatusTypeId == review.StatusTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+
+        //await emailSender.SendEmailAsync(staffEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequestReview, leaveType, statusType));
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.LeaveReviewedSuccessfully });
     }
@@ -333,7 +355,7 @@ public class LeaveController : BaseController
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)edit.ALeaveTypeId);
         var days = WorkingDays(startDate, endDate);
-        int actualDays = (int)(leaveDays.RemainingDays - days);
+        int actualDays = (int)(remainingLeaveDays - days);
 
         if (remainingLeaveDays - days < 0)
         {
@@ -343,7 +365,7 @@ public class LeaveController : BaseController
         var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(edit.LeaveIde));
         leave.StartDate = startDate;
         leave.EndDate = endDate;
-        leave.RemainingDays = (int)(leaveDays.RemainingDays - days);
+        leave.RemainingDays = (int)(remainingLeaveDays - days);
         leave.Description = edit.Description;
         leave.UpdatedDate = DateTime.Now;
         leave.UpdatedFrom = user.Id;
@@ -351,8 +373,11 @@ public class LeaveController : BaseController
 
         await db.SaveChangesAsync();
 
-        // TODO: send email to manager for the change. Changed date from this to this.
-        // TODO: send email to staff for the holiday change. Remind of remaining days.
+        //var staff = await db.Staff.Where(a => a.UserId == user.Id).FirstOrDefaultAsync();
+        //var managerEmail = await db.StaffDepartment.Where(a => a.EndDate >= DateTime.Now && a.StaffTypeId == (int)StaffTypeEnum.Manager).Select(a => a.Staff.User.Email).FirstOrDefaultAsync();
+        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == edit.ALeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+
+        //await emailSender.SendEmailAsync(managerEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequestChanged, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")));
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
@@ -427,8 +452,13 @@ public class LeaveController : BaseController
     #region Remote
 
     [Description("Arb Tahiri", "Method to check startdate and enddate.")]
-    public async Task<IActionResult> CheckDate(string StartDate, string EndDate, int LeaveTypeId)
+    public async Task<IActionResult> CheckDate(string StartDate, string EndDate, int ALeaveTypeId)
     {
+        if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate))
+        {
+            return Json(true);
+        }
+
         var startDate = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
         var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
 
@@ -437,18 +467,20 @@ public class LeaveController : BaseController
             return Json(Resource.StartDateVSEndDate);
         }
 
-        var days = WorkingDays(startDate, endDate);
-        int remainingDays;
-        var lastLeave = await db.Leave.Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == LeaveTypeId && a.StartDate.Year == DateTime.Now.Year && a.LeaveStatus.Any(b => b.Active && b.StatusTypeId != (int)Status.Rejected)).OrderBy(a => a.LeaveId).LastOrDefaultAsync();
-        remainingDays = lastLeave != null ? lastLeave.RemainingDays : 20;
+        var leaveDays = await db.LeaveStaffDays
+            .Where(a => a.Active && a.Staff.UserId == user.Id && a.LeaveTypeId == ALeaveTypeId && a.InsertedDate.Year == DateTime.Now.Year)
+            .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
-        if (remainingDays - days >= 0)
+        int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)ALeaveTypeId);
+        int days = (int)WorkingDays(startDate, endDate);
+
+        if (remainingLeaveDays - days >= 0)
         {
             return Json(true);
         }
         else
         {
-            return Json(string.Format(Resource.NoAvailableDaysLeave, remainingDays));
+            return Json(string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays));
         }
     }
 

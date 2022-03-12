@@ -114,3 +114,8 @@ public enum JobTypeEnum
     Primary = 1,
     Secondary = 2
 }
+
+public enum CountryEnum
+{
+    Kosova = 1
+}

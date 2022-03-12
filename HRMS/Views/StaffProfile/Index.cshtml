@@ -90,22 +90,22 @@
         });
 
         function department_tab(ide) {
-            $("#kt_department").load('@Url.Action("_ProfileDepartment", "Staff")', { ide: ide });
+            $("#kt_department").load('@Url.Action("_ProfileDepartment", "StaffProfile")', { ide: ide });
             sessionStorage.setItem("tab_id", "tab_department");
         }
 
         function qualification_tab(ide) {
-            $("#kt_qualification").load('@Url.Action("_ProfileQualification", "Staff")', { ide: ide });
+            $("#kt_qualification").load('@Url.Action("_ProfileQualification", "StaffProfile")', { ide: ide });
             sessionStorage.setItem("tab_id", "tab_qualification");
         }
 
         function document_tab(ide) {
-            $("#kt_document").load('@Url.Action("_ProfileDocument", "Staff")', { ide: ide });
+            $("#kt_document").load('@Url.Action("_ProfileDocument", "StaffProfile")', { ide: ide });
             sessionStorage.setItem("tab_id", "tab_document");
         }
 
         function subject_tab(ide) {
-            $("#kt_subject").load('@Url.Action("_ProfileSubject", "Staff")', { ide: ide });
+            $("#kt_subject").load('@Url.Action("_ProfileSubject", "StaffProfile")', { ide: ide });
             sessionStorage.setItem("tab_id", "tab_subject");
         }
 

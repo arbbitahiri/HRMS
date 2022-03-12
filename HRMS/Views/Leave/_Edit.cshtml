@@ -71,7 +71,14 @@
         });
 
         $(".datetimepicker-input").datetimepicker({
-            format: 'DD/MM/YYYY'
+            locale: "'" + cultureShort + "'",
+            format: 'DD/MM/YYYY',
+            dayViewHeaderFormat: "MMMM YYYY",
+            buttons: {
+                showToday: true,
+                showClear: true,
+                showClose: true
+            },
         });
     });
 

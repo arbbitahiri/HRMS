@@ -43,7 +43,7 @@
         </div>
         <div class="col-md-4">
             <label asp-for="BirthDate"></label>
-            <input asp-for="BirthDate" type="text" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
+            <input asp-for="BirthDate" type="text" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
     </div>
@@ -59,9 +59,9 @@
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="Country"></label>
-            <input asp-for="Country" type="text" autocomplete="off" class="form-control"/>
-            <span asp-validation-for="Country" class="text-danger"></span>
+            <label asp-for="CountryId"></label>
+            <select asp-for="CountryId" asp-items='await repo.Countries(user.Language)' class="form-control select2"></select>
+            <span asp-validation-for="CountryId" class="text-danger"></span></select>
         </div>
     </div>
     <div class="row form-group">
@@ -128,7 +128,14 @@
             });
 
             $("#BirthDate").datetimepicker({
-                format: 'DD/MM/YYYY'
+                locale: "'" + cultureShort + "'",
+                format: 'DD/MM/YYYY',
+                dayViewHeaderFormat: "MMMM YYYY",
+                buttons: {
+                    showToday: true,
+                    showClear: true,
+                    showClose: true
+                },
             });
         });
 

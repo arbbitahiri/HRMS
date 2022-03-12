@@ -37,13 +37,11 @@ public class AddDepartment
     public decimal Salary { get; set; }
 
     [Display(Name = "EmployeeContribution", ResourceType = typeof(Resource))]
-    [RangeIf(nameof(Outsider), 5, 15, ErrorMessageResourceName = "EmployeeContributionRange", ErrorMessageResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    [RequiredIf(nameof(Outsider), "true", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public decimal? EmployeeContribution { get; set; }
 
     [Display(Name = "EmployerContribution", ResourceType = typeof(Resource))]
-    [RangeIf(nameof(Outsider), 5, 15, ErrorMessageResourceName = "EmployerContributionRange", ErrorMessageResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    [RequiredIf(nameof(Outsider), "true", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public decimal? EmployerContribution { get; set; }
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]

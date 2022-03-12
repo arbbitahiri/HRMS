@@ -17,12 +17,12 @@ public class Create
     public string StartDate { get; set; }
 
     [Display(Name = "EndDate", ResourceType = typeof(Resource))]
-    [Remote("CheckDate", "Holiday", AdditionalFields = "StartDate,HolidayTypeId", ErrorMessageResourceName = "MustBe18YearsOld", ErrorMessageResourceType = typeof(Resource))]
+    [Remote("CheckDate", "Leave", AdditionalFields = "StartDate,EndDate,ALeaveTypeId", ErrorMessageResourceName = "MustBe18YearsOld", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string EndDate { get; set; }
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     public string Description { get; set; }
 
-    public int RemainingDays { get; set; }
+    public int? RemainingDays { get; set; }
 }

@@ -12,7 +12,7 @@
     </button>
 </div>
 
-<form asp-action="Create" asp-controller="Leave" id="frm_create_leave" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create" role="form">
+<form asp-action="Create" asp-controller="Leave" id="frm_create_leave" method="post" data-ajax="true" data-ajax-method="POST" data-ajax-success="success_create_leave" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
 
@@ -31,7 +31,7 @@
             <div class="col-md-6 form-group">
                 <label asp-for="StartDate" class="required"></label>
                 <div class="input-group date" id="kt_start_date">
-                    <input asp-for="StartDate" type="text" onchange="remaining_day_start(this)" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate" style="cursor: default;"/>
+                    <input asp-for="StartDate" type="text" onchange="remaining_day_start(this)" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate" style="cursor: default;"/>
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                     </div>
@@ -41,7 +41,7 @@
             <div class="col-md-6 form-group">
                 <label asp-for="EndDate" class="required"></label>
                 <div class="input-group date" id="kt_end_date">
-                    <input asp-for="EndDate" type="text" onchange="remaining_day_end(this)" readonly autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate" style="cursor: default;"/>
+                    <input asp-for="EndDate" type="text" onchange="remaining_day_end(this)" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate" style="cursor: default;"/>
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                     </div>
@@ -57,7 +57,7 @@
     </div>
     <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+        <button type="submit" id="btn_submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
 
@@ -78,7 +78,14 @@
         });
 
         $(".datetimepicker-input").datetimepicker({
-            format: 'DD/MM/YYYY'
+            locale: "'" + cultureShort + "'",
+            format: 'DD/MM/YYYY',
+            dayViewHeaderFormat: "MMMM YYYY",
+            buttons: {
+                showToday: true,
+                showClear: true,
+                showClose: true
+            },
         });
 
         $("#ALeaveTypeId").on("change", function() {
@@ -129,7 +136,7 @@
         });
     }
 
-    function success_create(data) {
+    function success_create_leave(data) {
         handle_success(data, SubmitPathType.RELOAD, "");
     }
 </script>

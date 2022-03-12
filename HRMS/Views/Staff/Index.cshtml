@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card" id="kt_staff_search">
     <div class="card-header">
         <h3 class="card-title mt-1">@Resource.SearchResult</h3>
         <div class="card-tools mr-2">
@@ -135,7 +135,7 @@
         });
 
         function search_staff(data) {
-            debugger
+            $('#kt_staff_search').slideDown(500);
             $("#tbl_staff").DataTable({
                 destroy: true,
                 language: {

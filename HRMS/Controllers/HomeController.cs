@@ -52,7 +52,14 @@ public class HomeController : BaseController
     {
         ViewData["Title"] = Resource.HomePage;
 
-        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+        var leaveStaffDays = await db.LeaveStaffDays
+            .Where(a => a.Active
+                && a.Staff.UserId == user.Id
+                && a.InsertedDate.Year == DateTime.Now.Year
+                && a.LeaveTypeId == (int)LeaveTypeEnum.Annual)
+            .ToListAsync();
+
+        int leaveCount = leaveStaffDays.Any() ? leaveStaffDays.Select(a => a.RemainingDays).FirstOrDefault() : 20;
 
         var dashboard = new AdministratorVM
         {
@@ -86,7 +93,14 @@ public class HomeController : BaseController
     {
         ViewData["Title"] = Resource.HomePage;
 
-        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+        var leaveStaffDays = await db.LeaveStaffDays
+            .Where(a => a.Active
+                && a.Staff.UserId == user.Id
+                && a.InsertedDate.Year == DateTime.Now.Year
+                && a.LeaveTypeId == (int)LeaveTypeEnum.Annual)
+            .ToListAsync();
+
+        int leaveCount = leaveStaffDays.Any() ? leaveStaffDays.Select(a => a.RemainingDays).FirstOrDefault() : 20;
 
         var dashboard = new LecturerVM
         {
@@ -121,7 +135,14 @@ public class HomeController : BaseController
     {
         ViewData["Title"] = Resource.HomePage;
 
-        int leaveCount = await db.LeaveStaffDays.AnyAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) ? await db.LeaveStaffDays.CountAsync(a => a.Staff.UserId == user.Id && a.InsertedDate.Year == DateTime.Now.Year && a.Active && a.LeaveTypeId == (int)LeaveTypeEnum.Annual) : 20;
+        var leaveStaffDays = await db.LeaveStaffDays
+            .Where(a => a.Active
+                && a.Staff.UserId == user.Id
+                && a.InsertedDate.Year == DateTime.Now.Year
+                && a.LeaveTypeId == (int)LeaveTypeEnum.Annual)
+            .ToListAsync();
+
+        int leaveCount = leaveStaffDays.Any() ? leaveStaffDays.Select(a => a.RemainingDays).FirstOrDefault() : 20;
 
         var dashboard = new ManagerVM
         {

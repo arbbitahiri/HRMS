@@ -168,4 +168,13 @@ public class DDLRepository : IDDLRepository
                 Value = a.DocumentForId.ToString(),
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).ToListAsync();
+
+    public async Task<List<SelectListItem>> Countries(LanguageEnum lang) =>
+        await db.Country
+            .OrderBy(a => lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
+            .Select(a => new SelectListItem
+            {
+                Value = a.CountryId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
 }

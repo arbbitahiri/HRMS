@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div class="card card-primary card-outline card-outline-tabs" id="kt_leave">
+<div class="card card-primary card-outline card-outline-tabs" style="display: none;" id="kt_leave">
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="pending_tab()"  id="tab_pending"  href="#kt_pending"  data-toggle="tab">@Resource.Pending</a></li>
@@ -148,7 +148,7 @@
             change_staff();
 
             $('#btn_search').on('click', function() {
-                $('#kt_leave').removeClass('d-none');
+                $('#kt_leave').slideDown(500);
                 if (sessionStorage.getItem("tab_leave") == null) {
                     $('#tab_pending').click();
                 } else {

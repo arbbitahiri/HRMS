@@ -4,7 +4,6 @@
     ViewData["Title"] = Resource.ThirdStepStaffRegistration;
     Layout = "~/Views/Staff/_Layout.cshtml";
 
-    UserModel user = (UserModel)ViewData["User"];
     var documents = Model.DocumentCount == 1 ? Resource.DocumentsLower.Substring(0, Resource.DocumentsLower.Length - 1) : (Model.DocumentCount == 0 ? Resource.NoDocuments : Resource.DocumentsLower);
 }
 
@@ -52,7 +51,7 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            if (@((int)Model.MethodType) == MethodType.POST) {
+            if (@((int)Model.StaffDetails.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: 'cursor: pointer' });
                 $('#tab2').attr({ href: '', style: 'cursor: pointer' });
                 $('#tab3').attr({ href: '', style: '' });
@@ -63,10 +62,10 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Qualification", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab4').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
@@ -76,11 +75,11 @@
         });
 
         function go_back_qualification(ide) {
-            window.location.href = '@Url.Action("Qualification", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
+            window.location.href = '@Url.Action("Qualification", "Staff")?ide=' + ide;
         }
 
         function continue_to_department(ide) {
-            window.location.href = '@Url.Action("Departments", "Staff")?ide=' + ide + '&method=@((int)Model.MethodType)';
+            window.location.href = '@Url.Action("Departments", "Staff")?ide=' + ide;
         }
 
         function render_tbl_documents(data) {

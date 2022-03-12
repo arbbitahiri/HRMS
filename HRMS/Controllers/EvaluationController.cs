@@ -26,7 +26,18 @@ public class EvaluationController : BaseController
     }
 
     [Authorize(Policy = "71:m"), Description("Korab Mustafa", "Form to display list of evaluation types.")]
-    public IActionResult Index() => View();
+    public async Task<IActionResult> Index()
+    {
+        var availableEvaluation = !User.IsInRole("Manager") ? new int[] { (int)EvaluationTypeEnum.Self } : new int[] { (int)EvaluationTypeEnum.Manager, (int)EvaluationTypeEnum.StudentCollege, (int)EvaluationTypeEnum.StudentStaff, (int)EvaluationTypeEnum.Self };
+        var list = await db.EvaluationType
+            .Where(a => a.Active && availableEvaluation.Contains(a.EvaluationTypeId))
+            .Select(a => new EvaluationTypes
+            {
+                EvaluationType = (EvaluationTypeEnum)a.EvaluationTypeId,
+                Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
+        return View(list);
+    }
 
     [Authorize(Policy = "70:m"), Description("Korab Mustafa", "Form to display list of evaluation data.")]
     public IActionResult Search() => View();

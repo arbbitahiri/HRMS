@@ -1,5 +1,10 @@
 ﻿@using HRMS.Models.Staff
 @model QualificationVM
+@{
+    var canCreate = User.HasClaim("21sq", "c");
+    var canEdit = User.HasClaim("21sq", "e");
+    var canDelete = User.HasClaim("21sq", "d");
+}
 
 <div class="row mb-3">
     <div class="col-md-8">
@@ -7,7 +12,10 @@
     </div>
     <div class="col-md-4">
         <div class="justify-content-end">
-            <a onclick="add_qualification('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddQualification</a>
+            @if (canCreate)
+            {
+                <a onclick="add_qualification('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddQualification</a>
+            }
         </div>
     </div>
 </div>
@@ -21,7 +29,10 @@
             <th>@Resource.Title</th>
             <th>@Resource.FieldOfStudy</th>
             <th>@Resource.CreditsNumber</th>
-            <th data-orderable="false">@Resource.Actions</th>
+            @if (canEdit || canDelete)
+            {
+                <th width="10%" data-orderable="false">@Resource.Actions</th>
+            }
         </tr>
     </thead>
     <tbody></tbody>
@@ -31,6 +42,10 @@
     $(document).ready(function() {
         render_qualification_tbl(@Json.Serialize(Model.Qualifications));
     });
+
+    var canEditQ = '@canEdit' == 'True' ? true : false;
+    var canDeleteQ = '@canDelete' == 'True' ? true : false;
+    var canSeeQ = canEditQ || canDeleteQ;
 
     function render_qualification_tbl(data) {
         var rowCount = 1;
@@ -45,6 +60,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { visible: canSeeQ, targets: [6] },
                 { className: "w10 vertikal", targets: [0, 5, 6] },
                 { className: "w20 vertikal", targets: [1, 2, 4] },
                 { className: "w30 vertikal", targets: [3] }
@@ -73,11 +89,16 @@
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                            '<button type="button" class="dropdown-item" onclick="details_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>'+
-                            '<button type="button" class="dropdown-item" onclick="delete_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>'+
-                            '</div></div>';
+                            '<div class="dropdown-menu" role="menu">';
+                        if (canEditQ) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                        }
+
+                        dropdown += '<button type="button" class="dropdown-item" onclick="details_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>';
+                        if (canDeleteQ) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="delete_qualification(\'' + row.staffQualificationIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                        }
+                        dropdown += '</div></div>';
                         return dropdown;
                     }
                 }

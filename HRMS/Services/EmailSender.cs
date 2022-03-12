@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using HRMS.Resources;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
@@ -61,7 +62,22 @@ public class EmailSender : IEmailSender
 
     private static string BodyContent(string mainContent, string Name = "")
     {
-        string content = $"<div></div>";
+        string content = $"<div><div style='margin: auto; max-width: 600px;'>" +
+            $"<div><p style='font-size: 20px;'>" +
+            $"<b>{Resource.Dear}</b> {Name},<br/><br/>" +
+            $"{mainContent}" +
+            $"</p></div>" +
+            $"<div>" +
+            $"<p style='font-size: 17px; margin-bottom: 0px; text-align: left;'>{Resource.BestRegards}</p>" +
+            $"<p style='margin-top: 3px;text-align: left;'>{Resource.RiinvestCollege}</p>" +
+            $"</div>" +
+            $"<div style='margin-top: 10px;'>" +
+            $"<div>" +
+            $"<img src='~/ favicon.ico' alt='Riinvest logo' style='opacity: .8; margin-top: -.5rem; margin - right: .2rem; height: 33px;'/>" +
+            $"<span>{Resource.RiinvestCollege}</span>" +
+            $"</div>" +
+            $"</div>" +
+            $"</div></div>";
 
         return content;
     }

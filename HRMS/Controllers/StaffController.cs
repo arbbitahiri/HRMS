@@ -11,7 +11,6 @@ using HRMS.Utilities.General;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +23,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
+
 [Authorize]
 public class StaffController : BaseController
 {
@@ -40,6 +40,69 @@ public class StaffController : BaseController
         this.roleManager = roleManager;
     }
 
+    #region List
+
+    [HttpGet, Authorize(Policy = "21:m")]
+    [Description("Arb Tahiri", "Entry home. Search for staff.")]
+    public IActionResult Index() => View();
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
+    [Description("Arb Tahiri", "Form to list searched list of staff.")]
+    public async Task<IActionResult> Search(Search search)
+    {
+        var staffList = await db.StaffDepartment
+            .Include(a => a.Staff).ThenInclude(a => a.User)
+            .Include(a => a.Department)
+            .Where(a => a.Staff.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished)
+                && a.DepartmentId == (search.Department ?? a.DepartmentId)
+                && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
+                && a.EndDate >= DateTime.Now
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
+                && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
+                && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
+            .AsSplitQuery()
+            .Select(a => new StaffDetails
+            {
+                Ide = CryptoSecurity.Encrypt(a.StaffId),
+                Firstname = a.Staff.FirstName,
+                Lastname = a.Staff.LastName,
+                PersonalNumber = a.Staff.PersonalNumber,
+                ProfileImage = a.Staff.User.ProfileImage,
+                Gender = a.Staff.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
+                Email = a.Staff.User.Email,
+                PhoneNumber = a.Staff.User.PhoneNumber,
+                StaffType = string.Join(", ", user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn)
+            }).ToListAsync();
+        return Json(staffList);
+    }
+
+    [HttpGet, Authorize(Policy = "21s:r")]
+    [Description("Arb Tahiri", "Form to display list of staff that are in process of registration.")]
+    public async Task<IActionResult> InProcess()
+    {
+        var list = await db.Staff
+            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
+            .Include(a => a.User)
+            .Where(a => !a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished))
+            .AsSplitQuery()
+            .Select(a => new StaffDetails
+            {
+                Ide = CryptoSecurity.Encrypt(a.StaffId),
+                PersonalNumber = a.PersonalNumber,
+                Firstname = a.FirstName,
+                Lastname = a.LastName,
+                ProfileImage = a.User.ProfileImage,
+                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
+                Email = a.User.Email,
+                PhoneNumber = a.User.PhoneNumber,
+                InsertedDate = a.InsertedDate
+            }).ToListAsync();
+        return PartialView(list);
+    }
+
+    #endregion
+
     #region 1. Register and edit
 
     [HttpGet, Authorize(Policy = "20:m")]
@@ -52,11 +115,11 @@ public class StaffController : BaseController
         }
         else
         {
-            var staff = await db.Staff.Include(a => a.User)
+            var staff = await db.Staff
                 .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
                 .Select(a => new StaffPost
                 {
-                    MethodType = MethodType.Put,
+                    MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post,
                     StaffIde = ide,
                     PersonalNumber = a.PersonalNumber,
                     Firstname = a.FirstName,
@@ -66,7 +129,7 @@ public class StaffController : BaseController
                     Email = a.User.Email,
                     PhoneNumber = a.User.PhoneNumber,
                     City = a.City,
-                    Country = a.Country,
+                    CountryId = a.CountryId,
                     Address = a.Address,
                     PostalCode = a.PostalCode,
                     Nationality = a.Nationality
@@ -105,7 +168,7 @@ public class StaffController : BaseController
                     Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
-                    Country = staff.Country,
+                    CountryId = staff.CountryId,
                     Address = staff.Address,
                     PostalCode = staff.PostalCode,
                     Nationality = staff.Nationality,
@@ -118,6 +181,7 @@ public class StaffController : BaseController
                 {
                     StaffId = newStaff.StaffId,
                     StatusTypeId = (int)Status.Processing,
+                    Active = true,
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 });
@@ -176,7 +240,7 @@ public class StaffController : BaseController
                     Birthdate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                     Gender = staff.Gender,
                     City = staff.City,
-                    Country = staff.Country,
+                    CountryId = staff.CountryId,
                     Address = staff.Address,
                     PostalCode = staff.PostalCode,
                     Nationality = staff.Nationality,
@@ -208,7 +272,7 @@ public class StaffController : BaseController
             }
         }
 
-        return RedirectToAction(nameof(Qualification), new { ide = staffIde, method = staff.MethodType });
+        return RedirectToAction(nameof(Qualification), new { ide = staffIde });
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
@@ -228,7 +292,7 @@ public class StaffController : BaseController
         staff.LastName = edit.Lastname;
         staff.Birthdate = DateTime.ParseExact(edit.BirthDate, "dd/MM/yyyy", null);
         staff.City = edit.City;
-        staff.Country = edit.Country;
+        staff.CountryId = edit.CountryId;
         staff.Address = edit.Address;
         staff.PostalCode = edit.PostalCode;
         staff.Nationality = edit.Nationality;
@@ -239,7 +303,7 @@ public class StaffController : BaseController
         staff.UpdatedNo = UpdateNo(staff.UpdatedNo);
 
         await db.SaveChangesAsync();
-        return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde, method = edit.MethodType });
+        return RedirectToAction(nameof(Qualification), new { ide = edit.StaffIde });
     }
 
     #endregion
@@ -250,14 +314,15 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "21sq:r")]
     [Description("Arb Tahiri", "Entry form for qualification. Second step of registration/edition of staff.")]
-    public async Task<IActionResult> Qualification(string ide, MethodType method)
+    public async Task<IActionResult> Qualification(string ide)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new StaffDetails
             {
                 Ide = ide,
                 Firstname = a.FirstName,
-                Lastname = a.LastName
+                Lastname = a.LastName,
+                MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post
             }).FirstOrDefaultAsync();
 
         var qualifications = await db.StaffQualification
@@ -277,8 +342,7 @@ public class StaffController : BaseController
         {
             StaffDetails = staff,
             Qualifications = qualifications,
-            QualificationCount = qualifications.Count,
-            MethodType = method
+            QualificationCount = qualifications.Count
         };
         return View(qualificationVM);
     }
@@ -460,14 +524,15 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "21sd:r")]
     [Description("Arb Tahiri", "Entry form for documents. Third step of registration/editation of staff.")]
-    public async Task<IActionResult> Documents(string ide, MethodType method)
+    public async Task<IActionResult> Documents(string ide)
     {
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new StaffDetails
             {
                 Ide = ide,
                 Firstname = a.FirstName,
-                Lastname = a.LastName
+                Lastname = a.LastName,
+                MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post
             }).FirstOrDefaultAsync();
 
         var documents = await db.StaffDocument
@@ -488,8 +553,7 @@ public class StaffController : BaseController
         {
             StaffDetails = staff,
             Documents = documents,
-            DocumentCount = documents.Count,
-            MethodType = method
+            DocumentCount = documents.Count
         };
         return View(documentVM);
     }
@@ -601,7 +665,7 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "21sds:r")]
     [Description("Arb Tahiri", "Entry form for department. Fourth step of registration/editation of staff.")]
-    public async Task<IActionResult> Departments(string ide, MethodType method)
+    public async Task<IActionResult> Departments(string ide)
     {
         var staff = await db.Staff
             .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
@@ -610,7 +674,8 @@ public class StaffController : BaseController
                 Ide = ide,
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
-                IsProfessor = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
+                MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post,
+                IsLecturer = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
@@ -624,7 +689,8 @@ public class StaffController : BaseController
                 JobType = user.Language == LanguageEnum.Albanian ? a.JobType.NameSq : a.JobType.NameEn,
                 BruttoSalary = $"{a.GrossSalary:#.##} €",
                 StartDate = a.StartDate,
-                EndDate = a.EndDate
+                EndDate = a.EndDate,
+                IsLecturer = a.StaffTypeId == (int)StaffTypeEnum.Lecturer
             }).ToListAsync();
 
         var subjects = await db.StaffDepartmentSubject
@@ -635,8 +701,7 @@ public class StaffController : BaseController
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
                 Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
                 StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                InsertDate = a.InsertedDate
+                EndDate = a.EndDate
             }).ToListAsync();
 
         var departmentVM = new DepartmentVM
@@ -645,8 +710,7 @@ public class StaffController : BaseController
             Departments = departments,
             Subjects = subjects,
             DepartmentCount = departments.Count,
-            SubjectCount = subjects.Count,
-            MethodType = method
+            SubjectCount = subjects.Count
         };
         return View(departmentVM);
     }
@@ -665,7 +729,7 @@ public class StaffController : BaseController
             .Select(a => new AddDepartment
             {
                 StaffIde = ide,
-                Outsider = !a.Country.ToLower().Contains("kosov")
+                Outsider = a.CountryId != (int)CountryEnum.Kosova
             }).FirstOrDefaultAsync();
         return PartialView(staffDetails);
     }
@@ -760,7 +824,7 @@ public class StaffController : BaseController
                 EmployeeContribution = a.EmployeeContribution,
                 EmployerContribution = a.EmployerContribution,
                 Description = a.Description,
-                Outsider = a.Staff.Country.ToLower().Contains("kosov")
+                Outsider = a.Staff.CountryId != (int)CountryEnum.Kosova
             }).FirstOrDefaultAsync();
 
         return PartialView(department);
@@ -1004,244 +1068,6 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region List
-
-    [HttpGet, Authorize(Policy = "21:m")]
-    [Description("Arb Tahiri", "Entry home. Search for staff.")]
-    public IActionResult Index() => View();
-
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:r")]
-    [Description("Arb Tahiri", "Form to list searched list of staff.")]
-    public async Task<IActionResult> Search(Search search)
-    {
-        var staffList = await db.StaffDepartment
-            .Include(a => a.Staff).ThenInclude(a => a.User)
-            .Include(a => a.Department)
-            .Where(a => a.Staff.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished)
-                && a.DepartmentId == (search.Department ?? a.DepartmentId)
-                && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
-                && a.EndDate >= DateTime.Now
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
-                && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
-            .AsSplitQuery()
-            .Select(a => new StaffDetails
-            {
-                Ide = CryptoSecurity.Encrypt(a.StaffId),
-                Firstname = a.Staff.FirstName,
-                Lastname = a.Staff.LastName,
-                PersonalNumber = a.Staff.PersonalNumber,
-                ProfileImage = a.Staff.User.ProfileImage,
-                Gender = a.Staff.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
-                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                Email = a.Staff.User.Email,
-                PhoneNumber = a.Staff.User.PhoneNumber,
-                StaffType = string.Join(", ", user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn)
-            }).ToListAsync();
-        return Json(staffList);
-    }
-
-    [HttpGet, Authorize(Policy = "21s:r")]
-    [Description("Arb Tahiri", "Form to display list of staff that are in process of registration.")]
-    public async Task<IActionResult> InProcess()
-    {
-        var list = await db.Staff
-            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
-            .Include(a => a.User)
-            .Where(a => !a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished))
-            .AsSplitQuery()
-            .Select(a => new StaffDetails
-            {
-                Ide = CryptoSecurity.Encrypt(a.PersonalNumber),
-                PersonalNumber = a.PersonalNumber,
-                Firstname = a.FirstName,
-                Lastname = a.LastName,
-                ProfileImage = a.User.ProfileImage,
-                Gender = a.Gender == ((int)GenderEnum.Male) ? Resource.Male : Resource.Female,
-                Email = a.User.Email,
-                PhoneNumber = a.User.PhoneNumber,
-                InsertedDate = a.InsertedDate
-            }).ToListAsync();
-        return PartialView(list);
-    }
-
-    #endregion
-
-    #region Profile
-
-    #region Main form
-
-    [HttpGet, Authorize(Policy = "25:m")]
-    [Description("Arb Tahiri", "Form to view the profile of staff.")]
-    public async Task<IActionResult> Profile(string ide)
-    {
-        if (string.IsNullOrEmpty(ide))
-        {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
-        }
-
-        var staffDetails = await db.Staff
-            .Include(a => a.User)
-            .Include(a => a.StaffDepartment).ThenInclude(a => a.Department)
-            .Where(a => a.PersonalNumber == CryptoSecurity.Decrypt<string>(ide))
-            .Select(a => new StaffDetails
-            {
-                Ide = CryptoSecurity.Encrypt(a.StaffId),
-                ProfileImage = a.User.ProfileImage,
-                Firstname = a.FirstName,
-                Lastname = a.LastName,
-                PhoneNumber = a.User.PhoneNumber,
-                Email = a.User.Email,
-                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
-                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
-                City = a.City,
-                Country = a.Country,
-                ZIP = a.PostalCode
-            }).FirstOrDefaultAsync();
-
-        var profile = new ProfileVM
-        {
-            StaffDetails = staffDetails,
-            QualificationsCount = await db.StaffQualification.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
-            DocumentsCount = await db.StaffDocument.CountAsync(a => a.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide)),
-            SubjectsCount = await db.StaffDepartmentSubject.CountAsync(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(staffDetails.Ide))
-        };
-        return View(profile);
-    }
-
-    #endregion
-
-    #region 1. Department
-
-    [Authorize(Policy = "21sds:r"), Description("Arb Tahiri", "Form to display list of departments.")]
-    public async Task<IActionResult> _ProfileDepartment(string ide)
-    {
-        var departments = await db.StaffDepartment
-            .Include(a => a.Department).Include(a => a.StaffType)
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new Departments
-            {
-                StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                Department = user.Language == LanguageEnum.Albanian ? $"{a.Department.Code} - {a.Department.NameSq}" : $"{a.Department.Code} - {a.Department.NameEn}",
-                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
-                StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                Description = a.Description
-            }).ToListAsync();
-
-        var departmentVM = new DepartmentVM
-        {
-            StaffIde = ide,
-            Departments = departments
-        };
-        return PartialView(departmentVM);
-    }
-
-    #endregion
-
-    #region 2. Qualification
-
-    [Authorize(Policy = "21sq:c"), Description("Arb Tahiri", "Form to display list of qualifications.")]
-    public async Task<IActionResult> _ProfileQualification(string ide)
-    {
-        var departments = await db.StaffQualification
-            .Include(a => a.ProfessionType).Include(a => a.EducationLevelType)
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new Qualifications
-            {
-                StaffQualificationIde = CryptoSecurity.Encrypt(a.StaffQualificationId),
-                ProfessionType = user.Language == LanguageEnum.Albanian ? $"{a.ProfessionType.Code} - {a.ProfessionType.NameSq}" : $"{a.ProfessionType.Code} - {a.ProfessionType.NameEn}",
-                EducationLevel = user.Language == LanguageEnum.Albanian ? a.EducationLevelType.NameSq : a.EducationLevelType.NameEn,
-                Title = a.Title,
-                FieldOfStudy = a.FieldStudy,
-                CreditNumber = a.CreditNumber,
-                CreditType = a.CreditType
-            }).ToListAsync();
-
-        var qualificationVM = new QualificationVM
-        {
-            StaffIde = ide,
-            Qualifications = departments
-        };
-        return PartialView(qualificationVM);
-    }
-
-    #endregion
-
-    #region 3. Document
-
-    [Authorize(Policy = "21sd:c"), Description("Arb Tahiri", "Form to display list of documents.")]
-    public async Task<IActionResult> _ProfileDocument(string ide)
-    {
-        var documents = await db.StaffDocument
-            .Include(a => a.DocumentType)
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new Documents
-            {
-                StaffDocumentIde = CryptoSecurity.Encrypt(a.StaffDocumentId),
-                Title = a.Title,
-                Path = a.Path,
-                PathExtension = Path.GetExtension(a.Path),
-                DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
-                Description = a.Description,
-                Active = a.Active
-            }).ToListAsync();
-
-        var documentVM = new DocumentsVM
-        {
-            StaffIde = ide,
-            Documents = documents,
-        };
-        return PartialView(documentVM);
-    }
-
-    #endregion
-
-    #region 4. Subject
-
-    [Authorize(Policy = "21sds:c"), Description("Arb Tahiri", "Form to display list of subjects.")]
-    public async Task<IActionResult> _ProfileSubject(string ide)
-    {
-        var subjects = await db.StaffDepartmentSubject
-            .Include(a => a.Subject)
-            .Where(a => a.StaffDepartment.StaffId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new Subjects
-            {
-                StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
-                Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
-                StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                InsertDate = a.InsertedDate
-            }).ToListAsync();
-        return PartialView(subjects);
-    }
-
-    #endregion
-
-    #region Change image
-
-    [HttpPost, Authorize(Policy = "22p:r"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to change profile photo.")]
-    public async Task<IActionResult> ChangeImage(IFormFile Image, string ide)
-    {
-        if (string.IsNullOrEmpty(ide))
-        {
-            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
-        }
-
-        string userId = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide)).Select(a => a.UserId).FirstOrDefaultAsync();
-        var aspUser = await db.AspNetUsers.FirstOrDefaultAsync(a => a.Id == userId);
-
-        string filePath = Image != null ? await SaveImage(environment, Image, "Users") : null;
-        aspUser.ProfileImage = filePath;
-        await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully, Icon = filePath });
-    }
-
-    #endregion
-
-    #endregion
-
     #region Remote
 
     [Description("Arb Tahiri", "Method to check birthday.")]
@@ -1287,8 +1113,8 @@ public class StaffController : BaseController
     [Description("Arb Tahiri", "Method to check end date and start date.")]
     public IActionResult CheckDates(string StartDate, string EndDate)
     {
-        var startDate = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
-        var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+        var startDate = !string.IsNullOrEmpty(StartDate) ? DateTime.ParseExact(StartDate, "dd/MM/yyyy", null) : new DateTime();
+        var endDate = !string.IsNullOrEmpty(EndDate) ? DateTime.ParseExact(EndDate, "dd/MM/yyyy", null) : new DateTime();
 
         if (startDate <= endDate)
         {

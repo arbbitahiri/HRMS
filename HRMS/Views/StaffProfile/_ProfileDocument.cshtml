@@ -1,5 +1,10 @@
 ﻿@using HRMS.Models.Staff.Document
 @model DocumentsVM
+@{
+    var canCreate = User.HasClaim("21sd", "c");
+    var canEdit = User.HasClaim("21sd", "e");
+    var canDelete = User.HasClaim("21sd", "d");
+}
 
 <div class="row mb-3">
     <div class="col-md-8">
@@ -7,7 +12,10 @@
     </div>
     <div class="col-md-4">
         <div class="justify-content-end">
-            <a onclick="add_document('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+            @if (canCreate)
+            {
+                <a onclick="add_document('@Model.StaffIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+            }
         </div>
     </div>
 </div>
@@ -21,7 +29,10 @@
             <th width="15%">@Resource.Download</th>
             <th width="40%">@Resource.Description</th>
             <th width="40%">@Resource.State</th>
-            <th width="10%" data-orderable="false">@Resource.Actions</th>
+            @if (canEdit || canDelete)
+            {
+                <th width="10%" data-orderable="false">@Resource.Actions</th>
+            }
         </tr>
     </thead>
     <tbody></tbody>
@@ -31,6 +42,10 @@
     $(document).ready(function() {
         render_document_tbl(@Json.Serialize(Model.Documents));
     });
+
+    var canEditDOC = '@canEdit' == 'True' ? true : false;
+    var canDeleteDOC = '@canDelete' == 'True' ? true : false;
+    var canSeeDOC = canEditDOC || canDeleteDOC;
 
     function render_document_tbl(data) {
         var rowCount = 1;
@@ -45,6 +60,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { visible: canSeeDOC, targets: [6] },
                 { className: "w5 vertikal", targets: [0, 5, 6] },
                 { className: "w15 vertikal", targets: [1, 2, 3] },
                 { className: "w30 vertikal", targets: [4] }
@@ -84,13 +100,17 @@
                 },
                 {
                     data: function (row, type, set) {
-                        var dnone = row.active ? "" : "d-none";
                         var dropdown = '<div class="input-group-prepend">' +
                             '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                            '<button type="button" class="dropdown-item ' + dnone + '" onclick="delete_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
-                            '</div></div>';
+                            '<div class="dropdown-menu" role="menu">';
+                        if (canEditDOC) {
+                            dropdown += '<button type="button" class="dropdown-item" onclick="edit_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                        }
+
+                        if (row.active && canDeleteDOC) {
+                            dropdown += '<button type="button" class="dropdown-item ' + dnone + '" onclick="delete_document(\'' + row.staffDocumentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                        }
+                        dropdown += '</div></div>';
                         return dropdown;
                     }
                 }
