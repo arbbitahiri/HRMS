@@ -3,6 +3,7 @@ using HRMS.Controllers;
 using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Models.Shared;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
@@ -130,7 +131,7 @@ public class StudentsStaffController : BaseController
         }
         await db.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Questions), new { ide = evaluationIde, method = MethodType.Post });
+        return RedirectToAction(nameof(Questions), new { ide = evaluationIde });
     }
 
     #endregion
@@ -143,11 +144,12 @@ public class StudentsStaffController : BaseController
     [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
     public async Task<IActionResult> Questions(string ide, MethodType method)
     {
+        var evaluationId = CryptoSecurity.Decrypt<int>(ide);
         var details = await db.EvaluationStudentsStaff
             .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.StaffDepartment).ThenInclude(a => a.Staff)
             .Include(a => a.StaffDepartmentSubject).ThenInclude(a => a.Subject)
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                && a.EvaluationId == evaluationId)
             .Select(a => new Details
             {
                 EvaluationIde = ide,
@@ -159,7 +161,7 @@ public class StudentsStaffController : BaseController
         var numericals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                && a.EvaluationId == evaluationId)
             .Select(a => new QuestionNumerical
             {
                 NumericalId = a.EvaluationQuestionnaireNumericalId * 6,
@@ -172,7 +174,7 @@ public class StudentsStaffController : BaseController
         var optionals = await db.EvaluationQuestionnaireOptional
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                && a.EvaluationId == evaluationId)
             .Select(a => new QuestionOptional
             {
                 OptionalId = a.EvaluationQuestionnaireOptionalId * 6,
@@ -194,7 +196,8 @@ public class StudentsStaffController : BaseController
             Numericals = numericals,
             Optionals = optionals,
             TotalQuestions = numericals.Count + optionals.Count,
-            Method = method
+            MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]),
+            Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
         return View(questionVM);
     }
@@ -215,7 +218,7 @@ public class StudentsStaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (create.QuestionTypeId == (int)QuestionType.Optional)
+        if (create.QuestionTypeId == (int)QuestionType.OptionalTopic)
         {
             if (create.Options == null)
             {
@@ -441,7 +444,7 @@ public class StudentsStaffController : BaseController
             question.Grade = null;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
@@ -451,7 +454,7 @@ public class StudentsStaffController : BaseController
             question.Grade = num;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -460,37 +463,30 @@ public class StudentsStaffController : BaseController
         return Json(error);
     }
 
-    [HttpPost, Authorize(Policy = "74q:a"), ValidateAntiForgeryToken]
+    [HttpPost, Authorize(Policy = "75q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
-    public async Task<IActionResult> OptionalAnswer(string ide, string txt)
+    public async Task<IActionResult> OptionalAnswer(string ide)
     {
         var error = new ErrorVM();
         if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
         {
-            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+            var question = await db.EvaluationQuestionnaireOptionalOption
+                .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
             question.Checked = false;
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
         }
         else
         {
             var question = await db.EvaluationQuestionnaireOptionalOption
-                .Include(a => a.EvaluationQuestionnaireOptional)
                 .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
             question.Checked = true;
-            if (!string.IsNullOrEmpty(txt))
-            {
-                question.EvaluationQuestionnaireOptional.Description = txt;
-                question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
-                question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
-                question.EvaluationQuestionnaireOptional.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
-            }
             question.UpdatedDate = DateTime.Now;
             question.UpdatedFrom = user.Id;
-            question.UpdatedNo = question.UpdatedNo.HasValue ? ++question.UpdatedNo : question.UpdatedNo = 1;
+            question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
             error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
         }
@@ -509,11 +505,12 @@ public class StudentsStaffController : BaseController
 
     [HttpGet, Authorize(Policy = "74d:r")]
     [Description("Arb Tahiri", "Form to display list of documents. Third step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Documents(string ide, MethodType method)
+    public async Task<IActionResult> Documents(string ide)
     {
+        var evaluationId = CryptoSecurity.Decrypt<int>(ide);
         var documents = await db.EvaluationDocument
             .Include(a => a.DocumentType)
-            .Where(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Where(a => a.EvaluationId == evaluationId)
             .Select(a => new Document
             {
                 EvaluationDocumentIde = CryptoSecurity.Encrypt(a.EvaluationDocumentId),
@@ -530,7 +527,7 @@ public class StudentsStaffController : BaseController
             EvaluationIde = ide,
             Documents = documents,
             DocumentCount = documents.Count,
-            Method = method
+            Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
         return View(documentVM);
     }
@@ -637,7 +634,7 @@ public class StudentsStaffController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "74f:c")]
     [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
-    public async Task<IActionResult> Finish(string ide, MethodType method)
+    public async Task<IActionResult> Finish(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -667,8 +664,8 @@ public class StudentsStaffController : BaseController
             InsertedFrom = user.Id
         });
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
-        return RedirectToAction("Index", "Evaluation");
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = finished ? Resource.DataUpdatedSuccessfully : Resource.DataRegisteredSuccessfully });
+        return RedirectToAction("Search", "Evaluation");
     }
 
     #endregion
@@ -676,12 +673,12 @@ public class StudentsStaffController : BaseController
     #region Select list item
 
     [Description("Arb Tahiri", "Method to get list of staff depending of subject.")]
-    public async Task<List<SelectListItem>> StaffSubjects(int subjectId) =>
+    public async Task<List<Select2>> StaffSubjects(int subjectId) =>
         await db.StaffDepartmentSubject.Where(a => a.Active && a.EndDate >= DateTime.Now && a.SubjectId == subjectId)
-            .Select(a => new SelectListItem
+            .Select(a => new Select2
             {
-                Value = a.StaffDepartmentSubjectId.ToString(),
-                Text = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName}"
+                id = a.StaffDepartmentSubjectId.ToString(),
+                text = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName}"
             }).ToListAsync();
 
     #endregion

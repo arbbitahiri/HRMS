@@ -24,5 +24,6 @@ public class ManageQuestion
 
     public string Answer { get; set; }
 
+    public int MaxQuestionOptions { get; set; }
     public QuestionType QuestionTypeEnum { get; set; }
 }

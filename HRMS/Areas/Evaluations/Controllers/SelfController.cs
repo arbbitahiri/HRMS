@@ -136,7 +136,7 @@ public class SelfController : BaseController
 
     [HttpGet, Authorize(Policy = "75q:r")]
     [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Questions(string ide, MethodType method)
+    public async Task<IActionResult> Questions(string ide)
     {
         var details = await db.EvaluationSelf
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
@@ -145,7 +145,8 @@ public class SelfController : BaseController
             {
                 EvaluationIde = ide,
                 Firstname = a.Staff.FirstName,
-                Lastname = a.Staff.LastName
+                Lastname = a.Staff.LastName,
+                MethodType = a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post
             }).FirstOrDefaultAsync();
 
         var numericals = await db.EvaluationQuestionnaireNumerical
@@ -198,8 +199,7 @@ public class SelfController : BaseController
             Numericals = numericals,
             Optionals = optionals,
             Topics = topics,
-            TotalQuestions = numericals.Count + optionals.Count + topics.Count,
-            Method = method
+            TotalQuestions = numericals.Count + optionals.Count + topics.Count
         };
         return View(questionVM);
     }
@@ -578,7 +578,7 @@ public class SelfController : BaseController
 
     [HttpGet, Authorize(Policy = "75d:r")]
     [Description("Arb Tahiri", "Form to display list of documents. Third step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Documents(string ide, MethodType method)
+    public async Task<IActionResult> Documents(string ide)
     {
         var details = await db.EvaluationSelf
             .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
@@ -587,7 +587,8 @@ public class SelfController : BaseController
             {
                 EvaluationIde = ide,
                 Firstname = a.Staff.FirstName,
-                Lastname = a.Staff.LastName
+                Lastname = a.Staff.LastName,
+                MethodType = a.Evaluation.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post
             }).FirstOrDefaultAsync();
 
         var documents = await db.EvaluationDocument
@@ -608,8 +609,7 @@ public class SelfController : BaseController
         {
             EvaluationDetails = details,
             Documents = documents,
-            DocumentCount = documents.Count,
-            Method = method
+            DocumentCount = documents.Count
         };
         return View(documentVM);
     }
@@ -716,7 +716,7 @@ public class SelfController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "75f:c")]
     [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
-    public async Task<IActionResult> Finish(string ide, MethodType method)
+    public async Task<IActionResult> Finish(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -750,8 +750,8 @@ public class SelfController : BaseController
         });
         await db.SaveChangesAsync();
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
-        return RedirectToAction("Index", "Evaluation");
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = finished ? Resource.DataUpdatedSuccessfully : Resource.DataRegisteredSuccessfully });
+        return RedirectToAction("Search", "Evaluation");
     }
 
     #endregion

@@ -87,8 +87,7 @@
                             var isChecked = option.Checked ? "checked" : "";
                             <ul class="icheck-primary p-2" style="font-size: 14px;">
                                 <input id="@option.OptionId" type="radio" @isChecked style="cursor: pointer;"/>
-                                <label for="@option.OptionId"
-                                    onclick="change_option('@option.EvaluationQuestionnaireOptionalOptionIde', '@option.DescNeeded' == 'True' ? true : false, @optional.OptionalId, @option.OptionId)">@option.Option</label>
+                                <label for="@option.OptionId" onclick="change_option('@option.EvaluationQuestionnaireOptionalOptionIde', @optional.OptionalId, @option.OptionId)">@option.Option</label>
                             </ul>
                         }
                         <legend class="bottom-legend" style="left: 89%;">
@@ -137,7 +136,7 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            if (@((int)Model.Method) == MethodType.POST) {
+            if (@((int)Model.EvaluationDetails.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: 'cursor: default' });
                 $('#tab2').attr({ href: '', style: '' });
                 $('#tab3').attr({ href: '', style: 'cursor: default' });
@@ -146,9 +145,9 @@
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
@@ -435,11 +434,11 @@
         }
 
         function back_to_register(ide) {
-            window.location.href = '@Url.Action("Index", "Manager")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Index", "Manager")?ide=' + ide;
         }
 
         function continue_to_document(ide) {
-            window.location.href = '@Url.Action("Documents", "Manager")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Documents", "Manager")?ide=' + ide;
         }
     </script>
 }

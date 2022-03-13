@@ -1032,20 +1032,21 @@ public class StaffController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "21s:c")]
     [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
-    public async Task<IActionResult> Finish(string ide, MethodType method)
+    public async Task<IActionResult> Finish(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var registeredInDepartment = await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == CryptoSecurity.Decrypt<int>(ide));
+        var staffId = CryptoSecurity.Decrypt<int>(ide);
+        var registeredInDepartment = await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == staffId);
         if (!registeredInDepartment)
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StaffNotComplete });
         }
 
-        var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == CryptoSecurity.Decrypt<int>(ide));
+        var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId);
         staffRegistrationStatus.Active = false;
         staffRegistrationStatus.UpdatedDate = DateTime.Now;
         staffRegistrationStatus.UpdatedFrom = user.Id;
@@ -1062,7 +1063,7 @@ public class StaffController : BaseController
         await db.SaveChangesAsync();
 
         TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataRegisteredSuccessfully });
-        return RedirectToAction(nameof(Index));
+        return Json(new ErrorVM { Status = ErrorStatus.Success });
     }
 
     #endregion

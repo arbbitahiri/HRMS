@@ -49,7 +49,8 @@ const EvaluationType = {
 const QuestionType = {
     NUMERICAL: 1,
     OPTIONAL: 2,
-    TOPIC: 3
+    TOPIC: 3,
+    OPTIONALTOPIC: 5
 }
 
 const LeaveType = {

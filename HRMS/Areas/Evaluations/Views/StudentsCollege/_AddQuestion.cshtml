@@ -18,17 +18,19 @@
         <input asp-for="EvaluationIde" type="hidden"/>
 
         <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionTypeId" class="required"></label>
-                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
+                <select asp-for="QuestionTypeId" asp-items="(await repo.EvaluationQuestionsForStudents(StudentsEvaluationType.Staff, user.Language)).Take(1)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
                 <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionSQ" class="required"></label>
                 <input asp-for="QuestionSQ" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionSQ" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label asp-for="QuestionEN" class="required"></label>
                 <input asp-for="QuestionEN" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionEN" class="text-danger"></span>
@@ -37,7 +39,7 @@
     </div>
     <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+        <button type="button" onclick="add_questions()" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
     </div>
 </form>
 
@@ -50,21 +52,10 @@
 
         $(".select2").select2({
             width: "100%",
-            placeholder: '@Resource.Choose',
             language: {
                 noResults: function () {
                     return '@Html.Raw(Resource.NoResultsFound)';
                 },
-            }
-        });
-
-        $('#QuestionTypeId').on('change', function() {
-            if ($(this).val() == QuestionType.OPTIONAL) {
-                $('#rpt_options').removeClass('d-none');
-            } else if ($(this).val() == QuestionType.TOPIC) {
-                $('#rpt_options').addClass('d-none');
-            } else {
-                $('#rpt_options').addClass('d-none');
             }
         });
     });

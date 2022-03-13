@@ -25,7 +25,6 @@ public class ManageQuestion
     public string QuestionEN { get; set; }
 
     [Display(Name = "Options", ResourceType = typeof(Resource))]
-    //required if per null list
     public List<Option> Options { get; set; }
 
     public string Answer { get; set; }

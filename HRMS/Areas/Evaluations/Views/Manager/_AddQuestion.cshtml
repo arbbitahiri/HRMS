@@ -20,7 +20,9 @@
         <div class="row">
             <div class="col-md-4 form-group">
                 <label asp-for="QuestionTypeId" class="required"></label>
-                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionTypes(user.Language)" class="form-control select2"></select>
+                <select asp-for="QuestionTypeId" asp-items="await repo.EvaluationQuestionsForStaff(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
                 <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
             </div>
             <div class="col-md-4 form-group">
@@ -36,12 +38,12 @@
             <div id="rpt_options" class="col-md-12 d-none">
                 <div data-repeater-list="" data-limit="@Model.MaxQuestionOptions" class="row repeater">
                     <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <label name="TitleSQ" class="required">@Resource.OptionSQ</label>
                             <input type="text" name="TitleSQ" class="form-control"/>
                             <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <label name="TitleEn" class="required">@Resource.OptionEN</label>
                             <input type="text" name="TitleEn" class="form-control"/>
                             <span id="rpt_option" class="text-danger d-none">@Resource.RequiredField</span>
@@ -78,7 +80,6 @@
 
         $(".select2").select2({
             width: "100%",
-            placeholder: '@Resource.Choose',
             language: {
                 noResults: function () {
                     return '@Html.Raw(Resource.NoResultsFound)';

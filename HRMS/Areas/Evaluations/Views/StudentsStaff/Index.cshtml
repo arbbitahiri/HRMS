@@ -61,9 +61,9 @@
                 $('#trigger_questions_form').attr({ disabled: true });
                 $('#trigger_documents_form').attr({ disabled: true });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });

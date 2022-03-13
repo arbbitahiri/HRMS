@@ -9,43 +9,48 @@
 }
 
 <div class="flex-row-fluid">
-    <div class="card" style="box-shadow: none !important;">
-        <div class="card-header border-0">
-            <h1 class="card-title align-items-start flex-column">
-                <span class="text-muted mt-1 font-weight-bold font-size-sm">
-                    @if (Model.DocumentCount >= 1)
-                    {
-                        @Resource.Has <b class="text-primary">@Model.DocumentCount </b>
-                    }
-                    @documents
-                </span>
-            </h1>
-            <div class="card-tools">
-                <a onclick="add_document('@Model.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+    <form asp-action="Finish" asp-controller="StudentsStaff" asp-area="Evaluation" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="EvaluationIde" name="ide" type="hidden" id="ide"/>
+
+        <div class="card" style="box-shadow: none !important;">
+            <div class="card-header border-0">
+                <h1 class="card-title align-items-start flex-column">
+                    <span class="text-muted mt-1 font-weight-bold font-size-sm">
+                        @if (Model.DocumentCount >= 1)
+                        {
+                            @Resource.Has <b class="text-primary">@Model.DocumentCount </b>
+                        }
+                        @documents
+                    </span>
+                </h1>
+                <div class="card-tools">
+                    <a onclick="add_document('@Model.EvaluationIde')" class="btn btn-primary float-right">@Resource.AddDocument</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tbl_documents" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="15%">@Resource.Title</th>
+                            <th width="15%">@Resource.DocumentType</th>
+                            <th width="15%">@Resource.Download</th>
+                            <th width="40%">@Resource.Description</th>
+                            <th width="40%">@Resource.State</th>
+                            <th width="10%" data-orderable="false">@Resource.Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
-        <div class="card-body">
-            <table id="tbl_documents" class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th width="5%">#</th>
-                        <th width="15%">@Resource.Title</th>
-                        <th width="15%">@Resource.DocumentType</th>
-                        <th width="15%">@Resource.Download</th>
-                        <th width="40%">@Resource.Description</th>
-                        <th width="40%">@Resource.State</th>
-                        <th width="10%" data-orderable="false">@Resource.Actions</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
 
-    <div class="d-flex justify-content-between border-top mt-5">
-        <input type="button" value="@Resource.Back" onclick="go_back_questions('@Model.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
-        <input type="button" value="@Resource.Continue" onclick="submit_form('@Model.EvaluationIde')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
-    </div>
+        <div class="d-flex justify-content-between border-top mt-5">
+            <input type="button" value="@Resource.Back" onclick="go_back_questions('@Model.EvaluationIde')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+            <input type="submit" value="@Resource.End" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -61,9 +66,9 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsStaff")?ide=@Model.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "StudentsStaff")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
                 $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
@@ -73,14 +78,13 @@
         });
 
         function go_back_questions(ide) {
-            window.location.href = '@Url.Action("Questions", "StudentsStaff")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Questions", "StudentsStaff")?ide=' + ide;
         }
 
         function submit_form(ide) {
             $.post('@Url.Action("Finish", "StudentsStaff")', {
                 ide: ide,
-                method: '@Model.Method'
-                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function() {
                 window.location.href = '@Url.Action("Index", "Evalaution")';
             });

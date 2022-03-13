@@ -155,6 +155,8 @@ public class DDLRepository : IDDLRepository
 
     public async Task<List<SelectListItem>> Staff() =>
         await db.Staff
+            .Where(a => a.StaffDepartment.Any(b => b.EndDate >= DateTime.Now)
+                && a.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished))
             .Select(a => new SelectListItem
             {
                 Value = a.StaffId.ToString(),
@@ -199,4 +201,28 @@ public class DDLRepository : IDDLRepository
                 Value = a.DocumentForId.ToString(),
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).ToListAsync();
+
+    public async Task<List<SelectListItem>> EvaluationQuestionsForStudents(StudentsEvaluationType studentsEvaluationType, LanguageEnum lang)
+    {
+        var statuses = studentsEvaluationType == StudentsEvaluationType.Staff ? new int[] { (int)QuestionType.Numerical, (int)QuestionType.OptionalTopic } : new int[] { (int)QuestionType.Numerical, (int)QuestionType.Optional };
+        return await db.EvaluationQuestionType
+            .Where(a => a.Active && statuses.Contains(a.EvaluationQuestionTypeId))
+            .Select(a => new SelectListItem
+            {
+                Value = a.EvaluationQuestionTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
+    }
+
+    public async Task<List<SelectListItem>> EvaluationQuestionsForStaff(LanguageEnum lang)
+    {
+        var statuses = new int[] { (int)QuestionType.Numerical, (int)QuestionType.Optional, (int)QuestionType.Topic };
+        return await db.EvaluationQuestionType
+            .Where(a => a.Active && statuses.Contains(a.EvaluationQuestionTypeId))
+            .Select(a => new SelectListItem
+            {
+                Value = a.EvaluationQuestionTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
+    }
 }

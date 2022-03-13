@@ -124,7 +124,7 @@ public class StudentsCollegeController : BaseController
         }
         await db.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Questions), new { ide = evaluationIde, method = MethodType.Post });
+        return RedirectToAction(nameof(Questions), new { ide = evaluationIde });
     }
 
     #endregion
@@ -135,12 +135,13 @@ public class StudentsCollegeController : BaseController
 
     [HttpGet, Authorize(Policy = "73q:r")]
     [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Questions(string ide, MethodType method)
+    public async Task<IActionResult> Questions(string ide)
     {
+        var evaluationId = CryptoSecurity.Decrypt<int>(ide);
         var numericals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                && a.EvaluationId == evaluationId)
             .Select(a => new QuestionNumerical
             {
                 NumericalId = a.EvaluationQuestionnaireNumericalId * 6,
@@ -153,7 +154,7 @@ public class StudentsCollegeController : BaseController
         var optionalTopics = await db.EvaluationQuestionnaireOptional
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+                && a.EvaluationId == evaluationId)
             .Select(a => new QuestionTopic
             {
                 EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
@@ -172,7 +173,7 @@ public class StudentsCollegeController : BaseController
             Numericals = numericals,
             OptionalTopics = optionalTopics,
             TotalQuestions = numericals.Count + optionalTopics.Count,
-            Method = method
+            Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
         return View(questionVM);
     }
@@ -182,7 +183,7 @@ public class StudentsCollegeController : BaseController
     #region => Create
 
     [Authorize(Policy = "73q:c"), Description("Arb Tahiri", "Form to add a question.")]
-    public IActionResult _AddQuestion(string ide) => PartialView(new ManageQuestion { EvaluationIde = ide });
+    public IActionResult _AddQuestion(string ide) => PartialView(new ManageQuestion { EvaluationIde = ide, MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]) });
 
     [HttpPost, Authorize(Policy = "73q:c"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to add a question.")]
@@ -426,11 +427,12 @@ public class StudentsCollegeController : BaseController
 
     [HttpGet, Authorize(Policy = "73d:r")]
     [Description("Arb Tahiri", "Form to display list of documents. Third step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Documents(string ide, MethodType method)
+    public async Task<IActionResult> Documents(string ide)
     {
+        var evaluationId = CryptoSecurity.Decrypt<int>(ide);
         var documents = await db.EvaluationDocument
             .Include(a => a.DocumentType)
-            .Where(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
+            .Where(a => a.EvaluationId == evaluationId)
             .Select(a => new Document
             {
                 EvaluationDocumentIde = CryptoSecurity.Encrypt(a.EvaluationDocumentId),
@@ -447,7 +449,7 @@ public class StudentsCollegeController : BaseController
             EvaluationIde = ide,
             Documents = documents,
             DocumentCount = documents.Count,
-            Method = method
+            Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
         return View(documentVM);
     }
@@ -554,7 +556,7 @@ public class StudentsCollegeController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "73f:c")]
     [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
-    public async Task<IActionResult> Finish(string ide, MethodType method)
+    public async Task<IActionResult> Finish(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -584,8 +586,8 @@ public class StudentsCollegeController : BaseController
             InsertedFrom = user.Id
         });
 
-        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = method == MethodType.Post ? Resource.DataRegisteredSuccessfully : Resource.DataUpdatedSuccessfully });
-        return RedirectToAction("Index", "Evaluation");
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = finished ? Resource.DataUpdatedSuccessfully : Resource.DataRegisteredSuccessfully });
+        return RedirectToAction("Search", "Evaluation");
     }
 
     #endregion

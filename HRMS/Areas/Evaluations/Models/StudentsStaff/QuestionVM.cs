@@ -10,4 +10,5 @@ public class QuestionVM
     public List<QuestionOptional> Optionals { get; set; }
     public int TotalQuestions { get; set; }
     public MethodType Method { get; set; }
+    public int MaxQuestionOptions { get; set; }
 }

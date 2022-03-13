@@ -106,7 +106,14 @@ public enum QuestionType
 {
     Numerical = 1,
     Optional = 2,
-    Topic = 3
+    Topic = 3,
+    OptionalTopic = 5
+}
+
+public enum StudentsEvaluationType
+{
+    Staff = 1,
+    College = 2
 }
 
 public enum JobTypeEnum

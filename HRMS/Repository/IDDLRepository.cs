@@ -47,4 +47,8 @@ public interface IDDLRepository
     Task<List<SelectListItem>> StatusTypesForLeave(LanguageEnum lang);
 
     Task<List<SelectListItem>> DocumentTypesFor(DocumentForEnum documentFor, LanguageEnum lang);
+
+    Task<List<SelectListItem>> EvaluationQuestionsForStudents(StudentsEvaluationType studentsEvaluationType, LanguageEnum lang);
+
+    Task<List<SelectListItem>> EvaluationQuestionsForStaff(LanguageEnum lang);
 }

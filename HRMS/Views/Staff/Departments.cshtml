@@ -108,7 +108,6 @@
         function submit_form(ide) {
             $.post('@Url.Action("Finish", "Staff")', {
                 ide: ide,
-                method: '@Model.MethodType',
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function(data) {
                 if (data.status == ErrorStatus.SUCCESS) {

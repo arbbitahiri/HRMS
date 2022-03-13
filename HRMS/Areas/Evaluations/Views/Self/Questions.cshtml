@@ -137,7 +137,7 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            if (@((int)Model.Method) == MethodType.POST) {
+            if (@((int)Model.EvaluationDetails.MethodType) == MethodType.POST) {
                 $('#tab1').attr({ href: '', style: 'cursor: default' });
                 $('#tab2').attr({ href: '', style: '' });
                 $('#tab3').attr({ href: '', style: 'cursor: default' });
@@ -146,9 +146,9 @@
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "Self")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "Self")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Self")?ide=@Model.EvaluationDetails.EvaluationIde&method=@((int)Model.Method)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Self")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Self")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Self")?ide=@Model.EvaluationDetails.EvaluationIde', style: "cursor: pointer" });
 
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
@@ -385,17 +385,17 @@
         }
 
         function add_question(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddQuestion", "Self")?ide=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddQuestion", "Self")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
             });
         }
 
         function edit_question(ide, question_type) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_EditQuestion", "Self")', {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditQuestion", "Self")', {
                 ide: ide,
                 questionType: question_type
             }, function () {
-                $('#modal-lg').modal('toggle');
+                $('#modal-xl').modal('toggle');
             });
         }
 
@@ -433,11 +433,11 @@
         }
 
         function back_to_register(ide) {
-            window.location.href = '@Url.Action("Index", "Self")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Index", "Self")?ide=' + ide;
         }
 
         function continue_to_document(ide) {
-            window.location.href = '@Url.Action("Documents", "Self")?ide=' + ide + '&method=@((int)Model.Method)';
+            window.location.href = '@Url.Action("Documents", "Self")?ide=' + ide;
         }
     </script>
 }

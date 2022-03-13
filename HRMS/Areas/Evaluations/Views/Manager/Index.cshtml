@@ -15,7 +15,9 @@
     <div class="row">
         <div class="col-md-6 form-group">
             <label asp-for="StaffId" class="required"></label>
-            <select asp-for="StaffId" asp-items="await repo.Staff()" class="form-control select2"></select>
+            <select asp-for="StaffId" asp-items="await repo.Staff()" class="form-control select2">
+                <option value="">@Resource.Choose</option>
+            </select>
             <span asp-validation-for="StaffId" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-group">
@@ -46,9 +48,9 @@
                 $('#trigger_questions_form').attr({ disabled: true });
                 $('#trigger_documents_form').attr({ disabled: true });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationIde&method=@((int)Model.MethodType)', style: "cursor: pointer" });
+                $('#tab1').attr({ href: '@Url.Action("Index", "Manager")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Questions", "Manager")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Documents", "Manager")?ide=@Model.EvaluationIde', style: "cursor: pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });
@@ -56,6 +58,15 @@
             form.removeData('validator');
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
+
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
         });
     </script>
 }

@@ -81,13 +81,11 @@
 
             $(".select2").select2({
                 width: "100%",
-                allowClear: true,
                 language: {
                     noResults: function () {
                         return '@Html.Raw(Resource.NoResultsFound)';
                     },
-                },
-                placeholder: '@Resource.Choose',
+                }
             });
 
             change_staff();
@@ -150,7 +148,6 @@
         function change_staff() {
             $('#StaffId').select2({
                 width: "100%",
-                allowClear: true,
                 language: {
                     noResults: function () {
                         return '@Html.Raw(Resource.NoResultsFound)';
@@ -177,7 +174,6 @@
                     },
                     catch: true
                 },
-                placeholder: '@Resource.Choose',
                 templateResult: formatRepo,
                 templateSelection: formatRepoSelection
             });
