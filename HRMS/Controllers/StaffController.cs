@@ -675,12 +675,12 @@ public class StaffController : BaseController
                 Firstname = a.FirstName,
                 Lastname = a.LastName,
                 MethodType = a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished) ? MethodType.Put : MethodType.Post,
-                IsLecturer = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer)
+                IsLecturer = a.StaffDepartment.Any(a => a.StaffTypeId == (int)StaffTypeEnum.Lecturer && a.EndDate >= DateTime.Now)
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
             .Include(a => a.Department).Include(a => a.StaffType)
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now)
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
@@ -779,7 +779,8 @@ public class StaffController : BaseController
         // TODO: try catch, if error, delete roles
         if (!getRoles.Any())
         {
-            var result = await userManager.AddToRolesAsync(newUser, db.AspNetRoles.Where(a => getRoles.Contains(a.Id)).Select(a => a.Name).ToList());
+            var role = await db.AspNetRoles.Where(a => a.Id == getRole).Select(a => a.NormalizedName).ToListAsync();
+            var result = await userManager.AddToRolesAsync(newUser, role);
             if (!result.Succeeded)
             {
                 TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
@@ -892,7 +893,7 @@ public class StaffController : BaseController
             var anotherRealRoles = await db.RealRole.Where(a => a.UserId == department.Staff.UserId).ToListAsync();
             if (anotherRealRoles.Count == 0)
             {
-                var result = await userManager.RemoveFromRolesAsync(userToRemove, db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.Name).ToList());
+                var result = await userManager.RemoveFromRolesAsync(userToRemove, db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.NormalizedName).ToList());
                 if (!result.Succeeded)
                 {
                     TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
@@ -900,7 +901,7 @@ public class StaffController : BaseController
             }
             else
             {
-                var result = await userManager.AddToRoleAsync(userToRemove, db.AspNetRoles.Where(a => a.Id == anotherRealRoles.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.Name).FirstOrDefault());
+                var result = await userManager.AddToRoleAsync(userToRemove, db.AspNetRoles.Where(a => a.Id == anotherRealRoles.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.NormalizedName).FirstOrDefault());
                 if (!result.Succeeded)
                 {
                     TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
