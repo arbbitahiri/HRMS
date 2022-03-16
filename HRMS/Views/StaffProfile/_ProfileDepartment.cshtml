@@ -79,18 +79,8 @@
                 { data: "staffType" },
                 { data: "jobType" },
                 { data: "bruttoSalary" },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.startDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.endDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
+                { data: "startDate" },
+                { data: "endDate" },
                 {
                     data: function (row, type, set) {
                         var date_time_now = new Date();

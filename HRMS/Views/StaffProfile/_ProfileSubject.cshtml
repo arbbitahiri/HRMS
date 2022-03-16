@@ -63,18 +63,8 @@
                     }
                 },
                 { data: "subject" },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.startDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.startDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
+                { data: "startDate" },
+                { data: "endDate" },
                 {
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
