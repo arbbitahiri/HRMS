@@ -104,7 +104,7 @@ public enum EvaluationTypeEnum
 
 public enum QuestionType
 {
-    Numerical = 1,
+    Numeral = 1,
     Optional = 2,
     Topic = 3,
     OptionalTopic = 5

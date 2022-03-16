@@ -60,24 +60,9 @@
                     }
                 },
                 { data: "leaveType" },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.startDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.returnDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                    }
-                },
-                {
-                    data: function (row, type, set) {
-                        var date = new Date(Date.parse(row.insertedDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-                    }
-                },
+                { data: "startDate" },
+                { data: "returnDate" },
+                { data: "insertedDate" },
                 { data: "reviewedDate" },
                 {
                     data: function (row, type, set) {

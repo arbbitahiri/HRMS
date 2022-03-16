@@ -11,46 +11,36 @@
 <div class="modal-body">
     @Html.AntiForgeryToken()
 
-    <div class="row form-group">
-        <div class="col-md-4">
+    <div class="row">
+        <div class="col-md-4 form-group">
             <label asp-for="StaffReviewer">@Resource.ReviewedFrom</label>
             <input asp-for="StaffReviewer" type="text" disabled class="form-control" value='@(Model.StaffReviewer ?? "///")'/>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 form-group">
             <label asp-for="LeaveType">@Resource.LeaveType</label>
             <input asp-for="LeaveType" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 form-group">
             <label asp-for="StatusType">@Resource.RemainingDays</label>
             <input asp-for="StatusType" type="text" disabled class="form-control"/>
         </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-4">
+        <div class="col-md-6 form-group">
             <label asp-for="StartDate">@Resource.StartDate</label>
             <input asp-for="StartDate" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6 form-group">
             <label asp-for="EndDate">@Resource.ReturnDate</label>
             <input asp-for="EndDate" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-4">
-            <label asp-for="TotalDays">@Resource.TotalDays</label>
-            <input asp-for="TotalDays" type="text" disabled class="form-control"/>
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-6">
+        <div class="col-md-6 form-group">
             <label asp-for="InsertedDate">@Resource.RequestedDate</label>
             <input asp-for="InsertedDate" type="text" disabled class="form-control"/>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 form-group">
             <label asp-for="UpdatedDate">@Resource.ReviewDate</label>
             <input asp-for="UpdatedDate" type="text" disabled class="form-control"/>
         </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-12">
+        <div class="col-md-12 form-group">
             <label asp-for="Description">@Resource.Description</label>
             <textarea asp-for="Description" rows="2" disabled class="form-control"></textarea>
         </div>

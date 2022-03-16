@@ -26,14 +26,6 @@
                 <input asp-for="QuestionEN" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionEN" class="text-danger"></span>
             </div>
-            @if (!string.IsNullOrEmpty(Model.Answer))
-            {
-                <div class="col-md-12 form-group">
-                    <label asp-for="Answer" class="required"></label>
-                    <textarea asp-for="Answer" rows="2" class="form-control"></textarea>
-                    <span asp-validation-for="Answer" class="text-danger"></span>
-                </div>
-            }
 
             @if (Model.QuestionTypeEnum == QuestionType.Optional)
             {

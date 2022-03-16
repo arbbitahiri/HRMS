@@ -200,7 +200,7 @@ public class EvaluationController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var evaluationType = await db.Evaluation.Where(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide)).Select(a => (EvaluationTypeEnum)a.EvaluationId).FirstOrDefaultAsync();
+        var evaluationType = await db.Evaluation.Where(a => a.EvaluationId == CryptoSecurity.Decrypt<int>(ide)).Select(a => (EvaluationTypeEnum)a.EvaluationTypeId).FirstOrDefaultAsync();
         var evaluationDetails = new EvaluationDetails();
         if (evaluationType == EvaluationTypeEnum.Manager)
         {
@@ -214,6 +214,8 @@ public class EvaluationController : BaseController
                     InsertedDate = a.InsertedDate,
                     MethodType = MethodType.Get,
                     EvaluationTypeEnum = evaluationType,
+                    Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                    Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
                     Manager = $"{a.Manager.Staff.FirstName} {a.Manager.Staff.LastName}",
                     Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
                     Title = a.Title,
@@ -234,6 +236,8 @@ public class EvaluationController : BaseController
                     MethodType = MethodType.Get,
                     EvaluationTypeEnum = evaluationType,
                     Students = a.StudentsNo,
+                    Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                    Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalTopic.Any(a => a.Active && !string.IsNullOrEmpty(a.Answer))) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
                     Title = a.Title,
                     Description = a.Description
                 }).FirstOrDefaultAsync();
@@ -256,6 +260,8 @@ public class EvaluationController : BaseController
                     Staff = $"{a.StaffDepartmentSubject.StaffDepartment.Staff.FirstName} {a.StaffDepartmentSubject.StaffDepartment.Staff.LastName}",
                     Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn,
                     Students = a.StudentsNo,
+                    Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)),
+                    Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)),
                     Title = a.Title,
                     Description = a.Description
                 }).FirstOrDefaultAsync();
@@ -273,6 +279,8 @@ public class EvaluationController : BaseController
                     MethodType = MethodType.Get,
                     EvaluationTypeEnum = evaluationType,
                     Staff = $"{a.Staff.FirstName} {a.Staff.LastName}",
+                    Questions = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(b => b.Active)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active),
+                    Answers = a.Evaluation.EvaluationQuestionnaireNumerical.Count(a => a.Active && a.Grade.HasValue) + a.Evaluation.EvaluationQuestionnaireOptional.Count(a => a.Active && a.EvaluationQuestionnaireOptionalOption.Any(a => a.Active && a.Checked)) + a.Evaluation.EvaluationQuestionnaireTopic.Count(a => a.Active && !string.IsNullOrEmpty(a.Answer)),
                     Title = a.Title,
                     Description = a.Description
                 }).FirstOrDefaultAsync();
@@ -300,7 +308,7 @@ public class EvaluationController : BaseController
         return View(details);
     }
 
-    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
+    [HttpGet, Authorize(Policy = "71:r")]
     [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _NumericalQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireNumerical
@@ -314,7 +322,7 @@ public class EvaluationController : BaseController
                 Graded = a.Grade.HasValue
             }).ToListAsync());
 
-    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
+    [HttpGet, Authorize(Policy = "71:r")]
     [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionalOptionQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
@@ -331,7 +339,8 @@ public class EvaluationController : BaseController
                     Checked = a.Checked
                 }).ToList()
             }).ToListAsync());
-    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
+
+    [HttpGet, Authorize(Policy = "71:r")]
     [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _OptionalTopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireOptional
@@ -349,7 +358,7 @@ public class EvaluationController : BaseController
                 }).ToList()
             }).ToListAsync());
 
-    [HttpPost, Authorize(Policy = "71:r"), ValidateAntiForgeryToken]
+    [HttpGet, Authorize(Policy = "71:r")]
     [Description("Korab Mustafa", "Form to view list of numerical questions.")]
     public async Task<IActionResult> _TopicQuestions(string ide) =>
         PartialView(await db.EvaluationQuestionnaireTopic

@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table id="tbl_numerical_questions" class="table table-striped table-bordered table-hover">
+            <table id="tbl_numeral_questions" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -76,6 +76,21 @@
                 {
                     <fieldset class="mb-4 px-4 ml-0">
                         <legend>@optional.Question</legend>
+                        <div class="d-flex justify-content-end">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="ki ki-bold-more-hor"></i></button>
+                                <div class="dropdown-menu" role="menu">
+                                    <button type="button" class="dropdown-item" onclick="edit_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">
+                                        <span class="mr-1"><i class="fas fa-pencil-alt"></i></span>
+                                        <span class="p-1">@Resource.Edit</span>
+                                    </button>
+                                    <button type="button" class="dropdown-item" onclick="delete_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">
+                                        <span class="mr-1"><i class="fas fa-trash"></i></span>
+                                        <span class="p-1">@Resource.Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         @foreach (var option in optional.Options)
                         {
                             var isChecked = option.Checked ? "checked" : "";
@@ -84,16 +99,6 @@
                                 <label for="@option.OptionId" onclick="change_option('@option.OptionIde')">@option.Option</label>
                             </ul>
                         }
-                        <legend class="bottom-legend" style="left: 89%;">
-                            <button type="button" class="btn btn-danger" onclick="delete_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">@Resource.Delete</button>
-                        </legend>
-                        <legend class="bottom-legend" style="left: 95%;">
-                            <button type="button" class="btn btn-primary" onclick="edit_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">@Resource.Edit</button>
-                        </legend>
-                        <div class="m-2 d-none" id='@optional.OptionalId'>
-                            <textarea asp-for="@optional.OtherDescription" onkeyup="show_button(this)" id="txt_other" rows="2" class="form-control"></textarea>
-                            <button id="btn_other" type="button" onclick="add_other_option('@optional.EvaluationQuestionnaireOptionalIde')" class="btn btn-primary mt-2" style="display: none;">@Resource.Save</button>
-                        </div>
                     </fieldset>
                 }
             </div>
@@ -127,44 +132,12 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
 
-            $('#rpt_options').repeater({
-                initEmpty: false,
-                isFirstItemUndeletable: true,
-                show: function() {
-                    var limitCount = $(this).parents(".repeater").data("limit");
-                    var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
-                    if (limitCount) {
-                        if (itemCount <= limitCount) {
-                            $(this).slideDown();
-                        } else {
-                            $(this).remove();
-                        }
-                    } else {
-                        $(this).slideDown();
-                    }
-
-                    if (itemCount >= limitCount) {
-                        $(".repeater input[data-repeater-create]").hide("slow");
-                    }
-                },
-                hide: function(deleteElement) {
-                    var limitCount = $(this).parents(".repeater").data("limit");
-                    var itemCount = $(this).parents(".repeater").find("div[data-repeater-item]").length;
-
-                    $(this).slideUp(deleteElement);
-
-                    if (itemCount <= limitCount) {
-                        $(".repeater input[data-repeater-create]").show("slow");
-                    }
-                }
-            });
-
-            render_numerical_tbl(@Json.Serialize(Model.Numericals));
+            render_numeral_tbl(@Json.Serialize(Model.Numerals));
         });
 
-        function render_numerical_tbl(data) {
+        function render_numeral_tbl(data) {
             var rowCount = 1;
-            $('#tbl_numerical_questions').DataTable({
+            $('#tbl_numeral_questions').DataTable({
                 destroy: true,
                 language: {
                     url: `/Culture/DataTable/${culture}.json`
@@ -274,14 +247,6 @@
             }, function(data) {
                 handle_success(data, SubmitPathType.RELOAD, "");
             });
-        }
-
-        function show_button(e) {
-            if ($(e).val() != '' && $(e).val() != null) {
-                $('#btn_other').show(100);
-            } else {
-                $('#btn_other').hide(100);
-            }
         }
 
         function add_question(ide) {

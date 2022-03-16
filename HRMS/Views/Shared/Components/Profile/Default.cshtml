@@ -18,12 +18,18 @@
     </li>
 
     <li class="user-body" style="border-radius: 0px;">
-        <label>@Resource.DarkMode</label><br/>
-        <input data-switch="true" style="cursor: pointer; width: 100%"
-            id="ch_change_mode" type="checkbox" @mode
-            data-size="xs" data-toggle="switchbutton" data-height="75"
-            data-on-text="@Resource.ON" data-off-text="@Resource.OFF"
-            data-on-color="dark" data-off-color="default" onchange="change_mode(this)" />
+        <div class="row">
+            <div class="col-6">
+                <label class="m-0">@Resource.DarkMode</label><br/>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <input data-switch="true" style="cursor: pointer; width: 100%"
+                    id="ch_change_mode" type="checkbox" @mode
+                    data-size="xs" data-toggle="switchbutton" data-height="75"
+                    data-on-text="@Resource.ON" data-off-text="@Resource.OFF"
+                    data-on-color="dark" data-off-color="default" onchange="change_mode(this)" />
+            </div>
+        </div>
     </li>
 
     @if (Model.Roles.Count > 1)

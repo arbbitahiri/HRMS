@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<table id="tbl_students_evaluation" class="table table-striped w-100 table-hover table-bordered">
+<table id="tbl_students_college_evaluation" class="table table-striped w-100 table-hover table-bordered">
     <thead>
         <tr>
             <th>#</th>
@@ -31,7 +31,7 @@
     function render_students_college_tbl(data) {
         var rowCount = 1;
         var studentsCollege = "StudentsCollege";
-        $('#tbl_students_evaluation').DataTable({
+        $('#tbl_students_college_evaluation').DataTable({
             destroy: true,
             language: {
                 url: `/Culture/DataTable/${culture}.json`

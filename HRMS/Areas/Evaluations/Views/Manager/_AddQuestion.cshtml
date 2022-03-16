@@ -35,7 +35,7 @@
                 <input asp-for="QuestionEN" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionEN" class="text-danger"></span>
             </div>
-            <div id="rpt_options" class="col-md-12 d-none">
+            <div id="rpt_options" class="col-md-12" style="display: none;">
                 <div data-repeater-list="" data-limit="@Model.MaxQuestionOptions" class="row repeater">
                     <div data-repeater-item="" class="form-group row col-md-12 align-items-center">
                         <div class="col-md-5">
@@ -89,11 +89,11 @@
 
         $('#QuestionTypeId').on('change', function() {
             if ($(this).val() == QuestionType.OPTIONAL) {
-                $('#rpt_options').removeClass('d-none');
+                $('#rpt_options').show(250);
             } else if ($(this).val() == QuestionType.TOPIC) {
-                $('#rpt_options').addClass('d-none');
+                $('#rpt_options').hide(250);
             } else {
-                $('#rpt_options').addClass('d-none');
+                $('#rpt_options').hide(250);
             }
         });
 

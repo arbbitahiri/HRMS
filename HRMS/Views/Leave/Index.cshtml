@@ -21,10 +21,13 @@
             @Html.AntiForgeryToken()
 
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-3 form-group">
-                    <label asp-for="StaffId">@Resource.Staff</label>
-                    <select asp-for="StaffId" class="form-control"></select>
-                </div>
+                @if (!User.IsInRole("Lecturer"))
+                {
+                    <div class="col-md-3 col-lg-3 col-sm-3 form-group">
+                        <label asp-for="StaffId">@Resource.Staff</label>
+                        <select asp-for="StaffId" class="form-control"></select>
+                    </div>
+                }
                 <div class="col-md-3 col-lg-3 col-sm-3 form-group">
                     <label asp-for="LeaveTypeId">@Resource.LeaveType</label>
                     <select asp-for="LeaveTypeId" asp-items="await repo.LeaveTypes(user.Language)" class="form-control select2">

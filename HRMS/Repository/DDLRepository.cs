@@ -204,7 +204,7 @@ public class DDLRepository : IDDLRepository
 
     public async Task<List<SelectListItem>> EvaluationQuestionsForStudents(StudentsEvaluationType studentsEvaluationType, LanguageEnum lang)
     {
-        var statuses = studentsEvaluationType == StudentsEvaluationType.Staff ? new int[] { (int)QuestionType.Numerical, (int)QuestionType.OptionalTopic } : new int[] { (int)QuestionType.Numerical, (int)QuestionType.Optional };
+        var statuses = studentsEvaluationType == StudentsEvaluationType.Staff ? new int[] { (int)QuestionType.Numeral, (int)QuestionType.OptionalTopic } : new int[] { (int)QuestionType.Numeral, (int)QuestionType.Optional };
         return await db.EvaluationQuestionType
             .Where(a => a.Active && statuses.Contains(a.EvaluationQuestionTypeId))
             .Select(a => new SelectListItem
@@ -216,7 +216,7 @@ public class DDLRepository : IDDLRepository
 
     public async Task<List<SelectListItem>> EvaluationQuestionsForStaff(LanguageEnum lang)
     {
-        var statuses = new int[] { (int)QuestionType.Numerical, (int)QuestionType.Optional, (int)QuestionType.Topic };
+        var statuses = new int[] { (int)QuestionType.Numeral, (int)QuestionType.Optional, (int)QuestionType.Topic };
         return await db.EvaluationQuestionType
             .Where(a => a.Active && statuses.Contains(a.EvaluationQuestionTypeId))
             .Select(a => new SelectListItem

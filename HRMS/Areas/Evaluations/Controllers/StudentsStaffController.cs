@@ -142,7 +142,7 @@ public class StudentsStaffController : BaseController
 
     [HttpGet, Authorize(Policy = "74q:r")]
     [Description("Arb Tahiri", "Form to display questionnaire form. Second step of registering/editing questionnaire.")]
-    public async Task<IActionResult> Questions(string ide, MethodType method)
+    public async Task<IActionResult> Questions(string ide)
     {
         var evaluationId = CryptoSecurity.Decrypt<int>(ide);
         var details = await db.EvaluationStudentsStaff
@@ -158,7 +158,7 @@ public class StudentsStaffController : BaseController
                 Subject = user.Language == LanguageEnum.Albanian ? a.StaffDepartmentSubject.Subject.NameSq : a.StaffDepartmentSubject.Subject.NameEn
             }).FirstOrDefaultAsync();
 
-        var numericals = await db.EvaluationQuestionnaireNumerical
+        var numerals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == evaluationId)
@@ -193,9 +193,9 @@ public class StudentsStaffController : BaseController
         var questionVM = new QuestionVM
         {
             EvaluationDetails = details,
-            Numericals = numericals,
+            Numerals = numerals,
             Optionals = optionals,
-            TotalQuestions = numericals.Count + optionals.Count,
+            TotalQuestions = numerals.Count + optionals.Count,
             MaxQuestionOptions = Convert.ToInt32(configuration["AppSettings:MaxQuestionOptions"]),
             Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
@@ -218,7 +218,7 @@ public class StudentsStaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (create.QuestionTypeId == (int)QuestionType.OptionalTopic)
+        if (create.QuestionTypeId == (int)QuestionType.Optional)
         {
             if (create.Options == null)
             {
@@ -269,7 +269,7 @@ public class StudentsStaffController : BaseController
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
         var question = new ManageQuestion();
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             question = await db.EvaluationQuestionnaireNumerical
                 .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
@@ -313,7 +313,7 @@ public class StudentsStaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (edit.QuestionTypeEnum == QuestionType.Numerical)
+        if (edit.QuestionTypeEnum == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
             question.QuestionSq = edit.QuestionSQ;
@@ -379,7 +379,7 @@ public class StudentsStaffController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Active = false;
@@ -406,7 +406,7 @@ public class StudentsStaffController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Grade = null;

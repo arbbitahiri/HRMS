@@ -72,6 +72,7 @@
             </table>
         </div>
     </div>
+    @* TODO: Later to integrate optional with topics. *@
     @*@if (Model.OptionalTopics.Any())
     {
         <hr/>
@@ -120,7 +121,7 @@
                 $('#icon_register').attr({ style: 'background-color: #43b25d' });
             }
 
-            render_numerical_tbl(@Json.Serialize(Model.Numericals));
+            render_numerical_tbl(@Json.Serialize(Model.Numerals));
         });
 
         function render_numerical_tbl(data) {
@@ -243,11 +244,12 @@
             });
         }
 
-        function submit_optional_topic(ide) {
+        // TODO: Later to integrate optional with topics.
+        @* function submit_optional_topic(ide) {
             $.post('@Url.Action("TopicAnswer", "StudentsCollege")?ide=?' + ide, function(data) {
                 handle_success(data, SubmitPathType.NORELOAD, "");
             });
-        }
+        } *@
 
         function delete_question(ide, question_type) {
             if(question_type === QuestionType.TOPIC) {

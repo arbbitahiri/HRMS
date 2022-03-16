@@ -283,7 +283,7 @@ public class SelfController : BaseController
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
         var question = new ManageQuestion();
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             question = await db.EvaluationQuestionnaireNumerical
                 .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
@@ -340,7 +340,7 @@ public class SelfController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (edit.QuestionTypeEnum == QuestionType.Numerical)
+        if (edit.QuestionTypeEnum == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
             question.QuestionSq = edit.QuestionSQ;
@@ -416,7 +416,7 @@ public class SelfController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Active = false;
@@ -449,7 +449,7 @@ public class SelfController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Grade = null;

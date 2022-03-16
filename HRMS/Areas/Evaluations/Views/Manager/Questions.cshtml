@@ -23,10 +23,11 @@
         margin-left: 10px
     }
 
-    .bottom-legend {
+    .top-legend {
         position: absolute;
-        bottom: 0;
-        transform: translate(-75%, 70%);
+        top: 0;
+        right: 0;
+        transform: translate(-20%, -90%);
         padding: 0 5px;
     }
 </style>
@@ -82,20 +83,31 @@
                 {
                     <fieldset class="mb-4 px-4 ml-0">
                         <legend>@optional.Question</legend>
+                        <legend class="top-legend">
+                            <div class="d-flex justify-content-end">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default" data-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <button type="button" class="dropdown-item" onclick="edit_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">
+                                            <span class="mr-1"><i class="fas fa-pencil-alt"></i></span>
+                                            <span class="p-1">@Resource.Edit</span>
+                                        </button>
+                                        <button type="button" class="dropdown-item" onclick="delete_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">
+                                            <span class="mr-1"><i class="fas fa-trash"></i></span>
+                                            <span class="p-1">@Resource.Delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </legend>
                         @foreach (var option in optional.Options)
                         {
                             var isChecked = option.Checked ? "checked" : "";
                             <ul class="icheck-primary p-2" style="font-size: 14px;">
                                 <input id="@option.OptionId" type="radio" @isChecked style="cursor: pointer;"/>
-                                <label for="@option.OptionId" onclick="change_option('@option.EvaluationQuestionnaireOptionalOptionIde', @optional.OptionalId, @option.OptionId)">@option.Option</label>
+                                <label for="@option.OptionId" onclick="change_option('@option.EvaluationQuestionnaireOptionalOptionIde', '@optional.EvaluationQuestionnaireOptionalIde')">@option.Option</label>
                             </ul>
                         }
-                        <legend class="bottom-legend" style="left: 89%;">
-                            <button type="button" class="btn btn-danger" onclick="delete_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">@Resource.Delete</button>
-                        </legend>
-                        <legend class="bottom-legend" style="left: 95%;">
-                            <button type="button" class="btn btn-primary" onclick="edit_question('@optional.EvaluationQuestionnaireOptionalIde', QuestionType.OPTIONAL)">@Resource.Edit</button>
-                        </legend>
                         <div class="m-2 d-none" id='@optional.OptionalId'>
                             <textarea asp-for="@optional.OtherDescription" onkeyup="show_button(this)" id="txt_other" rows="2" class="form-control"></textarea>
                             <button id="btn_other" type="button" onclick="add_other_option('@optional.EvaluationQuestionnaireOptionalIde')" class="btn btn-primary mt-2" style="display: none;">@Resource.Save</button>
@@ -345,17 +357,14 @@
             });
         }
 
-        function change_option(ide, other, optionalId, optionId) {
-            if (other) {
-                $('#' + optionalId).removeClass('d-none');
-            } else {
-                $.post('@Url.Action("OptionalAnswer", "Manager")', {
-                    ide: ide,
-                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
-                }, function(data) {
-                    handle_success(data, SubmitPathType.RELOAD, "");
-                });
-            }
+        function change_option(ide, oIde) {
+            $.post('@Url.Action("OptionalAnswer", "Manager")', {
+                ide: ide,
+                oIde: oIde,
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                handle_success(data, SubmitPathType.RELOAD, "");
+            });
         }
 
         function show_button(e) {

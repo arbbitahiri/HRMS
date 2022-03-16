@@ -289,7 +289,7 @@ public class ManagerController : BaseController
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
         var question = new ManageQuestion();
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             question = await db.EvaluationQuestionnaireNumerical
                 .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
@@ -346,7 +346,7 @@ public class ManagerController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (edit.QuestionTypeEnum == QuestionType.Numerical)
+        if (edit.QuestionTypeEnum == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
             question.QuestionSq = edit.QuestionSQ;
@@ -422,7 +422,7 @@ public class ManagerController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Active = false;
@@ -455,7 +455,7 @@ public class ManagerController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Grade = null;
@@ -512,7 +512,7 @@ public class ManagerController : BaseController
 
     [HttpPost, Authorize(Policy = "72q:a"), ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "Action to answer a question.")]
-    public async Task<IActionResult> OptionalAnswer(string ide, string txt)
+    public async Task<IActionResult> OptionalAnswer(string ide, string oIde, string txt)
     {
         var error = new ErrorVM();
         if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
@@ -527,6 +527,15 @@ public class ManagerController : BaseController
         }
         else
         {
+            var optionals = await db.EvaluationQuestionnaireOptional
+                .Include(a => a.EvaluationQuestionnaireOptionalOption)
+                .Where(a => a.Active && a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(oIde))
+                .FirstOrDefaultAsync();
+            foreach (var item in optionals.EvaluationQuestionnaireOptionalOption)
+            {
+                item.Checked = false;
+            }
+
             var question = await db.EvaluationQuestionnaireOptionalOption
                 .Include(a => a.EvaluationQuestionnaireOptional)
                 .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));

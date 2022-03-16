@@ -52,9 +52,9 @@ public class LeaveController : BaseController
                 ProfileImage = a.Staff.User.ProfileImage,
                 PersonalNumber = a.Staff.PersonalNumber,
                 LeaveType = user.Language == LanguageEnum.Albanian ? a.LeaveType.NameSq : a.LeaveType.NameEn,
-                StartDate = a.StartDate,
-                ReturnDate = a.EndDate,
-                InsertedDate = a.InsertedDate,
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                ReturnDate = a.EndDate.ToString("dd/MM/yyyy"),
+                InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy hh:mm"),
                 ReviewedDate = a.LeaveStatus.Any(b => b.StatusTypeId == (int)Status.Approved) ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
                 Finished = a.LeaveStatus.Any(b => b.StatusTypeId != (int)Status.Pending)
             }).ToListAsync();
@@ -80,9 +80,9 @@ public class LeaveController : BaseController
                 ProfileImage = a.Staff.User.ProfileImage,
                 PersonalNumber = a.Staff.PersonalNumber,
                 LeaveType = user.Language == LanguageEnum.Albanian ? a.LeaveType.NameSq : a.LeaveType.NameEn,
-                StartDate = a.StartDate,
-                ReturnDate = a.EndDate,
-                InsertedDate = a.InsertedDate,
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                ReturnDate = a.EndDate.ToString("dd/MM/yyyy"),
+                InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy hh:mm"),
                 ReviewedDate = a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Approved) ? a.InsertedDate.ToString("dd/MM/yyyy") : "///"
             }).ToListAsync();
         return PartialView(holidays);
@@ -107,9 +107,9 @@ public class LeaveController : BaseController
                 ProfileImage = a.Staff.User.ProfileImage,
                 PersonalNumber = a.Staff.PersonalNumber,
                 LeaveType = user.Language == LanguageEnum.Albanian ? a.LeaveType.NameSq : a.LeaveType.NameEn,
-                StartDate = a.StartDate,
-                ReturnDate = a.EndDate,
-                InsertedDate = a.InsertedDate,
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                ReturnDate = a.EndDate.ToString("dd/MM/yyyy"),
+                InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy hh:mm"),
                 ReviewedDate = a.LeaveStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Rejected) ? a.InsertedDate.ToString("dd/MM/yyyy") : "///"
             }).ToListAsync();
         return PartialView(holidays);
@@ -399,7 +399,6 @@ public class LeaveController : BaseController
                 StatusType = a.LeaveStatus.Select(a => user.Language == LanguageEnum.Albanian ? a.StatusType.NameSq : a.StatusType.NameEn).FirstOrDefault(),
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
-                TotalDays = WorkingDays(a.StartDate, a.EndDate),
                 InsertedDate = a.InsertedDate.ToString("dd/MM/yyyy"),
                 UpdatedDate = a.UpdatedDate.HasValue ? a.UpdatedDate.Value.ToString("dd/MM/yyyy") : "///",
                 Description = a.Description

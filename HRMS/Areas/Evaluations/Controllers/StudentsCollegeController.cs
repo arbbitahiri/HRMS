@@ -138,7 +138,7 @@ public class StudentsCollegeController : BaseController
     public async Task<IActionResult> Questions(string ide)
     {
         var evaluationId = CryptoSecurity.Decrypt<int>(ide);
-        var numericals = await db.EvaluationQuestionnaireNumerical
+        var numerals = await db.EvaluationQuestionnaireNumerical
             .Where(a => a.Active
                 && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
                 && a.EvaluationId == evaluationId)
@@ -151,28 +151,29 @@ public class StudentsCollegeController : BaseController
                 Graded = a.Grade.HasValue
             }).ToListAsync();
 
-        var optionalTopics = await db.EvaluationQuestionnaireOptional
-            .Where(a => a.Active
-                && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == evaluationId)
-            .Select(a => new QuestionTopic
-            {
-                EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
-                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
-                Answers = a.EvaluationQuestionnaireOptionalTopic.Where(a => a.Active).Select(a => new TopicAnswer
-                {
-                    TopicId = a.EvaluationQuestionnaireOptionalTopicId * 6,
-                    TopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalTopicId),
-                    Answer = a.Answer
-                }).ToList()
-            }).ToListAsync();
+        // TODO: Later to integrate optional with topics.
+        // var optionalTopics = await db.EvaluationQuestionnaireOptional
+        //     .Where(a => a.Active
+        //         && a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
+        //         && a.EvaluationId == evaluationId)
+        //     .Select(a => new QuestionTopic
+        //     {
+        //         EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
+        //         Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
+        //         Answers = a.EvaluationQuestionnaireOptionalTopic.Where(a => a.Active).Select(a => new TopicAnswer
+        //         {
+        //             TopicId = a.EvaluationQuestionnaireOptionalTopicId * 6,
+        //             TopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalTopicId),
+        //             Answer = a.Answer
+        //         }).ToList()
+        //     }).ToListAsync();
 
         var questionVM = new QuestionVM
         {
             EvaluationIde = ide,
-            Numericals = numericals,
-            OptionalTopics = optionalTopics,
-            TotalQuestions = numericals.Count + optionalTopics.Count,
+            Numerals = numerals,
+            //OptionalTopics = optionalTopics,
+            //TotalQuestions = numerals.Count + optionalTopics.Count,
             Method = await db.Evaluation.AnyAsync(a => a.EvaluationId == evaluationId && a.EvaluationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)) ? MethodType.Put : MethodType.Post
         };
         return View(questionVM);
@@ -194,30 +195,29 @@ public class StudentsCollegeController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (create.QuestionTypeId == (int)QuestionType.Optional)
+        db.EvaluationQuestionnaireNumerical.Add(new EvaluationQuestionnaireNumerical
         {
-            db.EvaluationQuestionnaireOptional.Add(new EvaluationQuestionnaireOptional
-            {
-                EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-                QuestionSq = create.QuestionSQ,
-                QuestionEn = create.QuestionEN,
-                Active = true,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = user.Id
-            });
-        }
-        else
-        {
-            db.EvaluationQuestionnaireNumerical.Add(new EvaluationQuestionnaireNumerical
-            {
-                EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
-                QuestionSq = create.QuestionSQ,
-                QuestionEn = create.QuestionEN,
-                Active = true,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = user.Id
-            });
-        }
+            EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
+            QuestionSq = create.QuestionSQ,
+            QuestionEn = create.QuestionEN,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+
+        // TODO: Later to integrate optional with topics.
+        // if (create.QuestionTypeId == (int)QuestionType.Optional)
+        // {
+        //     db.EvaluationQuestionnaireOptional.Add(new EvaluationQuestionnaireOptional
+        //     {
+        //         EvaluationId = CryptoSecurity.Decrypt<int>(create.EvaluationIde),
+        //         QuestionSq = create.QuestionSQ,
+        //         QuestionEn = create.QuestionEN,
+        //         Active = true,
+        //         InsertedDate = DateTime.Now,
+        //         InsertedFrom = user.Id
+        //     });
+        // }
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
@@ -230,31 +230,32 @@ public class StudentsCollegeController : BaseController
     [Authorize(Policy = "73q:e"), Description("Arb Tahiri", "Form to edit a question.")]
     public async Task<IActionResult> _EditQuestion(string ide, QuestionType questionType)
     {
-        var question = new ManageQuestion();
-        if (questionType == QuestionType.Numerical)
-        {
-            question = await db.EvaluationQuestionnaireNumerical
-                .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
-                .Select(a => new ManageQuestion
-                {
-                    EvaluationQuestionnaireNumericalIde = ide,
-                    QuestionSQ = a.QuestionSq,
-                    QuestionEN = a.QuestionEn,
-                    QuestionTypeEnum = questionType
-                }).FirstOrDefaultAsync();
-        }
-        else
-        {
-            question = await db.EvaluationQuestionnaireOptional
-                .Where(a => a.Active && a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide))
-                .Select(a => new ManageQuestion
-                {
-                    EvaluationQuestionnaireOptionalIde = ide,
-                    QuestionSQ = a.QuestionSq,
-                    QuestionEN = a.QuestionEn,
-                    QuestionTypeEnum = questionType
-                }).FirstOrDefaultAsync();
-        }
+        var question = await db.EvaluationQuestionnaireNumerical
+            .Where(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide))
+            .Select(a => new ManageQuestion
+            {
+                EvaluationQuestionnaireNumericalIde = ide,
+                QuestionSQ = a.QuestionSq,
+                QuestionEN = a.QuestionEn,
+                QuestionTypeEnum = questionType
+            }).FirstOrDefaultAsync();
+
+        // TODO: Later to integrate optional with topics.
+        // if (questionType == QuestionType.Numerical)
+        // {
+        // }
+        // else
+        // {
+        //     question = await db.EvaluationQuestionnaireOptional
+        //         .Where(a => a.Active && a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide))
+        //         .Select(a => new ManageQuestion
+        //         {
+        //             EvaluationQuestionnaireOptionalIde = ide,
+        //             QuestionSQ = a.QuestionSq,
+        //             QuestionEN = a.QuestionEn,
+        //             QuestionTypeEnum = questionType
+        //         }).FirstOrDefaultAsync();
+        // }
 
         return PartialView(question);
     }
@@ -268,7 +269,7 @@ public class StudentsCollegeController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        if (edit.QuestionTypeEnum == QuestionType.Numerical)
+        if (edit.QuestionTypeEnum == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(edit.EvaluationQuestionnaireNumericalIde));
             question.QuestionSq = edit.QuestionSQ;
@@ -299,22 +300,24 @@ public class StudentsCollegeController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> DeleteQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
-        {
-            var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
-            question.Active = false;
-            question.UpdatedDate = DateTime.Now;
-            question.UpdatedFrom = user.Id;
-            question.UpdatedNo = UpdateNo(question.UpdatedNo);
-        }
-        else
-        {
-            var question = await db.EvaluationQuestionnaireOptional.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide));
-            question.Active = false;
-            question.UpdatedDate = DateTime.Now;
-            question.UpdatedFrom = user.Id;
-            question.UpdatedNo = UpdateNo(question.UpdatedNo);
-        }
+        var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
+        question.Active = false;
+        question.UpdatedDate = DateTime.Now;
+        question.UpdatedFrom = user.Id;
+        question.UpdatedNo = UpdateNo(question.UpdatedNo);
+
+        // TODO: Later to integrate optional with topics.
+        // if (questionType == QuestionType.Numerical)
+        // {
+        // }
+        // else
+        // {
+        //     var question = await db.EvaluationQuestionnaireOptional.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireOptionalId == CryptoSecurity.Decrypt<int>(ide));
+        //     question.Active = false;
+        //     question.UpdatedDate = DateTime.Now;
+        //     question.UpdatedFrom = user.Id;
+        //     question.UpdatedNo = UpdateNo(question.UpdatedNo);
+        // }
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -324,7 +327,7 @@ public class StudentsCollegeController : BaseController
     [Description("Arb Tahiri", "Action to delete a question.")]
     public async Task<IActionResult> ClearQuestion(string ide, QuestionType questionType)
     {
-        if (questionType == QuestionType.Numerical)
+        if (questionType == QuestionType.Numeral)
         {
             var question = await db.EvaluationQuestionnaireNumerical.FirstOrDefaultAsync(a => a.EvaluationQuestionnaireNumericalId == CryptoSecurity.Decrypt<int>(ide));
             question.Grade = null;
@@ -379,43 +382,44 @@ public class StudentsCollegeController : BaseController
         return Json(error);
     }
 
-    [HttpPost, Authorize(Policy = "73q:a"), ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Action to answer a question.")]
-    public async Task<IActionResult> OptionalAnswer(string ide, string txt)
-    {
-        var error = new ErrorVM();
-        if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
-        {
-            var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
-            question.Checked = false;
-            question.UpdatedDate = DateTime.Now;
-            question.UpdatedFrom = user.Id;
-            question.UpdatedNo = UpdateNo(question.UpdatedNo);
+    // TODO: Later to integrate optional with topics.
+    // [HttpPost, Authorize(Policy = "73q:a"), ValidateAntiForgeryToken]
+    // [Description("Arb Tahiri", "Action to answer a question.")]
+    // public async Task<IActionResult> OptionalAnswer(string ide, string txt)
+    // {
+    //     var error = new ErrorVM();
+    //     if (await db.EvaluationQuestionnaireOptionalOption.AnyAsync(a => a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide) && a.Checked))
+    //     {
+    //         var question = await db.EvaluationQuestionnaireOptionalOption.FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+    //         question.Checked = false;
+    //         question.UpdatedDate = DateTime.Now;
+    //         question.UpdatedFrom = user.Id;
+    //         question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
-            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
-        }
-        else
-        {
-            var question = await db.EvaluationQuestionnaireOptionalOption
-                .Include(a => a.EvaluationQuestionnaireOptional)
-                .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
-            question.Checked = true;
-            if (!string.IsNullOrEmpty(txt))
-            {
-                question.EvaluationQuestionnaireOptional.Description = txt;
-                question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
-                question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
-                question.EvaluationQuestionnaireOptional.UpdatedNo = UpdateNo(question.EvaluationQuestionnaireOptional.UpdatedNo);
-            }
-            question.UpdatedDate = DateTime.Now;
-            question.UpdatedFrom = user.Id;
-            question.UpdatedNo = UpdateNo(question.UpdatedNo);
+    //         error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Cleared };
+    //     }
+    //     else
+    //     {
+    //         var question = await db.EvaluationQuestionnaireOptionalOption
+    //             .Include(a => a.EvaluationQuestionnaireOptional)
+    //             .FirstOrDefaultAsync(a => a.Active && a.EvaluationQuestionnaireOptionalOptionId == CryptoSecurity.Decrypt<int>(ide));
+    //         question.Checked = true;
+    //         if (!string.IsNullOrEmpty(txt))
+    //         {
+    //             question.EvaluationQuestionnaireOptional.Description = txt;
+    //             question.EvaluationQuestionnaireOptional.UpdatedDate = DateTime.Now;
+    //             question.EvaluationQuestionnaireOptional.UpdatedFrom = user.Id;
+    //             question.EvaluationQuestionnaireOptional.UpdatedNo = UpdateNo(question.EvaluationQuestionnaireOptional.UpdatedNo);
+    //         }
+    //         question.UpdatedDate = DateTime.Now;
+    //         question.UpdatedFrom = user.Id;
+    //         question.UpdatedNo = UpdateNo(question.UpdatedNo);
 
-            error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
-        }
-        await db.SaveChangesAsync();
-        return Json(error);
-    }
+    //         error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.Evaluated };
+    //     }
+    //     await db.SaveChangesAsync();
+    //     return Json(error);
+    // }
 
     #endregion
 
@@ -563,12 +567,11 @@ public class StudentsCollegeController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var noQuestions = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
-            + await db.EvaluationQuestionnaireOptional.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active));
+        // TODO: Later to integrate optional with topics.
+        //+ await db.EvaluationQuestionnaireOptional.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active && !string.IsNullOrEmpty(b.Answer)))
 
-        var noAnswers = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.Grade.HasValue && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
-            + await db.EvaluationQuestionnaireOptional.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide) && a.EvaluationQuestionnaireOptionalTopic.Any(b => b.Active && !string.IsNullOrEmpty(b.Answer)));
-
+        var noQuestions = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));
+        var noAnswers = await db.EvaluationQuestionnaireNumerical.CountAsync(a => a.Active && a.Grade.HasValue && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));
         var finished = noQuestions == noAnswers;
 
         var evaluationStatus = await db.EvaluationStatus.FirstOrDefaultAsync(a => a.Active && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide));

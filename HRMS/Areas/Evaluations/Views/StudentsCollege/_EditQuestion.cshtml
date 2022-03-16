@@ -26,6 +26,7 @@
                 <input asp-for="QuestionEN" type="text" class="form-control"/>
                 <span asp-validation-for="QuestionEN" class="text-danger"></span>
             </div>
+            @* TODO: Later to integrate optional with topics.
             @if (!string.IsNullOrEmpty(Model.Answer))
             {
                 <div class="col-md-12 form-group">
@@ -33,7 +34,7 @@
                     <textarea asp-for="Answer" rows="2" class="form-control"></textarea>
                     <span asp-validation-for="Answer" class="text-danger"></span>
                 </div>
-            }
+            } *@
         </div>
     </div>
 
@@ -50,12 +51,6 @@
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
-
-        if (culture == 'sq-AL') {
-            $('textarea').prop('spellcheck', false);
-        } else {
-            $('textarea').prop('spellcheck', true);
-        }
     });
 
     function success_edit_question(data) {
