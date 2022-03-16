@@ -225,6 +225,9 @@
   <data name="AllowNotification" xml:space="preserve">
     <value>Allow notification</value>
   </data>
+  <data name="AllRightReserved" xml:space="preserve">
+    <value>All right reserved.</value>
+  </data>
   <data name="AllTime" xml:space="preserve">
     <value>All time</value>
   </data>
@@ -408,6 +411,9 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="DevelopedBy" xml:space="preserve">
+    <value>Developed by</value>
+  </data>
   <data name="Developer" xml:space="preserve">
     <value>Developer</value>
   </data>
@@ -587,6 +593,9 @@
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="HRMSRiinvest" xml:space="preserve">
+    <value>HRMS Riinvest</value>
   </data>
   <data name="HttpMethod" xml:space="preserve">
     <value>HTTP Method</value>

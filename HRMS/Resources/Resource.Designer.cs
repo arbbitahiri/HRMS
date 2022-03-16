@@ -385,6 +385,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Të gjitha të drejtat e rezervuara..
+        /// </summary>
+        public static string AllRightReserved {
+            get {
+                return ResourceManager.GetString("AllRightReserved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gjithë kohën.
         /// </summary>
         public static string AllTime {
@@ -934,6 +943,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zhvilluar nga.
+        /// </summary>
+        public static string DevelopedBy {
+            get {
+                return ResourceManager.GetString("DevelopedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zhvilluesi.
         /// </summary>
         public static string Developer {
@@ -1470,6 +1488,15 @@ namespace HRMS.Resources {
         public static string HomePage {
             get {
                 return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HRMS Riinvest.
+        /// </summary>
+        public static string HRMSRiinvest {
+            get {
+                return ResourceManager.GetString("HRMSRiinvest", resourceCulture);
             }
         }
         

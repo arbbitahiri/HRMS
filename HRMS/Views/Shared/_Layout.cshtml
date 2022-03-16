@@ -16,7 +16,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HRMS</title>
+    <title>@ViewData["Title"] - @Resource.HRMSRiinvest</title>
 
     <link rel="shortcut icon" href="~/favicon.ico" />
 
@@ -118,7 +118,7 @@
 
         <footer class="main-footer text-sm">
             <div class="text-dark d-flex justify-content-end">
-                &copy; <b>HRMS Riinvest</b> &nbsp; @DateTime.Now.Year - Zhvilluar nga Arb & Korab. All rights reserved.
+                &copy; <b>@Resource.HRMSRiinvest</b> &nbsp; @DateTime.Now.Year - @Resource.DevelopedBy Arb & Korab. @Resource.AllRightReserved
             </div>
         </footer>
     </div>
@@ -162,11 +162,6 @@
         var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';
         var cultureShort = '@System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2)';
         $("#ch_change_mode").bootstrapSwitch();
-
-        //$(document).idleTimer(@conf["AppSettings:Timeout"]);
-        //$(document).on("idle.idleTimer", function (event, elem, obj) {
-        //    window.location.href = '/Identity/Account/Timeout?returnUrl=' + window.location.pathname;
-        //});
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

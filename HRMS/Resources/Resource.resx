@@ -1413,4 +1413,13 @@
   <data name="StaffNotComplete" xml:space="preserve">
     <value>Stafi nuk është regjistruar në një departament dhe nuk është përcaktuar paga. Dëshironi të vazhdoni?</value>
   </data>
+  <data name="AllRightReserved" xml:space="preserve">
+    <value>Të gjitha të drejtat e rezervuara.</value>
+  </data>
+  <data name="DevelopedBy" xml:space="preserve">
+    <value>Zhvilluar nga</value>
+  </data>
+  <data name="HRMSRiinvest" xml:space="preserve">
+    <value>HRMS Riinvest</value>
+  </data>
 </root>
