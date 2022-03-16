@@ -1,0 +1,89 @@
+﻿@using HRMS.Models.Configuration.Email
+@model EmailVM
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.EmailConfiguration</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Email" asp-controller="Configuration" id="frm_email" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.SMTPHost:</label>
+                    <div class="input-group">
+                        <input asp-for="Host" class="form-control"/>
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.ServerForEmail</span>
+                    <span asp-validation-for="Host" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Email:</label>
+                    <div class="input-group">
+                        <input asp-for="Email" class="form-control"/>
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-at"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.SendMailServer</span>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Password:</label>
+                    <div class="input-group">
+                        <input asp-for="Password" class="form-control"/>
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-key"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.PasswordForEmail</span>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.CC:</label>
+                    <div class="input-group">
+                        <input asp-for="CC" class="form-control"/>
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.CCUsersText</span>
+                    <span asp-validation-for="CC" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Port:</label>
+                    <div class="input-group">
+                        <input asp-for="Port" class="form-control"/>
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.PortForEmail</span>
+                    <span asp-validation-for="Port" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.SSLEnable:</label>
+                    <div class="input-group">
+                        <input type="checkbox" asp-for="SSLEnable" data-switch="true" style="cursor: pointer; width: 100%"
+                            data-size="xs" data-toggle="switchbutton" data-height="75"
+                            data-on-text="@Resource.ON" data-off-text="@Resource.OFF"
+                            data-on-color="success" data-off-color="warning" onchange="change_mode(this)" />
+                    </div>
+                    <span class="form-text text-muted">@Resource.SSLForEmail</span>
+                    <span asp-validation-for="SSLEnable" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label style="visibility: hidden;">///</label>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            var form = $('#frm_email');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            $('#SSLEnable').bootstrapSwitch();
+        });
+    </script>
+}

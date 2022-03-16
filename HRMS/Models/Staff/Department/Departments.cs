@@ -10,8 +10,7 @@ public class Departments
     public string StaffType { get; set; }
     public string JobType { get; set; }
     public string BruttoSalary { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public string Description { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
     public bool IsLecturer { get; set; }
 }

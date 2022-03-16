@@ -6,8 +6,7 @@ public class Subjects
 {
     public string StaffDepartmentSubjectIde { get; set; }
     public string Subject { get; set; }
-    public string Department { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public DateTime InsertDate { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
+    public string InsertDate { get; set; }
 }

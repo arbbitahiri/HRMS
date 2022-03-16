@@ -1422,4 +1422,37 @@
   <data name="HRMSRiinvest" xml:space="preserve">
     <value>HRMS Riinvest</value>
   </data>
+  <data name="CC" xml:space="preserve">
+    <value>CC</value>
+  </data>
+  <data name="CCUsersText" xml:space="preserve">
+    <value>Për çdo email të dërguar do të njoftohen edhe këta persona.</value>
+  </data>
+  <data name="EmailConfiguration" xml:space="preserve">
+    <value>Konfigurimi i email-it</value>
+  </data>
+  <data name="PasswordForEmail" xml:space="preserve">
+    <value>Fjalëkalimi për email adresën.</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Porti</value>
+  </data>
+  <data name="PortForEmail" xml:space="preserve">
+    <value>Porti për dërgimin e email-ave.</value>
+  </data>
+  <data name="SendMailServer" xml:space="preserve">
+    <value>Email adresa e cila do të përdoret për dërgimin e email-ave.</value>
+  </data>
+  <data name="ServerForEmail" xml:space="preserve">
+    <value>Serveri për dërgimin e email-it.</value>
+  </data>
+  <data name="SMTPHost" xml:space="preserve">
+    <value>SMTP host</value>
+  </data>
+  <data name="SSLEnable" xml:space="preserve">
+    <value>Aktivizo SSL protokolin</value>
+  </data>
+  <data name="SSLForEmail" xml:space="preserve">
+    <value>Email-at do të dërgohen në formë të enkriptuar.</value>
+  </data>
 </root>

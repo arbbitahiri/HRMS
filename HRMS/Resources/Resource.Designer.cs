@@ -628,6 +628,24 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CC.
+        /// </summary>
+        public static string CC {
+            get {
+                return ResourceManager.GetString("CC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Për çdo email të dërguar do të njoftohen edhe këta persona..
+        /// </summary>
+        public static string CCUsersText {
+            get {
+                return ResourceManager.GetString("CCUsersText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ndrysho grupin.
         /// </summary>
         public static string ChangeRole {
@@ -1101,6 +1119,15 @@ namespace HRMS.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konfigurimi i email-it.
+        /// </summary>
+        public static string EmailConfiguration {
+            get {
+                return ResourceManager.GetString("EmailConfiguration", resourceCulture);
             }
         }
         
@@ -2563,6 +2590,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjalëkalimi për email adresën..
+        /// </summary>
+        public static string PasswordForEmail {
+            get {
+                return ResourceManager.GetString("PasswordForEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fjalëkalimi nuk mund të vendoset:.
         /// </summary>
         public static string PasswordNotAdded {
@@ -2667,6 +2703,24 @@ namespace HRMS.Resources {
         public static string Policy {
             get {
                 return ResourceManager.GetString("Policy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Porti.
+        /// </summary>
+        public static string Port {
+            get {
+                return ResourceManager.GetString("Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Porti për dërgimin e email-ave..
+        /// </summary>
+        public static string PortForEmail {
+            get {
+                return ResourceManager.GetString("PortForEmail", resourceCulture);
             }
         }
         
@@ -3121,11 +3175,29 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email adresa e cila do të përdoret për dërgimin e email-ave..
+        /// </summary>
+        public static string SendMailServer {
+            get {
+                return ResourceManager.GetString("SendMailServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shtator.
         /// </summary>
         public static string September {
             get {
                 return ResourceManager.GetString("September", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serveri për dërgimin e email-it..
+        /// </summary>
+        public static string ServerForEmail {
+            get {
+                return ResourceManager.GetString("ServerForEmail", resourceCulture);
             }
         }
         
@@ -3175,11 +3247,38 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SMTP host.
+        /// </summary>
+        public static string SMTPHost {
+            get {
+                return ResourceManager.GetString("SMTPHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Burimi.
         /// </summary>
         public static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aktivizo SSL protokolin.
+        /// </summary>
+        public static string SSLEnable {
+            get {
+                return ResourceManager.GetString("SSLEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email-at do të dërgohen në formë të enkriptuar..
+        /// </summary>
+        public static string SSLForEmail {
+            get {
+                return ResourceManager.GetString("SSLForEmail", resourceCulture);
             }
         }
         

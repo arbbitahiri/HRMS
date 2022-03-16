@@ -688,8 +688,8 @@ public class StaffController : BaseController
                 StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 JobType = user.Language == LanguageEnum.Albanian ? a.JobType.NameSq : a.JobType.NameEn,
                 BruttoSalary = $"{a.GrossSalary:#.##} €",
-                StartDate = a.StartDate,
-                EndDate = a.EndDate,
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                EndDate = a.EndDate.ToString("dd/MM/yyyy"),
                 IsLecturer = a.StaffTypeId == (int)StaffTypeEnum.Lecturer
             }).ToListAsync();
 
@@ -700,8 +700,8 @@ public class StaffController : BaseController
             {
                 StaffDepartmentSubjectIde = CryptoSecurity.Encrypt(a.StaffDepartmentSubjectId),
                 Subject = user.Language == LanguageEnum.Albanian ? a.Subject.NameSq : a.Subject.NameEn,
-                StartDate = a.StartDate,
-                EndDate = a.EndDate
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                EndDate = a.EndDate.ToString("dd/MM/yyyy")
             }).ToListAsync();
 
         var departmentVM = new DepartmentVM

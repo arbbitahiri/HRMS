@@ -2,6 +2,7 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.AppSettings;
+using HRMS.Models.Configuration.Email;
 using HRMS.Models.Configuration.Subject;
 using HRMS.Repository;
 using HRMS.Resources;
@@ -239,6 +240,66 @@ public class ConfigurationController : BaseController
     #endregion
 
     #region Email
+
+    [HttpGet, Authorize(Policy = "1e:m"), Description("Arb Tahiri", "Form to display email.")]
+    public async Task<IActionResult> Email()
+    {
+        ViewData["Title"] = Resource.EmailConfiguration;
+        var streamReader = new StreamReader("appsettings.json");
+        string json = await streamReader.ReadToEndAsync();
+        streamReader.Close();
+        dynamic data = JsonConvert.DeserializeObject(json);
+        var email = new EmailVM
+        {
+            Email = data["EmailConfiguration"]["Email"],
+            Password = data["EmailConfiguration"]["Password"],
+            CC = data["EmailConfiguration"]["CC"],
+            Host = data["EmailConfiguration"]["Host"],
+            Port = data["EmailConfiguration"]["Port"],
+            SSLEnable = data["EmailConfiguration"]["EnableSsl"]
+        };
+        return View(email);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Method to change email on appsettings.")]
+    public async Task<IActionResult> Email(EmailVM em)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
+            return RedirectToAction(nameof(Email));
+        }
+
+        var appSettings = new AppSettings
+        {
+            IndertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        };
+
+        var streamReader = new StreamReader("appsettings.json");
+        string json = await streamReader.ReadToEndAsync();
+        dynamic data = JsonConvert.DeserializeObject(json);
+        appSettings.OldVersion = json;
+        data["EmailConfiguration"]["Email"] = em.Email;
+        data["EmailConfiguration"]["Password"] = em.Password;
+        data["EmailConfiguration"]["CC"] = em.CC;
+        data["EmailConfiguration"]["Host"] = em.Host;
+        data["EmailConfiguration"]["Port"] = em.Port;
+        data["EmailConfiguration"]["EnableSsl"] = em.SSLEnable;
+
+        var streamWriter = new StreamWriter("appsettings.json", false);
+        await streamWriter.WriteAsync(JsonConvert.SerializeObject(data));
+        await streamWriter.FlushAsync();
+        streamWriter.Close();
+
+        appSettings.UpdatedVersion = JsonConvert.SerializeObject(data);
+        db.AppSettings.Add(appSettings);
+        await db.SaveChangesAsync();
+
+        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
+        return RedirectToAction(nameof(Email));
+    }
 
     #endregion
 
