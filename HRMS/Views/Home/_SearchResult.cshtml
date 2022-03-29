@@ -1,0 +1,77 @@
+﻿@using HRMS.Models.Home
+@model IEnumerable<SearchData>
+
+<style>
+    .search-result {
+        position: absolute;
+        width: 100%;
+        /*box-shadow: 5px 1px 6px #e1e7eb, 15px 22px 69px #f9ffff !important;*/
+        background-color: #fff;
+        z-index: 9999;
+        border-radius: 0px 0px 10px 10px;
+    }
+
+    .search-item {
+        cursor: pointer;
+        transition: background-color linear 0.1s;
+        padding: 10px;
+    }
+
+        .search-item:hover {
+            background-color: #f3f6f9;
+        }
+</style>
+
+@if (Model.Any())
+{
+    <div class="search-result shadow col-md-8 offset-md-3">
+        @foreach (var item in Model)
+        {
+           <div class="d-flex align-items-center flex-grow-1 border-bottom border-bottom-light-primary search-item" onclick="redirect_to_details('@item.StaffIde')">
+               <div class="d-flex flex-grow-1">
+                   <div class="d-flex align-items-center">
+                       <div class="symbol symbol-60 bg-transparent flex-shrink-0">
+                           @if (item.ProfileImage != null)
+                           {
+                                <img loading="lazy" src="@item.ProfileImage" alt="user image"/>
+                           }
+                           else
+                           {
+                                <span class="symbol-label font-size-h4 font-weight-bold">@item.Initials</span>
+                           }
+                        </div>
+                        <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                            <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">@item.Name</div>
+                            <div class="text-muted font-weight-bold text-hover-primary">@item.PersonalNumber</div>
+                        </div>
+                   </div>
+               </div>
+                <div class="d-flex flex-column text-dark">
+                   @item.StaffType, @item.Department <br/>
+                   @item.StayDate
+                </div>
+           </div>
+        }
+        <div class="search-item text-center" onclick="redirect_to_advanced()">
+            <a class="text-dark text-hover-primary font-size-h5">@Resource.AdvancedSearch<i class="ml-2 text-primary fas fa-angle-double-right"></i></a>
+        </div>
+    </div>
+}
+
+<script>
+    $(window).click(function (e) {
+      if ($(e.target).closest("#frm_search_home").length > 0) {
+         return false;
+      }
+
+      $('.search-result').empty();
+   });
+
+    function redirect_to_details(ide) {
+        window.location.href = '@Url.Action("Index", "StaffProfile")?ide=' + ide;
+    }
+
+    function redirect_to_advanced(ide) {
+        window.location.href = '@Url.Action("Index", "Staff")';
+    }
+</script>

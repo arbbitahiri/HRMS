@@ -313,6 +313,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kërkimi avancuar.
+        /// </summary>
+        public static string AdvancedSearch {
+            get {
+                return ResourceManager.GetString("AdvancedSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pajtohem.
         /// </summary>
         public static string Agree {
@@ -3108,6 +3117,15 @@ namespace HRMS.Resources {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kërkoni sipas emrit, mbiemrit....
+        /// </summary>
+        public static string SearchHome {
+            get {
+                return ResourceManager.GetString("SearchHome", resourceCulture);
             }
         }
         

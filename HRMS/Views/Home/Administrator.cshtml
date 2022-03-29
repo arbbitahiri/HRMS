@@ -76,7 +76,6 @@
 @section Scripts {
     <script>
         var chartData = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.UserRoles))');
-        var tblData = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Logs))');
 
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
@@ -111,6 +110,9 @@
             }
         });
 
+        var tblData = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Logs))');
+        var rowCount = 1;
+
         $('#tbl_app_logs').DataTable({
             destroy: true,
             language: {
@@ -124,13 +126,38 @@
             columns: [
                 {
                     data: function (data, type, row, meta) {
+                        rowCount++;
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                { "data": "Action" },
-                { "data": "Description" },
-                { "data": "InsertDate" }
+                { data: "Action" },
+                {
+                    data: function (row, type, set) {
+                        var desc = '///';
+                        if (row.Description != null) {
+                            if (row.Description.length > 20) {
+                                desc = row.Description.substring(0, 20) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.Description.substring(20) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else {
+                                desc = row.Description ?? "///";
+                            }
+                        }
+                        return desc;
+                    }
+                },
+                { data: "InsertDate" }
             ]
         });
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
     </script>
 }

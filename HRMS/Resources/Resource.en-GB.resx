@@ -201,6 +201,9 @@
   <data name="AddUser" xml:space="preserve">
     <value>Add user</value>
   </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Advanced search</value>
+  </data>
   <data name="Agree" xml:space="preserve">
     <value>Agree</value>
   </data>
@@ -1112,6 +1115,9 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="SearchHome" xml:space="preserve">
+    <value>Search by firstname, lastname...</value>
   </data>
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>

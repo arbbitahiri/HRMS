@@ -1455,4 +1455,10 @@
   <data name="SSLForEmail" xml:space="preserve">
     <value>Email-at do të dërgohen në formë të enkriptuar.</value>
   </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Kërkimi avancuar</value>
+  </data>
+  <data name="SearchHome" xml:space="preserve">
+    <value>Kërkoni sipas emrit, mbiemrit...</value>
+  </data>
 </root>

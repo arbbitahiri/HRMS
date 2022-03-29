@@ -2,7 +2,7 @@
 using HRMS.Data.General;
 using HRMS.Models;
 using HRMS.Models.Home;
-using HRMS.Models.Home.SideProfile;
+using HRMS.Repository;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
@@ -11,22 +11,23 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
+
 [Authorize]
 public class HomeController : BaseController
 {
-    public HomeController(HRMSContext db,
-        SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager)
+    private readonly IFunctionRepository function;
+
+    public HomeController(IFunctionRepository function,
+        HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
+        this.function = function;
     }
 
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
@@ -44,6 +45,28 @@ public class HomeController : BaseController
             _ => View()
         };
     }
+
+    #region Search
+
+    [Description("Arb Tahiri", "Form to search for staff in application.")]
+    public async Task<IActionResult> Search(string param)
+    {
+        var list = (await function.SearchHome(param, user.Language))
+            .Select(a => new SearchData
+            {
+                StaffIde = CryptoSecurity.Encrypt(a.StaffId),
+                ProfileImage = a.ProfileImage,
+                Name = $"{a.FirstName} {a.LastName}",
+                Initials = $"{a.FirstName[..1]} {a.LastName[..1]}",
+                PersonalNumber = a.PersonalNumber,
+                Department = a.Department,
+                StaffType = a.StaffType,
+                StayDate = $"{a.StartDate:dd/MM/yyyy} - {a.EndDate:dd/MM/yyyy}"
+            }).ToList();
+        return PartialView("_SearchResult", list);
+    }
+
+    #endregion
 
     #region Dashboards
 

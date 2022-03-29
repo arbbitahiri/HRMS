@@ -340,3 +340,207 @@ function render_rejected_tbl(data) {
         function formatRepoSelection (repo) {
             return repo.text;
         }
+
+        END
+		INSERT INTO @tbl_List
+		SELECT TOP 5
+			NULL,
+			ANU.ProfileImage,
+			S.PersonalNumber,
+			S.FirstName,
+			S.LastName,
+			(CASE WHEN @Language = 1 THEN D.NameSQ
+				  WHEN @Language = 2 THEN D.NameEN
+				ELSE D.NameSQ END),
+			(CASE WHEN @Language = 1 THEN ST.NameSQ
+					WHEN @Language = 2 THEN ST.NameEN
+				ELSE ST.NameSQ END),
+			LeaveId,
+			(CASE WHEN @Language = 1 THEN LT.NameSQ
+				  WHEN @Language = 2 THEN LT.NameEN
+				ELSE LT.NameSQ END),
+			L.StartDate,
+			L.EndDate,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			2
+		FROM Leave L
+			INNER JOIN LeaveType LT			ON L.LeaveTypeId = LT.LeaveTypeID
+			INNER JOIN Staff S				ON L.StaffID = S.StaffID
+			INNER JOIN AspNetUsers ANU		ON S.UserID = ANU.Id
+			INNER JOIN StaffDepartment SD	ON S.StaffID = SD.StaffID
+			INNER JOIN Department D			ON SD.DepartmentID = D.DepartmentID
+			INNER JOIN StaffType ST			ON SD.StaffTypeID = ST.StaffTypeID
+		WHERE (GETDATE() BETWEEN SD.StartDate AND SD.EndDate)
+			AND S.UserID = (CASE WHEN @Role <> 'Manager' THEN @User ELSE S.UserID END)
+			AND ((LT.NameSQ		LIKE '%' + ISNULL(@Parameter, '') + '%')
+			OR (LT.NameEN		LIKE '%' + ISNULL(@Parameter, '') + '%'))
+		UNION
+		SELECT TOP 5
+			NULL,
+			ANU.ProfileImage,
+			S.PersonalNumber,
+			S.FirstName,
+			S.LastName,
+			(CASE WHEN @Language = 1 THEN D.NameSQ
+				  WHEN @Language = 2 THEN D.NameEN
+				ELSE D.NameSQ END),
+			(CASE WHEN @Language = 1 THEN ST.NameSQ
+					WHEN @Language = 2 THEN ST.NameEN
+				ELSE ST.NameSQ END),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			E.EvaluationID,
+			(CASE WHEN @Language = 1 THEN ET.NameSQ
+				  WHEN @Language = 2 THEN ET.NameEN
+				ELSE ET.NameSQ END),
+			E.InsertedDate,
+			NULL,
+			NULL,
+			3
+		FROM Evaluation E
+			INNER JOIN EvaluationType ET	ON E.EvaluationTypeID = ET.EvaluationTypeID
+			INNER JOIN EvaluationManager EM	ON E.EvaluationID = EM.EvaluationID
+			INNER JOIN Staff S				ON EM.StaffID = S.StaffID
+			INNER JOIN AspNetUsers ANU		ON S.UserID = ANU.Id
+			INNER JOIN StaffDepartment SD	ON S.StaffID = SD.StaffID
+			INNER JOIN Department D			ON SD.DepartmentID = D.DepartmentID
+			INNER JOIN StaffType ST			ON SD.StaffTypeID = ST.StaffTypeID
+		WHERE ET.EvaluationTypeID = 1
+			AND (GETDATE() BETWEEN SD.StartDate AND SD.EndDate)
+			AND S.UserID = (CASE WHEN @Role <> 'Manager' THEN @User ELSE S.UserID END)
+			AND (EM.Title	LIKE '%' + ISNULL(@Parameter, '') + '%')
+		UNION
+		SELECT TOP 5
+			NULL,
+			ANU.ProfileImage,
+			S.PersonalNumber,
+			S.FirstName,
+			S.LastName,
+			(CASE WHEN @Language = 1 THEN D.NameSQ
+				  WHEN @Language = 2 THEN D.NameEN
+				ELSE D.NameSQ END),
+			(CASE WHEN @Language = 1 THEN ST.NameSQ
+					WHEN @Language = 2 THEN ST.NameEN
+				ELSE ST.NameSQ END),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			E.EvaluationID,
+			(CASE WHEN @Language = 1 THEN ET.NameSQ
+				  WHEN @Language = 2 THEN ET.NameEN
+				ELSE ET.NameSQ END),
+			E.InsertedDate,
+			NULL,
+			NULL,
+			4
+		FROM Evaluation E
+			INNER JOIN EvaluationType ET			ON E.EvaluationTypeID = ET.EvaluationTypeID
+			INNER JOIN EvaluationStudentsStaff ES	ON E.EvaluationID = ES.EvaluationID
+			INNER JOIN StaffDepartmentSubject DS	ON ES.StaffDepartmentSubjectId = DS.StaffDepartmentSubjectID
+			INNER JOIN StaffDepartment SD			ON DS.StaffDepartmentID = SD.StaffDepartmentID
+			INNER JOIN Staff S						ON SD.StaffID = S.StaffID
+			INNER JOIN AspNetUsers ANU				ON S.UserID = ANU.Id
+			INNER JOIN Department D					ON SD.DepartmentID = D.DepartmentID
+			INNER JOIN StaffType ST					ON SD.StaffTypeID = ST.StaffTypeID
+		WHERE ET.EvaluationTypeID = 2
+			AND (GETDATE() BETWEEN SD.StartDate AND SD.EndDate)
+			AND S.UserID = (CASE WHEN @Role <> 'Manager' THEN @User ELSE S.UserID END)
+			AND (ES.Title LIKE '%' + ISNULL(@Parameter, '') + '%')
+		UNION
+		SELECT TOP 5
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			E.EvaluationID,
+			(CASE WHEN @Language = 1 THEN ET.NameSQ
+				  WHEN @Language = 2 THEN ET.NameEN
+				ELSE ET.NameSQ END),
+			E.InsertedDate,
+			NULL,
+			NULL,
+			5
+		FROM Evaluation E
+			INNER JOIN EvaluationType ET				ON E.EvaluationTypeID = ET.EvaluationTypeID
+			INNER JOIN EvaluationStudentsCollege ES		ON E.EvaluationID = ES.EvaluationID
+		WHERE ET.EvaluationTypeID = 3
+			AND (ES.Title	LIKE '%' + ISNULL(@Parameter, '') + '%')
+		UNION
+		SELECT TOP 5
+			NULL,
+			ANU.ProfileImage,
+			S.PersonalNumber,
+			S.FirstName,
+			S.LastName,
+			(CASE WHEN @Language = 1 THEN D.NameSQ
+				  WHEN @Language = 2 THEN D.NameEN
+				ELSE D.NameSQ END),
+			(CASE WHEN @Language = 1 THEN ST.NameSQ
+					WHEN @Language = 2 THEN ST.NameEN
+				ELSE ST.NameSQ END),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			E.EvaluationID,
+			(CASE WHEN @Language = 1 THEN ET.NameSQ
+				  WHEN @Language = 2 THEN ET.NameEN
+				ELSE ET.NameSQ END),
+			E.InsertedDate,
+			NULL,
+			NULL,
+			6
+		FROM Evaluation E
+			INNER JOIN EvaluationType ET	ON E.EvaluationTypeID = ET.EvaluationTypeID
+			INNER JOIN EvaluationSelf ES	ON E.EvaluationID = ES.EvaluationID
+			INNER JOIN Staff S				ON ES.StaffID = S.StaffID
+			INNER JOIN AspNetUsers ANU		ON S.UserID = ANU.Id
+			INNER JOIN StaffDepartment SD	ON S.StaffID = SD.StaffID
+			INNER JOIN Department D			ON SD.DepartmentID = D.DepartmentID
+			INNER JOIN StaffType ST			ON SD.StaffTypeID = ST.StaffTypeID
+		WHERE ET.EvaluationTypeID = 4
+			AND S.UserID = (CASE WHEN @Role <> 'Manager' THEN @User ELSE S.UserID END)
+			AND (ES.Title	LIKE '%' + ISNULL(@Parameter, '') + '%')
+		UNION
+		SELECT TOP 5
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			S.SubjectID,
+			(CASE WHEN @Language = 1 THEN S.NameSQ
+				  WHEN @Language = 2 THEN S.NameEN
+				ELSE S.NameSQ END),
+			7
+		FROM [Subject] S
+			LEFT JOIN StaffDepartmentSubject DS		ON S.SubjectID = DS.SubjectID
+			LEFT JOIN StaffDepartment SD			ON DS.StaffDepartmentID = SD.StaffDepartmentID
+			LEFT JOIN Staff ST						ON SD.StaffID = ST.StaffID
+		WHERE S.Active = 1
+			AND ST.UserID = (CASE WHEN @Role <> 'Manager' THEN @User ELSE ST.UserID END)
+			AND ((S.NameSQ	LIKE '%' + ISNULL(@Parameter, '') + '%') OR (S.NameEN	LIKE '%' + ISNULL(@Parameter, '') + '%'))
+

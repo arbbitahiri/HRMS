@@ -1,6 +1,22 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.bgi-no-repeat {
+    background-repeat: no-repeat
+}
+
+.bgi-position-y-center {
+    background-position-y: center
+}
+
+.bgi-position-x-left {
+    background-position-x: left
+}
+
+.bgi-size-cover {
+    background-size: cover
+}
+
 .w5 {
     width: 5% !important;
 }
