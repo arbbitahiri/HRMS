@@ -316,7 +316,6 @@ public class EvaluationController : BaseController
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionNumerical
             {
-                EvaluationQuestionnaireNumericalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireNumericalId),
                 Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Grade = a.Grade,
                 Graded = a.Grade.HasValue
@@ -330,30 +329,12 @@ public class EvaluationController : BaseController
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionOptional
             {
-                EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
                 Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
                 {
-                    EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
+                    OptionId = a.EvaluationQuestionnaireOptionalOptionId * 6,
                     Option = user.Language == LanguageEnum.Albanian ? a.OptionTitleSq : a.OptionTitleEn,
-                    Checked = a.Checked
-                }).ToList()
-            }).ToListAsync());
-
-    [HttpGet, Authorize(Policy = "71:r")]
-    [Description("Korab Mustafa", "Form to view list of numerical questions.")]
-    public async Task<IActionResult> _OptionalTopicQuestions(string ide) =>
-        PartialView(await db.EvaluationQuestionnaireOptional
-            .Where(a => a.Evaluation.EvaluationStatus.Any(a => a.StatusTypeId != (int)Status.Deleted)
-                && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new QuestionOptional
-            {
-                EvaluationQuestionnaireOptionalIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalId),
-                Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
-                Options = a.EvaluationQuestionnaireOptionalOption.Select(a => new QuestionOption
-                {
-                    EvaluationQuestionnaireOptionalOptionIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireOptionalOptionId),
-                    Option = user.Language == LanguageEnum.Albanian ? a.OptionTitleSq : a.OptionTitleEn,
+                    OtherDescription = a.Description,
                     Checked = a.Checked
                 }).ToList()
             }).ToListAsync());
@@ -366,7 +347,6 @@ public class EvaluationController : BaseController
                 && a.EvaluationId == CryptoSecurity.Decrypt<int>(ide))
             .Select(a => new QuestionTopic
             {
-                EvaluationQuestionnaireTopicIde = CryptoSecurity.Encrypt(a.EvaluationQuestionnaireTopicId),
                 Question = user.Language == LanguageEnum.Albanian ? a.QuestionSq : a.QuestionSq,
                 Answer = a.Answer
             }).ToListAsync());

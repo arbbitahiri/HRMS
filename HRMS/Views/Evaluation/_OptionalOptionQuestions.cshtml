@@ -1,4 +1,29 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HRMS.Models.Evaluation
+@model IEnumerable<QuestionOptional>
+
+<style>
+    table, th, td {
+        border-collapse: collapse;
+    }
+</style>
+
+@foreach (var optional in Model)
+{
+    <fieldset class="mb-4 px-4 ml-0">
+        <legend>@optional.Question</legend>
+        @foreach (var option in optional.Options)
+        {
+            var isChecked = option.Checked ? "checked" : "";
+            <ul class="icheck-primary p-2" style="font-size: 14px;">
+                <input id="@option.OptionId" disabled readonly type="radio" @isChecked style="cursor: pointer;"/>
+                <label for="@option.OptionId">@option.Option</label>
+            </ul>
+        }
+        @if (optional.Options.Any(a => !string.IsNullOrEmpty(a.OtherDescription)))
+        {
+            <div class="m-2">
+                <textarea asp-for="@optional.Options.Select(a => a.OtherDescription).FirstOrDefault()" id="txt_other" rows="2" class="form-control"></textarea>
+            </div>
+        }
+    </fieldset>
+}

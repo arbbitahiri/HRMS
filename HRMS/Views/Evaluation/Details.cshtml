@@ -2,7 +2,33 @@
 @model DetailsVM
 @{
     var docCount = 1;
+    UserModel user = (UserModel)ViewData["User"];
+    ViewData["Title"] = Resource.Evaluation;
 }
+
+<style>
+    fieldset {
+        border: 1px solid #6993ff;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    legend {
+        width: auto;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 0 6px;
+        margin-left: 10px
+    }
+
+    .top-legend {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-20%, -90%);
+        padding: 0 5px;
+    }
+</style>
 
 <div class="row">
     <div class="col-12 col-md-12 col-lg-4 order-1 order-md-1">
@@ -15,27 +41,27 @@
                 <div class="text-muted">
                     <div class="row">
                         <div class="col-6">
-                            <p class="text-sm">@Resource.Staff<b class="d-block">@Model.EvaluationDetails.Staff</b></p>
+                            <p class="@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark")">@Resource.Staff<b class="d-block">@Model.EvaluationDetails.Staff</b></p>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" style="cursor: default;">
                             @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.Manager)
                             {
-                                <p class="text-sm">@Resource.Manager<b class="d-block">@Model.EvaluationDetails.Manager</b></p>
+                                <p class="@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark")">@Resource.Manager<b class="d-block">@Model.EvaluationDetails.Manager</b></p>
                             }
                             @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.StudentStaff)
                             {
-                                <p class="text-sm">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
+                                <p class="@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark")">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
                             }
                             @if (Model.EvaluationDetails.EvaluationTypeEnum == EvaluationTypeEnum.StudentCollege)
                             {
-                                <p class="text-sm">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
+                                <p class="@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark")">@Resource.NumberOfStudents<b class="d-block">@Model.EvaluationDetails.Students</b></p>
                             }
                         </div>
                     </div>
                 </div>
                 @if (Model.Documents.Any())
                 {
-                    <h5 class="mt-5 text-muted">@Resource.Documents</h5>
+                    <h5 class="mt-4 @(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark")">@Resource.Documents</h5>
                     <ul class="list-unstyled">
                         @foreach (var doc in Model.Documents)
                         {
@@ -133,21 +159,15 @@
     <script>
         $(document).ready(function() {
             $('#kt_numerical').on('expanded.lte.cardwidget', function() {
-                $('#kt_load_numerical_tbl').load('@Url.Action("_NumericalQuestions", "Evaluation")', {
-                    ide: '@Model.EvaluationDetails.EvaluationIde'
-                });
+                $('#kt_load_numerical_tbl').load('@Url.Action("_NumericalQuestions", "Evaluation")?ide=@Model.EvaluationDetails.EvaluationIde');
             });
 
             $('#kt_option').on('expanded.lte.cardwidget', function() {
-                $('#kt_load_option_tbl').load('@Url.Action("_OptionQuestions", "Evaluation")', {
-                    ide: '@Model.EvaluationDetails.EvaluationIde'
-                });
+                $('#kt_load_option_tbl').load('@Url.Action("_OptionalOptionQuestions", "Evaluation")?ide=@Model.EvaluationDetails.EvaluationIde');
             });
 
             $('#kt_topic').on('expanded.lte.cardwidget', function() {
-                $('#kt_load_topic_tbl').load('@Url.Action("_TopicQuestions", "Evaluation")', {
-                    ide: '@Model.EvaluationDetails.EvaluationIde'
-                });
+                $('#kt_load_topic_tbl').load('@Url.Action("_TopicQuestions", "Evaluation")?ide=@Model.EvaluationDetails.EvaluationIde');
             });
         });
 

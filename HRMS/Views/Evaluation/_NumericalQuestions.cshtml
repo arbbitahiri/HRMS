@@ -1,4 +1,46 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HRMS.Models.Evaluation
+@model IEnumerable<QuestionNumerical>
+@{
+    var numericalRow = 0;
+}
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+<table class="table table-bordered" id="tbl_numerical">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Resource.Question</th>
+            <th class="text-center text-dark" style="background-color: #808080;">0</th>
+            <th class="text-center text-dark" style="background-color: #f00;">1</th>
+            <th class="text-center text-dark" style="background-color: #f4b083;">2</th>
+            <th class="text-center text-dark" style="background-color: #ffff00;">3</th>
+            <th class="text-center text-dark" style="background-color: #92d050;">4</th>
+            <th class="text-center text-dark" style="background-color: #00b050;">5</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var answer in Model)
+            {
+                numericalRow++;
+                <tr>
+                    <td>@numericalRow</td>
+                    <td>@answer.Question@(answer.Question.Substring(answer.Question.Length - 1, 1) == "?" ? "" : "?")</td>
+                    <td style='@(answer.Grade == 0 ? "background-color: #808080" : "")'></td>
+                    <td style='@(answer.Grade == 1 ? "background-color: #f00" : "")'></td>
+                    <td style='@(answer.Grade == 2 ? "background-color: #f4b083" : "")'></td>
+                    <td style='@(answer.Grade == 3 ? "background-color: #ffff00" : "")'></td>
+                    <td style='@(answer.Grade == 4 ? "background-color: #92d050" : "")'></td>
+                    <td style='@(answer.Grade == 5 ? "background-color: #00b050" : "")'></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

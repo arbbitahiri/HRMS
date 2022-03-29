@@ -1,46 +1,78 @@
 ﻿@using HRMS.Models.Evaluation
-@model IEnumerable<QuestionNumerical>
-@{
-    var numericalRow = 0;
-}
+@model IEnumerable<QuestionTopic>
 
 <style>
     table, th, td {
-        border: 1px solid black;
         border-collapse: collapse;
     }
 </style>
 
-<table id="tbl_numerical">
+<table class="table table-bordered table-striped table-hover" id="tbl_topic">
     <thead>
-        <th>
-            <tr>#</tr>
-            <tr>@Resource.Question</tr>
-            <tr style="background-color: #808080;">0</tr>
-            <tr style="background-color: #f00;">1</tr>
-            <tr style="background-color: #f4b083;">2</tr>
-            <tr style="background-color: #ffff00;">3</tr>
-            <tr style="background-color: #92d050;">4</tr>
-            <tr style="background-color: #00b050;">5</tr>
-        </th>
+        <tr>
+            <th>#</th>
+            <th>@Resource.Question</th>
+            <th>@Resource.Answer</th>
+        </tr>
     </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            @foreach (var answer in Model)
-            {
-                numericalRow++;
-                <tr>
-                    <td>@numericalRow</td>
-                    <td>@answer.Question</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.DontKnow ? "background-color: #808080" : "")'>@answer.Grade</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.DontAgreeAtAll ? "background-color: #f00" : "")'>@answer.Grade</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.DontAgree ? "background-color: #f4b083" : "")'>@answer.Grade</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.AgreeNorDisagree ? "background-color: #ffff00" : "")'>@answer.Grade</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.Agree ? "background-color: #92d050" : "")'>@answer.Grade</td>
-                    <td style='(answer.Grade == (int?)NumericalRate.AgreeAtAll ? "background-color: #00b050" : "")'>@answer.Grade</td>
-                </tr>
-            }
-        }
-    </tbody>
+    <tbody></tbody>
 </table>
+
+<script>
+    var tbl_data = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model))');
+    var rowCount = 1;
+    $('#tbl_topic').DataTable({
+        destroy: true,
+        language: {
+            url: `/Culture/DataTable/${culture}.json`
+        },
+        keys: true,
+        responsive: true,
+        pageLength: 5,
+        data: tbl_data,
+        deferRender: true,
+        columnDefs: [
+            { className: "w5 vertikal", targets: [0] },
+            { className: "w20 vertikal", targets: [1] },
+            { className: "w20 vertikal", targets: [2] }
+        ],
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    rowCount++;
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: function(row, type, set) {
+                    var qst = '///';
+                    if (row.Question != null) {
+                        row.Question = row.Question.slice(-1) != "?" ? row.Question + "?" : row.Question;
+                        if (row.Question.length > 50) {
+                            qst = row.Question.substring(0, 50) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.Question.substring(50) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                        } else {
+                            qst = row.Question ?? "///";
+                        }
+                    }
+                    return qst;
+                }
+            },
+            {
+                data: function(row, type, set) {
+                    var ans = '///';
+                    if (row.Answer != null) {
+                        if (row.Answer.length != 0) {
+                            if (row.Answer.length > 50) {
+                                ans = row.Answer.substring(0, 50) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.Answer.substring(50) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else {
+                                ans = row.Answer ?? "///";
+                            }
+                        }
+                    }
+                    return ans;
+                }
+            }
+        ]
+    });
+</script>

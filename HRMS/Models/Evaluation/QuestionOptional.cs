@@ -4,14 +4,14 @@ namespace HRMS.Models.Evaluation;
 
 public class QuestionOptional
 {
-    public string EvaluationQuestionnaireOptionalIde { get; set; }
     public string Question { get; set; }
     public List<QuestionOption> Options { get; set; }
 }
 
 public class QuestionOption
 {
-    public string EvaluationQuestionnaireOptionalOptionIde { get; set; }
+    public int OptionId { get; set; }
     public string Option { get; set; }
+    public string OtherDescription { get; set; }
     public bool Checked { get; set; }
 }
