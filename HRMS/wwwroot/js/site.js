@@ -72,6 +72,10 @@ $(document).ready(function () {
         $("input[type='text']").prop('spellcheck', true);
         $('textarea').prop('spellcheck', true);
     }
+
+    if (Notification.permission === 'default') {
+        $('#allow_notification').parent().removeClass('d-none');
+    }
 });
 
 function show_loading() {
@@ -142,7 +146,7 @@ $(document).ajaxError(function (error) {
             confirmButtonText: resources.responseJSON["Okay"]
         });
     } else if (error.handleObj.handler.arguments[1].status == 0) {
-        //window.location.href = '/Home/Index';
+        window.location.href = '/Home/Index';
     } else if (error.handleObj.handler.arguments[1].status == 307) {
         window.location.href = '/Home/Index';
     } else {
@@ -189,4 +193,99 @@ function change_mode(e) {
 
 function format_currency(data) {
     return parseFloat(data, 10).toFixed(2);
+}
+
+function get_notifications(row_number) {
+    if (row_number != null) {
+        var x = String(row_number);
+    }
+    connection.invoke('Notifications', x);
+}
+
+function mark_as_read(ide) {
+    $.post('/Home/MarkAsReadNotification', {
+        ide: ide
+    }, function (data) {
+        connection.invoke('Notifications', "0");
+    });
+}
+
+function delete_notification(ide) {
+    $.post('/Home/DeleteNotification', {
+        ide: ide
+    }, function (data) {
+        connection.invoke('Notifications', "0");
+    });
+}
+
+function mark_all_as_read() {
+    $.post('/Home/MarkAsReadAllNotification', function (data) {
+        connection.invoke('Notifications', "0");
+    });
+}
+
+function delete_all_notification() {
+    $.post('/Home/DeleteAllNotification', function (data) {
+        connection.invoke('Notifications', "0");
+    });
+}
+
+function change_notification_mode(e) {
+    if ($(e).is(':checked')) {
+        Notification.requestPermission().then(function (permission) {
+            if (permission == "granted") {
+                subscribeUser();
+            }
+        });
+    } else {
+        unsubscribeUser();
+    }
+}
+
+function display_notification(message, title, icon, url, target, type) {
+    $('#recent_notification').load('/Home/RecentNotifications')
+    $('#notifications_container').load('/Home/Notifications')
+
+    var content = {
+        message: message,
+        title: title,
+        icon: 'icon ' + icon,
+        url: url,
+        target: target
+    };
+
+    var notification_type = "";
+    if (type == 1) {
+        notification_type = "success"
+    } else if (type == 2) {
+        notification_type = "info"
+    } else if (type == 3) {
+        notification_type = "warning"
+    } else if (type == 4) {
+        notification_type = "danger"
+    }
+
+    var notify = $.notify(content, {
+        type: notification_type,
+        allow_dismiss: true,
+        newest_on_top: true,
+        mouse_over: true,
+        showProgressbar: true,
+        spacing: 10,
+        timer: 2000,
+        placement: {
+            from: 'top',
+            align: 'right'
+        },
+        offset: {
+            x: '30',
+            y: '30'
+        },
+        delay: '1000',
+        z_index: '10000',
+        animate: {
+            enter: 'animated ' + 'bounce',
+            exit: 'animated ' + 'pulse'
+        }
+    });
 }

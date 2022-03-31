@@ -6,11 +6,14 @@ using HRMS.Repository;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
+using HRMS.Utilities.Notifications;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ReportingServices.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -22,16 +25,18 @@ namespace HRMS.Controllers;
 public class HomeController : BaseController
 {
     private readonly IFunctionRepository function;
+    private readonly NotificationUtility notification;
 
-    public HomeController(IFunctionRepository function,
+    public HomeController(IFunctionRepository function, IHubContext<NotificationHub> hubContext,
         HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
+        notification = new NotificationUtility(db, hubContext);
         this.function = function;
     }
 
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         ViewData["Title"] = Resource.HomePage;
 
@@ -88,7 +93,6 @@ public class HomeController : BaseController
         {
             NumberOfUsers = await db.AspNetUsers.CountAsync(),
             NumberOfStaff = await db.Staff.CountAsync(),
-            //NumberOfDocuments = await db.StaffDocument.CountAsync(a => a.Active),
             NumberOfStaffSubjects = await db.StaffDepartmentSubject.CountAsync(a => a.EndDate >= DateTime.Now),
             NumberOfAvailableLeave = leaveCount,
             UserRoles = await db.AspNetRoles
@@ -156,6 +160,8 @@ public class HomeController : BaseController
     [HttpGet, Description("Arb Tahiri", "Home page for manager.")]
     public async Task<IActionResult> Manager()
     {
+        await SendNotification("", "far fa-bell", "Per testim", "Eshte testuar me sukses njoftimi!", "_blank", "/Home/Index", await GetUsers("Administrator"), notification, NotificationTypeEnum.Info);
+
         ViewData["Title"] = Resource.HomePage;
 
         var leaveStaffDays = await db.LeaveStaffDays
@@ -253,6 +259,46 @@ public class HomeController : BaseController
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [Description("Arb Tahiri", "Error view")]
     public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+    #endregion
+
+    #region Notifications
+
+    [HttpPost, Description("Arb Tahiri", "Action to mark as read a notification.")]
+    public async Task<IActionResult> MarkAsReadNotification(string ide)
+    {
+        int id = CryptoSecurity.Decrypt<int>(ide);
+        var notification = await db.Notification.FirstOrDefaultAsync(a => a.NotificationId == id);
+        notification.Read = !notification.Read;
+        await db.SaveChangesAsync();
+        return Json(true);
+    }
+
+    [HttpPost, Description("Arb Tahiri", "Action to delete a notification.")]
+    public async Task<IActionResult> DeleteNotification(string ide)
+    {
+        int id = CryptoSecurity.Decrypt<int>(ide);
+        var notification = await db.Notification.FirstOrDefaultAsync(a => a.NotificationId == id);
+        notification.Deleted = true;
+        await db.SaveChangesAsync();
+        return Json(true);
+    }
+
+    [HttpPost, Description("Arb Tahiri", "Action to mark as read all notifications.")]
+    public async Task<IActionResult> MarkAsReadAllNotification()
+    {
+        await db.Notification.Where(a => a.Receiver == user.Id && !a.Read).ForEachAsync(a => a.Read = true);
+        await db.SaveChangesAsync();
+        return Json(true);
+    }
+
+    [HttpPost, Description("Arb Tahiri", "Action to delete all notifications.")]
+    public async Task<IActionResult> DeleteAllNotification()
+    {
+        await db.Notification.Where(a => a.Receiver == user.Id && !a.Deleted).ForEachAsync(a => a.Deleted = true);
+        await db.SaveChangesAsync();
+        return Json(true);
+    }
 
     #endregion
 }

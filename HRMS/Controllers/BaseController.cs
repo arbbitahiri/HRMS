@@ -1,10 +1,12 @@
 ﻿using HRMS.Data.Core;
 using HRMS.Data.General;
 using HRMS.Models;
+using HRMS.Models.Notification;
 using HRMS.Models.Shared;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
+using HRMS.Utilities.Notifications;
 using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -149,8 +152,7 @@ public class BaseController : Controller
         return LocalRedirect(returnUrl);
     }
 
-    [HttpPost]
-    [Description("Arb Tahiri", "Change notification mode.")]
+    [HttpPost, Description("Arb Tahiri", "Change notification mode.")]
     public async Task<IActionResult> ChangeNotificationMode(bool mode)
     {
         var currentUser = await db.AspNetUsers.FindAsync(user.Id);
@@ -159,9 +161,22 @@ public class BaseController : Controller
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = "Notification mode changed successfully!" });
     }
 
-    [AllowAnonymous]
-    [Description("Arb Tahiri", "Error status message.")]
+    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
     public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
+
+    public async Task<List<string>> GetUsers(string role) =>
+        await db.AspNetUsers.Where(a => a.Role.Any(a => a.Name == role)).Select(a => a.Id).ToListAsync();
+
+    public async Task SendNotification(string ide, string icon, string title, string description, string target, string url, List<string> users, NotificationUtility notification, NotificationTypeEnum notificationType) =>
+        await notification.SendNotification(user.Id, users, new NotificationSend
+        {
+            Title = title,
+            Description = description,
+            Url = url,
+            Icon = icon,
+            Target = target,
+            NotificationType = notificationType
+        });
 
     protected LanguageEnum GetLanguage(string culture) =>
         culture switch

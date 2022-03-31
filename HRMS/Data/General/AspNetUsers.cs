@@ -7,8 +7,7 @@ namespace HRMS.Data.General
     {
         public AspNetUsers()
         {
-            AppSettingsInsertedFromNavigation = new HashSet<AppSettings>();
-            AppSettingsUpdatedFromNavigation = new HashSet<AppSettings>();
+            AppSettings = new HashSet<AppSettings>();
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
@@ -59,6 +58,8 @@ namespace HRMS.Data.General
             LeaveUpdatedFromNavigation = new HashSet<Leave>();
             MenuInsertedFromNavigation = new HashSet<Menu>();
             MenuUpdatedFromNavigation = new HashSet<Menu>();
+            NotificationInsertedFromNavigation = new HashSet<Notification>();
+            NotificationReceiverNavigation = new HashSet<Notification>();
             ProfessionTypeInsertedFromNavigation = new HashSet<ProfessionType>();
             ProfessionTypeUpdatedFromNavigation = new HashSet<ProfessionType>();
             RateTypeInsertedFromNavigation = new HashSet<RateType>();
@@ -118,8 +119,7 @@ namespace HRMS.Data.General
         public string InsertedFrom { get; set; }
 
         public virtual Department Department { get; set; }
-        public virtual ICollection<AppSettings> AppSettingsInsertedFromNavigation { get; set; }
-        public virtual ICollection<AppSettings> AppSettingsUpdatedFromNavigation { get; set; }
+        public virtual ICollection<AppSettings> AppSettings { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
@@ -170,6 +170,8 @@ namespace HRMS.Data.General
         public virtual ICollection<Leave> LeaveUpdatedFromNavigation { get; set; }
         public virtual ICollection<Menu> MenuInsertedFromNavigation { get; set; }
         public virtual ICollection<Menu> MenuUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Notification> NotificationInsertedFromNavigation { get; set; }
+        public virtual ICollection<Notification> NotificationReceiverNavigation { get; set; }
         public virtual ICollection<ProfessionType> ProfessionTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<ProfessionType> ProfessionTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<RateType> RateTypeInsertedFromNavigation { get; set; }

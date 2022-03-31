@@ -390,6 +390,15 @@
   <data name="Date" xml:space="preserve">
     <value>Date</value>
   </data>
+  <data name="Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="DaysAgo" xml:space="preserve">
+    <value>Days ago</value>
+  </data>
   <data name="Dear" xml:space="preserve">
     <value>Dear</value>
   </data>
@@ -597,6 +606,15 @@
   <data name="HomePage" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Hour</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>Hours ago</value>
+  </data>
   <data name="HRMSRiinvest" xml:space="preserve">
     <value>HRMS Riinvest</value>
   </data>
@@ -735,6 +753,9 @@
   <data name="ListSubMenus" xml:space="preserve">
     <value>List of submenus</value>
   </data>
+  <data name="LoadMore" xml:space="preserve">
+    <value>Load more</value>
+  </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>
@@ -780,6 +801,9 @@
   <data name="March" xml:space="preserve">
     <value>March</value>
   </data>
+  <data name="MarkAsRead" xml:space="preserve">
+    <value>Mark as read</value>
+  </data>
   <data name="MaxChar10" xml:space="preserve">
     <value>The maximum character length is 10.</value>
   </data>
@@ -806,6 +830,18 @@
   </data>
   <data name="MinChar10" xml:space="preserve">
     <value>The minimum character length is 10.</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>Minute</value>
+  </data>
+  <data name="MinuteAgo" xml:space="preserve">
+    <value>Minute ago</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>Minutes ago</value>
   </data>
   <data name="MondayLetter" xml:space="preserve">
     <value>Mo</value>
@@ -1127,6 +1163,18 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Search result</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>Second</value>
+  </data>
+  <data name="SecondAgo" xml:space="preserve">
+    <value>Second ago</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="SecondsAgo" xml:space="preserve">
+    <value>Seconds ago</value>
   </data>
   <data name="SecondStepEvaluation" xml:space="preserve">
     <value>2. Questions and answers</value>

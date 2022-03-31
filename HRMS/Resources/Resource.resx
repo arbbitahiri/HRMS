@@ -1461,4 +1461,58 @@
   <data name="SearchHome" xml:space="preserve">
     <value>Kërkoni sipas emrit, mbiemrit...</value>
   </data>
+  <data name="Day" xml:space="preserve">
+    <value>Ditë</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Ditë</value>
+  </data>
+  <data name="DaysAgo" xml:space="preserve">
+    <value>Ditë më parë</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Orë</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Orë</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>Orë më parë</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>Minutë</value>
+  </data>
+  <data name="MinuteAgo" xml:space="preserve">
+    <value>Minutë më parë</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minuta</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>Minuta më parë</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>Sekondë</value>
+  </data>
+  <data name="SecondAgo" xml:space="preserve">
+    <value>Sekondë më parë</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>Sekonda</value>
+  </data>
+  <data name="SecondsAgo" xml:space="preserve">
+    <value>Sekonda më parë</value>
+  </data>
+  <data name="DayAgo" xml:space="preserve">
+    <value>Ditë më parë</value>
+  </data>
+  <data name="HourAgo" xml:space="preserve">
+    <value>Orë më parë</value>
+  </data>
+  <data name="LoadMore" xml:space="preserve">
+    <value>Shiko më shumë</value>
+  </data>
+  <data name="MarkAsRead" xml:space="preserve">
+    <value>Shëno si të lexuar</value>
+  </data>
 </root>

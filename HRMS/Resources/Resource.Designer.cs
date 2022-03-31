@@ -898,6 +898,42 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ditë.
+        /// </summary>
+        public static string Day {
+            get {
+                return ResourceManager.GetString("Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ditë më parë.
+        /// </summary>
+        public static string DayAgo {
+            get {
+                return ResourceManager.GetString("DayAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ditë.
+        /// </summary>
+        public static string Days {
+            get {
+                return ResourceManager.GetString("Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ditë më parë.
+        /// </summary>
+        public static string DaysAgo {
+            get {
+                return ResourceManager.GetString("DaysAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I nderuar.
         /// </summary>
         public static string Dear {
@@ -1528,6 +1564,42 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Orë.
+        /// </summary>
+        public static string Hour {
+            get {
+                return ResourceManager.GetString("Hour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orë më parë.
+        /// </summary>
+        public static string HourAgo {
+            get {
+                return ResourceManager.GetString("HourAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orë.
+        /// </summary>
+        public static string Hours {
+            get {
+                return ResourceManager.GetString("Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orë më parë.
+        /// </summary>
+        public static string HoursAgo {
+            get {
+                return ResourceManager.GetString("HoursAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HRMS Riinvest.
         /// </summary>
         public static string HRMSRiinvest {
@@ -1951,6 +2023,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shiko më shumë.
+        /// </summary>
+        public static string LoadMore {
+            get {
+                return ResourceManager.GetString("LoadMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vendodhja.
         /// </summary>
         public static string Location {
@@ -2086,6 +2167,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shëno si të lexuar.
+        /// </summary>
+        public static string MarkAsRead {
+            get {
+                return ResourceManager.GetString("MarkAsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gjatësia maksimale e shkronjave është 10..
         /// </summary>
         public static string MaxChar10 {
@@ -2163,6 +2253,42 @@ namespace HRMS.Resources {
         public static string MinChar10 {
             get {
                 return ResourceManager.GetString("MinChar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minutë.
+        /// </summary>
+        public static string Minute {
+            get {
+                return ResourceManager.GetString("Minute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minutë më parë.
+        /// </summary>
+        public static string MinuteAgo {
+            get {
+                return ResourceManager.GetString("MinuteAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minuta.
+        /// </summary>
+        public static string Minutes {
+            get {
+                return ResourceManager.GetString("Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minuta më parë.
+        /// </summary>
+        public static string MinutesAgo {
+            get {
+                return ResourceManager.GetString("MinutesAgo", resourceCulture);
             }
         }
         
@@ -3153,6 +3279,42 @@ namespace HRMS.Resources {
         public static string SearchResult {
             get {
                 return ResourceManager.GetString("SearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sekondë.
+        /// </summary>
+        public static string Second {
+            get {
+                return ResourceManager.GetString("Second", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sekondë më parë.
+        /// </summary>
+        public static string SecondAgo {
+            get {
+                return ResourceManager.GetString("SecondAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sekonda.
+        /// </summary>
+        public static string Seconds {
+            get {
+                return ResourceManager.GetString("Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sekonda më parë.
+        /// </summary>
+        public static string SecondsAgo {
+            get {
+                return ResourceManager.GetString("SecondsAgo", resourceCulture);
             }
         }
         

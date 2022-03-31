@@ -4,6 +4,7 @@ using HRMS.Data.General;
 using HRMS.Repository;
 using HRMS.Services;
 using HRMS.Utilities.General;
+using HRMS.Utilities.Notifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -89,6 +90,7 @@ public class Startup
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.LoginPath = "/Identity/Account/Login";
             options.AccessDeniedPath = "/Identity/Account/AccessDenied";
         });
@@ -169,13 +171,12 @@ public class Startup
         });
 
         app.UseStaticFiles();
-
         app.UseRouting();
-
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseResponseCaching();
         app.UseSession();
+        app.UseCookiePolicy();
 
         app.UseEndpoints(endpoints =>
         {
@@ -183,6 +184,7 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{ide?}");
             endpoints.MapRazorPages();
+            endpoints.MapHub<NotificationHub>("/notificationHub");
         });
     }
 }

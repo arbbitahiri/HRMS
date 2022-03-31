@@ -49,6 +49,7 @@ public partial class HRMSContext : DbContext
     public virtual DbSet<LeaveType> LeaveType { get; set; }
     public virtual DbSet<Log> Log { get; set; }
     public virtual DbSet<Menu> Menu { get; set; }
+    public virtual DbSet<Notification> Notification { get; set; }
     public virtual DbSet<ProfessionType> ProfessionType { get; set; }
     public virtual DbSet<RateType> RateType { get; set; }
     public virtual DbSet<RealRole> RealRole { get; set; }
@@ -69,7 +70,7 @@ public partial class HRMSContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-            optionsBuilder.UseSqlServer("Server=DESKTOP-C9V24QP;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=HRMS;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
     }
 
@@ -91,22 +92,13 @@ public partial class HRMSContext : DbContext
 
             entity.Property(e => e.OldVersion).IsRequired();
 
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-            entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
             entity.Property(e => e.UpdatedVersion).IsRequired();
 
             entity.HasOne(d => d.InsertedFromNavigation)
-                .WithMany(p => p.AppSettingsInsertedFromNavigation)
+                .WithMany(p => p.AppSettings)
                 .HasForeignKey(d => d.InsertedFrom)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AppSettings_AspNetUsers_Inserted");
-
-            entity.HasOne(d => d.UpdatedFromNavigation)
-                .WithMany(p => p.AppSettingsUpdatedFromNavigation)
-                .HasForeignKey(d => d.UpdatedFrom)
-                .HasConstraintName("FK_AppSettings_AspNetUsers_Updated");
         });
 
         modelBuilder.Entity<AspNetRoleClaims>(entity =>
@@ -335,12 +327,12 @@ public partial class HRMSContext : DbContext
 
             entity.Property(e => e.NameEn)
                 .IsRequired()
-                .HasMaxLength(128)
+                .HasMaxLength(256)
                 .HasColumnName("NameEN");
 
             entity.Property(e => e.NameSq)
                 .IsRequired()
-                .HasMaxLength(128)
+                .HasMaxLength(256)
                 .HasColumnName("NameSQ");
 
             entity.HasOne(d => d.InsertedFromNavigation)
@@ -400,12 +392,12 @@ public partial class HRMSContext : DbContext
 
             entity.Property(e => e.NameEn)
                 .IsRequired()
-                .HasMaxLength(128)
+                .HasMaxLength(50)
                 .HasColumnName("NameEN");
 
             entity.Property(e => e.NameSq)
                 .IsRequired()
-                .HasMaxLength(128)
+                .HasMaxLength(50)
                 .HasColumnName("NameSQ");
 
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
@@ -1174,7 +1166,7 @@ public partial class HRMSContext : DbContext
                 .WithMany(p => p.Leave)
                 .HasForeignKey(d => d.LeaveTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Leave_HolidayType");
+                .HasConstraintName("FK_Leave_LeaveType");
 
             entity.HasOne(d => d.Staff)
                 .WithMany(p => p.Leave)
@@ -1395,6 +1387,47 @@ public partial class HRMSContext : DbContext
                 .WithMany(p => p.MenuUpdatedFromNavigation)
                 .HasForeignKey(d => d.UpdatedFrom)
                 .HasConstraintName("FK_Menu_AspNetUsers_Updated");
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.ToTable("Notification", "Core");
+
+            entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
+
+            entity.Property(e => e.Description).HasMaxLength(1024);
+
+            entity.Property(e => e.Icon)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.InsertedFrom)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(e => e.Receiver)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(512);
+
+            entity.Property(e => e.Url).HasMaxLength(1024);
+
+            entity.HasOne(d => d.InsertedFromNavigation)
+                .WithMany(p => p.NotificationInsertedFromNavigation)
+                .HasForeignKey(d => d.InsertedFrom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_AspNetUsers_Inserted");
+
+            entity.HasOne(d => d.ReceiverNavigation)
+                .WithMany(p => p.NotificationReceiverNavigation)
+                .HasForeignKey(d => d.Receiver)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_AspNetUsers");
         });
 
         modelBuilder.Entity<ProfessionType>(entity =>

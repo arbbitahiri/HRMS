@@ -132,3 +132,11 @@ public enum DocumentForEnum
     Staff = 1,
     Evaluation = 2
 }
+
+public enum NotificationTypeEnum
+{
+    Success = 1,
+    Info = 2,
+    Warning = 3,
+    Error = 4
+}
