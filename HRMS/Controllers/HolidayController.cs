@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,8 +40,9 @@ public class HolidayController : BaseController
                 HolidayTypeId = a.HolidayTypeId,
                 title = a.HolidayTypeId == (int)HolidayTypeEnum.Other ? a.Title : (user.Language == LanguageEnum.Albanian ? a.HolidayType.NameSq : a.HolidayType.NameEn),
                 description = a.HolidayTypeId == (int)HolidayTypeEnum.Other ? a.Description : (a.Description ?? (user.Language == LanguageEnum.Albanian ? a.HolidayType.DescriptionSq : a.HolidayType.DescriptionEn)),
-                start = a.Start.ToString("yyyy-MM-dd HH:mm"),
-                end = a.End.ToString("yyyy-MM-dd HH:mm")
+                start = a.Start.ToString("yyyy-MM-dd"),
+                end = a.End.ToString("yyyy-MM-dd"),
+                className = "fc-event-solid-primary fc-event"
             }).ToListAsync();
         return View(holidays);
     }
@@ -72,9 +74,12 @@ public class HolidayController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        DateTime startDate = DateTime.ParseExact(holiday.StartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+        DateTime endDate = DateTime.ParseExact(holiday.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
         bool weekly = holiday.RepeatTypeId == (int)RepeatTypeEnum.Weekly, monthly = holiday.RepeatTypeId == (int)RepeatTypeEnum.Monthly, anually = holiday.RepeatTypeId == (int)RepeatTypeEnum.Anually;
-        int remainingWeeks = (holiday.StartDate.AddMonths(1).AddDays(-holiday.StartDate.Day) - holiday.StartDate).Days / 7;
-        int remainingMonths = 12 - holiday.StartDate.Month;
+        int remainingWeeks = (startDate.AddMonths(1).AddDays(-startDate.Day) - startDate).Days / 7;
+        int remainingMonths = 12 - endDate.Month;
         int length = weekly ? remainingWeeks : (monthly ? remainingMonths : (anually ? 10 : 0));
 
         var addHoliday = new List<Holiday>();
@@ -83,8 +88,8 @@ public class HolidayController : BaseController
             addHoliday.Add(new Holiday
             {
                 HolidayTypeId = (int)HolidayTypeEnum.Other,
-                Start = weekly ? holiday.StartDate.AddDays(i * 7) : (monthly ? holiday.StartDate.AddMonths(i) : anually ? holiday.StartDate.AddYears(i) : holiday.StartDate),
-                End = weekly ? holiday.EndDate.AddDays(i * 7) : (monthly ? holiday.EndDate.AddMonths(i) : anually ? holiday.EndDate.AddYears(i) : holiday.EndDate),
+                Start = weekly ? startDate.AddDays(i * 7) : (monthly ? startDate.AddMonths(i) : anually ? startDate.AddYears(i) : startDate),
+                End = weekly ? endDate.AddDays(i * 7) : (monthly ? endDate.AddMonths(i) : anually ? endDate.AddYears(i) : endDate),
                 Title = holiday.Title,
                 Description = holiday.Description,
                 RepeatTypeId = holiday.RepeatTypeId,
@@ -114,8 +119,8 @@ public class HolidayController : BaseController
                 HolidayIde = ide,
                 Title = a.Title,
                 Description = a.Description,
-                StartDate = a.Start,
-                EndDate = a.End,
+                StartDate = a.Start.ToString("dd/MM/yyyy"),
+                EndDate = a.End.ToString("dd/MM/yyyy"),
                 RepeatTypeId = a.RepeatTypeId
             }).FirstOrDefaultAsync();
         return PartialView(holiday);
@@ -129,6 +134,9 @@ public class HolidayController : BaseController
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
+
+        DateTime startDate = DateTime.ParseExact(holiday.StartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+        DateTime endDate = DateTime.ParseExact(holiday.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
         var holidayId = CryptoSecurity.Decrypt<int>(holiday.HolidayIde);
 
@@ -144,8 +152,8 @@ public class HolidayController : BaseController
             });
 
         bool weekly = holiday.RepeatTypeId == (int)RepeatTypeEnum.Weekly, monthly = holiday.RepeatTypeId == (int)RepeatTypeEnum.Monthly, anually = holiday.RepeatTypeId == (int)RepeatTypeEnum.Anually;
-        int remainingWeeks = (holiday.StartDate.AddMonths(1).AddDays(-holiday.StartDate.Day) - holiday.StartDate).Days / 7;
-        int remainingMonths = 12 - holiday.StartDate.Month;
+        int remainingWeeks = (startDate.AddMonths(1).AddDays(-startDate.Day) - startDate).Days / 7;
+        int remainingMonths = 12 - startDate.Month;
         int length = weekly ? remainingWeeks : (monthly ? remainingMonths : (anually ? 10 : 0));
 
         var addHoliday = new List<Holiday>();
@@ -154,8 +162,8 @@ public class HolidayController : BaseController
             addHoliday.Add(new Holiday
             {
                 HolidayTypeId = (int)HolidayTypeEnum.Other,
-                Start = weekly ? holiday.StartDate.AddDays(i * 7) : (monthly ? holiday.StartDate.AddMonths(i) : anually ? holiday.StartDate.AddYears(i) : holiday.StartDate),
-                End = weekly ? holiday.EndDate.AddDays(i * 7) : (monthly ? holiday.EndDate.AddMonths(i) : anually ? holiday.EndDate.AddYears(i) : holiday.EndDate),
+                Start = weekly ? startDate.AddDays(i * 7) : (monthly ? startDate.AddMonths(i) : anually ? startDate.AddYears(i) : startDate),
+                End = weekly ? endDate.AddDays(i * 7) : (monthly ? endDate.AddMonths(i) : anually ? endDate.AddYears(i) : endDate),
                 Title = holiday.Title,
                 Description = holiday.Description,
                 RepeatTypeId = holiday.RepeatTypeId,
@@ -185,8 +193,8 @@ public class HolidayController : BaseController
                 HolidayIde = ide,
                 Title = a.Title,
                 Description = a.Description,
-                StartDate = a.Start,
-                EndDate = a.End,
+                StartDate = a.Start.ToString("dd/MM/yyyy"),
+                EndDate = a.End.ToString("dd/MM/yyyy"),
                 RepeatType = user.Language == LanguageEnum.Albanian ? a.RepeatType.NameSq : a.RepeatType.NameEn
             }).FirstOrDefaultAsync();
         return PartialView(holiday);

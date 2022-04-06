@@ -145,7 +145,7 @@ public enum NotificationTypeEnum
 
 public enum HolidayTypeEnum
 {
-    Other = 1
+    Other = 13
 }
 
 public enum RepeatTypeEnum
