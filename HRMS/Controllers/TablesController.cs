@@ -38,12 +38,14 @@ public class TablesController : BaseController
             new TableName() { Table = LookUpTable.DocumentFor, Title = Resource.DocumentTypeFor },
             new TableName() { Table = LookUpTable.EducationLevel, Title = Resource.EducationLevelType },
             new TableName() { Table = LookUpTable.Evaluation, Title = Resource.EvaluationType },
-            new TableName() { Table = LookUpTable.Holiday, Title = Resource.LeaveType },
+            new TableName() { Table = LookUpTable.Leave, Title = Resource.LeaveType },
             new TableName() { Table = LookUpTable.Profession, Title = Resource.ProfessionType },
             new TableName() { Table = LookUpTable.Staff, Title = Resource.StaffType },
             new TableName() { Table = LookUpTable.Status, Title = Resource.StatusType },
             new TableName() { Table = LookUpTable.Department, Title = Resource.Department },
-            new TableName() { Table = LookUpTable.EvaluationQuestion, Title = Resource.EvaluationQuestionType }
+            new TableName() { Table = LookUpTable.EvaluationQuestion, Title = Resource.EvaluationQuestionType },
+            new TableName() { Table = LookUpTable.Holiday, Title = Resource.OfficialHolidays },
+            new TableName() { Table = LookUpTable.Repeat, Title = Resource.RepeatType }
         };
 
         return PartialView(tables);
@@ -56,9 +58,7 @@ public class TablesController : BaseController
     [Authorize(Policy = "16:r"), Description("Korab Mustafa", "List of data of look up tables")]
     public async Task<IActionResult> _LookUpData(LookUpTable table, string title)
     {
-        var dataList = new List<DataList>();
-
-        dataList = table switch
+        var dataList = table switch
         {
             LookUpTable.Document => await db.DocumentType.Select(a => new DataList
             {
@@ -82,7 +82,7 @@ public class TablesController : BaseController
                 NameEN = a.NameEn,
                 Active = a.Active
             }).ToListAsync(),
-            LookUpTable.Holiday => await db.LeaveType.Select(a => new DataList
+            LookUpTable.Leave => await db.LeaveType.Select(a => new DataList
             {
                 Ide = CryptoSecurity.Encrypt(a.LeaveTypeId),
                 NameSQ = a.NameSq,
@@ -129,6 +129,22 @@ public class TablesController : BaseController
             LookUpTable.DocumentFor => await db.DocumentFor.Select(a => new DataList
             {
                 Ide = CryptoSecurity.Encrypt(a.DocumentForId),
+                NameSQ = a.NameSq,
+                NameEN = a.NameEn,
+                Active = a.Active
+            }).ToListAsync(),
+            LookUpTable.Holiday => await db.HolidayType.Select(a => new DataList
+            {
+                Ide = CryptoSecurity.Encrypt(a.HolidayTypeId),
+                NameSQ = a.NameSq,
+                NameEN = a.NameEn,
+                DescriptionSQ = a.DescriptionSq,
+                DescriptionEN = a.DescriptionEn,
+                Active = a.Active
+            }).ToListAsync(),
+            LookUpTable.Repeat => await db.RepeatType.Select(a => new DataList
+            {
+                Ide = CryptoSecurity.Encrypt(a.RepeatTypeId),
                 NameSQ = a.NameSq,
                 NameEN = a.NameEn,
                 Active = a.Active
@@ -195,7 +211,7 @@ public class TablesController : BaseController
                     InsertedFrom = user.Id
                 });
                 break;
-            case LookUpTable.Holiday:
+            case LookUpTable.Leave:
                 db.LeaveType.Add(new LeaveType
                 {
                     NameSq = create.NameSQ,
@@ -267,6 +283,28 @@ public class TablesController : BaseController
                     InsertedFrom = user.Id
                 });
                 break;
+            case LookUpTable.Holiday:
+                db.HolidayType.Add(new HolidayType
+                {
+                    NameSq = create.NameSQ,
+                    NameEn = create.NameEN,
+                    DescriptionSq = create.DescriptionSQ,
+                    DescriptionEn = create.DescriptionEN,
+                    Active = true,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+                break;
+            case LookUpTable.Repeat:
+                db.RepeatType.Add(new RepeatType
+                {
+                    NameSq = create.NameSQ,
+                    NameEn = create.NameEN,
+                    Active = true,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+                break;
             default:
                 return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
@@ -295,7 +333,8 @@ public class TablesController : BaseController
                         OtherDataId = a.DocumentForId,
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.EducationLevel =>
                 editData = await db.EducationLevelType
@@ -305,7 +344,8 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.EducationLevelTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.Evaluation =>
                 editData = await db.EvaluationType
@@ -315,9 +355,10 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.EvaluationTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
-            LookUpTable.Holiday =>
+            LookUpTable.Leave =>
                 editData = await db.LeaveType
                     .Where(a => a.LeaveTypeId == id)
                     .Select(a => new CreateData
@@ -325,7 +366,8 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.LeaveTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.Profession =>
                 editData = await db.ProfessionType
@@ -336,7 +378,8 @@ public class TablesController : BaseController
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
                         OtherData = a.Code,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.Staff =>
                 editData = await db.StaffType
@@ -346,7 +389,8 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.StaffTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.Status =>
                 editData = await db.StatusType
@@ -356,7 +400,8 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.StatusTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.Department =>
                 editData = await db.Department
@@ -367,7 +412,8 @@ public class TablesController : BaseController
                         OtherData = a.Code,
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.EvaluationQuestion =>
                 editData = await db.EvaluationQuestionType
@@ -377,7 +423,8 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.EvaluationQuestionTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             LookUpTable.DocumentFor =>
                 editData = await db.DocumentFor
@@ -387,7 +434,32 @@ public class TablesController : BaseController
                         Ide = CryptoSecurity.Encrypt(a.DocumentForId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
-                        Title = title
+                        Title = title,
+                        Table = table
+                    }).FirstOrDefaultAsync(),
+            LookUpTable.Holiday =>
+                editData = await db.HolidayType
+                    .Where(a => a.HolidayTypeId == id)
+                    .Select(a => new CreateData
+                    {
+                        Ide = CryptoSecurity.Encrypt(a.HolidayTypeId),
+                        NameSQ = a.NameSq,
+                        NameEN = a.NameEn,
+                        DescriptionSQ = a.DescriptionSq,
+                        DescriptionEN = a.DescriptionEn,
+                        Title = title,
+                        Table = table
+                    }).FirstOrDefaultAsync(),
+            LookUpTable.Repeat =>
+                editData = await db.RepeatType
+                    .Where(a => a.RepeatTypeId == id)
+                    .Select(a => new CreateData
+                    {
+                        Ide = CryptoSecurity.Encrypt(a.RepeatTypeId),
+                        NameSQ = a.NameSq,
+                        NameEN = a.NameEn,
+                        Title = title,
+                        Table = table
                     }).FirstOrDefaultAsync(),
             _ => null
         };
@@ -433,7 +505,7 @@ public class TablesController : BaseController
                 evaluationType.UpdatedFrom = user.Id;
                 evaluationType.UpdatedNo = UpdateNo(evaluationType.UpdatedNo);
                 break;
-            case LookUpTable.Holiday:
+            case LookUpTable.Leave:
                 var holidayType = await db.LeaveType.FirstOrDefaultAsync(a => a.LeaveTypeId == id);
                 holidayType.NameSq = edit.NameSQ;
                 holidayType.NameEn = edit.NameEN;
@@ -491,6 +563,24 @@ public class TablesController : BaseController
                 documentFor.UpdatedFrom = user.Id;
                 documentFor.UpdatedNo = UpdateNo(documentFor.UpdatedNo);
                 break;
+            case LookUpTable.Holiday:
+                var holiday = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
+                holiday.NameSq = edit.NameSQ;
+                holiday.NameEn = edit.NameEN;
+                holiday.DescriptionSq = edit.DescriptionSQ;
+                holiday.DescriptionEn = edit.DescriptionEN;
+                holiday.UpdatedDate = DateTime.Now;
+                holiday.UpdatedFrom = user.Id;
+                holiday.UpdatedNo = UpdateNo(holiday.UpdatedNo);
+                break;
+            case LookUpTable.Repeat:
+                var repeat = await db.DocumentFor.FirstOrDefaultAsync(a => a.DocumentForId == id);
+                repeat.NameSq = edit.NameSQ;
+                repeat.NameEn = edit.NameEN;
+                repeat.UpdatedDate = DateTime.Now;
+                repeat.UpdatedFrom = user.Id;
+                repeat.UpdatedNo = UpdateNo(repeat.UpdatedNo);
+                break;
             default:
                 return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
@@ -533,7 +623,7 @@ public class TablesController : BaseController
                 evaluationType.UpdatedFrom = user.Id;
                 evaluationType.UpdatedNo = UpdateNo(evaluationType.UpdatedNo);
                 break;
-            case LookUpTable.Holiday:
+            case LookUpTable.Leave:
                 var holidayType = await db.LeaveType.FirstOrDefaultAsync(a => a.LeaveTypeId == id);
                 holidayType.Active = active;
                 holidayType.UpdatedDate = DateTime.Now;
@@ -582,10 +672,23 @@ public class TablesController : BaseController
                 documentFor.UpdatedFrom = user.Id;
                 documentFor.UpdatedNo = UpdateNo(documentFor.UpdatedNo);
                 break;
+            case LookUpTable.Holiday:
+                var holiday = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == id);
+                holiday.Active = active;
+                holiday.UpdatedDate = DateTime.Now;
+                holiday.UpdatedFrom = user.Id;
+                holiday.UpdatedNo = UpdateNo(holiday.UpdatedNo);
+                break;
+            case LookUpTable.Repeat:
+                var repeat = await db.RepeatType.FirstOrDefaultAsync(a => a.RepeatTypeId == id);
+                repeat.Active = active;
+                repeat.UpdatedDate = DateTime.Now;
+                repeat.UpdatedFrom = user.Id;
+                repeat.UpdatedNo = UpdateNo(repeat.UpdatedNo);
+                break;
             default:
                 return Json(new ErrorVM() { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
-
         await db.SaveChangesAsync();
         return Json(error);
     }

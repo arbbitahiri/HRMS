@@ -1,0 +1,72 @@
+﻿@using HRMS.Models.Holiday
+@model ManageHoliday
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Details</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    @Html.AntiForgeryToken()
+    <input asp-for="HolidayIde" type="hidden"/>
+
+    <div class="row pl-2 pr-2">
+        <div class="col-md-6 form-group">
+            <label asp-for="Title" class="required"></label>
+            <input asp-for="Title" type="text" disabled class="form-control"/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="RepeatType" class="required"></label>
+            <input asp-for="RepeatType" type="text" disabled class="form-control"/>
+            <span asp-validation-for="RepeatType" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="StartDate" class="required"></label>
+            <input asp-for="StartDate" type="text" disabled autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate"/>
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="EndDate" class="required"></label>
+            <input asp-for="EndDate" type="text" disabled autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate"/>
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group pl-2 pr-2">
+        <div class="col-md-12">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" disabled type="text" rows="2" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer justify-content-between">
+    <button type="button" class="btn btn-bold btn-pure btn-danger" onclick="remove_event('@Model.HolidayIde')">@Resource.Delete</button>
+</div>
+
+<script>
+    function remove_event(ide) {
+        Swal.fire({
+            title: "@Html.Raw(Resource.AreYouSure)",
+            text: "@Html.Raw(Resource.SureYouWantToDeleteHoliday)",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: "@Resource.Yes",
+            cancelButtonText: "@Resource.No"
+        }).then((result) => {
+            if (result.value) {
+                $.post('@Url.Action("Remove", "Holiday")', {
+                    ide: ide,
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                    }, function (data) {
+                        handle_success(data, SubmitPathType.RELOAD, "");
+                });
+            }
+        });
+    }
+</script>

@@ -76,14 +76,16 @@ public enum LookUpTable
     Document = 1,
     EducationLevel = 2,
     Evaluation = 3,
-    Holiday = 4,
+    Leave = 4,
     Profession = 5,
     Rate = 6,
     Staff = 7,
     Status = 8,
     Department = 9,
     EvaluationQuestion = 10,
-    DocumentFor = 11
+    DocumentFor = 11,
+    Holiday = 12,
+    Repeat = 13
 }
 
 public enum LeaveTypeEnum
@@ -139,4 +141,18 @@ public enum NotificationTypeEnum
     Info = 2,
     Warning = 3,
     Error = 4
+}
+
+public enum HolidayTypeEnum
+{
+    Other = 1
+}
+
+public enum RepeatTypeEnum
+{
+    Once = 1,
+    Daily = 2,
+    Weekly = 3,
+    Monthly = 4,
+    Anually = 5
 }

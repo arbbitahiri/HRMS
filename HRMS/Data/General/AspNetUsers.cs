@@ -48,6 +48,10 @@ namespace HRMS.Data.General
             EvaluationTypeInsertedFromNavigation = new HashSet<EvaluationType>();
             EvaluationTypeUpdatedFromNavigation = new HashSet<EvaluationType>();
             EvaluationUpdatedFromNavigation = new HashSet<Evaluation>();
+            HolidayInsertedFromNavigation = new HashSet<Holiday>();
+            HolidayTypeInsertedFromNavigation = new HashSet<HolidayType>();
+            HolidayTypeUpdatedFromNavigation = new HashSet<HolidayType>();
+            HolidayUpdatedFromNavigation = new HashSet<Holiday>();
             LeaveInsertedFromNavigation = new HashSet<Leave>();
             LeaveStaffDaysInsertedFromNavigation = new HashSet<LeaveStaffDays>();
             LeaveStaffDaysUpdatedFromNavigation = new HashSet<LeaveStaffDays>();
@@ -62,11 +66,11 @@ namespace HRMS.Data.General
             NotificationReceiverNavigation = new HashSet<Notification>();
             ProfessionTypeInsertedFromNavigation = new HashSet<ProfessionType>();
             ProfessionTypeUpdatedFromNavigation = new HashSet<ProfessionType>();
-            RateTypeInsertedFromNavigation = new HashSet<RateType>();
-            RateTypeUpdatedFromNavigation = new HashSet<RateType>();
             RealRoleInsertedFromNavigation = new HashSet<RealRole>();
             RealRoleUpdatedFromNavigation = new HashSet<RealRole>();
             RealRoleUser = new HashSet<RealRole>();
+            RepeatTypeInsertedFromNavigation = new HashSet<RepeatType>();
+            RepeatTypeUpdatedFromNavigation = new HashSet<RepeatType>();
             StaffDepartmentInsertedFromNavigation = new HashSet<StaffDepartment>();
             StaffDepartmentSubjectInsertedFromNavigation = new HashSet<StaffDepartmentSubject>();
             StaffDepartmentSubjectUpdatedFromNavigation = new HashSet<StaffDepartmentSubject>();
@@ -160,6 +164,10 @@ namespace HRMS.Data.General
         public virtual ICollection<EvaluationType> EvaluationTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<EvaluationType> EvaluationTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<Evaluation> EvaluationUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Holiday> HolidayInsertedFromNavigation { get; set; }
+        public virtual ICollection<HolidayType> HolidayTypeInsertedFromNavigation { get; set; }
+        public virtual ICollection<HolidayType> HolidayTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Holiday> HolidayUpdatedFromNavigation { get; set; }
         public virtual ICollection<Leave> LeaveInsertedFromNavigation { get; set; }
         public virtual ICollection<LeaveStaffDays> LeaveStaffDaysInsertedFromNavigation { get; set; }
         public virtual ICollection<LeaveStaffDays> LeaveStaffDaysUpdatedFromNavigation { get; set; }
@@ -174,11 +182,11 @@ namespace HRMS.Data.General
         public virtual ICollection<Notification> NotificationReceiverNavigation { get; set; }
         public virtual ICollection<ProfessionType> ProfessionTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<ProfessionType> ProfessionTypeUpdatedFromNavigation { get; set; }
-        public virtual ICollection<RateType> RateTypeInsertedFromNavigation { get; set; }
-        public virtual ICollection<RateType> RateTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<RealRole> RealRoleInsertedFromNavigation { get; set; }
         public virtual ICollection<RealRole> RealRoleUpdatedFromNavigation { get; set; }
         public virtual ICollection<RealRole> RealRoleUser { get; set; }
+        public virtual ICollection<RepeatType> RepeatTypeInsertedFromNavigation { get; set; }
+        public virtual ICollection<RepeatType> RepeatTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubjectInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartmentSubject> StaffDepartmentSubjectUpdatedFromNavigation { get; set; }

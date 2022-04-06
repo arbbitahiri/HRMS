@@ -1515,4 +1515,31 @@
   <data name="MarkAsRead" xml:space="preserve">
     <value>Shëno si të lexuar</value>
   </data>
+  <data name="HolidayCalendarEvents" xml:space="preserve">
+    <value>Kalendari festave zyrtare për vitin {0}.</value>
+  </data>
+  <data name="MonthShort" xml:space="preserve">
+    <value>Muaj</value>
+  </data>
+  <data name="OfficialHolidays" xml:space="preserve">
+    <value>Festat zyrtare</value>
+  </data>
+  <data name="RepeatType" xml:space="preserve">
+    <value>Lloji përsëritjes</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Javë</value>
+  </data>
+  <data name="HolidayRemovedSuccess" xml:space="preserve">
+    <value>Pushimi u largua me sukses!</value>
+  </data>
+  <data name="HolidayNotDuplicate" xml:space="preserve">
+    <value>Nuk mund të caktoni festën për këtë vit. Është caktuar më parë.</value>
+  </data>
+  <data name="AddEvent" xml:space="preserve">
+    <value>Shto eventin</value>
+  </data>
+  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
+    <value>A jeni të sigurt për fshirjen e festës/eventit?</value>
+  </data>
 </root>

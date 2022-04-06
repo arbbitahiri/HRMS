@@ -51,4 +51,8 @@ public interface IDDLRepository
     Task<List<SelectListItem>> EvaluationQuestionsForStudents(StudentsEvaluationType studentsEvaluationType, LanguageEnum lang);
 
     Task<List<SelectListItem>> EvaluationQuestionsForStaff(LanguageEnum lang);
+
+    Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang);
+
+    Task<List<SelectListItem>> RepeatTypes(LanguageEnum lang);
 }

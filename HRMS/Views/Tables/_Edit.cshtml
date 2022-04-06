@@ -4,8 +4,9 @@
 @{
     UserModel user = (UserModel)ViewData["User"];
 
-    var bonusField = Model.Table == LookUpTable.Profession || Model.Table == LookUpTable.Rate || Model.Table == LookUpTable.Department;
-    var col = (bonusField || Model.Table == LookUpTable.DocumentFor) ? "col-md-4" : "col-md-6";
+    var bonusField = (Model.Table == LookUpTable.Profession) || (Model.Table == LookUpTable.Department);
+    var descriptionFields = Model.Table == LookUpTable.Holiday;
+    var col = (bonusField || (Model.Table == LookUpTable.Document)) ? "col-md-4" : "col-md-6";
 }
 
 <div class="modal-header">
@@ -30,7 +31,7 @@
                     <span asp-validation-for="OtherData" class="text-danger"></span>
                 </div>
             }
-            @if (Model.Table == LookUpTable.DocumentFor)
+            @if (Model.Table == LookUpTable.Document)
             {
                 <div class="@col form-group">
                     <label asp-for="OtherDataId" class="required">@Resource.DocumentTypeFor</label>
@@ -48,6 +49,19 @@
                 <input asp-for="NameEN" class="form-control" />
                 <span asp-validation-for="NameEN" class="text-danger"></span>
             </div>
+            @if (Model.Table == LookUpTable.Holiday)
+            {
+                <div class="col-md-6 form-group">
+                    <label asp-for="DescriptionSQ">@Resource.DescriptionSQ</label>
+                    <input asp-for="DescriptionSQ" class="form-control" />
+                    <span asp-validation-for="DescriptionSQ" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="DescriptionEN">@Resource.DescriptionEN</label>
+                    <input asp-for="DescriptionEN" class="form-control" />
+                    <span asp-validation-for="DescriptionEN" class="text-danger"></span>
+                </div>
+            }
         </div>
     </div>
     <div class="modal-footer justify-content-between">

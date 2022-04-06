@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="~/assets/plugins/daterangepicker/daterangepicker.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/plugins/toastr/toastr.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/jquery-ui/jquery-ui.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
 
     <style>
@@ -150,6 +151,7 @@
     <script src="~/assets/plugins/chart.js/Chart.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/moment/moment.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/moment/locale/sq.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/moment/locale/en-gb.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
     <script src="~/assets/plugins/select2/js/select2.min.js" asp-append-version="true"></script>
@@ -171,6 +173,7 @@
     <script>
         var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';
         var cultureShort = '@System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2)';
+        var cult = cultureShort == 'en' ? 'en-gb' : 'sq';
         $("#ch_change_mode").bootstrapSwitch();
     </script>
     @await RenderSectionAsync("Scripts", required: false)

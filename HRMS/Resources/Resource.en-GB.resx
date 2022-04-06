@@ -168,6 +168,9 @@
   <data name="AddDocument" xml:space="preserve">
     <value>Add document</value>
   </data>
+  <data name="AddEvent" xml:space="preserve">
+    <value>Add event</value>
+  </data>
   <data name="AddLeave" xml:space="preserve">
     <value>Add leave</value>
   </data>
@@ -603,6 +606,15 @@
   <data name="HelpingTables" xml:space="preserve">
     <value>Helping tables</value>
   </data>
+  <data name="HolidayCalendarEvents" xml:space="preserve">
+    <value>Calendar for official holidays for {0}.</value>
+  </data>
+  <data name="HolidayNotDuplicate" xml:space="preserve">
+    <value>You cannot schedule the official holiday for this year. It has been scheduled before.</value>
+  </data>
+  <data name="HolidayRemovedSuccess" xml:space="preserve">
+    <value>Holiday has been removed successfully!</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -849,6 +861,9 @@
   <data name="Month" xml:space="preserve">
     <value>Month</value>
   </data>
+  <data name="MonthShort" xml:space="preserve">
+    <value>Month</value>
+  </data>
   <data name="MustBe18YearsOld" xml:space="preserve">
     <value>Staff employee must be 18 years or older.</value>
   </data>
@@ -947,6 +962,9 @@
   </data>
   <data name="OFF" xml:space="preserve">
     <value>OFF</value>
+  </data>
+  <data name="OfficialHolidays" xml:space="preserve">
+    <value>Official holidays</value>
   </data>
   <data name="Okay" xml:space="preserve">
     <value>Okay</value>
@@ -1079,6 +1097,9 @@
   </data>
   <data name="RemainingDays" xml:space="preserve">
     <value>Remaining days</value>
+  </data>
+  <data name="Repeat type" xml:space="preserve">
+    <value>Repeat type</value>
   </data>
   <data name="RequestedDate" xml:space="preserve">
     <value>Requested date</value>
@@ -1275,6 +1296,9 @@
   <data name="SureYouWantToDeleteDocument" xml:space="preserve">
     <value>Are you sure you want to delete document?</value>
   </data>
+  <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
+    <value>Are you sure you want to delete holiday?</value>
+  </data>
   <data name="SureYouWantToDeleteLeave" xml:space="preserve">
     <value>Are you sure you want to delete leave?</value>
   </data>
@@ -1448,6 +1472,9 @@
   </data>
   <data name="WednesdayLetter" xml:space="preserve">
     <value>We</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Week</value>
   </data>
   <data name="WeekLetter" xml:space="preserve">
     <value>W</value>

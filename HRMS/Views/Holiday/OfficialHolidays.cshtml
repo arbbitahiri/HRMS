@@ -1,0 +1,25 @@
+﻿@using HRMS.Models.Holiday
+@model IEnumerable<HolidayTypes>
+@{
+    string[] colors = { "primary", "success", "warning", "danger", "info", "gray-dark", "indigo", "lightblue", "navy", "purple", "fuchsia", "orange", "lime", "teal", "olive" };
+    var selectedColor = "";
+    var random = new Random();
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">@Resource.OfficialHolidays</h4>
+    </div>
+    <div class="card-body">
+        <div id="kt_external_events" class="fc-unthemed">
+            @foreach (var holiday in Model)
+            {
+                selectedColor = colors[random.Next(colors.Length)];
+                <div data-ide="@holiday.HolidayTypeIde" data-description="@holiday.Description"
+                    class="fc-draggable-handle external-event bg-@(selectedColor) mb-3 cursor-move">
+                    @holiday.Title
+                </div>
+            }
+        </div>
+    </div>
+</div>

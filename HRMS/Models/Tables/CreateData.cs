@@ -17,6 +17,9 @@ public class CreateData
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string NameEN { get; set; }
 
+    public string DescriptionSQ { get; set; }
+    public string DescriptionEN { get; set; }
+
     public string OtherData { get; set; }
     public int OtherDataId { get; set; }
 }

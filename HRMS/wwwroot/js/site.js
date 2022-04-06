@@ -94,7 +94,8 @@ function handle_success(data, path_type, path) {
             icon: 'success',
             title: data.title,
             text: data.description,
-            timer: 2500,
+            timer: 2000,
+            timerProgressBar: true,
             showConfirmButton: false
         }).then((result) => {
             if (path_type == SubmitPathType.RELOAD) {

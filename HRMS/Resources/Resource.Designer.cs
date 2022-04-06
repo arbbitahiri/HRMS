@@ -214,6 +214,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shto eventin.
+        /// </summary>
+        public static string AddEvent {
+            get {
+                return ResourceManager.GetString("AddEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto pushim.
         /// </summary>
         public static string AddLeave {
@@ -1555,6 +1564,33 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kalendari festave zyrtare për vitin {0}..
+        /// </summary>
+        public static string HolidayCalendarEvents {
+            get {
+                return ResourceManager.GetString("HolidayCalendarEvents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk mund të caktoni festën për këtë vit. Është caktuar më parë..
+        /// </summary>
+        public static string HolidayNotDuplicate {
+            get {
+                return ResourceManager.GetString("HolidayNotDuplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pushimi u largua me sukses!.
+        /// </summary>
+        public static string HolidayRemovedSuccess {
+            get {
+                return ResourceManager.GetString("HolidayRemovedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ballina.
         /// </summary>
         public static string HomePage {
@@ -2311,6 +2347,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Muaj.
+        /// </summary>
+        public static string MonthShort {
+            get {
+                return ResourceManager.GetString("MonthShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër..
         /// </summary>
         public static string MustBe18YearsOld {
@@ -2604,6 +2649,15 @@ namespace HRMS.Resources {
         public static string OFF {
             get {
                 return ResourceManager.GetString("OFF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Festat zyrtare.
+        /// </summary>
+        public static string OfficialHolidays {
+            get {
+                return ResourceManager.GetString("OfficialHolidays", resourceCulture);
             }
         }
         
@@ -3027,6 +3081,15 @@ namespace HRMS.Resources {
         public static string RemainingDays {
             get {
                 return ResourceManager.GetString("RemainingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lloji përsëritjes.
+        /// </summary>
+        public static string RepeatType {
+            get {
+                return ResourceManager.GetString("RepeatType", resourceCulture);
             }
         }
         
@@ -3661,6 +3724,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e festës/eventit?.
+        /// </summary>
+        public static string SureYouWantToDeleteHoliday {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A jeni të sigurt për fshirjen e pushimit?.
         /// </summary>
         public static string SureYouWantToDeleteLeave {
@@ -4188,6 +4260,15 @@ namespace HRMS.Resources {
         public static string WednesdayLetter {
             get {
                 return ResourceManager.GetString("WednesdayLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Javë.
+        /// </summary>
+        public static string Week {
+            get {
+                return ResourceManager.GetString("Week", resourceCulture);
             }
         }
         

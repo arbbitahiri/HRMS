@@ -17,6 +17,8 @@
                     <th>@(Model.Table == LookUpTable.Document ? Resource.DocumentTypeFor : Resource.Code)</th>
                     <th>@Resource.NameSq</th>
                     <th>@Resource.NameEn</th>
+                    <th>@Resource.DescriptionSQ</th>
+                    <th>@Resource.DescriptionEN</th>
                     <th>@Resource.Active</th>
                     <th data-orderable="false">@Resource.Actions</th>
                 </tr>
@@ -33,7 +35,9 @@
     });
 
     function render_tbl(data) {
-        var bonusColumn = ('@Model.Table' == '@LookUpTable.Profession') || ('@Model.Table' == '@LookUpTable.Document') || ('@Model.Table' == '@LookUpTable.Department') ? true : false;
+        var bonus_column = ('@Model.Table' == '@LookUpTable.Profession') || ('@Model.Table' == '@LookUpTable.Document') || ('@Model.Table' == '@LookUpTable.Department') ? true : false;
+        var description_columns = '@Model.Table' == '@LookUpTable.Holiday';
+        var rowCount = 1;
 
         $('#tbl_table_data').DataTable({
             destroy: true,
@@ -42,16 +46,20 @@
             },
             keys: true,
             responsive: true,
-            pageLength: 20,
+            pageLength: 10,
             data: data,
             columnDefs: [
-                { visible: bonusColumn, targets: 1 },
-                { className: "vertikal", targets: "_all" }
+                { visible: bonus_column, targets: 1 },
+                { className: "text-center vertikal", targets: 6 },
+                { visible: description_columns, targets: [4, 5] },
+                { className: "vertikal", targets: "_all" },
+                { defaultContent: "///", targets: "_all" }
             ],
             order: [[0, "asc"]],
             columns: [
                 {
                     data: function(data, type, row, meta) {
+                        rowCount++;
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
@@ -66,6 +74,32 @@
                 },
                 { data: "nameSQ" },
                 { data: "nameEN" },
+                {
+                    data: function(row, type, set) {
+                        var description = '///';
+                        if (row.descriptionSQ != null) {
+                            if (row.descriptionSQ.length > 30) {
+                                description = row.descriptionSQ.substring(0, 30) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.descriptionSQ.substring(30) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else {
+                                description = row.descriptionSQ ?? "///";
+                            }
+                        }
+                        return description;
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        var description = '///';
+                        if (row.descriptionEN != null) {
+                            if (row.descriptionEN.length > 30) {
+                                description = row.descriptionEN.substring(0, 30) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LookMore)</a></b></span><span class="d-none load-less-fst">' + row.descriptionEN.substring(30) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                            } else {
+                                description = row.descriptionEN ?? "///";
+                            }
+                        }
+                        return description;
+                    }
+                },
                 {
                     data: function(row, type, set) {
                         var isActive = row.active ? "checked" : "";
@@ -86,6 +120,18 @@
                 }
             ]
         });
+    }
+
+    function load_more(e) {
+        $(e).parent().find('.load-less-fst').removeClass('d-none');
+        $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+        $(e).addClass('d-none');
+    }
+
+    function load_less(e) {
+        $(e).addClass('d-none');
+        $(e).parent().addClass('d-none');
+        $(e).parent().parent().find('.load-more').removeClass('d-none');
     }
 
     function change_active(ide, tbl, e) {

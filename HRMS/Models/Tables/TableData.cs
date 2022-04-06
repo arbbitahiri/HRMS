@@ -15,6 +15,8 @@ public class DataList
     public string Ide { get; set; }
     public string NameSQ { get; set; }
     public string NameEN { get; set; }
+    public string DescriptionSQ { get; set; }
+    public string DescriptionEN { get; set; }
     public string OtherData { get; set; }
     public bool Active { get; set; }
 }

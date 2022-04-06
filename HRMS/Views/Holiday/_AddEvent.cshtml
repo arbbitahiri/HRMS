@@ -1,0 +1,101 @@
+﻿@using HRMS.Models.Holiday
+@model ManageHoliday
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddEvent</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="AddEvent" asp-controller="Holiday" id="frm_add_event" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_add_event" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        <div class="row pl-2 pr-2">
+            <div class="col-md-6 form-group">
+                <label asp-for="Title" class="required"></label>
+                <input asp-for="Title" type="text" class="form-control"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="RepeatTypeId" class="required"></label>
+                <select asp-for="RepeatTypeId" asp-items="await repo.RepeatTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="RepeatTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="StartDate" class="required"></label>
+                <input asp-for="StartDate" type="text" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#StartDate"/>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="EndDate" class="required"></label>
+                <input asp-for="EndDate" type="text" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#EndDate"/>
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group pl-2 pr-2">
+            <div class="col-md-12">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" type="text" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $.validator.setDefaults({ ignore: '' });
+        var form = $('#frm_add_event');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $("#StartDate").datetimepicker({
+            locale: cult,
+            format: 'DD/MM/YYYY',
+            dayViewHeaderFormat: "MMMM YYYY",
+            buttons: {
+                showToday: true,
+                showClear: true,
+                showClose: true
+            },
+        });
+
+        $("#EndDate").datetimepicker({
+            locale: cult,
+            format: 'DD/MM/YYYY',
+            dayViewHeaderFormat: "MMMM YYYY",
+            buttons: {
+                showToday: true,
+                showClear: true,
+                showClose: true
+            },
+        });
+    });
+
+    function success_add_event(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

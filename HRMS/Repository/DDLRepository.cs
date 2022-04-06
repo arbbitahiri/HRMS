@@ -225,4 +225,22 @@ public class DDLRepository : IDDLRepository
                 Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).OrderBy(a => a.Text).ToListAsync();
     }
+
+    public async Task<List<SelectListItem>> HolidayTypes(LanguageEnum lang) =>
+        await db.HolidayType
+            .OrderBy(a => lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
+            .Select(a => new SelectListItem
+            {
+                Value = a.HolidayTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
+
+    public async Task<List<SelectListItem>> RepeatTypes(LanguageEnum lang) =>
+        await db.RepeatType
+            .OrderBy(a => lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
+            .Select(a => new SelectListItem
+            {
+                Value = a.RepeatTypeId.ToString(),
+                Text = lang == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
 }

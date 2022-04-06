@@ -3,18 +3,16 @@ using System.Collections.Generic;
 
 namespace HRMS.Data.General
 {
-    public partial class HolidayType
+    public partial class RepeatType
     {
-        public HolidayType()
+        public RepeatType()
         {
             Holiday = new HashSet<Holiday>();
         }
 
-        public int HolidayTypeId { get; set; }
+        public int RepeatTypeId { get; set; }
         public string NameSq { get; set; }
         public string NameEn { get; set; }
-        public string DescriptionSq { get; set; }
-        public string DescriptionEn { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
