@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.ReportingServices.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -25,23 +24,20 @@ namespace HRMS.Controllers;
 public class HomeController : BaseController
 {
     private readonly IFunctionRepository function;
-    private readonly NotificationUtility notification;
 
     public HomeController(IFunctionRepository function, IHubContext<NotificationHub> hubContext,
         HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
-        notification = new NotificationUtility(db, hubContext);
         this.function = function;
     }
 
     [Authorize(Policy = "1h:m"), Description("Arb Tahiri", "Entry home.")]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         ViewData["Title"] = Resource.HomePage;
 
         var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
-
         return getRole.Value switch
         {
             "Administrator" => RedirectToAction(nameof(Administrator)),
@@ -160,8 +156,6 @@ public class HomeController : BaseController
     [HttpGet, Description("Arb Tahiri", "Home page for manager.")]
     public async Task<IActionResult> Manager()
     {
-        await SendNotification("", "far fa-bell", "Per testim", "Eshte testuar me sukses njoftimi!", "_blank", "/Home/Index", await GetUsers("Administrator"), notification, NotificationTypeEnum.Info);
-
         ViewData["Title"] = Resource.HomePage;
 
         var leaveStaffDays = await db.LeaveStaffDays

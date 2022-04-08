@@ -41,7 +41,7 @@ public class HolidayController : BaseController
                 title = a.HolidayTypeId == (int)HolidayTypeEnum.Other ? a.Title : (user.Language == LanguageEnum.Albanian ? a.HolidayType.NameSq : a.HolidayType.NameEn),
                 description = a.HolidayTypeId == (int)HolidayTypeEnum.Other ? a.Description : (a.Description ?? (user.Language == LanguageEnum.Albanian ? a.HolidayType.DescriptionSq : a.HolidayType.DescriptionEn)),
                 start = a.Start.ToString("yyyy-MM-dd"),
-                end = a.End.ToString("yyyy-MM-dd"),
+                end = a.HolidayTypeId == (int)HolidayTypeEnum.Other ? a.End.AddDays(1).ToString("yyyy-MM-dd") : a.End.ToString("yyyy-MM-dd"),
                 className = "fc-event-solid-primary fc-event"
             }).ToListAsync();
         return View(holidays);
@@ -50,7 +50,7 @@ public class HolidayController : BaseController
     [HttpGet, Authorize(Policy = "9:r"), Description("Arb Tahiri", "List of official holidays.")]
     public async Task<IActionResult> OfficialHolidays() =>
         PartialView(await db.HolidayType
-            .Where(a => a.Active)
+            .Where(a => a.Active && a.HolidayTypeId != (int)HolidayTypeEnum.Other)
             .Select(a => new HolidayTypes
             {
                 HolidayTypeIde = CryptoSecurity.Encrypt(a.HolidayTypeId),
@@ -230,6 +230,7 @@ public class HolidayController : BaseController
         holiday.UpdatedDate = DateTime.Now;
         holiday.UpdatedFrom = user.Id;
         holiday.UpdatedNo = UpdateNo(holiday.UpdatedNo);
+        await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.HolidayRemovedSuccess });
     }
 
@@ -244,7 +245,7 @@ public class HolidayController : BaseController
         var holidayTypeId = CryptoSecurity.Decrypt<int>(holiday.HolidayTypeIde);
         var holidayEvent = await db.HolidayType.FirstOrDefaultAsync(a => a.HolidayTypeId == holidayTypeId);
 
-        if (await db.Holiday.AnyAsync(a => a.HolidayTypeId == holidayTypeId && a.Start.Year == holiday.Date.Year))
+        if (await db.Holiday.AnyAsync(a => a.Active && a.HolidayTypeId == holidayTypeId && a.Start.Year == holiday.Date.Year))
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.HolidayNotDuplicate });
         }

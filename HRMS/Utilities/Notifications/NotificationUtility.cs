@@ -23,16 +23,17 @@ public class NotificationUtility
     public async Task SendNotification(string sender, List<string> receivers, NotificationSend notification)
     {
         await hubContext.Clients.Users(receivers).SendAsync("Notification", notification);
+
         var notifications = new List<Notification>();
         receivers.ForEach(receiver =>
         {
             notifications.Add(new Notification
             {
                 Receiver = receiver,
-                Title = notification.Title,
-                Description = notification.Description,
-                Url = notification.Url,
-                Icon = notification.Icon,
+                Title = notification.title,
+                Description = notification.description,
+                Url = notification.url,
+                Icon = notification.icon,
                 Read = false,
                 Deleted = false,
                 Type = (int)notification.NotificationType,

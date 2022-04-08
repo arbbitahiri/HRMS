@@ -60,6 +60,10 @@ const LeaveType = {
     UNPAID: 4
 }
 
+const HolidayTypeEnum = {
+    OTHER: 13
+}
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
@@ -196,38 +200,50 @@ function format_currency(data) {
     return parseFloat(data, 10).toFixed(2);
 }
 
-function get_notifications(row_number) {
-    if (row_number != null) {
-        var x = String(row_number);
-    }
-    connection.invoke('Notifications', x);
+function get_notifications() {
+    connection.invoke('Notifications');
 }
 
-function mark_as_read(ide) {
+function mark_as_read(ide, e) {
+    $('#notifications_list').on("click", function (event) {
+        event.stopPropagation();
+    });
+
     $.post('/Home/MarkAsReadNotification', {
         ide: ide
     }, function (data) {
-        connection.invoke('Notifications', "0");
+        $(e).find("i").removeClass("far");
+        $(e).find("i").addClass("fas");
+
+        connection.invoke('Notifications');
     });
 }
 
 function delete_notification(ide) {
+    $('#notifications_list').on("click", function (event) {
+        event.stopPropagation();
+    });
+
     $.post('/Home/DeleteNotification', {
         ide: ide
     }, function (data) {
-        connection.invoke('Notifications', "0");
+        connection.invoke('Notifications');
     });
 }
 
 function mark_all_as_read() {
+    $('#notifications_list').addClass("show");
+
     $.post('/Home/MarkAsReadAllNotification', function (data) {
-        connection.invoke('Notifications', "0");
+        connection.invoke('Notifications');
     });
 }
 
 function delete_all_notification() {
+    $('#notifications_list').addClass("show");
+
     $.post('/Home/DeleteAllNotification', function (data) {
-        connection.invoke('Notifications', "0");
+        connection.invoke('Notifications');
     });
 }
 
@@ -243,50 +259,31 @@ function change_notification_mode(e) {
     }
 }
 
-function display_notification(message, title, icon, url, target, type) {
-    $('#recent_notification').load('/Home/RecentNotifications')
-    $('#notifications_container').load('/Home/Notifications')
-
-    var content = {
-        message: message,
-        title: title,
-        icon: 'icon ' + icon,
-        url: url,
-        target: target
-    };
-
-    var notification_type = "";
-    if (type == 1) {
-        notification_type = "success"
-    } else if (type == 2) {
-        notification_type = "info"
-    } else if (type == 3) {
-        notification_type = "warning"
-    } else if (type == 4) {
-        notification_type = "danger"
-    }
-
-    var notify = $.notify(content, {
-        type: notification_type,
-        allow_dismiss: true,
-        newest_on_top: true,
-        mouse_over: true,
-        showProgressbar: true,
-        spacing: 10,
+function display_notification(description, title, url, target, notification_type, background) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
         timer: 2000,
-        placement: {
-            from: 'top',
-            align: 'right'
+        timerProgressBar: true,
+        customClass: {
+            title: 'swal2-title'
         },
-        offset: {
-            x: '30',
-            y: '30'
-        },
-        delay: '1000',
-        z_index: '10000',
-        animate: {
-            enter: 'animated ' + 'bounce',
-            exit: 'animated ' + 'pulse'
+        background: background,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+            toast.addEventListener('click', function () {
+                window.open(url, target);
+            });
         }
+    })
+
+    Toast.fire({
+        icon: notification_type,
+        title: title,
+        text: description,
     });
+
+    $('.swal2-backdrop-show').css("cursor", "pointer");
 }

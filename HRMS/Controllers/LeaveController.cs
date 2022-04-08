@@ -5,11 +5,13 @@ using HRMS.Models.Leave;
 using HRMS.Resources;
 using HRMS.Utilities;
 using HRMS.Utilities.General;
+using HRMS.Utilities.Notifications;
 using HRMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -20,12 +22,14 @@ namespace HRMS.Controllers;
 public class LeaveController : BaseController
 {
     private readonly IEmailSender emailSender;
+    private readonly NotificationUtility notification;
 
-    public LeaveController(IEmailSender emailSender,
+    public LeaveController(IEmailSender emailSender, IHubContext<NotificationHub> hub,
         HRMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
         this.emailSender = emailSender;
+        notification = new NotificationUtility(db, hub);
     }
 
     [Authorize("31:m"), Description("Arb Tahiri", "Entry form. List of holidays.")]
@@ -189,10 +193,8 @@ public class LeaveController : BaseController
         });
         await db.SaveChangesAsync();
 
-        //var managerEmail = await db.StaffDepartment.Where(a => a.EndDate >= DateTime.Now && a.StaffTypeId == (int)StaffTypeEnum.Manager).Select(a => a.Staff.User.Email).FirstOrDefaultAsync();
-        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == create.ALeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-
-        //await emailSender.SendEmailAsync(managerEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequest, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")));
+        var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == create.ALeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+        await SendNotification(Resource.RequestForLeave, string.Format(Resource.LeaveRequest, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")), "_blank", Url.Action("Index", "Leave"), await GetUsers("Manager"), notification, NotificationTypeEnum.Info, "#17a2b8", "fas fa-calendar-alt");
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataRegisteredSuccessfully });
     }
@@ -240,7 +242,6 @@ public class LeaveController : BaseController
         if (review.StatusTypeId == (int)Status.Approved && review.LeaveTypeEnum != LeaveTypeEnum.Unpaid)
         {
             var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == leaveId);
-
             var leaveDays = await db.LeaveStaffDays
                 .Where(a => a.Active
                     && a.StaffId == staffId
@@ -297,11 +298,18 @@ public class LeaveController : BaseController
         });
         await db.SaveChangesAsync();
 
-        //var staffEmail = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.User.Email).FirstOrDefaultAsync();
-        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == leaveId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-        //var statusType = await db.StatusType.Where(a => a.StatusTypeId == review.StatusTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+        var notificationType = review.StatusTypeId switch
+        {
+            (int)Status.Approved => NotificationTypeEnum.Success,
+            (int)Status.Rejected => NotificationTypeEnum.Warning,
+            _ => NotificationTypeEnum.Info
+        };
 
-        //await emailSender.SendEmailAsync(staffEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequestReview, leaveType, statusType));
+        var staffUserId = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.UserId).ToListAsync();
+        var statusType = await db.StatusType.Where(a => a.StatusTypeId == review.StatusTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+        var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == (int)review.LeaveTypeEnum).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+
+        await SendNotification(Resource.RequestForLeave, string.Format(Resource.LeaveRequestReview, leaveType.ToLower(), statusType.ToLower()), "_blank", Url.Action("Index", "Leave"), staffUserId, notification, notificationType, "#17a2b8", "fas fa-calendar-alt");
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.LeaveReviewedSuccessfully });
     }
@@ -363,6 +371,9 @@ public class LeaveController : BaseController
         }
 
         var leave = await db.Leave.FirstOrDefaultAsync(a => a.Active && a.LeaveId == CryptoSecurity.Decrypt<int>(edit.LeaveIde));
+
+        var changedDate = startDate.Date != leave.StartDate.Date || endDate.Date != leave.EndDate.Date;
+
         leave.StartDate = startDate;
         leave.EndDate = endDate;
         leave.RemainingDays = (int)(remainingLeaveDays - days);
@@ -373,11 +384,14 @@ public class LeaveController : BaseController
 
         await db.SaveChangesAsync();
 
-        //var staff = await db.Staff.Where(a => a.UserId == user.Id).FirstOrDefaultAsync();
-        //var managerEmail = await db.StaffDepartment.Where(a => a.EndDate >= DateTime.Now && a.StaffTypeId == (int)StaffTypeEnum.Manager).Select(a => a.Staff.User.Email).FirstOrDefaultAsync();
-        //var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == edit.ALeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-
-        //await emailSender.SendEmailAsync(managerEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequestChanged, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")));
+        if (changedDate)
+        {
+            var staff = await db.Staff.Where(a => a.StaffId == leave.StaffId).Select(a => $"{a.FirstName} {a.LastName}").FirstOrDefaultAsync();
+            var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == leave.LeaveTypeId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+            await SendNotification(Resource.RequestForLeave, string.Format(Resource.LeaveRequestChanged, leaveType.ToLower(), staff, startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")), "_blank", Url.Action("Index", "Leave"), await GetUsers("Manager"), notification, NotificationTypeEnum.Info, "#17a2b8", "fas fa-calendar-alt");
+            //var managerEmail = await db.StaffDepartment.Where(a => a.EndDate >= DateTime.Now && a.StaffTypeId == (int)StaffTypeEnum.Manager).Select(a => a.Staff.User.Email).FirstOrDefaultAsync();
+            //await emailSender.SendEmailAsync(managerEmail, Resource.RequestForLeave, string.Format(Resource.LeaveRequestChanged, leaveType, $"{staff.FirstName} {staff.LastName}", startDate.ToString("dd/MM/yyyy"), endDate.ToString("dd/MM/yyyy")));
+        }
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataUpdatedSuccessfully });
     }
@@ -442,6 +456,10 @@ public class LeaveController : BaseController
             InsertedFrom = user.Id
         });
         await db.SaveChangesAsync();
+
+        var staff = await db.Staff.Where(a => a.StaffId == leave.StaffId).Select(a => $"{a.FirstName} {a.LastName}").FirstOrDefaultAsync();
+        var leaveType = await db.LeaveType.Where(a => a.LeaveTypeId == leaveId).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
+        await SendNotification(Resource.RequestForLeave, string.Format(Resource.LeaveRequestDeleted, leaveType.ToLower(), staff), "_blank", Url.Action("Index", "Leave"), await GetUsers("Manager"), notification, NotificationTypeEnum.Warning, "#17a2b8", "fas fa-calendar-alt");
 
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
     }

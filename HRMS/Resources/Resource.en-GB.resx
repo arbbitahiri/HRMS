@@ -696,6 +696,9 @@
   <data name="LeaveRequestChanged" xml:space="preserve">
     <value>Date of the request for {0} for {1}, has been changed. The new date is from {2} to {3}. You can find the application in the holiday list.</value>
   </data>
+  <data name="LeaveRequestDeleted" xml:space="preserve">
+    <value>Request for {0} for {1}, has been deleted.</value>
+  </data>
   <data name="LeaveRequestReview" xml:space="preserve">
     <value>The request for {0} is {1}. You can find the request in the leave list.</value>
   </data>
@@ -737,6 +740,9 @@
   </data>
   <data name="ListOfEvaluationStudentsStaff" xml:space="preserve">
     <value>List of students evaluations for staff</value>
+  </data>
+  <data name="ListOfNotifications" xml:space="preserve">
+    <value>List of notifications</value>
   </data>
   <data name="ListOfNumericalQuestions" xml:space="preserve">
     <value>List of numerical questions</value>
@@ -914,6 +920,9 @@
   </data>
   <data name="NotAnswered" xml:space="preserve">
     <value>Not answered</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -1493,6 +1502,9 @@
   </data>
   <data name="YouHaveNoAccessHere" xml:space="preserve">
     <value>You have no access here!</value>
+  </data>
+  <data name="YouHaveNoNotifications" xml:space="preserve">
+    <value>You have no notifications</value>
   </data>
   <data name="YouMustConfirmEmail" xml:space="preserve">
     <value>You must confirm your email!</value>

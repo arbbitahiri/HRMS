@@ -15,6 +15,7 @@
 <form asp-action="Review" asp-controller="Leave" id="frm_review_leave" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_review" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
+        <input asp-for="LeaveTypeEnum" type="hidden"/>
         <input asp-for="LeaveIde" type="hidden"/>
         <input asp-for="StaffIde" type="hidden"/>
 

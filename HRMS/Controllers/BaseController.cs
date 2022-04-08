@@ -167,14 +167,27 @@ public class BaseController : Controller
     public async Task<List<string>> GetUsers(string role) =>
         await db.AspNetUsers.Where(a => a.Role.Any(a => a.Name == role)).Select(a => a.Id).ToListAsync();
 
-    public async Task SendNotification(string ide, string icon, string title, string description, string target, string url, List<string> users, NotificationUtility notification, NotificationTypeEnum notificationType) =>
+    protected string GetNotificationType(NotificationTypeEnum notificationType) =>
+        notificationType switch
+        {
+            NotificationTypeEnum.Success => "success",
+            NotificationTypeEnum.Info => "info",
+            NotificationTypeEnum.Warning => "warning",
+            NotificationTypeEnum.Error => "error",
+            NotificationTypeEnum.Question => "question",
+            _ => "info",
+        };
+
+    public async Task SendNotification(string title, string description, string target, string url, List<string> users, NotificationUtility notification, NotificationTypeEnum notificationType, string background, string icon) =>
         await notification.SendNotification(user.Id, users, new NotificationSend
         {
-            Title = title,
-            Description = description,
-            Url = url,
-            Icon = icon,
-            Target = target,
+            title = title,
+            description = description,
+            icon = icon,
+            url = url,
+            target = target,
+            background = background,
+            notificationType = GetNotificationType(notificationType),
             NotificationType = notificationType
         });
 
