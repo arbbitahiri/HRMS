@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
+
 [Authorize]
 public class LeaveController : BaseController
 {
@@ -157,9 +158,9 @@ public class LeaveController : BaseController
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)create.ALeaveTypeId);
         var days = WorkingDays(startDate, endDate);
-        int actualDays = (int)(remainingLeaveDays - days);
+        int actualDays = (int)await WorkingDays(startDate, endDate);
 
-        if (remainingLeaveDays - days < 0)
+        if (actualDays < 0)
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.NoAvailableDaysLeave, remainingLeaveDays) });
         }
@@ -170,7 +171,7 @@ public class LeaveController : BaseController
             StaffId = staff.StaffId,
             StartDate = startDate,
             EndDate = endDate,
-            RemainingDays = (int)(remainingLeaveDays - days),
+            RemainingDays = actualDays,
             Description = create.Description,
             Active = true,
             InsertedDate = DateTime.Now,
@@ -249,7 +250,7 @@ public class LeaveController : BaseController
                 .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
             int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)leave.LeaveTypeId);
-            var days = WorkingDays(leave.StartDate, leave.EndDate);
+            var days = (int)await WorkingDays(leave.StartDate, leave.EndDate);
 
             if (remainingLeaveDays - days < 0)
             {
@@ -354,8 +355,8 @@ public class LeaveController : BaseController
             .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)edit.ALeaveTypeId);
-        var days = WorkingDays(startDate, endDate);
-        int actualDays = (int)(remainingLeaveDays - days);
+        var days = (int)await WorkingDays(startDate, endDate);
+        int actualDays = remainingLeaveDays - days;
 
         if (remainingLeaveDays - days < 0)
         {
@@ -471,7 +472,7 @@ public class LeaveController : BaseController
             .OrderByDescending(a => a.LeaveStaffDaysId).FirstOrDefaultAsync();
 
         int remainingLeaveDays = leaveDays != null ? leaveDays.RemainingDays : DaysForLeave((LeaveTypeEnum)ALeaveTypeId);
-        int days = (int)WorkingDays(startDate, endDate);
+        int days = (int)await WorkingDays(startDate, endDate);
 
         if (remainingLeaveDays - days >= 0)
         {
@@ -509,8 +510,7 @@ public class LeaveController : BaseController
         int remainingDays = leave != null ? leave.RemainingDays : DaysForLeave((LeaveTypeEnum)ltypeId);
         if (start.HasValue && end.HasValue)
         {
-            var difference = (int)WorkingDays(start.Value, end.Value);
-            remainingDays -= difference;
+            remainingDays -= (int)await WorkingDays(start.Value, end.Value);
         }
         return Json(remainingDays);
     }

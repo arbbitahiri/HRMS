@@ -186,8 +186,7 @@ public class BaseController : Controller
             _ => LanguageEnum.Albanian,
         };
 
-    protected int? UpdateNo(int? updateNo) =>
-        updateNo.HasValue ? ++updateNo : 1;
+    protected int? UpdateNo(int? updateNo) => updateNo.HasValue ? ++updateNo : 1;
 
     protected string GetRoleFromStaffType(int staffType) =>
         staffType switch
@@ -207,7 +206,7 @@ public class BaseController : Controller
             _ => 0
         };
 
-    protected double WorkingDays(DateTime startDate, DateTime endDate)
+    protected async Task<double> WorkingDays(DateTime startDate, DateTime endDate)
     {
         double workingDays = 1 + ((endDate - startDate).TotalDays * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
         if (endDate.DayOfWeek == DayOfWeek.Saturday)
@@ -218,7 +217,23 @@ public class BaseController : Controller
         {
             workingDays--;
         }
+        workingDays -= await GetHoliday(startDate, endDate);
         return workingDays;
+    }
+
+    public async Task<int> GetHoliday(DateTime startDate, DateTime endDate)
+    {
+        int days = 0;
+        await db.Holiday.Where(a => a.Active && a.Start.Year == startDate.Year && a.HolidayTypeId != (int)HolidayTypeEnum.Other)
+            .ForEachAsync(a =>
+            {
+                if (startDate.Date <= a.Start.Date && a.Start.Date <= endDate.Date
+                    && startDate.Date <= a.End.Date && a.End.Date <= endDate.Date)
+                {
+                    days++;
+                }
+            });
+        return days;
     }
 
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)

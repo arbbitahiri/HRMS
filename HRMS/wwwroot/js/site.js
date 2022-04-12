@@ -61,6 +61,25 @@ const LeaveType = {
 }
 
 $(document).ready(function () {
+    new MiniBar('#section_container', {
+        barType: "default",
+        minBarSize: 10,
+        hideBars: false,
+        alwaysShowBars: false,
+        horizontalMouseScroll: false,
+        scrollX: true,
+        scrollY: true,
+        navButtons: false,
+        scrollAmount: 10,
+        mutationObserver: {
+            attributes: false,
+            childList: true,
+            subtree: true
+        },
+    });
+
+    new MiniBar('#main_body');
+
     $('.fade-in').hide().fadeIn(2000);
 
     resources = $.getJSON(`/Culture/General/${culture}.json`);
@@ -135,6 +154,8 @@ $(document).on('submit', 'form:not(.noLoading)', function () {
 
 $(document).ajaxComplete(function () {
     hide_loading(500);
+
+    new MiniBar('#main_body');
     $(this).find('button[type="submit"]').removeAttr('disabled', 'disabled');
 });
 
@@ -166,6 +187,8 @@ $(document).on('invalid-form.validate', 'form', function () {
 
 $(document).ajaxStart(function () {
     Pace.restart();
+
+    new MiniBar('#main_body');
 });
 
 function change_role(ide) {

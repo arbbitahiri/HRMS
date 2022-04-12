@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="~/assets/plugins/toastr/toastr.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/plugins/jquery-ui/jquery-ui.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/minibar.min.css" asp-append-version="true">
 
     <style>
         .custom-file-input:lang(en) ~ .custom-file-label::after {
@@ -110,7 +111,7 @@
                 </div>
             </div>
 
-            <section class="content mt-2">
+            <section class="content mt-2" id="section_container">
                 @if (error.Status != 0)
                 {
                     <div style="margin: 7px;">
@@ -165,6 +166,7 @@
     <script src="~/js/jquery.repeater.js" asp-append-version="true"></script>
     <script src="~/js/SignalRUtils.js" asp-append-version="true"></script>
     <script src="~/js/JQueryCustomValidation.js" asp-append-version="true"></script>
+    <script src="~/js/minibar.min.js" asp-append-version="true"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
