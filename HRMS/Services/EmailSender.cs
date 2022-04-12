@@ -60,11 +60,11 @@ public class EmailSender : IEmailSender
         await smtpClient.SendMailAsync(mailMessage);
     }
 
-    private static string BodyContent(string mainContent, string Name = "")
+    private static string BodyContent(string mainContent, string name = "")
     {
         string content = $"<div><div style='margin: auto; max-width: 600px;'>" +
             $"<div><p style='font-size: 20px;'>" +
-            $"<b>{Resource.Dear}</b> {Name},<br/><br/>" +
+            $"<b>{Resource.Dear}</b> {name},<br/><br/>" +
             $"{mainContent}" +
             $"</p></div>" +
             $"<div>" +
@@ -78,7 +78,6 @@ public class EmailSender : IEmailSender
             $"</div>" +
             $"</div>" +
             $"</div></div>";
-
         return content;
     }
 }

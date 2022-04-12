@@ -32,6 +32,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace HRMS.Controllers;
+
 [Authorize]
 public class BaseController : Controller
 {
@@ -316,10 +317,11 @@ public class BaseController : Controller
         var networkCredential = new NetworkCredential(configuration["EmailConfiguration:Email"], configuration["EmailConfiguration:Password"]);
         var mailMessage = new MailMessage();
         var mailAddress = new MailAddress(configuration["EmailConfiguration:Email"]);
+
         smtpClient.Host = configuration["EmailConfiguration:Host"];
         smtpClient.UseDefaultCredentials = false;
         smtpClient.Credentials = networkCredential;
-        smtpClient.EnableSsl = true;
+        smtpClient.EnableSsl = bool.Parse(configuration["EmailConfig:SSL"]);
         smtpClient.Port = int.Parse(configuration["EmailConfiguration:Port"].ToString());
         mailMessage.From = mailAddress;
         mailMessage.Subject = subject;
@@ -332,10 +334,9 @@ public class BaseController : Controller
             {
                 await smtpClient.SendMailAsync(mailMessage);
             }
-            catch
+            catch (Exception ex)
             {
-
-                throw;
+                await LogError(ex);
             }
         });
         thread.Start();
