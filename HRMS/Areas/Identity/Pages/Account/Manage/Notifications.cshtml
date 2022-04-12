@@ -1,0 +1,105 @@
+﻿@page
+@model HRMS.Areas.Identity.Pages.Account.Manage.NotificationsModel
+@using HRMS.Data.Core
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Resource.Notifications;
+    ViewData["ActivePage"] = ManageNavPages.Notification;
+    ApplicationUser user = (ApplicationUser)ViewData["InternalUser"];
+}
+
+<div class="card">
+    <div class="card-header p-2">
+        <div class="card-title align-items-start flex-column ml-2">
+            <h3 class="card-label font-weight-bolder">@Resource.ListOfNotifications</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        @Html.AntiForgeryToken()
+        <div class="navi navi-icon-circle navi-spacer-x-0 scroll overflow-auto" style="max-height:410px;">
+            @if (Model.Notifications.Any())
+            {
+                @foreach(var notification in Model.Notifications)
+                {
+                    <a href="@notification.Url" onclick="mark_as_read_this('@notification.NotificationIde', this)">
+                        <div class="alert @GetColor(notification.NotificationType) alert-dismissible shadow">
+                            <button type="button" onclick="mark_as_read_this('@notification.NotificationIde', this)" class="close mr-5 p-3">
+                                @if (notification.Read)
+                                {
+                                    <i aria-hidden="true" class="far fa-bookmark"></i>
+                                }
+                                else
+                                {
+                                    <i aria-hidden="true" class="fas fa-bookmark"></i>
+                                }
+                            </button>
+                            <button type="button" onclick="delete_this_notification('@notification.NotificationIde')" class="close p-3" data-dismiss="alert" aria-hidden="true">
+                                <i aria-hidden="true" class="far fa-times-circle"></i>
+                            </button>
+                            <div class="d-flex justify-content-between mr-5">
+                                <div class="font-weight-bolder font-size-lg">
+                                    <i class="icon @notification.Icon"></i>
+                                    @notification.Title
+                                </div>
+                                <div class="font-weight-bolder">
+                                    @notification.Date
+                                </div>
+                            </div>
+                            <div class="text-justify">@notification.Description</div>
+                        </div>
+                    </a>
+                }
+            }
+            else
+            {
+                <div class="alert alert-warning alert-dismissible shadow">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <div class="d-flex justify-content-between">
+                        <div class="font-weight-bolder font-size-lg">
+                            <i class="icon fas fa-exclamation-triangle"></i>
+                            @Resource.YouHaveNoNotifications
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function delete_this_notification(ide) {
+            $.post('@Url.Action("DeleteNotification", "Home")', {
+                ide: ide,
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                connection.invoke('Notifications', "0");
+                handle_success(data, SubmitPathType.NORELOAD, "");
+            });
+        }
+
+        function mark_as_read_this(ide, e) {
+            $.post('@Url.Action("MarkAsReadNotification", "Home")', {
+                ide: ide,
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                $(e).find("i").removeClass("far");
+                $(e).find("i").addClass("fas");
+
+                connection.invoke('Notifications', "0");
+                handle_success(data, SubmitPathType.NORELOAD, "");
+            });
+        }
+    </script>
+}
+
+@functions {
+    private string GetColor(NotificationTypeEnum type) => type switch
+    {
+        NotificationTypeEnum.Success => "alert-success",
+        NotificationTypeEnum.Info => "alert-info",
+        NotificationTypeEnum.Warning => "alert-warning",
+        NotificationTypeEnum.Error => "alert-danger",
+        _ => "alert-info"
+    };
+}

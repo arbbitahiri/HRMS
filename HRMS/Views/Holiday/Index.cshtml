@@ -114,25 +114,19 @@
                             Date: arg.dateStr,
                             __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
                         }, function (data) {
-                            handle_success(data, SubmitPathType.NORELOAD, "");
-
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                calendar.getEvents()[calendar.getEvents().length - 1].remove();
-                                $('.popover').empty();
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                         });
                     },
                     eventResize: function (info) {
 
                     },
                     eventClick: function (info) {
-                        console.log(info.event.extendedProps);
-                        if (info.event.extendedProps.HolidayTypeId == "12") {
-                            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditEvent", "Holiday")?ide=' + info.event.HolidayIde, function () {
+                        if (info.event.extendedProps.HolidayTypeId == HolidayTypeEnum.OTHER) {
+                            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditEvent", "Holiday")?ide=' + info.event.extendedProps.HolidayIde, function () {
                                 $('#modal-xl').modal('toggle');
                             });
                         } else {
-                            $('#modal-xl').find('.modal-content').load('@Url.Action("_Details", "Holiday")?ide=' + info.event.HolidayIde, function () {
+                            $('#modal-xl').find('.modal-content').load('@Url.Action("_Details", "Holiday")?ide=' + info.event.extendedProps.HolidayIde, function () {
                                 $('#modal-xl').modal('toggle');
                             });
                         }
@@ -149,12 +143,7 @@
                             StartDate: new_start_date,
                             EndDate: new_end_date
                         }, function (data) {
-                            handle_success(data, SubmitPathType.NORELOAD, "");
-
-                            if (data.status == ErrorStatus.SUCCESS) {
-                                calendar.getEvents()[calendar.getEvents().length - 1].remove();
-                                $('.popover').empty();
-                            }
+                            handle_success(data, SubmitPathType.RELOAD, "");
                         });
                     },
                     eventRender: function (info) {

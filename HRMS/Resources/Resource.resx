@@ -1542,4 +1542,16 @@
   <data name="SureYouWantToDeleteHoliday" xml:space="preserve">
     <value>A jeni të sigurt për fshirjen e festës/eventit?</value>
   </data>
+  <data name="LeaveRequestDeleted" xml:space="preserve">
+    <value>Kërkesa për {0} për {1}, është fshirë.</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Njoftimet</value>
+  </data>
+  <data name="YouHaveNoNotifications" xml:space="preserve">
+    <value>Nuk keni njoftime!</value>
+  </data>
+  <data name="ListOfNotifications" xml:space="preserve">
+    <value>Lista e njoftimeve</value>
+  </data>
 </root>

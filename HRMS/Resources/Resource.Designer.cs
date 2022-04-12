@@ -1852,6 +1852,15 @@ namespace HRMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kërkesa për {0} për {1}, është fshirë..
+        /// </summary>
+        public static string LeaveRequestDeleted {
+            get {
+                return ResourceManager.GetString("LeaveRequestDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kërkesa për {0} është {1}. Kërkesën mund ta gjeni në listën e pushimeve..
         /// </summary>
         public static string LeaveRequestReview {
@@ -1974,6 +1983,15 @@ namespace HRMS.Resources {
         public static string ListOfEvaluationStudentsStaff {
             get {
                 return ResourceManager.GetString("ListOfEvaluationStudentsStaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e njoftimeve.
+        /// </summary>
+        public static string ListOfNotifications {
+            get {
+                return ResourceManager.GetString("ListOfNotifications", resourceCulture);
             }
         }
         
@@ -2505,6 +2523,15 @@ namespace HRMS.Resources {
         public static string NotAnswered {
             get {
                 return ResourceManager.GetString("NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Njoftimet.
+        /// </summary>
+        public static string Notifications {
+            get {
+                return ResourceManager.GetString("Notifications", resourceCulture);
             }
         }
         
@@ -4323,6 +4350,15 @@ namespace HRMS.Resources {
         public static string YouHaveNoAccessHere {
             get {
                 return ResourceManager.GetString("YouHaveNoAccessHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk keni njoftime!.
+        /// </summary>
+        public static string YouHaveNoNotifications {
+            get {
+                return ResourceManager.GetString("YouHaveNoNotifications", resourceCulture);
             }
         }
         
