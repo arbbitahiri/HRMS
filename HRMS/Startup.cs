@@ -59,8 +59,6 @@ public class Startup
             .AddErrorDescriber<IdentityErrorDescriber>()
             .AddDefaultTokenProviders();
 
-        services.AddDatabaseDeveloperPageExceptionFilter();
-
         services.AddControllersWithViews();
 
         services.AddRazorPages()

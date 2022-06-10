@@ -8,7 +8,7 @@ using System.Resources;
 namespace HRMS.Utilities.Validations;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
-public class RangeIfAttribute: ValidationAttribute, IClientModelValidator
+public class RangeIfAttribute : ValidationAttribute, IClientModelValidator
 {
     private readonly string required;
     private readonly int minimum;

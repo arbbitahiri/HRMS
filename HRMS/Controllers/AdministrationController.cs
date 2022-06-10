@@ -236,7 +236,7 @@ public class AdministrationController : BaseController
 
     [Description("Arb Tahiri", "Check if email already exists.")]
     public async Task<IActionResult> CheckEmail(string Email, string UserId)
-   {
+    {
         if (await db.AspNetUsers.AnyAsync(a => a.Email == Email && (string.IsNullOrEmpty(UserId) || a.Id != CryptoSecurity.Decrypt<string>(UserId))))
         {
             return Json(Resource.EmailExists);

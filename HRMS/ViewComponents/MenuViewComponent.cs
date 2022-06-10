@@ -1,11 +1,9 @@
-﻿using HRMS.Data;
-using HRMS.Data.Core;
+﻿using HRMS.Data.Core;
 using HRMS.Data.SqlFunctions;
 using HRMS.Models.Shared;
 using HRMS.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
