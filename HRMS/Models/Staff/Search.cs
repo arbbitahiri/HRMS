@@ -1,6 +1,4 @@
-﻿using HRMS.Utilities;
-
-namespace HRMS.Models.Staff;
+﻿namespace HRMS.Models.Staff;
 public class Search
 {
     public int? Department { get; set; }
